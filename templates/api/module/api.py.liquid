@@ -1,0 +1,60 @@
+from pydantic import BaseModel
+from typing import Iterable
+from enum import IntEnum
+
+{% for enum in module.enums %}
+
+{% assign class = enum.name %}
+
+class {{class}}(IntEnum):
+{% for member in enum.members %}  
+    {{member.name}} = {{member.value}}
+{% endfor %}
+
+{% endfor %}
+
+{% for struct in module.structs %}
+
+{% assign class = struct.name %}
+
+class {{class}}(BaseModel):
+{% for field in struct.fields %}
+    {{field.name}} : {{field|pyReturn}} = {{field|pyDefault}}
+{% endfor %}
+
+{% endfor %}
+
+{% for interface in module.interfaces %}
+{% assign class = interface.name %}
+
+class I{{class}}:
+{% if interface.properties.size == 0 and interface.operations.size == 0 %}
+  pass
+{% endif %}
+{% for property in interface.properties %}
+    @property
+    def {{property.name}}(self):
+        raise NotImplementedError
+{% endfor %}
+{% for operation in interface.operations %}
+    def {{operation.name}}({{operation|pyParams}}):
+        raise NotImplementedError
+    
+{% endfor %}
+{% endfor %}
+
+class Factory:
+    def __init__(self):
+        self.formats = {}
+{% for interface in  module.interfaces %}
+
+    def register_{{interface.name|identifier}}(self, format, cls):
+      self.formats[format] = cls
+
+    def get_{{interface.name|identifier}}(self, format):
+        if format in self.formats:
+          cls = self.formats[format]
+          return cls()
+        return None
+
+{% endfor %}

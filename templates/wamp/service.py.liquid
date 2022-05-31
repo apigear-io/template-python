@@ -1,0 +1,54 @@
+from os import environ
+import asyncio
+
+from {{module.name|identifier}}.api import api
+from . import shared
+
+
+{% for interface in module.interfaces %}
+
+class {{interface}}Service(object):
+    def __init__(self):
+        self._state = shared.{{interface}}State(
+{% for property in interface.properties %}
+            {{property}}={% if module.enums contains property.type %}api.{% endif %}{{property|pyDefault}}{% unless forloop.last %},{% endunless %}
+{% endfor %}
+        )
+
+    def _set_listener(self, listener: shared.{{interface}}EventListener):
+        self._listener = listener
+
+    def _get_state(self):
+        return self._state
+
+    def _set_state(self, **msg):
+        try:
+            # if all properties were transferred set them at once
+            self._state = shared.{{interface}}State.parse_obj(msg)
+        except:
+            # if a property is missing try partial updates
+{% for property in interface.properties %}
+            if '{{property}}' in msg:
+                self._state.{{property}} = msg['{{property}}']
+{% else %}
+            pass
+{% endfor %}
+
+{% for operation in interface.operations %}
+
+    def {{operation}}({{operation|pyParams: 'api.'}}) -> {{operation|pyReturn: 'api.'}}:
+        raise NotImplementedError("Not implemented {{interface}}.{{operation}}")
+{% endfor %}
+
+{% for signal in interface.signals %}
+
+    def {{signal.name}}({{signal|pyParams: 'api.'}}):
+        if self._listener:
+            self._listener.notify{{signal.name|upperFirst}}({{signal.params|join: ", "}})
+{% endfor %}
+
+    # service logic can be handled here
+    async def run(self):
+        pass
+
+{% endfor %}
