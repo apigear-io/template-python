@@ -10,6 +10,10 @@ on:
         description: 'Is this a test run? No artifacts will be published'
         required: true
         default: 'true'
+      lernaVersionIncrement:
+        description: 'Set the semver keyword or explicit version for the templates packages(e.g. --minor, --patch, --prerelease). Empty will create a version based on the commit log.'
+        required: false
+        default: ''
 
 jobs:
   publish:
@@ -58,7 +62,7 @@ jobs:
       - run: yarn run test:goldenmaster
       - name: Version package
         run: |
-          npm run version
+          npm run version -- ${{ github.event.inputs.lernaVersionIncrement }}
       - name: Test registry login
         if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
