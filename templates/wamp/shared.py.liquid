@@ -1,0 +1,30 @@
+from pydantic import BaseModel
+from typing import Iterable
+from {{module.name|identifier}}.api import api
+
+
+{% for interface in module.interfaces %}
+
+### {{interface}} ###
+
+# Service Signal Listener
+
+class {{interface}}EventListener(object):
+{% for signal in interface.signals %}
+
+    def {{signal}}({{signal|pyParams: 'api.'}}):
+        pass
+{% else %}
+    pass
+{% endfor %}
+
+# Service State Model
+
+class {{interface}}State(BaseModel):
+{% for property in interface.properties %}
+    {{property}}: {{property|pyReturn: 'api.'}}
+{% else %}
+    pass
+{% endfor %}
+
+{% endfor %}

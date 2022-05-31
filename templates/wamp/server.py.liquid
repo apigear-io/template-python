@@ -1,0 +1,26 @@
+from os import environ
+import asyncio
+from autobahn.asyncio.component import Component, run
+
+{% for module in system.modules %}
+import {{module.name | identifier}}.wamp.adapter
+{% endfor %}
+
+
+WAMP_SERVER=u'ws://127.0.0.1:8080/ws'
+WAMP_REALM=u"realm1"
+
+comp = Component(
+    transports=WAMP_SERVER,
+    realm=WAMP_REALM,
+)
+
+@comp.on_join
+async def joined(session, details):
+    {% for module in system.modules %}
+    {{module.name | identifier}}.wamp.adapter.register(session)
+    {% endfor %}
+
+
+if __name__ == '__main__':
+    run([comp])

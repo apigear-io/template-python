@@ -1,0 +1,56 @@
+import asyncio
+from typing import Any
+from olink.core.types import Name
+from olink.clientnode import IObjectSink, ClientNode
+from .shared import EventHook
+from {{module.name|identifier}}.api import api
+
+{% for interface in module.interfaces %}
+
+
+class {{interface}}Sink(IObjectSink):
+{% for property in interface.properties %}
+    {{property}}={% if module.enums contains property.type %}api.{% endif %}{{property|pyDefault}}
+{% endfor %}
+    on_property_changed = EventHook()
+{% for signal in interface.signals %}
+    on_{{signal}} = EventHook()
+{% endfor %}
+
+    client = None
+
+    def __init__(self):
+        self.client = ClientNode.register_sink(self)
+
+    async def _invoke(self, name, args):
+        future = asyncio.get_running_loop().create_future()
+        def func(args):
+            return future.set_result(args.value)
+        self.client.invoke_remote(f'{{module}}.{{interface}}/{name}', args, func)
+        return await asyncio.wait_for(future, 500)
+
+{% for operation in interface.operations %}
+
+    async def {{operation}}({{operation|pyParams: 'api.'}}):
+        return await self._invoke('{{operation}}', [{{ operation.params|join: ", " }}])
+
+
+{% endfor %}
+
+    def olink_object_name(self):
+        return '{{module}}.{{interface}}'
+
+    def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        for k in props:
+            setattr(self, k, props[k])
+
+    def olink_on_property_changed(self, name: str, value: Any) -> None:
+        path = Name.path_from_name(name)
+        setattr(self, path, value)
+        self.on_property_changed.fire(path, value)
+
+    def olink_on_signal(self, name: str, args: list[Any]):
+        path = Name.path_from_name(name)
+        hook = getattr(self, f'on_{path}')        
+        hook.fire(*args)
+{% endfor %}

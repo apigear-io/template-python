@@ -1,0 +1,47 @@
+import requests
+import os
+
+from {{module.name|identifier}}.api import api
+from . import shared
+
+
+API_SERVER = os.getenv('API_SERVER', 'http://localhost:8000')
+
+{% for interface in module.interfaces %}
+
+
+class {{interface.name}}(api.I{{interface.name}}):
+    def __init__(self):
+        super().__init__()
+{% for property in interface.properties %}
+        self._{{property.name}} = {{property|pyDefault}}
+{% endfor %}
+
+
+{% for property in interface.properties %}
+
+    @property
+    def {{property.name}}(self):
+        return self._{{property.name}}
+{% endfor %}
+
+{% for operation in interface.operations %}
+
+    def {{operation.name}}({{operation|pyParams}}):
+        req = shared.{{interface}}{{operation|capitalize}}Request(
+{% for param in operation.params %}
+            {{param}}={{param}}{% unless forloop.last %},{% endunless %}
+{% endfor %}          
+        )
+        data = requests.post(
+            f'{API_SERVER}/{{module.name}}/{{interface.name}}/{{operation.name}}',
+            req.json()
+        )
+        resp = shared.{{interface}}{{operation|capitalize}}Response(**data.json())
+        print(resp.json())
+{% for property in interface.properties %}
+        self._{{property.name}} = resp.state.{{property.name}}
+{% endfor %}
+
+{% endfor %}
+{% endfor %}
