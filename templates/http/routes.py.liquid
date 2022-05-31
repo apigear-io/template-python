@@ -1,0 +1,37 @@
+from fastapi import APIRouter
+{% for interface in module.interfaces %}
+from {{module.name|identifier}}.{{interface.name|identifier}} import {{interface}}
+{% endfor %}
+
+from . import shared
+
+router = APIRouter()
+
+{% for interface in module.interfaces %}
+{{interface.name|lower}} = {{interface.name}}()
+{% endfor %}
+
+{% for interface in module.interfaces %}
+{% for operation in interface.operations %}
+
+
+@router.post(
+    "/{{interface.name}}/{{operation.name}}", 
+    response_model=shared.{{interface}}{{operation|capitalize}}Response
+)
+async def {{interface.name|identifier}}_{{operation.name|identifier}}(params: shared.{{interface}}{{operation|capitalize}}Request):
+    result = {{interface.name|lower}}.{{operation.name}}({% for p in operation.params %}params.{{p}}{% unless forloop.first %}, {% endunless %}{% endfor %})
+    state = shared.{{interface}}State(
+{% for property in interface.properties %}
+        {{property}}={{interface.name|lower}}.{{property}}{% unless forloop.last %},{% endunless %}
+{% endfor %} 
+    )
+    response = shared.{{interface}}{{operation|capitalize}}Response(
+{% if operation.type != 'void' %}
+        result=result,
+{% endif %}
+        state=state
+    )
+    return response
+{% endfor %}
+{% endfor %}

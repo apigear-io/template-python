@@ -1,0 +1,36 @@
+{
+  "name": "@apigear-io-templates/python-blueprint",
+  "version": "1.17.2",
+  "description": "A python blueprint with support for http and wamp.",
+  "keywords": [
+    "objectapi",
+    "library",
+    "client"
+  ],
+  "scripts": {
+    "gen:goldenmaster": "rm -rf goldenmaster && node ../../node_modules/@apigear-io/objectapi-cli/bin/apigear-gen --rules rules.yaml --force --sources ../../apis/testbed.module.yaml --features all --output test && mv test/ goldenmaster",
+    "test:goldenmaster": "rm -rf test && node ../../node_modules/@apigear-io/objectapi-cli/bin/apigear-gen --rules rules.yaml --force --sources ../../apis/testbed.module.yaml --features all --output test && diff -r goldenmaster/ test/"
+  },
+  "author": {
+    "name": "ApiGear UG",
+    "url": "https://github.com/apigear-io/objectapi-generator/issues"
+  },
+  "homepage": "https://github.com/apigear-io/objectapi-generator#readme",
+  "license": "SEE LICENSE IN LICENSE.TXT",
+  "files": [
+    "/templates",
+    "/rules.yaml",
+    "/README.md",
+    "/LICENSE.txt"
+  ],
+  "publishConfig": {
+    "registry": "https://europe-west3-npm.pkg.dev/apigear/technology-templates/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apigear-io/objectapi-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/apigear-io/objectapi-generator/issues"
+  }
+}

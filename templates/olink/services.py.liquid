@@ -1,0 +1,36 @@
+from olink.remotenode import RemoteNode
+
+from {{module.name|identifier}}.api import api
+from . import shared
+
+
+{% for interface in module.interfaces %}
+
+class {{interface}}Service(object):
+{% for property in interface.properties %}
+    {{property}}={% if module.enums contains property.type %}api.{% endif %}{{property|pyDefault}}
+{% endfor %}
+
+    def set_property(self, name, value):    
+        if value != getattr(self, name):
+            setattr(self, name, value)
+            RemoteNode.notify_property_change(f'{{module}}.{{interface}}/{name}', value)
+    
+
+{% for operation in interface.operations %}
+
+    def {{ operation}}({{operation|pyParams: 'api.'}}):
+        raise NotImplementedError()
+{% endfor %}    
+
+{% for signal in interface.signals %}
+
+    def {{signal.name}}({{signal|pyParams: 'api.'}}):
+        RemoteNode.notify_signal('{{module}}.{{interface}}/{{signal}}', [{{signal.params|join: ", "}}])
+{% endfor %}
+
+    # service logic can be handled here
+    async def run(self):
+        pass
+
+{% endfor %}
