@@ -1,8 +1,12 @@
 # base
 pydantic==1.7.3
 
+# OLink
+uvicorn[standard]==0.17.4
+git+https://github.com/apigear-io/objectlink-core-python.git@v0.0.1#objectlink-core-python
 
 # http
+requests==2.27.1
 fastapi==0.63.0
 starlette==0.13.6
 
@@ -22,6 +26,8 @@ six==1.15.0
 txaio==20.12.1
 ujson==4.0.1
 
-# OLink
-uvicorn[standard]==0.17.4
-git+https://github.com/apigear-io/objectlink-core-python.git@v0.0.1#objectlink-core-python
+# Pytest
+pytest==6.2.5
+
+# PyQt
+PyQt5==5.15.6

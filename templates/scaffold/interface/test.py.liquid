@@ -1,5 +1,5 @@
 {% assign class = interface.name %}
-from {{module.name|identifier}}.{{interface.name|identifier}} import {{interface.name}}
+from {{module.name|identifier}}.scaffold.{{interface.name|identifier}} import {{interface.name}}
 
 class Test{{class}}:
 {% for operation in interface.operations %}

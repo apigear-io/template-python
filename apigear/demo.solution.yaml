@@ -1,0 +1,21 @@
+# demo.solution.yaml
+schema: "apigear.solution/1.0"
+name: demo
+version: "0.1"
+
+layers:
+  - name: demo
+    modules:
+      - demo.module.yaml
+    output: ../output
+    blueprint:
+      #package: "@apigear-io-templates/python-blueprint"
+      package: ""
+      rules: ../rules.yaml
+      features: 
+        - api
+        - olink
+        - http
+        - wamp
+        - scaffold
+        - ui

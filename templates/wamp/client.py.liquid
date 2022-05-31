@@ -1,14 +1,12 @@
 from os import environ
 import asyncio
-from {{module.name|identifier}}.api import api
+
+from {{module.name}}.api import api
 from . import shared
-
-
-
 
 {% for interface in module.interfaces %}
 
-class {{interface}}Service(object):
+class {{interface}}Client(object):
     def __init__(self, session):
         self._session = session
         self._listener = None

@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 from asyncio.queues import Queue
 from olink.clientnode import ClientNode
 import asyncio
@@ -19,7 +22,7 @@ class Client:
         self.node.on_write(self.writer)
 
     def writer(self, data):
-        print('writer, data')
+        print('writer', data)
         # write data to queue
         self.queue.put_nowait(data)
 
@@ -47,39 +50,3 @@ class Client:
             await asyncio.gather(sender_task, reader_task)
             # wait till queue is empty
             await self.queue.join()
-
-
-
-# create a client node
-node = ClientNode()
-
-# create our client ws adapter
-client = Client(node)
-
-{% for module in system.modules %}
-{% for interface in module.interfaces %}
-
-# register {{module}}.{{interface}} to the remote node
-node.link_remote('{{module}}.{{interface}}')
-# create our client api
-{{module.name | identifier}}.olink.sinks.{{interface}}Sink()
-
-{% endfor %}
-{% endfor %}
-
-
-def main():
-    def print_change(name, value):
-        print('property changed', name, value)
-
-    # get a sink from the registry
-    # sink = node.get_sink('<module>.<interface>')
-    # register a property change listener
-    # sink.on_property_changed += print_change
-    loop = asyncio.get_event_loop()
-    # register a async function call
-    # loop.create_task(sink.doSomething(value))
-    loop.run_until_complete(client.connect('ws://localhost:8000/ws'))
-
-if __name__ == '__main__':
-    main()
