@@ -35,9 +35,22 @@ if __name__ == '__main__':
     main()
 ```
 
-## Server
+## Services
 
-implement the services, see `services.py`
+Implement the services, see `services.py`
+
+Example:
+```py
+def increment(self, step: int):
+    #raise NotImplementedError()
+    return step+1
+
+def decrement(self, step: int):
+    #raise NotImplementedError()
+    return step-1
+```  
+
+## Server
 
 run the server with uvicorn
 
