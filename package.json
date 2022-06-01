@@ -20,8 +20,8 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "gen:goldenmaster": "rm -rf goldenmaster && node node_modules/@apigear-io/objectapi-cli/bin/apigear-gen --rules rules.yaml --force --sources apis/testbed.module.yaml --features all --output test && mv test/ goldenmaster",
-    "test:goldenmaster": "rm -rf test && node node_modules/@apigear-io/objectapi-cli/bin/apigear-gen --rules rules.yaml --force --sources apis/testbed.module.yaml --features all --output test && diff -r goldenmaster/ test/",
+    "gen:goldenmaster": "rm -rf goldenmaster && node node_modules/@apigear-io/objectapi-cli/bin/apigear-gen --solution apigear/goldenmaster.solution.yaml && mv test/ goldenmaster",
+    "test:goldenmaster": "rm -rf test && node node_modules/@apigear-io/objectapi-cli/bin/apigear-gen --solution apigear/goldenmaster.solution.yaml && diff -r goldenmaster/ test/",
     "report:license": "license-report --exclude=@apigear-io/objectapi-cli --department.value=apigear --relatedTo.value=$npm_package_name --output=csv --csvHeaders > licenses.csv",
     "version": "standard-version -i CHANGELOG.md --same-file"
   },
