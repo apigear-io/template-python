@@ -18,16 +18,15 @@ def main():
     def print_change(name, value):
         print('property changed', name, value)
 
-    sink = node.get_object_sink('demo.Calc')
+    sink = node.get_sink('demo.Counter')
     sink.on_property_changed += print_change
 
     # get event loop
     loop = asyncio.get_event_loop()
 
     # schedule some calls
-    loop.create_task(sink.add(10))
-    loop.create_task(sink.add(11))
-    loop.create_task(sink.add(12))
+    loop.create_task(sink.increment(1))
+    loop.create_task(sink.decrement(2))
 
     # run the event loop
     loop.run_until_complete(client.connect('ws://localhost:8000/ws'))
@@ -36,9 +35,22 @@ if __name__ == '__main__':
     main()
 ```
 
-## Server
+## Services
 
-implement the services, see `services.py`
+Implement the services, see `services.py`
+
+Example:
+```py
+def increment(self, step: int):
+    #raise NotImplementedError()
+    return step+1
+
+def decrement(self, step: int):
+    #raise NotImplementedError()
+    return step-1
+```  
+
+## Server
 
 run the server with uvicorn
 

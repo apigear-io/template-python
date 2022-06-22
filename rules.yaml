@@ -11,10 +11,6 @@ features:
         - source: "api/module/api.py.liquid"
           target: "{{module.name|identifier}}/api/api.py"
   scaffold:
-    system:
-      documents:
-        - source: "scaffold/system/Makefile.liquid"
-          target: "Makefile"
     module:
       documents:
         - source: "scaffold/module/__init__.py.liquid"
@@ -22,9 +18,32 @@ features:
     interface:
       documents:
         - source: "scaffold/interface/interface.py.liquid"
-          target: "{{module.name|identifier}}/{{interface.name|identifier}}.py"
+          target: "{{module.name|identifier}}/scaffold/{{interface.name|identifier}}.py"
         - source: "scaffold/interface/test.py.liquid"
-          target: "{{module.name|identifier}}/test_{{interface.name|identifier}}.py"
+          target: "{{module.name|identifier}}/scaffold/test_{{interface.name|identifier}}.py"
+  olink:
+    system:
+      documents:
+        - source: "olink/server.py.liquid"
+          target: "olinkserver.py"
+    module:
+      documents:
+        - source: "olink/OLINK_README.md"
+          target: "{{module.name|identifier}}/olink/OLINK_README.md"
+          raw: true
+        - source: "olink/client.py.liquid"
+          target: "{{module.name|identifier}}/olink/client.py"
+        - source: "olink/sinks.py.liquid"
+          target: "{{module.name|identifier}}/olink/sinks.py"
+          overwrite: true
+        - source: "olink/sources.py.liquid"
+          target: "{{module.name|identifier}}/olink/sources.py"
+          overwrite: true
+        - source: "olink/shared.py.liquid"
+          target: "{{module.name|identifier}}/olink/shared.py"
+          overwrite: true
+        - source: "olink/services.py.liquid"
+          target: "{{module.name|identifier}}/olink/services.py"
   http:
     system:
       documents:
@@ -47,9 +66,11 @@ features:
           target: "wampserver.py"
     module:
       documents:
+        - source: "wamp/WAMP_README.md"
+          target: "{{module.name|identifier}}/wamp/WAMP_README.md"
+          raw: true
         - source: "wamp/client.py.liquid"
-          target: "{{module.name|identifier}}/wamp/client.py"
-          overwrite: true
+          target: "{{module.name|identifier}}/wamp/wampclient.py"
         - source: "wamp/shared.py.liquid"
           target: "{{module.name|identifier}}/wamp/shared.py"
           overwrite: true
@@ -58,26 +79,15 @@ features:
           overwrite: true
         - source: "wamp/service.py.liquid"
           target: "{{module.name|identifier}}/wamp/service.py"
-  olink :
-    system:
-      documents:
-        - source: "olink/OLINK_README.md"
-          target: "OLINK_README.md"
-          raw: true
-        - source: "olink/server.py.liquid"
-          target: "olinkserver.py"
-        - source: "olink/client.py.liquid"
-          target: "olinkclient.py"
+  ui:
     module:
       documents:
-        - source: "olink/sinks.py.liquid"
-          target: "{{module.name|identifier}}/olink/sinks.py"
-          overwrite: true
-        - source: "olink/sources.py.liquid"
-          target: "{{module.name|identifier}}/olink/sources.py"
-          overwrite: true
-        - source: "olink/shared.py.liquid"
-          target: "{{module.name|identifier}}/olink/shared.py"
-          overwrite: true
-        - source: "olink/services.py.liquid"
-          target: "{{module.name|identifier}}/olink/services.py"
+        - source: "ui/cmd.py"
+          target: "cmd.py"
+          raw: true
+        - source: "ui/ui.py"
+          target: "{{module.name|identifier}}/ui/ui.py"
+          raw: true
+
+
+
