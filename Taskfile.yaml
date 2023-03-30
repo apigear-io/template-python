@@ -1,0 +1,17 @@
+version: 3
+
+tasks:
+  install:
+    cmds:
+      - go install github.com/apigear-io/cli/cmd/apigear@latest
+  clean:
+    cmds:
+      - rm -rf ./test
+  test:
+    cmds:
+      - task: clean
+      - apigear g s ./apigear/goldenmaster.solution.yaml
+      - task: diff
+  diff:
+    cmds:
+      - git --no-pager diff --no-index ./goldenmaster ./test

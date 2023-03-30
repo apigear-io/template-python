@@ -7,15 +7,69 @@ from starlette.routing import WebSocketRoute
 from starlette.websockets import WebSocket
 
 from olink.remotenode import RemoteNode
-import org_objectapi_testbed.olink.sources as sources
-import org_objectapi_testbed.olink.services as services
 
-# Interface1 service registration
-sources.Interface1Source(services.Interface1Service())
+import tb.adv.olink.sources as sources
+import tb.adv.olink.services as services
+# ManyParamInterface service registration
+sources.ManyParamInterfaceSource(services.ManyParamInterfaceService())
+# NestedStruct1Interface service registration
+sources.NestedStruct1InterfaceSource(services.NestedStruct1InterfaceService())
+# NestedStruct2Interface service registration
+sources.NestedStruct2InterfaceSource(services.NestedStruct2InterfaceService())
+# NestedStruct3Interface service registration
+sources.NestedStruct3InterfaceSource(services.NestedStruct3InterfaceService())
 
-# Interface2 service registration
-sources.Interface2Source(services.Interface2Service())
+import tb.conflict.olink.sources as sources
+import tb.conflict.olink.services as services
+# Conflict1 service registration
+sources.Conflict1Source(services.Conflict1Service())
+# Conflict2 service registration
+sources.Conflict2Source(services.Conflict2Service())
+# Conflict3 service registration
+sources.Conflict3Source(services.Conflict3Service())
+# Conflict4 service registration
+sources.Conflict4Source(services.Conflict4Service())
 
+import tb.data.olink.sources as sources
+import tb.data.olink.services as services
+# StructInterface service registration
+sources.StructInterfaceSource(services.StructInterfaceService())
+# StructArrayInterface service registration
+sources.StructArrayInterfaceSource(services.StructArrayInterfaceService())
+
+import tb.enum.olink.sources as sources
+import tb.enum.olink.services as services
+# EnumInterface service registration
+sources.EnumInterfaceSource(services.EnumInterfaceService())
+
+import tb.same.olink.sources as sources
+import tb.same.olink.services as services
+# SameStruct1Interface service registration
+sources.SameStruct1InterfaceSource(services.SameStruct1InterfaceService())
+# SameStruct2Interface service registration
+sources.SameStruct2InterfaceSource(services.SameStruct2InterfaceService())
+# SameEnum1Interface service registration
+sources.SameEnum1InterfaceSource(services.SameEnum1InterfaceService())
+# SameEnum2Interface service registration
+sources.SameEnum2InterfaceSource(services.SameEnum2InterfaceService())
+
+import tb.again.olink.sources as sources
+import tb.again.olink.services as services
+# SameStruct1Interface service registration
+sources.SameStruct1InterfaceSource(services.SameStruct1InterfaceService())
+# SameStruct2Interface service registration
+sources.SameStruct2InterfaceSource(services.SameStruct2InterfaceService())
+# SameEnum1Interface service registration
+sources.SameEnum1InterfaceSource(services.SameEnum1InterfaceService())
+# SameEnum2Interface service registration
+sources.SameEnum2InterfaceSource(services.SameEnum2InterfaceService())
+
+import tb.simple.olink.sources as sources
+import tb.simple.olink.services as services
+# SimpleInterface service registration
+sources.SimpleInterfaceSource(services.SimpleInterfaceService())
+# SimpleArrayInterface service registration
+sources.SimpleArrayInterfaceSource(services.SimpleArrayInterfaceService())
 
 class RemoteEndpoint(WebSocketEndpoint):
     encoding = "text"
@@ -56,4 +110,3 @@ routes = [
 ]
 
 app = Starlette(routes=routes)
-
