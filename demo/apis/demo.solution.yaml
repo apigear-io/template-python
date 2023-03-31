@@ -1,0 +1,10 @@
+schema: apigear.solution/1.0
+layers:
+  - name: demo
+    inputs:
+      - counter.idl
+    output: ../sdk
+    template: ../..
+    features:
+      - olink
+    force: true

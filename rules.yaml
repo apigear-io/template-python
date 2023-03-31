@@ -2,23 +2,28 @@ features:
   - name: api
     scopes:
       - match: module
-        prefix: "{{Path .Module.Name}}/"
+        prefix: "{{snake .Module.Name}}/"
         documents:
-          - source: "api/__init__.py"
-            target: "api/__init__.py"
-            raw: true
           - source: "api/api.py.tpl"
-            target: "api/api.py"
+            target: "api.py"
   - name: scaffold
     scopes:
-      - match: interface
-        prefix: "{{.Module.Name|Path}}/"
+      - match: system
         documents:
-          - source: "scaffold/__init__.py"
-            target: "__init__.py"
+          - source: requirements.txt
+            target: requirements.txt
             raw: true
+          - source: README.md
+            target: README.md
+            raw: true
+      - match: interface
+        prefix: "{{snake .Module.Name}}/"
+        documents:
+          - source: "scaffold/__init__.py.tpl"
+            target: "__init__.py"
           - source: "scaffold/interface.py.tpl"
             target: "{{snake .Interface.Name}}.py"
+
   - name: http
     scopes:
       - match: system
@@ -26,7 +31,7 @@ features:
           - source: "http/server.py.tpl"
             target: "http/server.py"
       - match: module
-        prefix: "{{.Module.Name|Path}}/"
+        prefix: "{{path .Module.Name}}/"
         documents:
           - source: "http/__init__.py"
             target: "http/__init__.py"
@@ -38,6 +43,7 @@ features:
           - source: "http/shared.py.tpl"
             target: "http/shared.py"
   - name: olink
+    requires: [api, scaffold]
     scopes:
       - match: system
         documents:
@@ -45,10 +51,9 @@ features:
             target: "OLINK_README.md"
             raw: true
           - source: "olink/server.py.tpl"
-            target: "olinkserver.py"
-
+            target: "olink_server.py"
       - match: module
-        prefix: "{{.Module.Name|Path}}/"
+        prefix: "{{snake .Module.Name}}/"
         documents:
           - source: "olink/__init__.py"
             target: "olink/__init__.py"

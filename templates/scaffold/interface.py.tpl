@@ -1,20 +1,12 @@
-from {{ dot .Module.Name}}.api import api
+from {{ snake .Module.Name}} import api
 from typing import Iterable
 {{- $class := .Interface.Name }}
 
-class {{$class}}(api.I{{$class}}):
-    def __init__(self):
+class {{$class}}(api.{{$class}}):
 {{- range .Interface.Properties }}
-        self.__{{.Name}}: {{pyReturn "api." .}} = {{pyDefault "api." .}}
-{{- else }}
-        pass
+    {{snake .Name}}: {{pyType "api." .}} = {{pyDefault "api." .}}
 {{- end }}
-{{- range .Interface.Properties }}
 
-    @property
-    def {{.Name}}(self):
-        return self.__{{.Name}}
-{{- end }}
 {{- range .Interface.Operations }}
 
     def {{.Name}}({{pyParams "api." .Params}}) -> {{pyReturn "api." .Return}}:

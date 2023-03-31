@@ -1,25 +1,22 @@
 import asyncio
-from typing import Any
 from asyncio.queues import Queue
-from starlette.applications import Starlette
-from starlette.endpoints import WebSocketEndpoint
-from starlette.routing import WebSocketRoute
-from starlette.websockets import WebSocket
+from typing import Any
 
-from olink.remotenode import RemoteNode
-from olink.ws import Server, SourceAdapter
+from olink.remote import RemoteNode, SourceAdapter
+from olink.ws import run_server
 
 {{- range .System.Modules }}
-
-import {{dot .Name}}.olink.sources as sources
-import {{dot .Name}}.olink.services as services
+{{ $module := . }}
+import {{snake .Name}}
 {{- range .Interfaces }}
+
 # {{.Name}} service registration
-sources.{{.Name}}Source(services.{{.Name}}Service())
+{{snake .Name}}_impl = {{snake $module.Name}}.{{Camel .Name}}()
+{{snake .Name}}_source = SourceAdapter("{{dot $module.Name}}.{{Camel .Name}}", {{snake .Name}}_impl)
+RemoteNode.register_source({{snake .Name}}_source)
 
 {{- end }}
 {{- end }}
-
 
 if __name__ == "__main__":
     run_server("localhost", 8152)

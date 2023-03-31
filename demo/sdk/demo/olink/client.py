@@ -3,9 +3,8 @@ from olink.client import ClientNode
 import asyncio
 from olink.ws import Connection
 
-{{ range .System.Modules }}
-import {{dot .Name}}
-{{- end }}
+
+import demo
 
 # create a client node
 node = ClientNode()
@@ -13,16 +12,14 @@ node = ClientNode()
 # create our client ws adapter
 client = Connection(node)
 
-{{ range .System.Modules }}
-{{ $module := . }}
-{{ range .Interfaces }}
 
-# register {{$module.Name}}.{{.Name}} to the remote node
-node.link_remote('{{$module.Name}}.{{.Name}}')
+
+
+
+# register demo.Counter to the remote node
+node.link_remote('demo.Counter')
 # create our client api
-{{dot $module.Name}}.olink.sinks.{{.Name}}Sink()
-{{- end }}
-{{- end }}
+demo.olink.sinks.CounterSink()
 
 def main():
     def print_change(name, value):
