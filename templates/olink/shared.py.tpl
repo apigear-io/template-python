@@ -13,3 +13,4 @@ class EventHook(object):
     def fire(self, *args, **keywargs):
         for handler in self.__handlers:
             handler(*args, **keywargs)
+

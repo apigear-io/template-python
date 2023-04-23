@@ -1,19 +1,19 @@
 from olink.core.types import Name
 from olink.remotenode import IObjectSource, RemoteNode
-from {{module.name|identifier}}.api import api
+from {{snake .Module.Name}}_api import api
 from typing import Any
 
-{% for interface in module.interfaces %}
+{{- range .Module.Interfaces }}
+{{- $class := Camel .Name }}
 
-class {{interface}}Source(IObjectSource):
-    impl: api.I{{interface}}
-    def __init__(self, impl: api.I{{interface}}):
+class {{$class}}Source(IObjectSource):
+    impl: api.I{{$class}}
+    def __init__(self, impl: api.I{{$class}}):
         self.impl = impl
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
-        return "{{module}}.{{interface}}"
-
+        return "{{$.Module.Name}}.{{.Name}}"
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
@@ -28,8 +28,9 @@ class {{interface}}Source(IObjectSource):
         print('linked')
 
     def olink_collect_properties(self) -> object:
-        props = [ {% for property in interface.properties%}"{{property}}"{% unless forloop.last %}, {% endunless %}{% endfor %} ]
-        return {k: getattr(self.impl, k) for k in props}
-
-{% endfor %}
-
+        props = {}
+        {{- range .Properties }}
+        props["{{.Name }}"] = self.impl.get_{{snake .Name}}()
+        {{- end }}
+        return props
+{{- end }}
