@@ -3,42 +3,39 @@ from typing import Any
 from olink.core.types import Name
 from olink.clientnode import IObjectSink, ClientNode
 from .shared import EventHook
-from {{module.name|identifier}}.api import api
-
-{% for interface in module.interfaces %}
+from {{snake .Module.Name}}_api import api
 
 
-class {{interface}}Sink(IObjectSink):
-{% for property in interface.properties %}
-    {{property}}={% if module.enums contains property.type %}api.{% endif %}{{property|pyDefault}}
-{% endfor %}
-    on_property_changed = EventHook()
-{% for signal in interface.signals %}
-    on_{{signal}} = EventHook()
-{% endfor %}
-
-    client = None
-
+{{- $module := .Module }}
+{{- range .Module.Interfaces }}
+{{- $iface := . }}
+{{- $id := printf "%s.%s" $module.Name $iface.Name }}
+class {{Camel .Name}}Sink(IObjectSink):
     def __init__(self):
+        super().__init__()
+{{- range .Properties }}
+        self.{{snake .Name}} = {{pyDefault "api." .}}
+{{- end }}
+        self.on_property_changed = EventHook()
+{{- range .Signals }}
+        self.{{snake .Name}} = EventHook()
+{{- end }}
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote(f'{{module}}.{{interface}}/{name}', args, func)
+        self.client.invoke_remote('{{$id}}/{{.Name}}', args, func)
         return await asyncio.wait_for(future, 500)
 
-{% for operation in interface.operations %}
-
-    async def {{operation}}({{operation|pyParams: 'api.'}}):
-        return await self._invoke('{{operation}}', [{{ operation.params|join: ", " }}])
-
-
-{% endfor %}
+    {{- range .Operations }}
+    async def {{snake .Name}}({{pyParams "api." .Params}}):
+        return await self._invoke("{{.Name}}", [{{pyVars .Params}}])
+    {{- end }}
 
     def olink_object_name(self):
-        return '{{module}}.{{interface}}'
+        return '{{$id}}'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
         for k in props:
@@ -53,4 +50,5 @@ class {{interface}}Sink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
-{% endfor %}
+
+{{- end }}
