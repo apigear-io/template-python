@@ -60,15 +60,15 @@ features:
           - source: "olink/OLINK_README.md"
             target: "OLINK_README.md"
             raw: true
-          - source: "olink/server.py.tpl"
+          - source: "olink/system_server.py.tpl"
             target: "olink_server.py"
+          - source: "olink/system_client.py.tpl"
+            target: "olink_client.py"
       - match: module
         prefix: "{{snake .Module.Name}}_olink/"
         documents:
           - source: "olink/__init__.py.tpl"
             target: "__init__.py"
-          - source: "olink/client.py.tpl"
-            target: "client.py"
           - source: "olink/services.py.tpl"
             target: "services.py"
           - source: "olink/sources.py.tpl"

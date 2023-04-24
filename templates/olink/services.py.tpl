@@ -12,6 +12,10 @@ class {{Camel .Name}}Service(object):
         self.{{snake .Name}} = {{pyDefault "api." .}}
 {{- end }}
 {{- range .Properties }}
+
+    def get_{{snake .Name}}(self):
+        return self.{{snake .Name}}
+
     def set_{{snake .Name}}(self, value):
         if value != self.{{snake .Name}}:
             self.{{snake .Name}} = value
