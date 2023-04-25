@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from enum import IntEnum
 
 {{ range .Module.Enums }}
@@ -13,7 +13,7 @@ class {{ .Name }}(IntEnum):
 
 class {{ Camel .Name }}(BaseModel):
     {{- range .Fields }}
-    {{ snake .Name }}: {{ pyReturn "" . }}
+    {{ snake .Name }}: {{ pyReturn "" . }} = Field(None, alias="{{.Name}}")
     {{- end }}
 {{- end }}
 
@@ -22,6 +22,7 @@ class {{ Camel .Name }}(BaseModel):
 
 class I{{ $class}}:
     {{- range .Properties }}
+
     def get_{{snake .Name}}(self):
         raise NotImplementedError
 
@@ -29,6 +30,7 @@ class I{{ $class}}:
         raise NotImplementedError
     {{- end }}
     {{- range .Operations }}
+
     def {{snake .Name}}({{pyParams "" .Params}}):
         raise NotImplementedError
     {{- end }}
