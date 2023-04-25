@@ -78,7 +78,5 @@ class {{$class}}Source(IObjectSource):
 {{- end }}
                 RemoteNode.notify_property_change(symbol, value)
             case _:
-                logging.info("unknown property %s", symbol)
-
-    
+                logging.info("unknown property %s", symbol)    
 {{- end }}
