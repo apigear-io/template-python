@@ -1,20 +1,17 @@
 from olink.core.types import Name
 from olink.remotenode import IObjectSource, RemoteNode
-from {{snake .Module.Name}}_api import api
+from demo_api import api
 from typing import Any
 
-{{- range .Module.Interfaces }}
-{{- $class := Camel .Name }}
-
-class {{$class}}Source(IObjectSource):
-    impl: api.I{{$class}}
-    def __init__(self, impl: api.I{{$class}}):
+class CounterSource(IObjectSource):
+    impl: api.ICounter
+    def __init__(self, impl: api.ICounter):
         self.impl = impl
         impl._notifier = self
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
-        return "{{$.Module.Name}}.{{.Name}}"
+        return "demo.Counter"
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
@@ -34,9 +31,7 @@ class {{$class}}Source(IObjectSource):
 
     def olink_collect_properties(self) -> object:
         props = {}
-        {{- range .Properties }}
-        props["{{.Name }}"] = self.impl.get_{{snake .Name}}()
-        {{- end }}
+        props["value"] = self.impl.get_value()
         return props
 
     def notify_signal(self, symbol, args):
@@ -44,6 +39,3 @@ class {{$class}}Source(IObjectSource):
 
     def notify_property(self, symbol, value):
         RemoteNode.notify_property_change(symbol, value)
-
-    
-{{- end }}

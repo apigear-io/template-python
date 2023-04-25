@@ -9,22 +9,11 @@ from starlette.websockets import WebSocket
 
 from olink.remotenode import RemoteNode
 
-{{- range .System.Modules }}
-{{- $import_olink := printf "%s_olink" (snake .Name)}}
-{{- $import_impl := printf "%s_impl" (snake .Name)}}
+import demo_olink
+import demo_impl
 
-import {{$import_olink}}
-import {{$import_impl}}
+demo_olink.CounterSource(demo_impl.Counter())
 
-{{- end }}
-{{ range .System.Modules }}
-{{- $import_olink := printf "%s_olink" (snake .Name)}}
-{{- $import_impl := printf "%s_impl" (snake .Name)}}
-
-{{- range .Interfaces }}
-{{$import_olink}}.{{Camel .Name}}Source({{$import_impl}}.{{Camel .Name}}())
-{{- end }}
-{{ end }}
 
 
 class RemoteEndpoint(WebSocketEndpoint):

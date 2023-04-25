@@ -1,0 +1,7 @@
+module demo 1.0
+
+interface Counter {
+    value: int
+    increment()
+    decrement()
+}
