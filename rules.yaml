@@ -69,8 +69,6 @@ features:
         documents:
           - source: "olink/__init__.py.tpl"
             target: "__init__.py"
-          - source: "olink/services.py.tpl"
-            target: "services.py"
           - source: "olink/sources.py.tpl"
             target: "sources.py"
           - source: "olink/sinks.py.tpl"

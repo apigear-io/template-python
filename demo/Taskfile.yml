@@ -1,0 +1,6 @@
+version: 3
+
+tasks:
+  build:
+    cmds:
+      - apigear g s api/demo.solution.yaml
