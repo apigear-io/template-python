@@ -1,14 +1,15 @@
 version: 3
 
 vars:
-  BIN: bin/apigear{{exeExt}}
+  BIN: apigear{{exeExt}}
 tasks:
   install:
     cmds:
-      - rm -rf tmp bin
-      - mkdir tmp bin
-      - gh release download --repo apigear-io/cli --pattern "apigear_{{OS}}_{{ARCH}}.zip" --dir tmp
-      - unzip tmp/apigear_{{OS}}_{{ARCH}}.zip -d bin
+      - go install github.com/apigear-io/cli@latest
+      # - rm -rf tmp bin
+      # - mkdir tmp bin
+      # - gh release download --repo apigear-io/cli --pattern "apigear_{{OS}}_{{ARCH}}.zip" --dir tmp
+      # - unzip tmp/apigear_{{OS}}_{{ARCH}}.zip -d bin
   clean:
     cmds:
       - cmd: powershell Remove-Item -Recurse -Force test
