@@ -25,5 +25,5 @@ jobs:
       - run: task install
       - run: task test
       - run: task diff
-      - run: task py::install
-      - run: task pytest
+      - run: task py:install
+      - run: task py:test
