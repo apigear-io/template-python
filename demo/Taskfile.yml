@@ -4,3 +4,30 @@ tasks:
   build:
     cmds:
       - apigear g s api/demo.solution.yaml
+  clean:
+    cmds:
+      - cmd: del -r -fo sdk ue
+        platforms: [windows]
+      - cmd: rm -rf sdk ue
+        platforms: [linux, darwin]
+
+  server:
+    desc: run the olink server
+    dir: sdk
+    cmds:
+      - uvicorn olink_server:app --reload
+  client:
+    desc: run the olink client
+    dir: sdk
+    cmds:
+      - python olink_client.py
+  install:
+    desc: install the dependencies
+    dir: sdk
+    cmds:
+      - pip install -r requirements.txt
+  test:
+    desc: run the tests
+    dir: sdk
+    cmds:
+      - pytest
