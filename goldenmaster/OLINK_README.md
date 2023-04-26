@@ -11,8 +11,8 @@ node = ClientNode()
 client = Client(node)
 
 # demo.Calc sink registration
-node.link_remote('demo.Calc')
-demo.olink.sinks.CalcSink()
+sink = demo.olink.sinks.CalcSink()
+node.link_remote(sink.olink_object_name())
 
 def main():
     def print_change(name, value):

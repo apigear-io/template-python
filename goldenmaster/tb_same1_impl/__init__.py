@@ -1,0 +1,5 @@
+
+from .same_struct1_interface import SameStruct1Interface as SameStruct1Interface
+from .same_struct2_interface import SameStruct2Interface as SameStruct2Interface
+from .same_enum1_interface import SameEnum1Interface as SameEnum1Interface
+from .same_enum2_interface import SameEnum2Interface as SameEnum2Interface

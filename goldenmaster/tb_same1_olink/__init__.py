@@ -1,0 +1,9 @@
+
+from .sources import SameStruct1InterfaceSource as SameStruct1InterfaceSource
+from .sinks import SameStruct1InterfaceSink as SameStruct1InterfaceSink
+from .sources import SameStruct2InterfaceSource as SameStruct2InterfaceSource
+from .sinks import SameStruct2InterfaceSink as SameStruct2InterfaceSink
+from .sources import SameEnum1InterfaceSource as SameEnum1InterfaceSource
+from .sinks import SameEnum1InterfaceSink as SameEnum1InterfaceSink
+from .sources import SameEnum2InterfaceSource as SameEnum2InterfaceSource
+from .sinks import SameEnum2InterfaceSink as SameEnum2InterfaceSink
