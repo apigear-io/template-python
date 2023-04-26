@@ -1,0 +1,14 @@
+
+from testbed2_api import api
+from testbed2_impl import NestedStruct2Interface
+
+class TestNestedStruct2Interface:
+
+    def test_func1(self):
+        o = NestedStruct2Interface()
+        o.func1({},)
+
+    def test_func2(self):
+        o = NestedStruct2Interface()
+        o.func2({},{},)
+
