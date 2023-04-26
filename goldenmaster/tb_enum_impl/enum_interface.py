@@ -63,16 +63,16 @@ class EnumInterface(api.IEnumInterface):
         self._notifier.notify_property("tb.enum.EnumInterface/prop3", value)
 
     def func0(self, param0: api.Enum0) -> api.Enum0:
-        raise NotImplementedError()
+        return api.Enum0.value0
 
     def func1(self, param1: api.Enum1) -> api.Enum1:
-        raise NotImplementedError()
+        return api.Enum1.value1
 
     def func2(self, param2: api.Enum2) -> api.Enum2:
-        raise NotImplementedError()
+        return api.Enum2.value2
 
     def func3(self, param3: api.Enum3) -> api.Enum3:
-        raise NotImplementedError()
+        return api.Enum3.value3
 
     def sig0(self, param0: api.Enum0):
         if not self._notifier:

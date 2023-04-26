@@ -63,16 +63,16 @@ class StructInterface(api.IStructInterface):
         self._notifier.notify_property("testbed1.StructInterface/propString", value)
 
     def func_bool(self, param_bool: api.StructBool) -> api.StructBool:
-        raise NotImplementedError()
+        return {}
 
     def func_int(self, param_int: api.StructInt) -> api.StructBool:
-        raise NotImplementedError()
+        return {}
 
     def func_float(self, param_float: api.StructFloat) -> api.StructFloat:
-        raise NotImplementedError()
+        return {}
 
     def func_string(self, param_string: api.StructString) -> api.StructString:
-        raise NotImplementedError()
+        return {}
 
     def sig_bool(self, param_bool: api.StructBool):
         if not self._notifier:

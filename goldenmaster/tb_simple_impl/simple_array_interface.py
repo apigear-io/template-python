@@ -63,16 +63,16 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._notifier.notify_property("tb.simple.SimpleArrayInterface/propString", value)
 
     def func_bool(self, param_bool: list[bool]) -> list[bool]:
-        raise NotImplementedError()
+        return []
 
     def func_int(self, param_int: list[int]) -> list[int]:
-        raise NotImplementedError()
+        return []
 
     def func_float(self, param_float: list[float]) -> list[float]:
-        raise NotImplementedError()
+        return []
 
     def func_string(self, param_string: list[str]) -> list[str]:
-        raise NotImplementedError()
+        return []
 
     def sig_bool(self, param_bool: list[bool]):
         if not self._notifier:

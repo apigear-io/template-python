@@ -63,16 +63,16 @@ class SimpleInterface(api.ISimpleInterface):
         self._notifier.notify_property("tb.simple.SimpleInterface/propString", value)
 
     def func_bool(self, param_bool: bool) -> bool:
-        raise NotImplementedError()
+        return False
 
     def func_int(self, param_int: int) -> int:
-        raise NotImplementedError()
+        return 0
 
     def func_float(self, param_float: float) -> float:
-        raise NotImplementedError()
+        return 0.0
 
     def func_string(self, param_string: str) -> str:
-        raise NotImplementedError()
+        return ""
 
     def sig_bool(self, param_bool: bool):
         if not self._notifier:

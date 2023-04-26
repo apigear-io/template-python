@@ -6,5 +6,5 @@ class TestSameStruct1Interface:
 
     def test_func1(self):
         o = SameStruct1Interface()
-        o.func1({},)
+        o.func1(param1={})
 
