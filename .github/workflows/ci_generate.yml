@@ -11,7 +11,7 @@ env:
   GOPRIVATE: "github.com/apigear-io/*"
   GH_ACCESS_TOKEN: ${{ secrets.APIGEAR_REPOS }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  go_version: "1.19.x"
+  go_version: "1.20.x"
 
 jobs:
   generate:
@@ -21,6 +21,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{env.go_version}}
       - uses: arduino/setup-task@v1
       - run: task install
       - run: task test
