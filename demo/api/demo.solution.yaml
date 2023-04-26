@@ -6,4 +6,8 @@ layers:
       - counter.idl
     output: ../sdk
     template: ../../
-    force: true
+  - name: game
+    inputs:
+      - counter.idl
+    output: ../ue
+    template: apigear-io/template-unreal

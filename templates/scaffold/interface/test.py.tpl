@@ -1,6 +1,6 @@
 {{- $class := Camel .Interface.Name }}
-from {{snake .Module.Name}} import api
-from {{snake .Module.Name}}.{{snake .Interface.Name}} import {{$class}}
+from {{snake .Module.Name}}_api import api
+from {{snake .Module.Name}}_impl import {{$class}}
 
 class Test{{$class}}:
 {{- range .Interface.Operations }}
@@ -8,10 +8,11 @@ class Test{{$class}}:
     def test_{{snake .Name}}(self):
         o = {{$class}}()
         o.{{snake .Name}}(
-{{- range .Params }}
+    {{- range .Params -}}
             {{ pyDefault "api." .}},
+    {{- end -}}
         )
-{{- end }}
 {{- else }}
     pass
 {{- end }}
+
