@@ -16,7 +16,12 @@ tasks:
     cmds:
       - task: clean
       - apigear g s ./apigear/goldenmaster.solution.yaml
-  
+
+  py::install:
+    desc: install the dependencies
+    dir: test
+    cmds:
+      - pip install -r requirements.txt  
   pytest:
     desc: runs pytest in test dir
     dir: test
