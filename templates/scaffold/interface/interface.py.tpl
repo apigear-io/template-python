@@ -29,7 +29,11 @@ class {{$class}}(api.I{{$class}}):
 {{- range .Interface.Operations }}
 
     def {{snake .Name}}({{pyParams "api." .Params}}) -> {{pyReturn "api." .Return}}:
-        raise NotImplementedError()
+    {{- if .Return.IsVoid}}
+        return None
+    {{- else }}
+        return {{pyDefault "api." .Return}}
+    {{- end }}
 {{- end }}
 
 {{- range .Interface.Signals }}

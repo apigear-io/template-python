@@ -63,16 +63,16 @@ class ManyParamInterface(api.IManyParamInterface):
         self._notifier.notify_property("testbed2.ManyParamInterface/prop4", value)
 
     def func1(self, param1: int) -> int:
-        raise NotImplementedError()
+        return 0
 
     def func2(self, param1: int, param2: int) -> int:
-        raise NotImplementedError()
+        return 0
 
     def func3(self, param1: int, param2: int, param3: int) -> int:
-        raise NotImplementedError()
+        return 0
 
     def func4(self, param1: int, param2: int, param3: int, param4: int) -> int:
-        raise NotImplementedError()
+        return 0
 
     def sig1(self, param1: int):
         if not self._notifier:

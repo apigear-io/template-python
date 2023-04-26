@@ -6,5 +6,5 @@ class TestSameEnum1Interface:
 
     def test_func1(self):
         o = SameEnum1Interface()
-        o.func1(api.Enum1.value1,)
+        o.func1(param1=api.Enum1.value1)
 

@@ -21,7 +21,7 @@ class NestedStruct1Interface(api.INestedStruct1Interface):
         self._notifier.notify_property("testbed2.NestedStruct1Interface/prop1", value)
 
     def func1(self, param1: api.NestedStruct1) -> api.NestedStruct1:
-        raise NotImplementedError()
+        return {}
 
     def sig1(self, param1: api.NestedStruct1):
         if not self._notifier:

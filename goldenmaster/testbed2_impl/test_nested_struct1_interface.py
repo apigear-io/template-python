@@ -6,5 +6,5 @@ class TestNestedStruct1Interface:
 
     def test_func1(self):
         o = NestedStruct1Interface()
-        o.func1({},)
+        o.func1(param1={})
 

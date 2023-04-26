@@ -21,7 +21,7 @@ class SameStruct1Interface(api.ISameStruct1Interface):
         self._notifier.notify_property("tb.same1.SameStruct1Interface/prop1", value)
 
     def func1(self, param1: api.Struct1) -> api.Struct1:
-        raise NotImplementedError()
+        return {}
 
     def sig1(self, param1: api.Struct1):
         if not self._notifier:

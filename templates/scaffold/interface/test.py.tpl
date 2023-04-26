@@ -8,8 +8,9 @@ class Test{{$class}}:
     def test_{{snake .Name}}(self):
         o = {{$class}}()
         o.{{snake .Name}}(
-    {{- range .Params -}}
-            {{ pyDefault "api." .}},
+    {{- range $idx, $p := .Params -}}
+            {{- if $idx }}, {{end -}}
+            {{snake .Name}}={{ pyDefault "api." .}}
     {{- end -}}
         )
 {{- else }}

@@ -21,7 +21,7 @@ class SameEnum1Interface(api.ISameEnum1Interface):
         self._notifier.notify_property("tb.same2.SameEnum1Interface/prop1", value)
 
     def func1(self, param1: api.Enum1) -> api.Enum1:
-        raise NotImplementedError()
+        return api.Enum1.value1
 
     def sig1(self, param1: api.Enum1):
         if not self._notifier:
