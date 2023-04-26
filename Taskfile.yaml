@@ -16,6 +16,12 @@ tasks:
     cmds:
       - task: clean
       - apigear g s ./apigear/goldenmaster.solution.yaml
+  
+  pytest:
+    desc: runs pytest in test dir
+    dir: test
+    cmds:      
+      - pytest
   diff:
     cmds:
       - git --no-pager diff --no-index ./goldenmaster ./test
