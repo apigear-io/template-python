@@ -1,21 +1,26 @@
 version: 3
 
+vars:
+  BIN: bin/apigear{{exeExt}}
 tasks:
   install:
     cmds:
-      - go install github.com/apigear-io/cli/cmd/apigear@latest
+      - rm -rf tmp bin
+      - mkdir tmp bin
+      - gh release download --repo apigear-io/cli --pattern "apigear_{{OS}}_{{ARCH}}.zip" --dir tmp
+      - unzip tmp/apigear_{{OS}}_{{ARCH}}.zip -d bin
   clean:
     cmds:
-      - cmd: powershell del -r -fo test
+      - cmd: powershell Remove-Item -Recurse -Force test
         platforms: [windows]
         ignore_error: true
-      - cmd: rm -rf test
+      - cmd: rm -rf test bin tmp
         platforms: [linux, darwin]
         ignore_error: true
   test:
     cmds:
       - task: clean
-      - apigear g s ./apigear/goldenmaster.solution.yaml
+      - "{{.BIN}} g s ./apigear/goldenmaster.solution.yaml"
 
   py:install:
     desc: install the dependencies

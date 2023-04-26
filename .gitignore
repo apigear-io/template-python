@@ -133,3 +133,6 @@ test
 
 # objectapi tooling dependencies
 node_modules
+
+bin/
+tmp/
