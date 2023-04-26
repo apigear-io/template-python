@@ -16,48 +16,46 @@ class ManyParamInterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-            case "prop1":
-                v = api.as_int(value)
-                self.impl.set_prop1(v)
-            case "prop2":
-                v = api.as_int(value)
-                self.impl.set_prop2(v)
-            case "prop3":
-                v = api.as_int(value)
-                self.impl.set_prop3(v)
-            case "prop4":
-                v = api.as_int(value)
-                self.impl.set_prop4(v)
+        if path == "prop1":
+            v = api.as_int(value)
+            return self.impl.set_prop1(v)
+        elif path == "prop2":
+            v = api.as_int(value)
+            return self.impl.set_prop2(v)
+        elif path == "prop3":
+            v = api.as_int(value)
+            return self.impl.set_prop3(v)
+        elif path == "prop4":
+            v = api.as_int(value)
+            return self.impl.set_prop4(v)
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-            case "func1":
-                param1 = api.as_int(args[0])
-                reply = self.impl.func1(param1)
-                return api.from_int(reply)
-            case "func2":
-                param1 = api.as_int(args[0])
-                param2 = api.as_int(args[1])
-                reply = self.impl.func2(param1, param2)
-                return api.from_int(reply)
-            case "func3":
-                param1 = api.as_int(args[0])
-                param2 = api.as_int(args[1])
-                param3 = api.as_int(args[2])
-                reply = self.impl.func3(param1, param2, param3)
-                return api.from_int(reply)
-            case "func4":
-                param1 = api.as_int(args[0])
-                param2 = api.as_int(args[1])
-                param3 = api.as_int(args[2])
-                param4 = api.as_int(args[3])
-                reply = self.impl.func4(param1, param2, param3, param4)
-                return api.from_int(reply)      
-            case _:
-                logging.info("unknown operation")
-                return None
+        if path == "func1":
+            param1 = api.as_int(args[0])
+            reply = self.impl.func1(param1)
+            return api.from_int(reply)
+        elif path == "func2":
+            param1 = api.as_int(args[0])
+            param2 = api.as_int(args[1])
+            reply = self.impl.func2(param1, param2)
+            return api.from_int(reply)
+        elif path == "func3":
+            param1 = api.as_int(args[0])
+            param2 = api.as_int(args[1])
+            param3 = api.as_int(args[2])
+            reply = self.impl.func3(param1, param2, param3)
+            return api.from_int(reply)
+        elif path == "func4":
+            param1 = api.as_int(args[0])
+            param2 = api.as_int(args[1])
+            param3 = api.as_int(args[2])
+            param4 = api.as_int(args[3])
+            reply = self.impl.func4(param1, param2, param3, param4)
+            return api.from_int(reply)      
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -76,42 +74,41 @@ class ManyParamInterfaceSource(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-            case "sig1":
-                param1 = api.from_int(args[0])
-                RemoteNode.notify_signal(symbol, [param1])
-            case "sig2":
-                param1 = api.from_int(args[0])
-                param2 = api.from_int(args[1])
-                RemoteNode.notify_signal(symbol, [param1, param2])
-            case "sig3":
-                param1 = api.from_int(args[0])
-                param2 = api.from_int(args[1])
-                param3 = api.from_int(args[2])
-                RemoteNode.notify_signal(symbol, [param1, param2, param3])
-            case "sig4":
-                param1 = api.from_int(args[0])
-                param2 = api.from_int(args[1])
-                param3 = api.from_int(args[2])
-                param4 = api.from_int(args[3])
-                RemoteNode.notify_signal(symbol, [param1, param2, param3, param4])
-            case _:
-                logging.info("unknown signal %s", symbol)
+        if path == "sig1":
+            param1 = api.from_int(args[0])
+            return RemoteNode.notify_signal(symbol, [param1])
+        elif path == "sig2":
+            param1 = api.from_int(args[0])
+            param2 = api.from_int(args[1])
+            return RemoteNode.notify_signal(symbol, [param1, param2])
+        elif path == "sig3":
+            param1 = api.from_int(args[0])
+            param2 = api.from_int(args[1])
+            param3 = api.from_int(args[2])
+            return RemoteNode.notify_signal(symbol, [param1, param2, param3])
+        elif path == "sig4":
+            param1 = api.from_int(args[0])
+            param2 = api.from_int(args[1])
+            param3 = api.from_int(args[2])
+            param4 = api.from_int(args[3])
+            return RemoteNode.notify_signal(symbol, [param1, param2, param3, param4])
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-            case "prop1":
-                v = api.from_int(value)
-            case "prop2":
-                v = api.from_int(value)
-            case "prop3":
-                v = api.from_int(value)
-            case "prop4":
-                v = api.from_int(value)
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)
+        if path == "prop1":
+            v = api.from_int(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "prop2":
+            v = api.from_int(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "prop3":
+            v = api.from_int(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "prop4":
+            v = api.from_int(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        logging.info("unknown property %s", symbol)
 
 class NestedStruct1InterfaceSource(IObjectSource):
     impl: api.INestedStruct1Interface
@@ -125,21 +122,19 @@ class NestedStruct1InterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-            case "prop1":
-                v = api.as_nested_struct1(value)
-                self.impl.set_prop1(v)
+        if path == "prop1":
+            v = api.as_nested_struct1(value)
+            return self.impl.set_prop1(v)
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-            case "func1":
-                param1 = api.as_nested_struct1(args[0])
-                reply = self.impl.func1(param1)
-                return api.from_nested_struct1(reply)      
-            case _:
-                logging.info("unknown operation")
-                return None
+        if path == "func1":
+            param1 = api.as_nested_struct1(args[0])
+            reply = self.impl.func1(param1)
+            return api.from_nested_struct1(reply)      
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -152,21 +147,17 @@ class NestedStruct1InterfaceSource(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-            case "sig1":
-                param1 = api.from_nested_struct1(args[0])
-                RemoteNode.notify_signal(symbol, [param1])
-            case _:
-                logging.info("unknown signal %s", symbol)
+        if path == "sig1":
+            param1 = api.from_nested_struct1(args[0])
+            return RemoteNode.notify_signal(symbol, [param1])
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-            case "prop1":
-                v = api.from_nested_struct1(value)
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)
+        if path == "prop1":
+            v = api.from_nested_struct1(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        logging.info("unknown property %s", symbol)
 
 class NestedStruct2InterfaceSource(IObjectSource):
     impl: api.INestedStruct2Interface
@@ -180,29 +171,27 @@ class NestedStruct2InterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-            case "prop1":
-                v = api.as_nested_struct1(value)
-                self.impl.set_prop1(v)
-            case "prop2":
-                v = api.as_nested_struct2(value)
-                self.impl.set_prop2(v)
+        if path == "prop1":
+            v = api.as_nested_struct1(value)
+            return self.impl.set_prop1(v)
+        elif path == "prop2":
+            v = api.as_nested_struct2(value)
+            return self.impl.set_prop2(v)
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-            case "func1":
-                param1 = api.as_nested_struct1(args[0])
-                reply = self.impl.func1(param1)
-                return api.from_nested_struct1(reply)
-            case "func2":
-                param1 = api.as_nested_struct1(args[0])
-                param2 = api.as_nested_struct2(args[1])
-                reply = self.impl.func2(param1, param2)
-                return api.from_nested_struct1(reply)      
-            case _:
-                logging.info("unknown operation")
-                return None
+        if path == "func1":
+            param1 = api.as_nested_struct1(args[0])
+            reply = self.impl.func1(param1)
+            return api.from_nested_struct1(reply)
+        elif path == "func2":
+            param1 = api.as_nested_struct1(args[0])
+            param2 = api.as_nested_struct2(args[1])
+            reply = self.impl.func2(param1, param2)
+            return api.from_nested_struct1(reply)      
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -217,27 +206,24 @@ class NestedStruct2InterfaceSource(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-            case "sig1":
-                param1 = api.from_nested_struct1(args[0])
-                RemoteNode.notify_signal(symbol, [param1])
-            case "sig2":
-                param1 = api.from_nested_struct1(args[0])
-                param2 = api.from_nested_struct2(args[1])
-                RemoteNode.notify_signal(symbol, [param1, param2])
-            case _:
-                logging.info("unknown signal %s", symbol)
+        if path == "sig1":
+            param1 = api.from_nested_struct1(args[0])
+            return RemoteNode.notify_signal(symbol, [param1])
+        elif path == "sig2":
+            param1 = api.from_nested_struct1(args[0])
+            param2 = api.from_nested_struct2(args[1])
+            return RemoteNode.notify_signal(symbol, [param1, param2])
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-            case "prop1":
-                v = api.from_nested_struct1(value)
-            case "prop2":
-                v = api.from_nested_struct2(value)
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)
+        if path == "prop1":
+            v = api.from_nested_struct1(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "prop2":
+            v = api.from_nested_struct2(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        logging.info("unknown property %s", symbol)
 
 class NestedStruct3InterfaceSource(IObjectSource):
     impl: api.INestedStruct3Interface
@@ -251,38 +237,36 @@ class NestedStruct3InterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-            case "prop1":
-                v = api.as_nested_struct1(value)
-                self.impl.set_prop1(v)
-            case "prop2":
-                v = api.as_nested_struct2(value)
-                self.impl.set_prop2(v)
-            case "prop3":
-                v = api.as_nested_struct3(value)
-                self.impl.set_prop3(v)
+        if path == "prop1":
+            v = api.as_nested_struct1(value)
+            return self.impl.set_prop1(v)
+        elif path == "prop2":
+            v = api.as_nested_struct2(value)
+            return self.impl.set_prop2(v)
+        elif path == "prop3":
+            v = api.as_nested_struct3(value)
+            return self.impl.set_prop3(v)
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-            case "func1":
-                param1 = api.as_nested_struct1(args[0])
-                reply = self.impl.func1(param1)
-                return api.from_nested_struct1(reply)
-            case "func2":
-                param1 = api.as_nested_struct1(args[0])
-                param2 = api.as_nested_struct2(args[1])
-                reply = self.impl.func2(param1, param2)
-                return api.from_nested_struct1(reply)
-            case "func3":
-                param1 = api.as_nested_struct1(args[0])
-                param2 = api.as_nested_struct2(args[1])
-                param3 = api.as_nested_struct3(args[2])
-                reply = self.impl.func3(param1, param2, param3)
-                return api.from_nested_struct1(reply)      
-            case _:
-                logging.info("unknown operation")
-                return None
+        if path == "func1":
+            param1 = api.as_nested_struct1(args[0])
+            reply = self.impl.func1(param1)
+            return api.from_nested_struct1(reply)
+        elif path == "func2":
+            param1 = api.as_nested_struct1(args[0])
+            param2 = api.as_nested_struct2(args[1])
+            reply = self.impl.func2(param1, param2)
+            return api.from_nested_struct1(reply)
+        elif path == "func3":
+            param1 = api.as_nested_struct1(args[0])
+            param2 = api.as_nested_struct2(args[1])
+            param3 = api.as_nested_struct3(args[2])
+            reply = self.impl.func3(param1, param2, param3)
+            return api.from_nested_struct1(reply)      
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -299,31 +283,29 @@ class NestedStruct3InterfaceSource(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-            case "sig1":
-                param1 = api.from_nested_struct1(args[0])
-                RemoteNode.notify_signal(symbol, [param1])
-            case "sig2":
-                param1 = api.from_nested_struct1(args[0])
-                param2 = api.from_nested_struct2(args[1])
-                RemoteNode.notify_signal(symbol, [param1, param2])
-            case "sig3":
-                param1 = api.from_nested_struct1(args[0])
-                param2 = api.from_nested_struct2(args[1])
-                param3 = api.from_nested_struct3(args[2])
-                RemoteNode.notify_signal(symbol, [param1, param2, param3])
-            case _:
-                logging.info("unknown signal %s", symbol)
+        if path == "sig1":
+            param1 = api.from_nested_struct1(args[0])
+            return RemoteNode.notify_signal(symbol, [param1])
+        elif path == "sig2":
+            param1 = api.from_nested_struct1(args[0])
+            param2 = api.from_nested_struct2(args[1])
+            return RemoteNode.notify_signal(symbol, [param1, param2])
+        elif path == "sig3":
+            param1 = api.from_nested_struct1(args[0])
+            param2 = api.from_nested_struct2(args[1])
+            param3 = api.from_nested_struct3(args[2])
+            return RemoteNode.notify_signal(symbol, [param1, param2, param3])
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-            case "prop1":
-                v = api.from_nested_struct1(value)
-            case "prop2":
-                v = api.from_nested_struct2(value)
-            case "prop3":
-                v = api.from_nested_struct3(value)
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)
+        if path == "prop1":
+            v = api.from_nested_struct1(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "prop2":
+            v = api.from_nested_struct2(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "prop3":
+            v = api.from_nested_struct3(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        logging.info("unknown property %s", symbol)

@@ -16,42 +16,40 @@ class StructInterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-            case "propBool":
-                v = api.as_struct_bool(value)
-                self.impl.set_prop_bool(v)
-            case "propInt":
-                v = api.as_struct_int(value)
-                self.impl.set_prop_int(v)
-            case "propFloat":
-                v = api.as_struct_float(value)
-                self.impl.set_prop_float(v)
-            case "propString":
-                v = api.as_struct_string(value)
-                self.impl.set_prop_string(v)
+        if path == "propBool":
+            v = api.as_struct_bool(value)
+            return self.impl.set_prop_bool(v)
+        elif path == "propInt":
+            v = api.as_struct_int(value)
+            return self.impl.set_prop_int(v)
+        elif path == "propFloat":
+            v = api.as_struct_float(value)
+            return self.impl.set_prop_float(v)
+        elif path == "propString":
+            v = api.as_struct_string(value)
+            return self.impl.set_prop_string(v)
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-            case "funcBool":
-                param_bool = api.as_struct_bool(args[0])
-                reply = self.impl.func_bool(param_bool)
-                return api.from_struct_bool(reply)
-            case "funcInt":
-                param_int = api.as_struct_int(args[0])
-                reply = self.impl.func_int(param_int)
-                return api.from_struct_bool(reply)
-            case "funcFloat":
-                param_float = api.as_struct_float(args[0])
-                reply = self.impl.func_float(param_float)
-                return api.from_struct_float(reply)
-            case "funcString":
-                param_string = api.as_struct_string(args[0])
-                reply = self.impl.func_string(param_string)
-                return api.from_struct_string(reply)      
-            case _:
-                logging.info("unknown operation")
-                return None
+        if path == "funcBool":
+            param_bool = api.as_struct_bool(args[0])
+            reply = self.impl.func_bool(param_bool)
+            return api.from_struct_bool(reply)
+        elif path == "funcInt":
+            param_int = api.as_struct_int(args[0])
+            reply = self.impl.func_int(param_int)
+            return api.from_struct_bool(reply)
+        elif path == "funcFloat":
+            param_float = api.as_struct_float(args[0])
+            reply = self.impl.func_float(param_float)
+            return api.from_struct_float(reply)
+        elif path == "funcString":
+            param_string = api.as_struct_string(args[0])
+            reply = self.impl.func_string(param_string)
+            return api.from_struct_string(reply)      
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -70,36 +68,35 @@ class StructInterfaceSource(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-            case "sigBool":
-                param_bool = api.from_struct_bool(args[0])
-                RemoteNode.notify_signal(symbol, [param_bool])
-            case "sigInt":
-                param_int = api.from_struct_int(args[0])
-                RemoteNode.notify_signal(symbol, [param_int])
-            case "sigFloat":
-                param_float = api.from_struct_float(args[0])
-                RemoteNode.notify_signal(symbol, [param_float])
-            case "sigString":
-                param_string = api.from_struct_string(args[0])
-                RemoteNode.notify_signal(symbol, [param_string])
-            case _:
-                logging.info("unknown signal %s", symbol)
+        if path == "sigBool":
+            param_bool = api.from_struct_bool(args[0])
+            return RemoteNode.notify_signal(symbol, [param_bool])
+        elif path == "sigInt":
+            param_int = api.from_struct_int(args[0])
+            return RemoteNode.notify_signal(symbol, [param_int])
+        elif path == "sigFloat":
+            param_float = api.from_struct_float(args[0])
+            return RemoteNode.notify_signal(symbol, [param_float])
+        elif path == "sigString":
+            param_string = api.from_struct_string(args[0])
+            return RemoteNode.notify_signal(symbol, [param_string])
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-            case "propBool":
-                v = api.from_struct_bool(value)
-            case "propInt":
-                v = api.from_struct_int(value)
-            case "propFloat":
-                v = api.from_struct_float(value)
-            case "propString":
-                v = api.from_struct_string(value)
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)
+        if path == "propBool":
+            v = api.from_struct_bool(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "propInt":
+            v = api.from_struct_int(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "propFloat":
+            v = api.from_struct_float(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "propString":
+            v = api.from_struct_string(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        logging.info("unknown property %s", symbol)
 
 class StructArrayInterfaceSource(IObjectSource):
     impl: api.IStructArrayInterface
@@ -113,42 +110,40 @@ class StructArrayInterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-            case "propBool":
-                v = api.as_struct_bool(value)
-                self.impl.set_prop_bool(v)
-            case "propInt":
-                v = api.as_struct_int(value)
-                self.impl.set_prop_int(v)
-            case "propFloat":
-                v = api.as_struct_float(value)
-                self.impl.set_prop_float(v)
-            case "propString":
-                v = api.as_struct_string(value)
-                self.impl.set_prop_string(v)
+        if path == "propBool":
+            v = api.as_struct_bool(value)
+            return self.impl.set_prop_bool(v)
+        elif path == "propInt":
+            v = api.as_struct_int(value)
+            return self.impl.set_prop_int(v)
+        elif path == "propFloat":
+            v = api.as_struct_float(value)
+            return self.impl.set_prop_float(v)
+        elif path == "propString":
+            v = api.as_struct_string(value)
+            return self.impl.set_prop_string(v)
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-            case "funcBool":
-                param_bool = api.as_struct_bool(args[0])
-                reply = self.impl.func_bool(param_bool)
-                return api.from_struct_bool(reply)
-            case "funcInt":
-                param_int = api.as_struct_int(args[0])
-                reply = self.impl.func_int(param_int)
-                return api.from_struct_bool(reply)
-            case "funcFloat":
-                param_float = api.as_struct_float(args[0])
-                reply = self.impl.func_float(param_float)
-                return api.from_struct_bool(reply)
-            case "funcString":
-                param_string = api.as_struct_string(args[0])
-                reply = self.impl.func_string(param_string)
-                return api.from_struct_bool(reply)      
-            case _:
-                logging.info("unknown operation")
-                return None
+        if path == "funcBool":
+            param_bool = api.as_struct_bool(args[0])
+            reply = self.impl.func_bool(param_bool)
+            return api.from_struct_bool(reply)
+        elif path == "funcInt":
+            param_int = api.as_struct_int(args[0])
+            reply = self.impl.func_int(param_int)
+            return api.from_struct_bool(reply)
+        elif path == "funcFloat":
+            param_float = api.as_struct_float(args[0])
+            reply = self.impl.func_float(param_float)
+            return api.from_struct_bool(reply)
+        elif path == "funcString":
+            param_string = api.as_struct_string(args[0])
+            reply = self.impl.func_string(param_string)
+            return api.from_struct_bool(reply)      
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -167,33 +162,32 @@ class StructArrayInterfaceSource(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-            case "sigBool":
-                param_bool = api.from_struct_bool(args[0])
-                RemoteNode.notify_signal(symbol, [param_bool])
-            case "sigInt":
-                param_int = api.from_struct_int(args[0])
-                RemoteNode.notify_signal(symbol, [param_int])
-            case "sigFloat":
-                param_float = api.from_struct_float(args[0])
-                RemoteNode.notify_signal(symbol, [param_float])
-            case "sigString":
-                param_string = api.from_struct_string(args[0])
-                RemoteNode.notify_signal(symbol, [param_string])
-            case _:
-                logging.info("unknown signal %s", symbol)
+        if path == "sigBool":
+            param_bool = api.from_struct_bool(args[0])
+            return RemoteNode.notify_signal(symbol, [param_bool])
+        elif path == "sigInt":
+            param_int = api.from_struct_int(args[0])
+            return RemoteNode.notify_signal(symbol, [param_int])
+        elif path == "sigFloat":
+            param_float = api.from_struct_float(args[0])
+            return RemoteNode.notify_signal(symbol, [param_float])
+        elif path == "sigString":
+            param_string = api.from_struct_string(args[0])
+            return RemoteNode.notify_signal(symbol, [param_string])
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-            case "propBool":
-                v = api.from_struct_bool(value)
-            case "propInt":
-                v = api.from_struct_int(value)
-            case "propFloat":
-                v = api.from_struct_float(value)
-            case "propString":
-                v = api.from_struct_string(value)
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)
+        if path == "propBool":
+            v = api.from_struct_bool(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "propInt":
+            v = api.from_struct_int(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "propFloat":
+            v = api.from_struct_float(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        elif path == "propString":
+            v = api.from_struct_string(value)
+            return RemoteNode.notify_property_change(symbol, value)
+        logging.info("unknown property %s", symbol)
