@@ -5,7 +5,7 @@ vars:
 tasks:
   install:
     cmds:
-      - go install github.com/apigear-io/cli@latest
+      - go install github.com/apigear-io/cli/cmd/apigear@latest
       # - rm -rf tmp bin
       # - mkdir tmp bin
       # - gh release download --repo apigear-io/cli --pattern "apigear_{{OS}}_{{ARCH}}.zip" --dir tmp
