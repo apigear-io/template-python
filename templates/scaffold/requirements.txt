@@ -4,4 +4,4 @@ starlette
 uvicorn
 pytest
 websockets
-git+https://github.com/apigear-io/objectlink-core-python.git@v0.0.1#objectlink-core-python
+git+https://github.com/apigear-io/objectlink-core-python.git@v0.1.0#objectlink-core-python

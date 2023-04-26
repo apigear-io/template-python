@@ -17,16 +17,24 @@ tasks:
       - task: clean
       - apigear g s ./apigear/goldenmaster.solution.yaml
 
-  py::install:
+  py:install:
     desc: install the dependencies
     dir: test
     cmds:
-      - pip install -r requirements.txt  
-  pytest:
+      - pip install -r requirements.txt
+  py:test:
     desc: runs pytest in test dir
     dir: test
-    cmds:      
+    cmds:
       - pytest
   diff:
     cmds:
       - git --no-pager diff --no-index ./goldenmaster ./test
+  ci:
+    desc: runs the ci pipeline
+    cmds:
+      - task: install
+      - task: test
+      - task: diff
+      - task: py:install
+      - task: py:test

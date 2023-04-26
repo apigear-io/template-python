@@ -19,31 +19,37 @@ class {{$class}}Source(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        match path:
-{{- range .Properties }}
-            case "{{.Name}}":
-                v = api.as_{{snake .Type}}(value)
-                self.impl.set_{{snake .Name}}(v)
+{{- range $idx, $p := .Properties }}
+    {{- if $idx }}
+        elif path == "{{.Name}}":
+    {{- else }}
+        if path == "{{.Name}}":
+    {{- end }}
+            v = api.as_{{snake .Type}}(value)
+            return self.impl.set_{{snake .Name}}(v)
 {{- end }}
+        logging.info("unknown property: %s", name)
+
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        match path:
-{{- range .Operations }}
-            case "{{.Name}}":
-            {{- range $idx, $_ := .Params }}
-                {{snake .Name}} = api.as_{{snake .Type}}(args[{{$idx}}])
-            {{- end }}
-                reply = self.impl.{{snake .Name}}({{pyVars .Params}})
-            {{- if .Return.IsVoid }}
-                return None
-            {{- else }}
-                return api.from_{{snake .Return.Type}}(reply)
-            {{- end }}
+{{- range $idx, $o := .Operations }}
+    {{- if $idx }}
+        elif path == "{{.Name}}":
+    {{- else }}
+        if path == "{{.Name}}":
+    {{- end }}
+        {{- range $idx, $_ := .Params }}
+            {{snake .Name}} = api.as_{{snake .Type}}(args[{{$idx}}])
+        {{- end }}
+            reply = self.impl.{{snake .Name}}({{pyVars .Params}})
+        {{- if .Return.IsVoid }}
+            return None
+        {{- else }}
+            return api.from_{{snake .Return.Type}}(reply)
+        {{- end }}
 {{- end }}      
-            case _:
-                logging.info("unknown operation")
-                return None
+        logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         print('linked')
@@ -58,25 +64,29 @@ class {{$class}}Source(IObjectSource):
 
     def notify_signal(self, symbol, args):
         path = Name.path_from_name(symbol)
-        match path:
-{{- range .Signals }}
-            case "{{.Name}}":
-            {{- range $idx, $_ := .Params }}
-                {{snake .Name}} = api.from_{{snake .Type}}(args[{{$idx}}])
-            {{- end }}
-                RemoteNode.notify_signal(symbol, [{{pyVars .Params}}])    
+{{- range $idx, $s := .Signals }}
+    {{- if $idx }}
+        elif path == "{{.Name}}":
+    {{- else }}
+        if path == "{{.Name}}":
+    {{- end }}
+        {{- range $idx, $_ := .Params }}
+            {{snake .Name}} = api.from_{{snake .Type}}(args[{{$idx}}])
+        {{- end }}
+            return RemoteNode.notify_signal(symbol, [{{pyVars .Params}}])    
 {{- end }}
-            case _:
-                logging.info("unknown signal %s", symbol)
+        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
-        match path:
-{{- range .Properties }}
-            case "{{.Name}}":
-                v = api.from_{{snake .Type}}(value)
+{{- range $idx, $p := .Properties }}
+    {{- if $idx }}
+        elif path == "{{.Name}}":
+    {{- else }}
+        if path == "{{.Name}}":
+    {{- end }}
+            v = api.from_{{snake .Type}}(value)
+            return RemoteNode.notify_property_change(symbol, value)
 {{- end }}
-                RemoteNode.notify_property_change(symbol, value)
-            case _:
-                logging.info("unknown property %s", symbol)    
+        logging.info("unknown property %s", symbol)    
 {{- end }}
