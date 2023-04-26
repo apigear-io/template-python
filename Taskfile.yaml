@@ -6,7 +6,12 @@ tasks:
       - go install github.com/apigear-io/cli/cmd/apigear@latest
   clean:
     cmds:
-      - rm -rf ./test
+      - cmd: powershell del -r -fo test
+        platforms: [windows]
+        ignore_error: true
+      - cmd: rm -rf test
+        platforms: [linux, darwin]
+        ignore_error: true
   test:
     cmds:
       - task: clean
