@@ -6,6 +6,7 @@ tasks:
   install:
     cmds:
       - go install github.com/apigear-io/cli/cmd/apigear@latest
+      - pip install black
       # - rm -rf tmp bin
       # - mkdir tmp bin
       # - gh release download --repo apigear-io/cli --pattern "apigear_{{OS}}_{{ARCH}}.zip" --dir tmp
@@ -36,6 +37,10 @@ tasks:
   diff:
     cmds:
       - git --no-pager diff --no-index ./goldenmaster ./test
+  format:
+    dir: test
+    cmds:
+      - black .
   ci:
     desc: runs the ci pipeline
     cmds:
