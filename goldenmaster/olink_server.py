@@ -27,6 +27,9 @@ import tb_simple_impl
 import testbed1_olink
 import testbed1_impl
 
+import tb_empty_olink
+import tb_empty_impl
+
 testbed2_olink.ManyParamInterfaceSource(testbed2_impl.ManyParamInterface())
 testbed2_olink.NestedStruct1InterfaceSource(testbed2_impl.NestedStruct1Interface())
 testbed2_olink.NestedStruct2InterfaceSource(testbed2_impl.NestedStruct2Interface())
@@ -49,6 +52,8 @@ tb_simple_olink.SimpleArrayInterfaceSource(tb_simple_impl.SimpleArrayInterface()
 
 testbed1_olink.StructInterfaceSource(testbed1_impl.StructInterface())
 testbed1_olink.StructArrayInterfaceSource(testbed1_impl.StructArrayInterface())
+
+tb_empty_olink.EmptyInterfaceSource(tb_empty_impl.EmptyInterface())
 
 
 

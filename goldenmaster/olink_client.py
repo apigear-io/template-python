@@ -11,6 +11,7 @@ import tb_same1_olink
 import tb_same2_olink
 import tb_simple_olink
 import testbed1_olink
+import tb_empty_olink
 
 class Client:
     def __init__(self, node: ClientNode):
@@ -141,6 +142,12 @@ node.link_remote(sink.olink_object_name())
 
 # create and register sink for testbed1.StructArrayInterface
 sink = testbed1_olink.StructArrayInterfaceSink()
+node.link_remote(sink.olink_object_name())
+
+
+
+# create and register sink for tb.empty.EmptyInterface
+sink = tb_empty_olink.EmptyInterfaceSink()
 node.link_remote(sink.olink_object_name())
 
 
