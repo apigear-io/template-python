@@ -6,6 +6,8 @@ from enum import IntEnum
 class {{ .Name }}(IntEnum):
     {{- range .Members }}
     {{ snake .Name }} = {{ .Value }}
+    {{- else }}
+    pass
     {{- end }}
 {{- end }}
 
@@ -14,6 +16,8 @@ class {{ .Name }}(IntEnum):
 class {{ Camel .Name }}(BaseModel):
     {{- range .Fields }}
     {{ snake .Name }}: {{ pyReturn "" . }} = Field(None, alias="{{.Name}}")
+    {{- else }}
+    pass
     {{- end }}
 {{- end }}
 
@@ -33,6 +37,9 @@ class I{{ $class}}:
 
     def {{snake .Name}}({{pyParams "" .Params}}):
         raise NotImplementedError
+    {{- end }}
+    {{- if .NoMembers }}
+    pass
     {{- end }}
 {{- end }}
 
