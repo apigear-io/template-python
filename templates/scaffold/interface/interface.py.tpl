@@ -1,6 +1,7 @@
 from {{ snake .Module.Name}}_api import api
 from typing import Iterable
-{{- $class := .Interface.Name }}
+{{- $class := Camel .Interface.Name }}
+{{- $ns := printf "%s.%s" $.Module.Name $.Interface.Name }}
 
 class {{$class}}(api.I{{$class}}):
     def __init__(self, notifier=None):
@@ -23,7 +24,7 @@ class {{$class}}(api.I{{$class}}):
     def push_{{snake .Name}}(self, value):
         if not self._notifier:
             return
-        self._notifier.notify_property("{{$.Module.Name}}.{{$.Interface.Name}}/{{.Name}}", value)
+        self._notifier.notify_property("{{$ns}}/{{.Name}}", value)
 {{- end }}
 
 {{- range .Interface.Operations }}
@@ -41,5 +42,5 @@ class {{$class}}(api.I{{$class}}):
     def {{snake .Name}}({{pyParams "api." .Params }}):
         if not self._notifier:
             return
-        self._notifier.notify_signal("{{$.Module.Name}}.{{$.Interface.Name}}/{{.Name}}", [{{pyVars .Params}}])
+        self._notifier.notify_signal("{{$ns}}/{{.Name}}", [{{pyVars .Params}}])
 {{- end }}

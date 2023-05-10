@@ -6,13 +6,13 @@ from . import shared
 
 {{ $module := .Module }}
 {{- range .Module.Interfaces }}
-{{ $iface := . }}
+{{ $i := . }}
 class {{Camel .Name}}(api.I{{Camel .Name}}):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url
 {{- range .Properties }}        
-        self._{{snake .Name}} = {{pyDefault "" .}}
+        self._{{snake .Name}} = {{pyDefault "api." .}}
 {{- end }}
 {{- range .Properties }}
     
@@ -23,19 +23,19 @@ class {{Camel .Name}}(api.I{{Camel .Name}}):
         self._{{snake .Name}} = value
 {{- end }}
 {{- range .Operations }}
-    def {{snake .Name}}({{pyParams "" .Params}}):
-        req = shared.{{$iface.Name}}{{Camel .Name}}Request(
+
+    def {{snake .Name}}({{pyParams "api." .Params}}):
+        req = shared.{{$i.Name}}{{Camel .Name}}Request(
     {{- range $idx, $el := .Params }}
-            {{if $idx}}, {{end}}{{.Name}}={{.Name}}
+            {{if $idx}}, {{end}}{{snake .Name}}={{snake .Name}}
     {{- end }}
         )
         data = requests.post(
-            f'{self.url}/{{$module.Name}}/{{$iface.Name}}/{{.Name}}',
+            f'{self.url}/{{snake $module.Name}}/{{snake $i.Name}}/{{snake .Name}}',
             req.json()
         )
-        resp = shared.{{Camel $iface.Name}}{{Camel .Name}}Response(**data.json())
-        print(resp.json())
-{{- range $iface.Properties }}
+        resp = shared.{{Camel $i.Name}}{{Camel .Name}}Response(**data.json())
+{{- range $i.Properties }}
         self._{{snake .Name}} = resp.state.{{snake .Name}}
 {{- end }}
 

@@ -33,7 +33,7 @@ pip install --upgrade pip
 For dependencies see `requirements.txt`
 
 ```
-pip install -r requirements.txt
+pip install --upgrade -r requirements.txt
 ```
 
 ## Features

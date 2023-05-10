@@ -1,12 +1,12 @@
-from olink.core.types import Name
-from olink.remotenode import IObjectSource, RemoteNode
+from olink.core import Name
+from olink.remote import IObjectSource, RemoteNode
 from {{snake .Module.Name}}_api import api
 from typing import Any
 import logging
 
 {{- range .Module.Interfaces }}
 {{- $class := Camel .Name }}
-
+{{- $id := printf "%s.%s" $.Module.Name .Name }}
 class {{$class}}Source(IObjectSource):
     impl: api.I{{$class}}
     def __init__(self, impl: api.I{{$class}}):
@@ -15,7 +15,7 @@ class {{$class}}Source(IObjectSource):
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
-        return "{{$.Module.Name}}.{{.Name}}"
+        return "{{$id}}"
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)

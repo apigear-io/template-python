@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Iterable
 from {{dot .Module.Name}}_api import api
 
@@ -6,7 +6,7 @@ from {{dot .Module.Name}}_api import api
 {{ $iface := . }}
 class {{Camel .Name}}State(BaseModel):
 {{- range .Properties }}
-    {{.Name}}: {{ pyReturn "api." . }}
+    {{snake .Name }}: {{pyType "api." .}} = Field(None, alias="{{.Name}}")
 {{- else }}
     pass
 {{- end }}
@@ -16,7 +16,7 @@ class {{Camel .Name}}State(BaseModel):
 # method {{$iface.Name}}.{{.Name}}
 class {{$iface.Name}}{{Camel .Name}}Request(BaseModel):
 {{- range .Params }}
-    {{.Name}}: {{ pyReturn "api." . }}
+    {{snake .Name }}: {{pyType "api." .}} = Field(None, alias="{{.Name}}")
 {{- else }}
     pass
 {{- end }} {{/* range .Params */}}
