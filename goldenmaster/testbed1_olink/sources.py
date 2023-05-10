@@ -1,9 +1,8 @@
-from olink.core.types import Name
-from olink.remotenode import IObjectSource, RemoteNode
+from olink.core import Name
+from olink.remote import IObjectSource, RemoteNode
 from testbed1_api import api
 from typing import Any
 import logging
-
 class StructInterfaceSource(IObjectSource):
     impl: api.IStructInterface
     def __init__(self, impl: api.IStructInterface):
@@ -97,7 +96,6 @@ class StructInterfaceSource(IObjectSource):
             v = api.from_struct_string(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class StructArrayInterfaceSource(IObjectSource):
     impl: api.IStructArrayInterface
     def __init__(self, impl: api.IStructArrayInterface):

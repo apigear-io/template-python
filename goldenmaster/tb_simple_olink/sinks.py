@@ -1,9 +1,10 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from tb_simple_api import api
+
 class SimpleInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -24,12 +25,16 @@ class SimpleInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.simple.SimpleInterface/SimpleInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func_bool(self, param_bool: bool):
         return await self._invoke("funcBool", [param_bool])
+
     async def func_int(self, param_int: int):
         return await self._invoke("funcInt", [param_int])
+
     async def func_float(self, param_float: float):
         return await self._invoke("funcFloat", [param_float])
+
     async def func_string(self, param_string: str):
         return await self._invoke("funcString", [param_string])
 
@@ -49,6 +54,7 @@ class SimpleInterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class SimpleArrayInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -69,12 +75,16 @@ class SimpleArrayInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.simple.SimpleArrayInterface/SimpleArrayInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func_bool(self, param_bool: list[bool]):
         return await self._invoke("funcBool", [param_bool])
+
     async def func_int(self, param_int: list[int]):
         return await self._invoke("funcInt", [param_int])
+
     async def func_float(self, param_float: list[float]):
         return await self._invoke("funcFloat", [param_float])
+
     async def func_string(self, param_string: list[str]):
         return await self._invoke("funcString", [param_string])
 

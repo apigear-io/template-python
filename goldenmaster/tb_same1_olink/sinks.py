@@ -1,9 +1,10 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from tb_same1_api import api
+
 class SameStruct1InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -18,6 +19,7 @@ class SameStruct1InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.same1.SameStruct1Interface/SameStruct1Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.Struct1):
         return await self._invoke("func1", [param1])
 
@@ -37,6 +39,7 @@ class SameStruct1InterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class SameStruct2InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -53,8 +56,10 @@ class SameStruct2InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.same1.SameStruct2Interface/SameStruct2Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.Struct1):
         return await self._invoke("func1", [param1])
+
     async def func2(self, param1: api.Struct1, param2: api.Struct2):
         return await self._invoke("func2", [param1, param2])
 
@@ -74,10 +79,11 @@ class SameStruct2InterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class SameEnum1InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = api.Enum1.value1
+        self.prop1 = api.Enum1.VALUE1
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
@@ -88,6 +94,7 @@ class SameEnum1InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.same1.SameEnum1Interface/SameEnum1Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.Enum1):
         return await self._invoke("func1", [param1])
 
@@ -107,11 +114,12 @@ class SameEnum1InterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class SameEnum2InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = api.Enum1.value1
-        self.prop2 = api.Enum2.value1
+        self.prop1 = api.Enum1.VALUE1
+        self.prop2 = api.Enum2.VALUE1
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.sig2 = EventHook()
@@ -123,8 +131,10 @@ class SameEnum2InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.same1.SameEnum2Interface/SameEnum2Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.Enum1):
         return await self._invoke("func1", [param1])
+
     async def func2(self, param1: api.Enum1, param2: api.Enum2):
         return await self._invoke("func2", [param1, param2])
 

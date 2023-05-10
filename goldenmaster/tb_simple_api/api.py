@@ -4,6 +4,8 @@ from enum import IntEnum
 
 
 class ISimpleInterface:
+    def __init__(self):
+        pass
 
     def get_prop_bool(self):
         raise NotImplementedError
@@ -42,6 +44,8 @@ class ISimpleInterface:
         raise NotImplementedError
 
 class ISimpleArrayInterface:
+    def __init__(self):
+        pass
 
     def get_prop_bool(self):
         raise NotImplementedError
@@ -91,7 +95,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']

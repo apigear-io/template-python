@@ -1,9 +1,8 @@
-from olink.core.types import Name
-from olink.remotenode import IObjectSource, RemoteNode
+from olink.core import Name
+from olink.remote import IObjectSource, RemoteNode
 from tb_same2_api import api
 from typing import Any
 import logging
-
 class SameStruct1InterfaceSource(IObjectSource):
     impl: api.ISameStruct1Interface
     def __init__(self, impl: api.ISameStruct1Interface):
@@ -52,7 +51,6 @@ class SameStruct1InterfaceSource(IObjectSource):
             v = api.from_struct1(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class SameStruct2InterfaceSource(IObjectSource):
     impl: api.ISameStruct2Interface
     def __init__(self, impl: api.ISameStruct2Interface):
@@ -118,7 +116,6 @@ class SameStruct2InterfaceSource(IObjectSource):
             v = api.from_struct2(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class SameEnum1InterfaceSource(IObjectSource):
     impl: api.ISameEnum1Interface
     def __init__(self, impl: api.ISameEnum1Interface):
@@ -167,7 +164,6 @@ class SameEnum1InterfaceSource(IObjectSource):
             v = api.from_enum1(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class SameEnum2InterfaceSource(IObjectSource):
     impl: api.ISameEnum2Interface
     def __init__(self, impl: api.ISameEnum2Interface):

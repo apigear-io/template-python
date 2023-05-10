@@ -4,22 +4,22 @@ from enum import IntEnum
 
 
 class Enum1(IntEnum):
-    value1 = 1
-    value2 = 2
-    value3 = 3
-    value4 = 4
+    VALUE1 = 1
+    VALUE2 = 2
+    VALUE3 = 3
+    VALUE4 = 4
 
 class Enum2(IntEnum):
-    value1 = 1
-    value2 = 2
-    value3 = 3
-    value4 = 4
+    VALUE1 = 1
+    VALUE2 = 2
+    VALUE3 = 3
+    VALUE4 = 4
 
 class Enum3(IntEnum):
-    value1 = 1
-    value2 = 2
-    value3 = 3
-    value4 = 4
+    VALUE1 = 1
+    VALUE2 = 2
+    VALUE3 = 3
+    VALUE4 = 4
 
 class Struct1(BaseModel):
     field1: int = Field(None, alias="field1")
@@ -52,6 +52,8 @@ class NestedStruct3(BaseModel):
     field3: Struct3 = Field(None, alias="field3")
 
 class IManyParamInterface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -90,6 +92,8 @@ class IManyParamInterface:
         raise NotImplementedError
 
 class INestedStruct1Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -101,6 +105,8 @@ class INestedStruct1Interface:
         raise NotImplementedError
 
 class INestedStruct2Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -121,6 +127,8 @@ class INestedStruct2Interface:
         raise NotImplementedError
 
 class INestedStruct3Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -161,7 +169,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']

@@ -10,10 +10,10 @@ class EnumInterface(api.IEnumInterface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop0 = Enum0.value0        
-        self._prop1 = Enum1.value1        
-        self._prop2 = Enum2.value2        
-        self._prop3 = Enum3.value3
+        self._prop0 = api.Enum0.VALUE0        
+        self._prop1 = api.Enum1.VALUE1        
+        self._prop2 = api.Enum2.VALUE2        
+        self._prop3 = api.Enum3.VALUE3
     
     def get_prop0(self):
         return self._prop0
@@ -38,58 +38,58 @@ class EnumInterface(api.IEnumInterface):
 
     def set_prop3(self, value):
         self._prop3 = value
-    def func0(self, param0: Enum0):
+
+    def func0(self, param0: api.Enum0):
         req = shared.EnumInterfaceFunc0Request(
             param0=param0
         )
         data = requests.post(
-            f'{self.url}/tb.enum/EnumInterface/func0',
+            f'{self.url}/tb_enum/enum_interface/func0',
             req.json()
         )
         resp = shared.EnumInterfaceFunc0Response(**data.json())
-        print(resp.json())
         self._prop0 = resp.state.prop0
         self._prop1 = resp.state.prop1
         self._prop2 = resp.state.prop2
         self._prop3 = resp.state.prop3
-    def func1(self, param1: Enum1):
+
+    def func1(self, param1: api.Enum1):
         req = shared.EnumInterfaceFunc1Request(
             param1=param1
         )
         data = requests.post(
-            f'{self.url}/tb.enum/EnumInterface/func1',
+            f'{self.url}/tb_enum/enum_interface/func1',
             req.json()
         )
         resp = shared.EnumInterfaceFunc1Response(**data.json())
-        print(resp.json())
         self._prop0 = resp.state.prop0
         self._prop1 = resp.state.prop1
         self._prop2 = resp.state.prop2
         self._prop3 = resp.state.prop3
-    def func2(self, param2: Enum2):
+
+    def func2(self, param2: api.Enum2):
         req = shared.EnumInterfaceFunc2Request(
             param2=param2
         )
         data = requests.post(
-            f'{self.url}/tb.enum/EnumInterface/func2',
+            f'{self.url}/tb_enum/enum_interface/func2',
             req.json()
         )
         resp = shared.EnumInterfaceFunc2Response(**data.json())
-        print(resp.json())
         self._prop0 = resp.state.prop0
         self._prop1 = resp.state.prop1
         self._prop2 = resp.state.prop2
         self._prop3 = resp.state.prop3
-    def func3(self, param3: Enum3):
+
+    def func3(self, param3: api.Enum3):
         req = shared.EnumInterfaceFunc3Request(
             param3=param3
         )
         data = requests.post(
-            f'{self.url}/tb.enum/EnumInterface/func3',
+            f'{self.url}/tb_enum/enum_interface/func3',
             req.json()
         )
         resp = shared.EnumInterfaceFunc3Response(**data.json())
-        print(resp.json())
         self._prop0 = resp.state.prop0
         self._prop1 = resp.state.prop1
         self._prop2 = resp.state.prop2

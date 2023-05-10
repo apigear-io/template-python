@@ -1,26 +1,18 @@
 from fastapi import APIRouter
-
-
-
-from testbed2 import ManyParamInterface
-from testbed2 import NestedStruct1Interface
-from testbed2 import NestedStruct2Interface
-from testbed2 import NestedStruct3Interface
-
 from . import shared
 
 router = APIRouter()
 
 
-many_param_interface = ManyParamInterface()
-nested_struct1_interface = NestedStruct1Interface()
-nested_struct2_interface = NestedStruct2Interface()
-nested_struct3_interface = NestedStruct3Interface()
+many_param_interface = shared.ManyParamInterfaceState()
+nested_struct1_interface = shared.NestedStruct1InterfaceState()
+nested_struct2_interface = shared.NestedStruct2InterfaceState()
+nested_struct3_interface = shared.NestedStruct3InterfaceState()
 
 
 
 @router.post(
-    "/many_param_interface/func1", 
+    "/testbed2/many_param_interface/func1", 
     response_model=shared.ManyParamInterfaceFunc1Response
 )
 async def many_param_interface_func1(params: shared.ManyParamInterfaceFunc1Request):
@@ -38,7 +30,7 @@ async def many_param_interface_func1(params: shared.ManyParamInterfaceFunc1Reque
     return response
 
 @router.post(
-    "/many_param_interface/func2", 
+    "/testbed2/many_param_interface/func2", 
     response_model=shared.ManyParamInterfaceFunc2Response
 )
 async def many_param_interface_func2(params: shared.ManyParamInterfaceFunc2Request):
@@ -56,7 +48,7 @@ async def many_param_interface_func2(params: shared.ManyParamInterfaceFunc2Reque
     return response
 
 @router.post(
-    "/many_param_interface/func3", 
+    "/testbed2/many_param_interface/func3", 
     response_model=shared.ManyParamInterfaceFunc3Response
 )
 async def many_param_interface_func3(params: shared.ManyParamInterfaceFunc3Request):
@@ -74,7 +66,7 @@ async def many_param_interface_func3(params: shared.ManyParamInterfaceFunc3Reque
     return response
 
 @router.post(
-    "/many_param_interface/func4", 
+    "/testbed2/many_param_interface/func4", 
     response_model=shared.ManyParamInterfaceFunc4Response
 )
 async def many_param_interface_func4(params: shared.ManyParamInterfaceFunc4Request):
@@ -94,7 +86,7 @@ async def many_param_interface_func4(params: shared.ManyParamInterfaceFunc4Reque
 
 
 @router.post(
-    "/nested_struct1_interface/func1", 
+    "/testbed2/nested_struct1_interface/func1", 
     response_model=shared.NestedStruct1InterfaceFunc1Response
 )
 async def nested_struct1_interface_func1(params: shared.NestedStruct1InterfaceFunc1Request):
@@ -111,7 +103,7 @@ async def nested_struct1_interface_func1(params: shared.NestedStruct1InterfaceFu
 
 
 @router.post(
-    "/nested_struct2_interface/func1", 
+    "/testbed2/nested_struct2_interface/func1", 
     response_model=shared.NestedStruct2InterfaceFunc1Response
 )
 async def nested_struct2_interface_func1(params: shared.NestedStruct2InterfaceFunc1Request):
@@ -127,7 +119,7 @@ async def nested_struct2_interface_func1(params: shared.NestedStruct2InterfaceFu
     return response
 
 @router.post(
-    "/nested_struct2_interface/func2", 
+    "/testbed2/nested_struct2_interface/func2", 
     response_model=shared.NestedStruct2InterfaceFunc2Response
 )
 async def nested_struct2_interface_func2(params: shared.NestedStruct2InterfaceFunc2Request):
@@ -145,7 +137,7 @@ async def nested_struct2_interface_func2(params: shared.NestedStruct2InterfaceFu
 
 
 @router.post(
-    "/nested_struct3_interface/func1", 
+    "/testbed2/nested_struct3_interface/func1", 
     response_model=shared.NestedStruct3InterfaceFunc1Response
 )
 async def nested_struct3_interface_func1(params: shared.NestedStruct3InterfaceFunc1Request):
@@ -162,7 +154,7 @@ async def nested_struct3_interface_func1(params: shared.NestedStruct3InterfaceFu
     return response
 
 @router.post(
-    "/nested_struct3_interface/func2", 
+    "/testbed2/nested_struct3_interface/func2", 
     response_model=shared.NestedStruct3InterfaceFunc2Response
 )
 async def nested_struct3_interface_func2(params: shared.NestedStruct3InterfaceFunc2Request):
@@ -179,7 +171,7 @@ async def nested_struct3_interface_func2(params: shared.NestedStruct3InterfaceFu
     return response
 
 @router.post(
-    "/nested_struct3_interface/func3", 
+    "/testbed2/nested_struct3_interface/func3", 
     response_model=shared.NestedStruct3InterfaceFunc3Response
 )
 async def nested_struct3_interface_func3(params: shared.NestedStruct3InterfaceFunc3Request):

@@ -38,58 +38,58 @@ class StructInterface(api.IStructInterface):
 
     def set_prop_string(self, value):
         self._prop_string = value
-    def func_bool(self, param_bool: StructBool):
+
+    def func_bool(self, param_bool: api.StructBool):
         req = shared.StructInterfaceFuncBoolRequest(
-            paramBool=paramBool
+            param_bool=param_bool
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructInterface/funcBool',
+            f'{self.url}/testbed1/struct_interface/func_bool',
             req.json()
         )
         resp = shared.StructInterfaceFuncBoolResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
-    def func_int(self, param_int: StructInt):
+
+    def func_int(self, param_int: api.StructInt):
         req = shared.StructInterfaceFuncIntRequest(
-            paramInt=paramInt
+            param_int=param_int
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructInterface/funcInt',
+            f'{self.url}/testbed1/struct_interface/func_int',
             req.json()
         )
         resp = shared.StructInterfaceFuncIntResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
-    def func_float(self, param_float: StructFloat):
+
+    def func_float(self, param_float: api.StructFloat):
         req = shared.StructInterfaceFuncFloatRequest(
-            paramFloat=paramFloat
+            param_float=param_float
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructInterface/funcFloat',
+            f'{self.url}/testbed1/struct_interface/func_float',
             req.json()
         )
         resp = shared.StructInterfaceFuncFloatResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
-    def func_string(self, param_string: StructString):
+
+    def func_string(self, param_string: api.StructString):
         req = shared.StructInterfaceFuncStringRequest(
-            paramString=paramString
+            param_string=param_string
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructInterface/funcString',
+            f'{self.url}/testbed1/struct_interface/func_string',
             req.json()
         )
         resp = shared.StructInterfaceFuncStringResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
@@ -127,58 +127,58 @@ class StructArrayInterface(api.IStructArrayInterface):
 
     def set_prop_string(self, value):
         self._prop_string = value
-    def func_bool(self, param_bool: list[StructBool]):
+
+    def func_bool(self, param_bool: list[api.StructBool]):
         req = shared.StructArrayInterfaceFuncBoolRequest(
-            paramBool=paramBool
+            param_bool=param_bool
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructArrayInterface/funcBool',
+            f'{self.url}/testbed1/struct_array_interface/func_bool',
             req.json()
         )
         resp = shared.StructArrayInterfaceFuncBoolResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
-    def func_int(self, param_int: list[StructInt]):
+
+    def func_int(self, param_int: list[api.StructInt]):
         req = shared.StructArrayInterfaceFuncIntRequest(
-            paramInt=paramInt
+            param_int=param_int
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructArrayInterface/funcInt',
+            f'{self.url}/testbed1/struct_array_interface/func_int',
             req.json()
         )
         resp = shared.StructArrayInterfaceFuncIntResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
-    def func_float(self, param_float: list[StructFloat]):
+
+    def func_float(self, param_float: list[api.StructFloat]):
         req = shared.StructArrayInterfaceFuncFloatRequest(
-            paramFloat=paramFloat
+            param_float=param_float
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructArrayInterface/funcFloat',
+            f'{self.url}/testbed1/struct_array_interface/func_float',
             req.json()
         )
         resp = shared.StructArrayInterfaceFuncFloatResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
-    def func_string(self, param_string: list[StructString]):
+
+    def func_string(self, param_string: list[api.StructString]):
         req = shared.StructArrayInterfaceFuncStringRequest(
-            paramString=paramString
+            param_string=param_string
         )
         data = requests.post(
-            f'{self.url}/testbed1/StructArrayInterface/funcString',
+            f'{self.url}/testbed1/struct_array_interface/func_string',
             req.json()
         )
         resp = shared.StructArrayInterfaceFuncStringResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float

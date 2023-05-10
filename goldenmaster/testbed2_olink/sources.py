@@ -1,9 +1,8 @@
-from olink.core.types import Name
-from olink.remotenode import IObjectSource, RemoteNode
+from olink.core import Name
+from olink.remote import IObjectSource, RemoteNode
 from testbed2_api import api
 from typing import Any
 import logging
-
 class ManyParamInterfaceSource(IObjectSource):
     impl: api.IManyParamInterface
     def __init__(self, impl: api.IManyParamInterface):
@@ -109,7 +108,6 @@ class ManyParamInterfaceSource(IObjectSource):
             v = api.from_int(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class NestedStruct1InterfaceSource(IObjectSource):
     impl: api.INestedStruct1Interface
     def __init__(self, impl: api.INestedStruct1Interface):
@@ -158,7 +156,6 @@ class NestedStruct1InterfaceSource(IObjectSource):
             v = api.from_nested_struct1(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class NestedStruct2InterfaceSource(IObjectSource):
     impl: api.INestedStruct2Interface
     def __init__(self, impl: api.INestedStruct2Interface):
@@ -224,7 +221,6 @@ class NestedStruct2InterfaceSource(IObjectSource):
             v = api.from_nested_struct2(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class NestedStruct3InterfaceSource(IObjectSource):
     impl: api.INestedStruct3Interface
     def __init__(self, impl: api.INestedStruct3Interface):

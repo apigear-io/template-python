@@ -1,9 +1,10 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from testbed2_api import api
+
 class ManyParamInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -24,12 +25,16 @@ class ManyParamInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('testbed2.ManyParamInterface/ManyParamInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: int):
         return await self._invoke("func1", [param1])
+
     async def func2(self, param1: int, param2: int):
         return await self._invoke("func2", [param1, param2])
+
     async def func3(self, param1: int, param2: int, param3: int):
         return await self._invoke("func3", [param1, param2, param3])
+
     async def func4(self, param1: int, param2: int, param3: int, param4: int):
         return await self._invoke("func4", [param1, param2, param3, param4])
 
@@ -49,6 +54,7 @@ class ManyParamInterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class NestedStruct1InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -63,6 +69,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('testbed2.NestedStruct1Interface/NestedStruct1Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.NestedStruct1):
         return await self._invoke("func1", [param1])
 
@@ -82,6 +89,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class NestedStruct2InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -98,8 +106,10 @@ class NestedStruct2InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('testbed2.NestedStruct2Interface/NestedStruct2Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.NestedStruct1):
         return await self._invoke("func1", [param1])
+
     async def func2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
         return await self._invoke("func2", [param1, param2])
 
@@ -119,6 +129,7 @@ class NestedStruct2InterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class NestedStruct3InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -137,10 +148,13 @@ class NestedStruct3InterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('testbed2.NestedStruct3Interface/NestedStruct3Interface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: api.NestedStruct1):
         return await self._invoke("func1", [param1])
+
     async def func2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
         return await self._invoke("func2", [param1, param2])
+
     async def func3(self, param1: api.NestedStruct1, param2: api.NestedStruct2, param3: api.NestedStruct3):
         return await self._invoke("func3", [param1, param2, param3])
 

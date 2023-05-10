@@ -4,26 +4,28 @@ from enum import IntEnum
 
 
 class Enum0(IntEnum):
-    value0 = 0
-    value1 = 1
-    value2 = 2
+    VALUE0 = 0
+    VALUE1 = 1
+    VALUE2 = 2
 
 class Enum1(IntEnum):
-    value1 = 1
-    value2 = 2
-    value3 = 3
+    VALUE1 = 1
+    VALUE2 = 2
+    VALUE3 = 3
 
 class Enum2(IntEnum):
-    value2 = 2
-    value1 = 1
-    value0 = 0
+    VALUE2 = 2
+    VALUE1 = 1
+    VALUE0 = 0
 
 class Enum3(IntEnum):
-    value3 = 3
-    value2 = 2
-    value1 = 1
+    VALUE3 = 3
+    VALUE2 = 2
+    VALUE1 = 1
 
 class IEnumInterface:
+    def __init__(self):
+        pass
 
     def get_prop0(self):
         raise NotImplementedError
@@ -73,7 +75,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']

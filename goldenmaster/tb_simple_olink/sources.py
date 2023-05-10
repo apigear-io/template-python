@@ -1,9 +1,8 @@
-from olink.core.types import Name
-from olink.remotenode import IObjectSource, RemoteNode
+from olink.core import Name
+from olink.remote import IObjectSource, RemoteNode
 from tb_simple_api import api
 from typing import Any
 import logging
-
 class SimpleInterfaceSource(IObjectSource):
     impl: api.ISimpleInterface
     def __init__(self, impl: api.ISimpleInterface):
@@ -97,7 +96,6 @@ class SimpleInterfaceSource(IObjectSource):
             v = api.from_string(value)
             return RemoteNode.notify_property_change(symbol, value)
         logging.info("unknown property %s", symbol)
-
 class SimpleArrayInterfaceSource(IObjectSource):
     impl: api.ISimpleArrayInterface
     def __init__(self, impl: api.ISimpleArrayInterface):

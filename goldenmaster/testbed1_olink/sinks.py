@@ -1,9 +1,10 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from testbed1_api import api
+
 class StructInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -24,12 +25,16 @@ class StructInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('testbed1.StructInterface/StructInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func_bool(self, param_bool: api.StructBool):
         return await self._invoke("funcBool", [param_bool])
+
     async def func_int(self, param_int: api.StructInt):
         return await self._invoke("funcInt", [param_int])
+
     async def func_float(self, param_float: api.StructFloat):
         return await self._invoke("funcFloat", [param_float])
+
     async def func_string(self, param_string: api.StructString):
         return await self._invoke("funcString", [param_string])
 
@@ -49,6 +54,7 @@ class StructInterfaceSink(IObjectSink):
         path = Name.path_from_name(name)
         hook = getattr(self, f'on_{path}')        
         hook.fire(*args)
+
 class StructArrayInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -69,12 +75,16 @@ class StructArrayInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('testbed1.StructArrayInterface/StructArrayInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func_bool(self, param_bool: list[api.StructBool]):
         return await self._invoke("funcBool", [param_bool])
+
     async def func_int(self, param_int: list[api.StructInt]):
         return await self._invoke("funcInt", [param_int])
+
     async def func_float(self, param_float: list[api.StructFloat]):
         return await self._invoke("funcFloat", [param_float])
+
     async def func_string(self, param_string: list[api.StructString]):
         return await self._invoke("funcString", [param_string])
 

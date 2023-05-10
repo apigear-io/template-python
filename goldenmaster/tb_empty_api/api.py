@@ -10,7 +10,8 @@ class EmptyStruct(BaseModel):
     pass
 
 class IEmptyInterface:
-    pass
+    def __init__(self):
+        pass
 
 
 def as_int(v):
@@ -24,7 +25,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']

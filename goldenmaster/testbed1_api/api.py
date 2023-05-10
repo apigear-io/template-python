@@ -16,6 +16,8 @@ class StructString(BaseModel):
     field_string: str = Field(None, alias="fieldString")
 
 class IStructInterface:
+    def __init__(self):
+        pass
 
     def get_prop_bool(self):
         raise NotImplementedError
@@ -54,6 +56,8 @@ class IStructInterface:
         raise NotImplementedError
 
 class IStructArrayInterface:
+    def __init__(self):
+        pass
 
     def get_prop_bool(self):
         raise NotImplementedError
@@ -103,7 +107,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']

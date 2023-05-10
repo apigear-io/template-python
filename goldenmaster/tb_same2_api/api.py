@@ -4,12 +4,12 @@ from enum import IntEnum
 
 
 class Enum1(IntEnum):
-    value1 = 1
-    value2 = 2
+    VALUE1 = 1
+    VALUE2 = 2
 
 class Enum2(IntEnum):
-    value1 = 1
-    value2 = 2
+    VALUE1 = 1
+    VALUE2 = 2
 
 class Struct1(BaseModel):
     field1: int = Field(None, alias="field1")
@@ -22,6 +22,8 @@ class Struct2(BaseModel):
     field3: int = Field(None, alias="field3")
 
 class ISameStruct1Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -33,6 +35,8 @@ class ISameStruct1Interface:
         raise NotImplementedError
 
 class ISameStruct2Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -53,6 +57,8 @@ class ISameStruct2Interface:
         raise NotImplementedError
 
 class ISameEnum1Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -64,6 +70,8 @@ class ISameEnum1Interface:
         raise NotImplementedError
 
 class ISameEnum2Interface:
+    def __init__(self):
+        pass
 
     def get_prop1(self):
         raise NotImplementedError
@@ -95,7 +103,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']
