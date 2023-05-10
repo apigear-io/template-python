@@ -1,29 +1,24 @@
 from fastapi import APIRouter
-
-{{ $m := .Module}}
-{{ range .Module.Interfaces }}
-from {{ dot $m.Name }} import {{ .Name }}
-{{- end }}
-
+{{- $m := .Module}}
 from . import shared
 
 router = APIRouter()
 
-{{ range .Module.Interfaces }}
-{{ snake .Name }} = {{ .Name }}()
+{{ range $i := .Module.Interfaces }}
+{{ snake $i.Name }} = shared.{{Camel $i.Name }}State()
 {{- end }}
 
 {{ range $i := .Module.Interfaces }}
 {{ range .Operations }}
 @router.post(
-    "/{{ snake $i.Name }}/{{ .Name }}", 
-    response_model=shared.{{ $i.Name }}{{Camel .Name }}Response
+    "/{{snake $m.Name}}/{{ snake $i.Name }}/{{ snake .Name }}", 
+    response_model=shared.{{ Camel $i.Name }}{{Camel .Name }}Response
 )
 async def {{snake $i.Name}}_{{camel .Name}}(params: shared.{{$i.Name}}{{Camel .Name}}Request):
-    result = {{snake $i.Name}}.{{.Name}}({{ range $idx, $e := .Params }}{{if $idx }}, {{end}}params.{{.Name}}{{end}})
-    state = shared.{{$i.Name}}State(
+    result = {{snake $i.Name}}.{{.Name}}({{ range $idx, $e := .Params }}{{if $idx }}, {{end}}params.{{snake .Name}}{{end}})
+    state = shared.{{Camel $i.Name}}State(
         {{- range $i.Properties }}
-        {{ .Name }} = {{ snake $i.Name }}.{{ .Name }},
+        {{snake  .Name }} = {{ snake $i.Name }}.{{ snake .Name }},
         {{- end }}
     )
     response = shared.{{$i.Name}}{{Camel .Name}}Response(

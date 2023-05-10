@@ -3,9 +3,9 @@ from enum import IntEnum
 
 {{ range .Module.Enums }}
 
-class {{ .Name }}(IntEnum):
+class {{Camel .Name }}(IntEnum):
     {{- range .Members }}
-    {{ snake .Name }} = {{ .Value }}
+    {{ SNAKE .Name }} = {{ .Value }}
     {{- else }}
     pass
     {{- end }}
@@ -13,18 +13,19 @@ class {{ .Name }}(IntEnum):
 
 {{- range .Module.Structs }}
 
-class {{ Camel .Name }}(BaseModel):
+class {{Camel .Name }}(BaseModel):
     {{- range .Fields }}
-    {{ snake .Name }}: {{ pyReturn "" . }} = Field(None, alias="{{.Name}}")
+    {{snake .Name }}: {{pyType "" .}} = Field(None, alias="{{.Name}}")
     {{- else }}
     pass
     {{- end }}
 {{- end }}
 
 {{- range .Module.Interfaces }}
-{{- $class := Camel .Name }}
 
-class I{{ $class}}:
+class I{{Camel .Name}}:
+    def __init__(self):
+        pass
     {{- range .Properties }}
 
     def get_{{snake .Name}}(self):
@@ -37,9 +38,6 @@ class I{{ $class}}:
 
     def {{snake .Name}}({{pyParams "" .Params}}):
         raise NotImplementedError
-    {{- end }}
-    {{- if .NoMembers }}
-    pass
     {{- end }}
 {{- end }}
 
@@ -55,7 +53,6 @@ def as_string(v):
 
 def from_string(v):
     return v
-
 
 def as_bool(v):
     return str(v).lower() in ['true', '1', 't', 'y', 'yes']

@@ -1,15 +1,16 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from {{snake .Module.Name}}_api import api
 
 
-{{- $module := .Module }}
+{{- $m := .Module }}
 {{- range .Module.Interfaces }}
-{{- $iface := . }}
-{{- $id := printf "%s.%s" $module.Name $iface.Name }}
+{{- $i := . }}
+{{- $id := printf "%s.%s" $m.Name $i.Name }}
+
 class {{Camel .Name}}Sink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -30,6 +31,7 @@ class {{Camel .Name}}Sink(IObjectSink):
         return await asyncio.wait_for(future, 500)
 
     {{- range .Operations }}
+
     async def {{snake .Name}}({{pyParams "api." .Params}}):
         return await self._invoke("{{.Name}}", [{{pyVars .Params}}])
     {{- end }}

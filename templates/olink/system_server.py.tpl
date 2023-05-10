@@ -7,7 +7,7 @@ from starlette.endpoints import WebSocketEndpoint, Scope, Receive, Send
 from starlette.routing import WebSocketRoute
 from starlette.websockets import WebSocket
 
-from olink.remotenode import RemoteNode
+from olink.remote import RemoteNode
 
 {{- range .System.Modules }}
 {{- $import_olink := printf "%s_olink" (snake .Name)}}
