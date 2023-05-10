@@ -1,31 +1,25 @@
 from fastapi import APIRouter
-
-
-
-from testbed1 import StructInterface
-from testbed1 import StructArrayInterface
-
 from . import shared
 
 router = APIRouter()
 
 
-struct_interface = StructInterface()
-struct_array_interface = StructArrayInterface()
+struct_interface = shared.StructInterfaceState()
+struct_array_interface = shared.StructArrayInterfaceState()
 
 
 
 @router.post(
-    "/struct_interface/funcBool", 
+    "/testbed1/struct_interface/func_bool", 
     response_model=shared.StructInterfaceFuncBoolResponse
 )
 async def struct_interface_funcBool(params: shared.StructInterfaceFuncBoolRequest):
-    result = struct_interface.funcBool(params.paramBool)
+    result = struct_interface.funcBool(params.param_bool)
     state = shared.StructInterfaceState(
-        propBool = struct_interface.propBool,
-        propInt = struct_interface.propInt,
-        propFloat = struct_interface.propFloat,
-        propString = struct_interface.propString,
+        prop_bool = struct_interface.prop_bool,
+        prop_int = struct_interface.prop_int,
+        prop_float = struct_interface.prop_float,
+        prop_string = struct_interface.prop_string,
     )
     response = shared.StructInterfaceFuncBoolResponse(
         result=result,
@@ -34,16 +28,16 @@ async def struct_interface_funcBool(params: shared.StructInterfaceFuncBoolReques
     return response
 
 @router.post(
-    "/struct_interface/funcInt", 
+    "/testbed1/struct_interface/func_int", 
     response_model=shared.StructInterfaceFuncIntResponse
 )
 async def struct_interface_funcInt(params: shared.StructInterfaceFuncIntRequest):
-    result = struct_interface.funcInt(params.paramInt)
+    result = struct_interface.funcInt(params.param_int)
     state = shared.StructInterfaceState(
-        propBool = struct_interface.propBool,
-        propInt = struct_interface.propInt,
-        propFloat = struct_interface.propFloat,
-        propString = struct_interface.propString,
+        prop_bool = struct_interface.prop_bool,
+        prop_int = struct_interface.prop_int,
+        prop_float = struct_interface.prop_float,
+        prop_string = struct_interface.prop_string,
     )
     response = shared.StructInterfaceFuncIntResponse(
         result=result,
@@ -52,16 +46,16 @@ async def struct_interface_funcInt(params: shared.StructInterfaceFuncIntRequest)
     return response
 
 @router.post(
-    "/struct_interface/funcFloat", 
+    "/testbed1/struct_interface/func_float", 
     response_model=shared.StructInterfaceFuncFloatResponse
 )
 async def struct_interface_funcFloat(params: shared.StructInterfaceFuncFloatRequest):
-    result = struct_interface.funcFloat(params.paramFloat)
+    result = struct_interface.funcFloat(params.param_float)
     state = shared.StructInterfaceState(
-        propBool = struct_interface.propBool,
-        propInt = struct_interface.propInt,
-        propFloat = struct_interface.propFloat,
-        propString = struct_interface.propString,
+        prop_bool = struct_interface.prop_bool,
+        prop_int = struct_interface.prop_int,
+        prop_float = struct_interface.prop_float,
+        prop_string = struct_interface.prop_string,
     )
     response = shared.StructInterfaceFuncFloatResponse(
         result=result,
@@ -70,16 +64,16 @@ async def struct_interface_funcFloat(params: shared.StructInterfaceFuncFloatRequ
     return response
 
 @router.post(
-    "/struct_interface/funcString", 
+    "/testbed1/struct_interface/func_string", 
     response_model=shared.StructInterfaceFuncStringResponse
 )
 async def struct_interface_funcString(params: shared.StructInterfaceFuncStringRequest):
-    result = struct_interface.funcString(params.paramString)
+    result = struct_interface.funcString(params.param_string)
     state = shared.StructInterfaceState(
-        propBool = struct_interface.propBool,
-        propInt = struct_interface.propInt,
-        propFloat = struct_interface.propFloat,
-        propString = struct_interface.propString,
+        prop_bool = struct_interface.prop_bool,
+        prop_int = struct_interface.prop_int,
+        prop_float = struct_interface.prop_float,
+        prop_string = struct_interface.prop_string,
     )
     response = shared.StructInterfaceFuncStringResponse(
         result=result,
@@ -90,16 +84,16 @@ async def struct_interface_funcString(params: shared.StructInterfaceFuncStringRe
 
 
 @router.post(
-    "/struct_array_interface/funcBool", 
+    "/testbed1/struct_array_interface/func_bool", 
     response_model=shared.StructArrayInterfaceFuncBoolResponse
 )
 async def struct_array_interface_funcBool(params: shared.StructArrayInterfaceFuncBoolRequest):
-    result = struct_array_interface.funcBool(params.paramBool)
+    result = struct_array_interface.funcBool(params.param_bool)
     state = shared.StructArrayInterfaceState(
-        propBool = struct_array_interface.propBool,
-        propInt = struct_array_interface.propInt,
-        propFloat = struct_array_interface.propFloat,
-        propString = struct_array_interface.propString,
+        prop_bool = struct_array_interface.prop_bool,
+        prop_int = struct_array_interface.prop_int,
+        prop_float = struct_array_interface.prop_float,
+        prop_string = struct_array_interface.prop_string,
     )
     response = shared.StructArrayInterfaceFuncBoolResponse(
         result=result,
@@ -108,16 +102,16 @@ async def struct_array_interface_funcBool(params: shared.StructArrayInterfaceFun
     return response
 
 @router.post(
-    "/struct_array_interface/funcInt", 
+    "/testbed1/struct_array_interface/func_int", 
     response_model=shared.StructArrayInterfaceFuncIntResponse
 )
 async def struct_array_interface_funcInt(params: shared.StructArrayInterfaceFuncIntRequest):
-    result = struct_array_interface.funcInt(params.paramInt)
+    result = struct_array_interface.funcInt(params.param_int)
     state = shared.StructArrayInterfaceState(
-        propBool = struct_array_interface.propBool,
-        propInt = struct_array_interface.propInt,
-        propFloat = struct_array_interface.propFloat,
-        propString = struct_array_interface.propString,
+        prop_bool = struct_array_interface.prop_bool,
+        prop_int = struct_array_interface.prop_int,
+        prop_float = struct_array_interface.prop_float,
+        prop_string = struct_array_interface.prop_string,
     )
     response = shared.StructArrayInterfaceFuncIntResponse(
         result=result,
@@ -126,16 +120,16 @@ async def struct_array_interface_funcInt(params: shared.StructArrayInterfaceFunc
     return response
 
 @router.post(
-    "/struct_array_interface/funcFloat", 
+    "/testbed1/struct_array_interface/func_float", 
     response_model=shared.StructArrayInterfaceFuncFloatResponse
 )
 async def struct_array_interface_funcFloat(params: shared.StructArrayInterfaceFuncFloatRequest):
-    result = struct_array_interface.funcFloat(params.paramFloat)
+    result = struct_array_interface.funcFloat(params.param_float)
     state = shared.StructArrayInterfaceState(
-        propBool = struct_array_interface.propBool,
-        propInt = struct_array_interface.propInt,
-        propFloat = struct_array_interface.propFloat,
-        propString = struct_array_interface.propString,
+        prop_bool = struct_array_interface.prop_bool,
+        prop_int = struct_array_interface.prop_int,
+        prop_float = struct_array_interface.prop_float,
+        prop_string = struct_array_interface.prop_string,
     )
     response = shared.StructArrayInterfaceFuncFloatResponse(
         result=result,
@@ -144,16 +138,16 @@ async def struct_array_interface_funcFloat(params: shared.StructArrayInterfaceFu
     return response
 
 @router.post(
-    "/struct_array_interface/funcString", 
+    "/testbed1/struct_array_interface/func_string", 
     response_model=shared.StructArrayInterfaceFuncStringResponse
 )
 async def struct_array_interface_funcString(params: shared.StructArrayInterfaceFuncStringRequest):
-    result = struct_array_interface.funcString(params.paramString)
+    result = struct_array_interface.funcString(params.param_string)
     state = shared.StructArrayInterfaceState(
-        propBool = struct_array_interface.propBool,
-        propInt = struct_array_interface.propInt,
-        propFloat = struct_array_interface.propFloat,
-        propString = struct_array_interface.propString,
+        prop_bool = struct_array_interface.prop_bool,
+        prop_int = struct_array_interface.prop_int,
+        prop_float = struct_array_interface.prop_float,
+        prop_string = struct_array_interface.prop_string,
     )
     response = shared.StructArrayInterfaceFuncStringResponse(
         result=result,

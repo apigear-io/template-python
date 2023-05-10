@@ -1,16 +1,17 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from tb_enum_api import api
+
 class EnumInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop0 = api.Enum0.value0
-        self.prop1 = api.Enum1.value1
-        self.prop2 = api.Enum2.value2
-        self.prop3 = api.Enum3.value3
+        self.prop0 = api.Enum0.VALUE0
+        self.prop1 = api.Enum1.VALUE1
+        self.prop2 = api.Enum2.VALUE2
+        self.prop3 = api.Enum3.VALUE3
         self.on_property_changed = EventHook()
         self.sig0 = EventHook()
         self.sig1 = EventHook()
@@ -24,12 +25,16 @@ class EnumInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.enum.EnumInterface/EnumInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
     async def func0(self, param0: api.Enum0):
         return await self._invoke("func0", [param0])
+
     async def func1(self, param1: api.Enum1):
         return await self._invoke("func1", [param1])
+
     async def func2(self, param2: api.Enum2):
         return await self._invoke("func2", [param2])
+
     async def func3(self, param3: api.Enum3):
         return await self._invoke("func3", [param3])
 

@@ -1,16 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Iterable
 from tb.simple_api import api
 
 class SimpleInterfaceState(BaseModel):
-    propBool: bool
-    propInt: int
-    propFloat: float
-    propString: str
+    prop_bool: bool = Field(None, alias="propBool")
+    prop_int: int = Field(None, alias="propInt")
+    prop_float: float = Field(None, alias="propFloat")
+    prop_string: str = Field(None, alias="propString")
 
 # method SimpleInterface.funcBool
 class SimpleInterfaceFuncBoolRequest(BaseModel):
-    paramBool: bool 
+    param_bool: bool = Field(None, alias="paramBool") 
 
 class SimpleInterfaceFuncBoolResponse(BaseModel):
     result: bool
@@ -18,7 +18,7 @@ class SimpleInterfaceFuncBoolResponse(BaseModel):
 
 # method SimpleInterface.funcInt
 class SimpleInterfaceFuncIntRequest(BaseModel):
-    paramInt: int 
+    param_int: int = Field(None, alias="paramInt") 
 
 class SimpleInterfaceFuncIntResponse(BaseModel):
     result: int
@@ -26,7 +26,7 @@ class SimpleInterfaceFuncIntResponse(BaseModel):
 
 # method SimpleInterface.funcFloat
 class SimpleInterfaceFuncFloatRequest(BaseModel):
-    paramFloat: float 
+    param_float: float = Field(None, alias="paramFloat") 
 
 class SimpleInterfaceFuncFloatResponse(BaseModel):
     result: float
@@ -34,21 +34,21 @@ class SimpleInterfaceFuncFloatResponse(BaseModel):
 
 # method SimpleInterface.funcString
 class SimpleInterfaceFuncStringRequest(BaseModel):
-    paramString: str 
+    param_string: str = Field(None, alias="paramString") 
 
 class SimpleInterfaceFuncStringResponse(BaseModel):
     result: str
     state: SimpleInterfaceState
 
 class SimpleArrayInterfaceState(BaseModel):
-    propBool: list[bool]
-    propInt: list[int]
-    propFloat: list[float]
-    propString: list[str]
+    prop_bool: list[bool] = Field(None, alias="propBool")
+    prop_int: list[int] = Field(None, alias="propInt")
+    prop_float: list[float] = Field(None, alias="propFloat")
+    prop_string: list[str] = Field(None, alias="propString")
 
 # method SimpleArrayInterface.funcBool
 class SimpleArrayInterfaceFuncBoolRequest(BaseModel):
-    paramBool: list[bool] 
+    param_bool: list[bool] = Field(None, alias="paramBool") 
 
 class SimpleArrayInterfaceFuncBoolResponse(BaseModel):
     result: list[bool]
@@ -56,7 +56,7 @@ class SimpleArrayInterfaceFuncBoolResponse(BaseModel):
 
 # method SimpleArrayInterface.funcInt
 class SimpleArrayInterfaceFuncIntRequest(BaseModel):
-    paramInt: list[int] 
+    param_int: list[int] = Field(None, alias="paramInt") 
 
 class SimpleArrayInterfaceFuncIntResponse(BaseModel):
     result: list[int]
@@ -64,7 +64,7 @@ class SimpleArrayInterfaceFuncIntResponse(BaseModel):
 
 # method SimpleArrayInterface.funcFloat
 class SimpleArrayInterfaceFuncFloatRequest(BaseModel):
-    paramFloat: list[float] 
+    param_float: list[float] = Field(None, alias="paramFloat") 
 
 class SimpleArrayInterfaceFuncFloatResponse(BaseModel):
     result: list[float]
@@ -72,7 +72,7 @@ class SimpleArrayInterfaceFuncFloatResponse(BaseModel):
 
 # method SimpleArrayInterface.funcString
 class SimpleArrayInterfaceFuncStringRequest(BaseModel):
-    paramString: list[str] 
+    param_string: list[str] = Field(None, alias="paramString") 
 
 class SimpleArrayInterfaceFuncStringResponse(BaseModel):
     result: list[str]

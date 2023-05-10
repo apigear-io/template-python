@@ -5,8 +5,8 @@ class SameEnum2Interface(api.ISameEnum2Interface):
     def __init__(self, notifier=None):
         super().__init__()
         self._notifier = notifier
-        self._prop1: api.Enum1 = api.Enum1.value1
-        self._prop2: api.Enum2 = api.Enum2.value1
+        self._prop1: api.Enum1 = api.Enum1.VALUE1
+        self._prop2: api.Enum2 = api.Enum2.VALUE1
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -35,10 +35,10 @@ class SameEnum2Interface(api.ISameEnum2Interface):
         self._notifier.notify_property("tb.same1.SameEnum2Interface/prop2", value)
 
     def func1(self, param1: api.Enum1) -> api.Enum1:
-        return api.Enum1.value1
+        return api.Enum1.VALUE1
 
     def func2(self, param1: api.Enum1, param2: api.Enum2) -> api.Enum1:
-        return api.Enum1.value1
+        return api.Enum1.VALUE1
 
     def sig1(self, param1: api.Enum1):
         if not self._notifier:

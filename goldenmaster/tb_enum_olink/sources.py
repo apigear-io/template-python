@@ -1,9 +1,8 @@
-from olink.core.types import Name
-from olink.remotenode import IObjectSource, RemoteNode
+from olink.core import Name
+from olink.remote import IObjectSource, RemoteNode
 from tb_enum_api import api
 from typing import Any
 import logging
-
 class EnumInterfaceSource(IObjectSource):
     impl: api.IEnumInterface
     def __init__(self, impl: api.IEnumInterface):

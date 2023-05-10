@@ -1,26 +1,18 @@
 from fastapi import APIRouter
-
-
-
-from tb.same2 import SameStruct1Interface
-from tb.same2 import SameStruct2Interface
-from tb.same2 import SameEnum1Interface
-from tb.same2 import SameEnum2Interface
-
 from . import shared
 
 router = APIRouter()
 
 
-same_struct1_interface = SameStruct1Interface()
-same_struct2_interface = SameStruct2Interface()
-same_enum1_interface = SameEnum1Interface()
-same_enum2_interface = SameEnum2Interface()
+same_struct1_interface = shared.SameStruct1InterfaceState()
+same_struct2_interface = shared.SameStruct2InterfaceState()
+same_enum1_interface = shared.SameEnum1InterfaceState()
+same_enum2_interface = shared.SameEnum2InterfaceState()
 
 
 
 @router.post(
-    "/same_struct1_interface/func1", 
+    "/tb_same2/same_struct1_interface/func1", 
     response_model=shared.SameStruct1InterfaceFunc1Response
 )
 async def same_struct1_interface_func1(params: shared.SameStruct1InterfaceFunc1Request):
@@ -37,7 +29,7 @@ async def same_struct1_interface_func1(params: shared.SameStruct1InterfaceFunc1R
 
 
 @router.post(
-    "/same_struct2_interface/func1", 
+    "/tb_same2/same_struct2_interface/func1", 
     response_model=shared.SameStruct2InterfaceFunc1Response
 )
 async def same_struct2_interface_func1(params: shared.SameStruct2InterfaceFunc1Request):
@@ -53,7 +45,7 @@ async def same_struct2_interface_func1(params: shared.SameStruct2InterfaceFunc1R
     return response
 
 @router.post(
-    "/same_struct2_interface/func2", 
+    "/tb_same2/same_struct2_interface/func2", 
     response_model=shared.SameStruct2InterfaceFunc2Response
 )
 async def same_struct2_interface_func2(params: shared.SameStruct2InterfaceFunc2Request):
@@ -71,7 +63,7 @@ async def same_struct2_interface_func2(params: shared.SameStruct2InterfaceFunc2R
 
 
 @router.post(
-    "/same_enum1_interface/func1", 
+    "/tb_same2/same_enum1_interface/func1", 
     response_model=shared.SameEnum1InterfaceFunc1Response
 )
 async def same_enum1_interface_func1(params: shared.SameEnum1InterfaceFunc1Request):
@@ -88,7 +80,7 @@ async def same_enum1_interface_func1(params: shared.SameEnum1InterfaceFunc1Reque
 
 
 @router.post(
-    "/same_enum2_interface/func1", 
+    "/tb_same2/same_enum2_interface/func1", 
     response_model=shared.SameEnum2InterfaceFunc1Response
 )
 async def same_enum2_interface_func1(params: shared.SameEnum2InterfaceFunc1Request):
@@ -104,7 +96,7 @@ async def same_enum2_interface_func1(params: shared.SameEnum2InterfaceFunc1Reque
     return response
 
 @router.post(
-    "/same_enum2_interface/func2", 
+    "/tb_same2/same_enum2_interface/func2", 
     response_model=shared.SameEnum2InterfaceFunc2Response
 )
 async def same_enum2_interface_func2(params: shared.SameEnum2InterfaceFunc2Request):

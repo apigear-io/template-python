@@ -1,20 +1,15 @@
 from fastapi import APIRouter
-
-
-
-from tb.enum import EnumInterface
-
 from . import shared
 
 router = APIRouter()
 
 
-enum_interface = EnumInterface()
+enum_interface = shared.EnumInterfaceState()
 
 
 
 @router.post(
-    "/enum_interface/func0", 
+    "/tb_enum/enum_interface/func0", 
     response_model=shared.EnumInterfaceFunc0Response
 )
 async def enum_interface_func0(params: shared.EnumInterfaceFunc0Request):
@@ -32,7 +27,7 @@ async def enum_interface_func0(params: shared.EnumInterfaceFunc0Request):
     return response
 
 @router.post(
-    "/enum_interface/func1", 
+    "/tb_enum/enum_interface/func1", 
     response_model=shared.EnumInterfaceFunc1Response
 )
 async def enum_interface_func1(params: shared.EnumInterfaceFunc1Request):
@@ -50,7 +45,7 @@ async def enum_interface_func1(params: shared.EnumInterfaceFunc1Request):
     return response
 
 @router.post(
-    "/enum_interface/func2", 
+    "/tb_enum/enum_interface/func2", 
     response_model=shared.EnumInterfaceFunc2Response
 )
 async def enum_interface_func2(params: shared.EnumInterfaceFunc2Request):
@@ -68,7 +63,7 @@ async def enum_interface_func2(params: shared.EnumInterfaceFunc2Request):
     return response
 
 @router.post(
-    "/enum_interface/func3", 
+    "/tb_enum/enum_interface/func3", 
     response_model=shared.EnumInterfaceFunc3Response
 )
 async def enum_interface_func3(params: shared.EnumInterfaceFunc3Request):

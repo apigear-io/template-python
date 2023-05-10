@@ -1,16 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Iterable
 from testbed1_api import api
 
 class StructInterfaceState(BaseModel):
-    propBool: api.StructBool
-    propInt: api.StructInt
-    propFloat: api.StructFloat
-    propString: api.StructString
+    prop_bool: api.StructBool = Field(None, alias="propBool")
+    prop_int: api.StructInt = Field(None, alias="propInt")
+    prop_float: api.StructFloat = Field(None, alias="propFloat")
+    prop_string: api.StructString = Field(None, alias="propString")
 
 # method StructInterface.funcBool
 class StructInterfaceFuncBoolRequest(BaseModel):
-    paramBool: api.StructBool 
+    param_bool: api.StructBool = Field(None, alias="paramBool") 
 
 class StructInterfaceFuncBoolResponse(BaseModel):
     result: api.StructBool
@@ -18,7 +18,7 @@ class StructInterfaceFuncBoolResponse(BaseModel):
 
 # method StructInterface.funcInt
 class StructInterfaceFuncIntRequest(BaseModel):
-    paramInt: api.StructInt 
+    param_int: api.StructInt = Field(None, alias="paramInt") 
 
 class StructInterfaceFuncIntResponse(BaseModel):
     result: api.StructBool
@@ -26,7 +26,7 @@ class StructInterfaceFuncIntResponse(BaseModel):
 
 # method StructInterface.funcFloat
 class StructInterfaceFuncFloatRequest(BaseModel):
-    paramFloat: api.StructFloat 
+    param_float: api.StructFloat = Field(None, alias="paramFloat") 
 
 class StructInterfaceFuncFloatResponse(BaseModel):
     result: api.StructFloat
@@ -34,21 +34,21 @@ class StructInterfaceFuncFloatResponse(BaseModel):
 
 # method StructInterface.funcString
 class StructInterfaceFuncStringRequest(BaseModel):
-    paramString: api.StructString 
+    param_string: api.StructString = Field(None, alias="paramString") 
 
 class StructInterfaceFuncStringResponse(BaseModel):
     result: api.StructString
     state: StructInterfaceState
 
 class StructArrayInterfaceState(BaseModel):
-    propBool: list[api.StructBool]
-    propInt: list[api.StructInt]
-    propFloat: list[api.StructFloat]
-    propString: list[api.StructString]
+    prop_bool: list[api.StructBool] = Field(None, alias="propBool")
+    prop_int: list[api.StructInt] = Field(None, alias="propInt")
+    prop_float: list[api.StructFloat] = Field(None, alias="propFloat")
+    prop_string: list[api.StructString] = Field(None, alias="propString")
 
 # method StructArrayInterface.funcBool
 class StructArrayInterfaceFuncBoolRequest(BaseModel):
-    paramBool: list[api.StructBool] 
+    param_bool: list[api.StructBool] = Field(None, alias="paramBool") 
 
 class StructArrayInterfaceFuncBoolResponse(BaseModel):
     result: api.StructBool
@@ -56,7 +56,7 @@ class StructArrayInterfaceFuncBoolResponse(BaseModel):
 
 # method StructArrayInterface.funcInt
 class StructArrayInterfaceFuncIntRequest(BaseModel):
-    paramInt: list[api.StructInt] 
+    param_int: list[api.StructInt] = Field(None, alias="paramInt") 
 
 class StructArrayInterfaceFuncIntResponse(BaseModel):
     result: api.StructBool
@@ -64,7 +64,7 @@ class StructArrayInterfaceFuncIntResponse(BaseModel):
 
 # method StructArrayInterface.funcFloat
 class StructArrayInterfaceFuncFloatRequest(BaseModel):
-    paramFloat: list[api.StructFloat] 
+    param_float: list[api.StructFloat] = Field(None, alias="paramFloat") 
 
 class StructArrayInterfaceFuncFloatResponse(BaseModel):
     result: api.StructBool
@@ -72,7 +72,7 @@ class StructArrayInterfaceFuncFloatResponse(BaseModel):
 
 # method StructArrayInterface.funcString
 class StructArrayInterfaceFuncStringRequest(BaseModel):
-    paramString: list[api.StructString] 
+    param_string: list[api.StructString] = Field(None, alias="paramString") 
 
 class StructArrayInterfaceFuncStringResponse(BaseModel):
     result: api.StructBool

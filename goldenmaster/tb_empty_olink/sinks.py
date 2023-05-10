@@ -1,9 +1,10 @@
 import asyncio
 from typing import Any
-from olink.core.types import Name
-from olink.clientnode import IObjectSink, ClientNode
+from olink.core import Name
+from olink.client import IObjectSink, ClientNode
 from .shared import EventHook
 from tb_empty_api import api
+
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()

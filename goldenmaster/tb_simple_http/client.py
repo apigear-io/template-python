@@ -38,58 +38,58 @@ class SimpleInterface(api.ISimpleInterface):
 
     def set_prop_string(self, value):
         self._prop_string = value
+
     def func_bool(self, param_bool: bool):
         req = shared.SimpleInterfaceFuncBoolRequest(
-            paramBool=paramBool
+            param_bool=param_bool
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleInterface/funcBool',
+            f'{self.url}/tb_simple/simple_interface/func_bool',
             req.json()
         )
         resp = shared.SimpleInterfaceFuncBoolResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+
     def func_int(self, param_int: int):
         req = shared.SimpleInterfaceFuncIntRequest(
-            paramInt=paramInt
+            param_int=param_int
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleInterface/funcInt',
+            f'{self.url}/tb_simple/simple_interface/func_int',
             req.json()
         )
         resp = shared.SimpleInterfaceFuncIntResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+
     def func_float(self, param_float: float):
         req = shared.SimpleInterfaceFuncFloatRequest(
-            paramFloat=paramFloat
+            param_float=param_float
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleInterface/funcFloat',
+            f'{self.url}/tb_simple/simple_interface/func_float',
             req.json()
         )
         resp = shared.SimpleInterfaceFuncFloatResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+
     def func_string(self, param_string: str):
         req = shared.SimpleInterfaceFuncStringRequest(
-            paramString=paramString
+            param_string=param_string
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleInterface/funcString',
+            f'{self.url}/tb_simple/simple_interface/func_string',
             req.json()
         )
         resp = shared.SimpleInterfaceFuncStringResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
@@ -127,58 +127,58 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
 
     def set_prop_string(self, value):
         self._prop_string = value
+
     def func_bool(self, param_bool: list[bool]):
         req = shared.SimpleArrayInterfaceFuncBoolRequest(
-            paramBool=paramBool
+            param_bool=param_bool
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleArrayInterface/funcBool',
+            f'{self.url}/tb_simple/simple_array_interface/func_bool',
             req.json()
         )
         resp = shared.SimpleArrayInterfaceFuncBoolResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+
     def func_int(self, param_int: list[int]):
         req = shared.SimpleArrayInterfaceFuncIntRequest(
-            paramInt=paramInt
+            param_int=param_int
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleArrayInterface/funcInt',
+            f'{self.url}/tb_simple/simple_array_interface/func_int',
             req.json()
         )
         resp = shared.SimpleArrayInterfaceFuncIntResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+
     def func_float(self, param_float: list[float]):
         req = shared.SimpleArrayInterfaceFuncFloatRequest(
-            paramFloat=paramFloat
+            param_float=param_float
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleArrayInterface/funcFloat',
+            f'{self.url}/tb_simple/simple_array_interface/func_float',
             req.json()
         )
         resp = shared.SimpleArrayInterfaceFuncFloatResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+
     def func_string(self, param_string: list[str]):
         req = shared.SimpleArrayInterfaceFuncStringRequest(
-            paramString=paramString
+            param_string=param_string
         )
         data = requests.post(
-            f'{self.url}/tb.simple/SimpleArrayInterface/funcString',
+            f'{self.url}/tb_simple/simple_array_interface/func_string',
             req.json()
         )
         resp = shared.SimpleArrayInterfaceFuncStringResponse(**data.json())
-        print(resp.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
