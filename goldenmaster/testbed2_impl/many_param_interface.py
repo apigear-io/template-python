@@ -14,6 +14,7 @@ class ManyParamInterface(api.IManyParamInterface):
         if self._prop1 == value:
             return
         self._prop1 = value
+        self.push_prop1(self._prop1)
     
     def get_prop1(self):
         return self._prop1        
@@ -27,6 +28,7 @@ class ManyParamInterface(api.IManyParamInterface):
         if self._prop2 == value:
             return
         self._prop2 = value
+        self.push_prop2(self._prop2)
     
     def get_prop2(self):
         return self._prop2        
@@ -40,6 +42,7 @@ class ManyParamInterface(api.IManyParamInterface):
         if self._prop3 == value:
             return
         self._prop3 = value
+        self.push_prop3(self._prop3)
     
     def get_prop3(self):
         return self._prop3        
@@ -53,6 +56,7 @@ class ManyParamInterface(api.IManyParamInterface):
         if self._prop4 == value:
             return
         self._prop4 = value
+        self.push_prop4(self._prop4)
     
     def get_prop4(self):
         return self._prop4        

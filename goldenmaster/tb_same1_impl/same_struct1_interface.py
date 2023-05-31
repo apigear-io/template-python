@@ -11,6 +11,7 @@ class SameStruct1Interface(api.ISameStruct1Interface):
         if self._prop1 == value:
             return
         self._prop1 = value
+        self.push_prop1(self._prop1)
     
     def get_prop1(self):
         return self._prop1        
