@@ -14,6 +14,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         if self._prop_bool == value:
             return
         self._prop_bool = value
+        self.push_prop_bool(self._prop_bool)
     
     def get_prop_bool(self):
         return self._prop_bool        
@@ -27,6 +28,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         if self._prop_int == value:
             return
         self._prop_int = value
+        self.push_prop_int(self._prop_int)
     
     def get_prop_int(self):
         return self._prop_int        
@@ -40,6 +42,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         if self._prop_float == value:
             return
         self._prop_float = value
+        self.push_prop_float(self._prop_float)
     
     def get_prop_float(self):
         return self._prop_float        
@@ -53,6 +56,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         if self._prop_string == value:
             return
         self._prop_string = value
+        self.push_prop_string(self._prop_string)
     
     def get_prop_string(self):
         return self._prop_string        

@@ -17,6 +17,7 @@ class {{$class}}(api.I{{$class}}):
         if self._{{snake .Name}} == value:
             return
         self._{{snake .Name}} = value
+        self.push_{{snake .Name}}(self._{{snake .Name}})
     
     def get_{{snake .Name}}(self):
         return self._{{snake .Name}}        
