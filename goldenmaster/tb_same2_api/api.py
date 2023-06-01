@@ -1,7 +1,13 @@
 from pydantic import BaseModel, Field
 from enum import IntEnum
 
-
+class EnhancedModel(BaseModel):
+    """This model is used to enforce the json encoding by alias"""
+    class config:
+        allow_population_by_field_name = True
+    def dict(self, **kwargs):
+        kwargs.setdefault('by_alias', True)
+        return super().dict(**kwargs)
 
 class Enum1(IntEnum):
     VALUE1 = 1
@@ -11,12 +17,12 @@ class Enum2(IntEnum):
     VALUE1 = 1
     VALUE2 = 2
 
-class Struct1(BaseModel):
+class Struct1(EnhancedModel):
     field1: int = Field(None, alias="field1")
     field2: int = Field(None, alias="field2")
     field3: int = Field(None, alias="field3")
 
-class Struct2(BaseModel):
+class Struct2(EnhancedModel):
     field1: int = Field(None, alias="field1")
     field2: int = Field(None, alias="field2")
     field3: int = Field(None, alias="field3")

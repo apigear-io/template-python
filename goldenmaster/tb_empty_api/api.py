@@ -1,12 +1,18 @@
 from pydantic import BaseModel, Field
 from enum import IntEnum
 
-
+class EnhancedModel(BaseModel):
+    """This model is used to enforce the json encoding by alias"""
+    class config:
+        allow_population_by_field_name = True
+    def dict(self, **kwargs):
+        kwargs.setdefault('by_alias', True)
+        return super().dict(**kwargs)
 
 class EmptyEnum(IntEnum):
     pass
 
-class EmptyStruct(BaseModel):
+class EmptyStruct(EnhancedModel):
     pass
 
 class IEmptyInterface:
