@@ -20,13 +20,24 @@ class {{Camel .Name }}(IntEnum):
 {{- end }}
 
 {{- range .Module.Structs }}
+{{- $struct := . }}
 
 class {{Camel .Name }}(EnhancedModel):
-    {{- range .Fields }}
+    {{- range $struct.Fields }}
     {{snake .Name }}: {{pyType "" .}} = Field(None, alias="{{.Name}}")
     {{- else }}
     pass
     {{- end }}
+
+    {{- if $struct.Fields }}
+
+    def __init__(self,{{ range $struct.Fields }} {{snake .Name }} = {{pyDefault "" .}},{{ end}} **kw):
+        # initialize properties with correct default values
+        super().__init__(**kw)
+        {{- range $struct.Fields }}
+        self.{{snake .Name }} = {{snake .Name }}
+        {{- end}}
+    {{- end}}
 {{- end }}
 
 {{- range .Module.Interfaces }}
