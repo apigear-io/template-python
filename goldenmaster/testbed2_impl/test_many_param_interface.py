@@ -4,6 +4,26 @@ from testbed2_impl import ManyParamInterface
 
 class TestManyParamInterface:
 
+    def test_prop1(self):
+        o = ManyParamInterface()
+        o.set_prop1(0)
+        assert o.get_prop1() == 0
+
+    def test_prop2(self):
+        o = ManyParamInterface()
+        o.set_prop2(0)
+        assert o.get_prop2() == 0
+
+    def test_prop3(self):
+        o = ManyParamInterface()
+        o.set_prop3(0)
+        assert o.get_prop3() == 0
+
+    def test_prop4(self):
+        o = ManyParamInterface()
+        o.set_prop4(0)
+        assert o.get_prop4() == 0
+
     def test_func1(self):
         o = ManyParamInterface()
         o.func1(param1=0)

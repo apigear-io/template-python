@@ -4,6 +4,26 @@ from tb_enum_impl import EnumInterface
 
 class TestEnumInterface:
 
+    def test_prop0(self):
+        o = EnumInterface()
+        o.set_prop0(api.Enum0.VALUE0)
+        assert o.get_prop0() == api.Enum0.VALUE0
+
+    def test_prop1(self):
+        o = EnumInterface()
+        o.set_prop1(api.Enum1.VALUE1)
+        assert o.get_prop1() == api.Enum1.VALUE1
+
+    def test_prop2(self):
+        o = EnumInterface()
+        o.set_prop2(api.Enum2.VALUE2)
+        assert o.get_prop2() == api.Enum2.VALUE2
+
+    def test_prop3(self):
+        o = EnumInterface()
+        o.set_prop3(api.Enum3.VALUE3)
+        assert o.get_prop3() == api.Enum3.VALUE3
+
     def test_func0(self):
         o = EnumInterface()
         o.func0(param0=api.Enum0.VALUE0)
