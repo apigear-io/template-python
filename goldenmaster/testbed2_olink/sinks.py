@@ -58,7 +58,7 @@ class ManyParamInterfaceSink(IObjectSink):
 class NestedStruct1InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = {}
+        self.prop1 = api.NestedStruct1()
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
@@ -93,8 +93,8 @@ class NestedStruct1InterfaceSink(IObjectSink):
 class NestedStruct2InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = {}
-        self.prop2 = {}
+        self.prop1 = api.NestedStruct1()
+        self.prop2 = api.NestedStruct2()
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.sig2 = EventHook()
@@ -133,9 +133,9 @@ class NestedStruct2InterfaceSink(IObjectSink):
 class NestedStruct3InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = {}
-        self.prop2 = {}
-        self.prop3 = {}
+        self.prop1 = api.NestedStruct1()
+        self.prop2 = api.NestedStruct2()
+        self.prop3 = api.NestedStruct3()
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.sig2 = EventHook()

@@ -8,7 +8,7 @@ from tb_same2_api import api
 class SameStruct1InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = {}
+        self.prop1 = api.Struct1()
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
@@ -43,8 +43,8 @@ class SameStruct1InterfaceSink(IObjectSink):
 class SameStruct2InterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop1 = {}
-        self.prop2 = {}
+        self.prop1 = api.Struct2()
+        self.prop2 = api.Struct2()
         self.on_property_changed = EventHook()
         self.sig1 = EventHook()
         self.sig2 = EventHook()

@@ -5,10 +5,10 @@ class StructInterface(api.IStructInterface):
     def __init__(self, notifier=None):
         super().__init__()
         self._notifier = notifier
-        self._prop_bool: api.StructBool = {}
-        self._prop_int: api.StructInt = {}
-        self._prop_float: api.StructFloat = {}
-        self._prop_string: api.StructString = {}
+        self._prop_bool: api.StructBool = api.StructBool()
+        self._prop_int: api.StructInt = api.StructInt()
+        self._prop_float: api.StructFloat = api.StructFloat()
+        self._prop_string: api.StructString = api.StructString()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -67,16 +67,16 @@ class StructInterface(api.IStructInterface):
         self._notifier.notify_property("testbed1.StructInterface/propString", value)
 
     def func_bool(self, param_bool: api.StructBool) -> api.StructBool:
-        return {}
+        return api.StructBool()
 
     def func_int(self, param_int: api.StructInt) -> api.StructBool:
-        return {}
+        return api.StructBool()
 
     def func_float(self, param_float: api.StructFloat) -> api.StructFloat:
-        return {}
+        return api.StructFloat()
 
     def func_string(self, param_string: api.StructString) -> api.StructString:
-        return {}
+        return api.StructString()
 
     def sig_bool(self, param_bool: api.StructBool):
         if not self._notifier:

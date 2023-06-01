@@ -10,7 +10,7 @@ class SameStruct1Interface(api.ISameStruct1Interface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop1 = {}
+        self._prop1 = api.Struct1()
     
     def get_prop1(self):
         return self._prop1
@@ -33,8 +33,8 @@ class SameStruct2Interface(api.ISameStruct2Interface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop1 = {}        
-        self._prop2 = {}
+        self._prop1 = api.Struct2()        
+        self._prop2 = api.Struct2()
     
     def get_prop1(self):
         return self._prop1

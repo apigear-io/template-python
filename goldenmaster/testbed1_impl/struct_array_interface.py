@@ -67,16 +67,16 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._notifier.notify_property("testbed1.StructArrayInterface/propString", value)
 
     def func_bool(self, param_bool: list[api.StructBool]) -> api.StructBool:
-        return {}
+        return api.StructBool()
 
     def func_int(self, param_int: list[api.StructInt]) -> api.StructBool:
-        return {}
+        return api.StructBool()
 
     def func_float(self, param_float: list[api.StructFloat]) -> api.StructBool:
-        return {}
+        return api.StructBool()
 
     def func_string(self, param_string: list[api.StructString]) -> api.StructBool:
-        return {}
+        return api.StructBool()
 
     def sig_bool(self, param_bool: list[api.StructBool]):
         if not self._notifier:

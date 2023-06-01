@@ -105,7 +105,7 @@ class NestedStruct1Interface(api.INestedStruct1Interface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop1 = {}
+        self._prop1 = api.NestedStruct1()
     
     def get_prop1(self):
         return self._prop1
@@ -128,8 +128,8 @@ class NestedStruct2Interface(api.INestedStruct2Interface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop1 = {}        
-        self._prop2 = {}
+        self._prop1 = api.NestedStruct1()        
+        self._prop2 = api.NestedStruct2()
     
     def get_prop1(self):
         return self._prop1
@@ -172,9 +172,9 @@ class NestedStruct3Interface(api.INestedStruct3Interface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop1 = {}        
-        self._prop2 = {}        
-        self._prop3 = {}
+        self._prop1 = api.NestedStruct1()        
+        self._prop2 = api.NestedStruct2()        
+        self._prop3 = api.NestedStruct3()
     
     def get_prop1(self):
         return self._prop1
