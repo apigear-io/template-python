@@ -1,18 +1,24 @@
 from pydantic import BaseModel, Field
 from enum import IntEnum
 
+class EnhancedModel(BaseModel):
+    """This model is used to enforce the json encoding by alias"""
+    class config:
+        allow_population_by_field_name = True
+    def dict(self, **kwargs):
+        kwargs.setdefault('by_alias', True)
+        return super().dict(**kwargs)
 
-
-class StructBool(BaseModel):
+class StructBool(EnhancedModel):
     field_bool: bool = Field(None, alias="fieldBool")
 
-class StructInt(BaseModel):
+class StructInt(EnhancedModel):
     field_int: int = Field(None, alias="fieldInt")
 
-class StructFloat(BaseModel):
+class StructFloat(EnhancedModel):
     field_float: float = Field(None, alias="fieldFloat")
 
-class StructString(BaseModel):
+class StructString(EnhancedModel):
     field_string: str = Field(None, alias="fieldString")
 
 class IStructInterface:
