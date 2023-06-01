@@ -12,14 +12,34 @@ class EnhancedModel(BaseModel):
 class StructBool(EnhancedModel):
     field_bool: bool = Field(None, alias="fieldBool")
 
+    def __init__(self, field_bool = False, **kw):
+        # initialize properties with correct default values
+        super().__init__(**kw)
+        self.field_bool = field_bool
+
 class StructInt(EnhancedModel):
     field_int: int = Field(None, alias="fieldInt")
+
+    def __init__(self, field_int = 0, **kw):
+        # initialize properties with correct default values
+        super().__init__(**kw)
+        self.field_int = field_int
 
 class StructFloat(EnhancedModel):
     field_float: float = Field(None, alias="fieldFloat")
 
+    def __init__(self, field_float = 0.0, **kw):
+        # initialize properties with correct default values
+        super().__init__(**kw)
+        self.field_float = field_float
+
 class StructString(EnhancedModel):
     field_string: str = Field(None, alias="fieldString")
+
+    def __init__(self, field_string = "", **kw):
+        # initialize properties with correct default values
+        super().__init__(**kw)
+        self.field_string = field_string
 
 class IStructInterface:
     def __init__(self):
