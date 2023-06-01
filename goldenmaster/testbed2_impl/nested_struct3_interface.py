@@ -5,9 +5,9 @@ class NestedStruct3Interface(api.INestedStruct3Interface):
     def __init__(self, notifier=None):
         super().__init__()
         self._notifier = notifier
-        self._prop1: api.NestedStruct1 = {}
-        self._prop2: api.NestedStruct2 = {}
-        self._prop3: api.NestedStruct3 = {}
+        self._prop1: api.NestedStruct1 = api.NestedStruct1()
+        self._prop2: api.NestedStruct2 = api.NestedStruct2()
+        self._prop3: api.NestedStruct3 = api.NestedStruct3()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -52,13 +52,13 @@ class NestedStruct3Interface(api.INestedStruct3Interface):
         self._notifier.notify_property("testbed2.NestedStruct3Interface/prop3", value)
 
     def func1(self, param1: api.NestedStruct1) -> api.NestedStruct1:
-        return {}
+        return api.NestedStruct1()
 
     def func2(self, param1: api.NestedStruct1, param2: api.NestedStruct2) -> api.NestedStruct1:
-        return {}
+        return api.NestedStruct1()
 
     def func3(self, param1: api.NestedStruct1, param2: api.NestedStruct2, param3: api.NestedStruct3) -> api.NestedStruct1:
-        return {}
+        return api.NestedStruct1()
 
     def sig1(self, param1: api.NestedStruct1):
         if not self._notifier:

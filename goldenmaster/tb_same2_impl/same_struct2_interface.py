@@ -5,8 +5,8 @@ class SameStruct2Interface(api.ISameStruct2Interface):
     def __init__(self, notifier=None):
         super().__init__()
         self._notifier = notifier
-        self._prop1: api.Struct2 = {}
-        self._prop2: api.Struct2 = {}
+        self._prop1: api.Struct2 = api.Struct2()
+        self._prop2: api.Struct2 = api.Struct2()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -37,10 +37,10 @@ class SameStruct2Interface(api.ISameStruct2Interface):
         self._notifier.notify_property("tb.same2.SameStruct2Interface/prop2", value)
 
     def func1(self, param1: api.Struct1) -> api.Struct1:
-        return {}
+        return api.Struct1()
 
     def func2(self, param1: api.Struct1, param2: api.Struct2) -> api.Struct1:
-        return {}
+        return api.Struct1()
 
     def sig1(self, param1: api.Struct1):
         if not self._notifier:

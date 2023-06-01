@@ -6,37 +6,37 @@ class TestStructInterface:
 
     def test_prop_bool(self):
         o = StructInterface()
-        o.set_prop_bool({})
-        assert o.get_prop_bool() == {}
+        o.set_prop_bool(api.StructBool())
+        assert o.get_prop_bool() == api.StructBool()
 
     def test_prop_int(self):
         o = StructInterface()
-        o.set_prop_int({})
-        assert o.get_prop_int() == {}
+        o.set_prop_int(api.StructInt())
+        assert o.get_prop_int() == api.StructInt()
 
     def test_prop_float(self):
         o = StructInterface()
-        o.set_prop_float({})
-        assert o.get_prop_float() == {}
+        o.set_prop_float(api.StructFloat())
+        assert o.get_prop_float() == api.StructFloat()
 
     def test_prop_string(self):
         o = StructInterface()
-        o.set_prop_string({})
-        assert o.get_prop_string() == {}
+        o.set_prop_string(api.StructString())
+        assert o.get_prop_string() == api.StructString()
 
     def test_func_bool(self):
         o = StructInterface()
-        o.func_bool(param_bool={})
+        o.func_bool(param_bool=api.StructBool())
 
     def test_func_int(self):
         o = StructInterface()
-        o.func_int(param_int={})
+        o.func_int(param_int=api.StructInt())
 
     def test_func_float(self):
         o = StructInterface()
-        o.func_float(param_float={})
+        o.func_float(param_float=api.StructFloat())
 
     def test_func_string(self):
         o = StructInterface()
-        o.func_string(param_string={})
+        o.func_string(param_string=api.StructString())
 

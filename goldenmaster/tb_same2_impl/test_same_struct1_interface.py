@@ -6,10 +6,10 @@ class TestSameStruct1Interface:
 
     def test_prop1(self):
         o = SameStruct1Interface()
-        o.set_prop1({})
-        assert o.get_prop1() == {}
+        o.set_prop1(api.Struct1())
+        assert o.get_prop1() == api.Struct1()
 
     def test_func1(self):
         o = SameStruct1Interface()
-        o.func1(param1={})
+        o.func1(param1=api.Struct1())
 

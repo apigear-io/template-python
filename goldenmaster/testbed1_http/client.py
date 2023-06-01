@@ -10,10 +10,10 @@ class StructInterface(api.IStructInterface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
         self._url = url        
-        self._prop_bool = {}        
-        self._prop_int = {}        
-        self._prop_float = {}        
-        self._prop_string = {}
+        self._prop_bool = api.StructBool()        
+        self._prop_int = api.StructInt()        
+        self._prop_float = api.StructFloat()        
+        self._prop_string = api.StructString()
     
     def get_prop_bool(self):
         return self._prop_bool

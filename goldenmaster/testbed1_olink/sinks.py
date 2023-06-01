@@ -8,10 +8,10 @@ from testbed1_api import api
 class StructInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop_bool = {}
-        self.prop_int = {}
-        self.prop_float = {}
-        self.prop_string = {}
+        self.prop_bool = api.StructBool()
+        self.prop_int = api.StructInt()
+        self.prop_float = api.StructFloat()
+        self.prop_string = api.StructString()
         self.on_property_changed = EventHook()
         self.sig_bool = EventHook()
         self.sig_int = EventHook()
