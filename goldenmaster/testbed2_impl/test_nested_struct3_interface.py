@@ -4,6 +4,21 @@ from testbed2_impl import NestedStruct3Interface
 
 class TestNestedStruct3Interface:
 
+    def test_prop1(self):
+        o = NestedStruct3Interface()
+        o.set_prop1({})
+        assert o.get_prop1() == {}
+
+    def test_prop2(self):
+        o = NestedStruct3Interface()
+        o.set_prop2({})
+        assert o.get_prop2() == {}
+
+    def test_prop3(self):
+        o = NestedStruct3Interface()
+        o.set_prop3({})
+        assert o.get_prop3() == {}
+
     def test_func1(self):
         o = NestedStruct3Interface()
         o.func1(param1={})
