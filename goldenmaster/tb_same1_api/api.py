@@ -22,24 +22,16 @@ class Struct1(EnhancedModel):
     field2: int = Field(None, alias="field2")
     field3: int = Field(None, alias="field3")
 
-    def __init__(self, field1 = 0, field2 = 0, field3 = 0, **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
-        self.field3 = field3
 
 class Struct2(EnhancedModel):
     field1: int = Field(None, alias="field1")
     field2: int = Field(None, alias="field2")
     field3: int = Field(None, alias="field3")
 
-    def __init__(self, field1 = 0, field2 = 0, field3 = 0, **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
-        self.field3 = field3
 
 class ISameStruct1Interface:
     def __init__(self):

@@ -30,32 +30,23 @@ class Enum3(IntEnum):
 class Struct1(EnhancedModel):
     field1: int = Field(None, alias="field1")
 
-    def __init__(self, field1 = 0, **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
 
 class Struct2(EnhancedModel):
     field1: int = Field(None, alias="field1")
     field2: int = Field(None, alias="field2")
 
-    def __init__(self, field1 = 0, field2 = 0, **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
 
 class Struct3(EnhancedModel):
     field1: int = Field(None, alias="field1")
     field2: int = Field(None, alias="field2")
     field3: int = Field(None, alias="field3")
 
-    def __init__(self, field1 = 0, field2 = 0, field3 = 0, **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
-        self.field3 = field3
 
 class Struct4(EnhancedModel):
     field1: int = Field(None, alias="field1")
@@ -63,43 +54,29 @@ class Struct4(EnhancedModel):
     field3: int = Field(None, alias="field3")
     field4: int = Field(None, alias="field4")
 
-    def __init__(self, field1 = 0, field2 = 0, field3 = 0, field4 = 0, **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
-        self.field3 = field3
-        self.field4 = field4
 
 class NestedStruct1(EnhancedModel):
     field1: Struct1 = Field(None, alias="field1")
 
-    def __init__(self, field1 = Struct1(), **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
 
 class NestedStruct2(EnhancedModel):
     field1: Struct1 = Field(None, alias="field1")
     field2: Struct2 = Field(None, alias="field2")
 
-    def __init__(self, field1 = Struct1(), field2 = Struct2(), **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
 
 class NestedStruct3(EnhancedModel):
     field1: Struct1 = Field(None, alias="field1")
     field2: Struct2 = Field(None, alias="field2")
     field3: Struct3 = Field(None, alias="field3")
 
-    def __init__(self, field1 = Struct1(), field2 = Struct2(), field3 = Struct3(), **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        self.field1 = field1
-        self.field2 = field2
-        self.field3 = field3
 
 class IManyParamInterface:
     def __init__(self):

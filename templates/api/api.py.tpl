@@ -31,12 +31,8 @@ class {{Camel .Name }}(EnhancedModel):
 
     {{- if $struct.Fields }}
 
-    def __init__(self,{{ range $struct.Fields }} {{snake .Name }} = {{pyDefault "" .}},{{ end}} **kw):
-        # initialize properties with correct default values
+    def __init__(self, **kw):
         super().__init__(**kw)
-        {{- range $struct.Fields }}
-        self.{{snake .Name }} = {{snake .Name }}
-        {{- end}}
     {{- end}}
 {{- end }}
 
