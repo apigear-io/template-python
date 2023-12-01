@@ -6,7 +6,7 @@ from {{dot .Module.Name}}_api import api
 {{ $iface := . }}
 class {{Camel .Name}}State(BaseModel):
 {{- range .Properties }}
-    {{snake .Name }}: {{pyType "api." .}} = Field(None, alias="{{.Name}}")
+    {{snake .Name }}: {{pyType "api." .}} = Field(default={{pyDefault "api." .}}, alias="{{.Name}}")
 {{- else }}
     pass
 {{- end }}
@@ -16,7 +16,7 @@ class {{Camel .Name}}State(BaseModel):
 # method {{$iface.Name}}.{{.Name}}
 class {{$iface.Name}}{{Camel .Name}}Request(BaseModel):
 {{- range .Params }}
-    {{snake .Name }}: {{pyType "api." .}} = Field(None, alias="{{.Name}}")
+    {{snake .Name }}: {{pyType "api." .}} = Field(default={{pyDefault "api." .}}, alias="{{.Name}}")
 {{- else }}
     pass
 {{- end }} {{/* range .Params */}}
