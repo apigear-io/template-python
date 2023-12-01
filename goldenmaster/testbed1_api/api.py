@@ -10,25 +10,25 @@ class EnhancedModel(BaseModel):
         return super().dict(**kwargs)
 
 class StructBool(EnhancedModel):
-    field_bool: bool = Field(None, alias="fieldBool")
+    field_bool: bool = Field(False, alias="fieldBool")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class StructInt(EnhancedModel):
-    field_int: int = Field(None, alias="fieldInt")
+    field_int: int = Field(0, alias="fieldInt")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class StructFloat(EnhancedModel):
-    field_float: float = Field(None, alias="fieldFloat")
+    field_float: float = Field(0.0, alias="fieldFloat")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class StructString(EnhancedModel):
-    field_string: str = Field(None, alias="fieldString")
+    field_string: str = Field("", alias="fieldString")
 
     def __init__(self, **kw):
         super().__init__(**kw)

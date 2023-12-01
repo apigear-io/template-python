@@ -18,17 +18,17 @@ class Enum2(IntEnum):
     VALUE2 = 2
 
 class Struct1(EnhancedModel):
-    field1: int = Field(None, alias="field1")
-    field2: int = Field(None, alias="field2")
-    field3: int = Field(None, alias="field3")
+    field1: int = Field(0, alias="field1")
+    field2: int = Field(0, alias="field2")
+    field3: int = Field(0, alias="field3")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class Struct2(EnhancedModel):
-    field1: int = Field(None, alias="field1")
-    field2: int = Field(None, alias="field2")
-    field3: int = Field(None, alias="field3")
+    field1: int = Field(0, alias="field1")
+    field2: int = Field(0, alias="field2")
+    field3: int = Field(0, alias="field3")
 
     def __init__(self, **kw):
         super().__init__(**kw)
