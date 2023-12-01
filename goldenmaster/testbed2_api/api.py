@@ -28,52 +28,52 @@ class Enum3(IntEnum):
     VALUE4 = 4
 
 class Struct1(EnhancedModel):
-    field1: int = Field(0, alias="field1")
+    field1: int = Field(default=0, alias="field1")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class Struct2(EnhancedModel):
-    field1: int = Field(0, alias="field1")
-    field2: int = Field(0, alias="field2")
+    field1: int = Field(default=0, alias="field1")
+    field2: int = Field(default=0, alias="field2")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class Struct3(EnhancedModel):
-    field1: int = Field(0, alias="field1")
-    field2: int = Field(0, alias="field2")
-    field3: int = Field(0, alias="field3")
+    field1: int = Field(default=0, alias="field1")
+    field2: int = Field(default=0, alias="field2")
+    field3: int = Field(default=0, alias="field3")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class Struct4(EnhancedModel):
-    field1: int = Field(0, alias="field1")
-    field2: int = Field(0, alias="field2")
-    field3: int = Field(0, alias="field3")
-    field4: int = Field(0, alias="field4")
+    field1: int = Field(default=0, alias="field1")
+    field2: int = Field(default=0, alias="field2")
+    field3: int = Field(default=0, alias="field3")
+    field4: int = Field(default=0, alias="field4")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class NestedStruct1(EnhancedModel):
-    field1: Struct1 = Field(Struct1(), alias="field1")
+    field1: Struct1 = Field(default=Struct1(), alias="field1")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class NestedStruct2(EnhancedModel):
-    field1: Struct1 = Field(Struct1(), alias="field1")
-    field2: Struct2 = Field(Struct2(), alias="field2")
+    field1: Struct1 = Field(default=Struct1(), alias="field1")
+    field2: Struct2 = Field(default=Struct2(), alias="field2")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class NestedStruct3(EnhancedModel):
-    field1: Struct1 = Field(Struct1(), alias="field1")
-    field2: Struct2 = Field(Struct2(), alias="field2")
-    field3: Struct3 = Field(Struct3(), alias="field3")
+    field1: Struct1 = Field(default=Struct1(), alias="field1")
+    field2: Struct2 = Field(default=Struct2(), alias="field2")
+    field3: Struct3 = Field(default=Struct3(), alias="field3")
 
     def __init__(self, **kw):
         super().__init__(**kw)

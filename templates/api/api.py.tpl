@@ -24,7 +24,7 @@ class {{Camel .Name }}(IntEnum):
 
 class {{Camel .Name }}(EnhancedModel):
     {{- range $struct.Fields }}
-    {{snake .Name }}: {{pyType "" .}} = Field({{pyDefault "" .}}, alias="{{.Name}}")
+    {{snake .Name }}: {{pyType "" .}} = Field(default={{pyDefault "" .}}, alias="{{.Name}}")
     {{- else }}
     pass
     {{- end }}
