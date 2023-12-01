@@ -45,9 +45,11 @@ class I{{Camel .Name}}:
 
     def get_{{snake .Name}}(self):
         raise NotImplementedError
+    {{- if not .IsReadOnly }}
 
     def set_{{snake .Name}}(self, value):
         raise NotImplementedError
+    {{- end }}
     {{- end }}
     {{- range .Operations }}
 

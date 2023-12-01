@@ -25,8 +25,12 @@ class {{$class}}Source(IObjectSource):
     {{- else }}
         if path == "{{.Name}}":
     {{- end }}
+        {{- if not .IsReadOnly }}
             v = api.as_{{snake .Type}}(value)
             return self.impl.set_{{snake .Name}}(v)
+        {{- else }}
+            pass
+        {{- end }}
 {{- end }}
         logging.info("unknown property: %s", name)
 
