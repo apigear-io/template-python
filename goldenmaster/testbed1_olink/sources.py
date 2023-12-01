@@ -85,16 +85,16 @@ class StructInterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "propBool":
             v = api.from_struct_bool(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "propInt":
             v = api.from_struct_int(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "propFloat":
             v = api.from_struct_float(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "propString":
             v = api.from_struct_string(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class StructArrayInterfaceSource(IObjectSource):
     impl: api.IStructArrayInterface
@@ -178,14 +178,14 @@ class StructArrayInterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "propBool":
             v = api.from_struct_bool(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "propInt":
             v = api.from_struct_int(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "propFloat":
             v = api.from_struct_float(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "propString":
             v = api.from_struct_string(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
