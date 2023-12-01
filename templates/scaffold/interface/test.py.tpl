@@ -7,7 +7,9 @@ class Test{{$class}}:
 
     def test_{{snake .Name}}(self):
         o = {{$class}}()
+        {{- if not .IsReadOnly }}
         o.set_{{snake .Name}}({{ pyDefault "api." .}})
+        {{- end }}
         assert o.get_{{snake .Name}}() == {{ pyDefault "api." .}}
 {{- else }}
     pass

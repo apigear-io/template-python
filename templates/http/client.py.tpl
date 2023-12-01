@@ -18,9 +18,11 @@ class {{Camel .Name}}(api.I{{Camel .Name}}):
     
     def get_{{snake .Name}}(self):
         return self._{{snake .Name}}
+    {{- if not .IsReadOnly }}
 
     def set_{{snake .Name}}(self, value):
         self._{{snake .Name}} = value
+    {{- end }}
 {{- end }}
 {{- range .Operations }}
 

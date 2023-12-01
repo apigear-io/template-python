@@ -10,11 +10,13 @@ class {{$class}}(api.I{{$class}}):
 {{- end }}
 
 {{- range .Interface.Properties }}
+    {{- if not .IsReadOnly }}
     def set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:
             return
         self._{{snake .Name}} = value
-    
+    {{- end }}
+
     def get_{{snake .Name}}(self):
         return self._{{snake .Name}}        
 {{- end }}
