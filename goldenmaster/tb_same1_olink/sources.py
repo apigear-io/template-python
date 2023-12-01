@@ -49,7 +49,7 @@ class SameStruct1InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_struct1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class SameStruct2InterfaceSource(IObjectSource):
     impl: api.ISameStruct2Interface
@@ -111,10 +111,10 @@ class SameStruct2InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_struct2(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop2":
             v = api.from_struct2(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class SameEnum1InterfaceSource(IObjectSource):
     impl: api.ISameEnum1Interface
@@ -162,7 +162,7 @@ class SameEnum1InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_enum1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class SameEnum2InterfaceSource(IObjectSource):
     impl: api.ISameEnum2Interface
@@ -224,8 +224,8 @@ class SameEnum2InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_enum1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop2":
             v = api.from_enum2(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)

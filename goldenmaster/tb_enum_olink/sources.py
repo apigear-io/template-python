@@ -85,14 +85,14 @@ class EnumInterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop0":
             v = api.from_enum0(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop1":
             v = api.from_enum1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop2":
             v = api.from_enum2(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop3":
             v = api.from_enum3(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)

@@ -97,16 +97,16 @@ class ManyParamInterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop2":
             v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop3":
             v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop4":
             v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class NestedStruct1InterfaceSource(IObjectSource):
     impl: api.INestedStruct1Interface
@@ -154,7 +154,7 @@ class NestedStruct1InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_nested_struct1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class NestedStruct2InterfaceSource(IObjectSource):
     impl: api.INestedStruct2Interface
@@ -216,10 +216,10 @@ class NestedStruct2InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_nested_struct1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop2":
             v = api.from_nested_struct2(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)
 class NestedStruct3InterfaceSource(IObjectSource):
     impl: api.INestedStruct3Interface
@@ -297,11 +297,11 @@ class NestedStruct3InterfaceSource(IObjectSource):
         path = Name.path_from_name(symbol)
         if path == "prop1":
             v = api.from_nested_struct1(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop2":
             v = api.from_nested_struct2(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         elif path == "prop3":
             v = api.from_nested_struct3(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
         logging.info("unknown property %s", symbol)

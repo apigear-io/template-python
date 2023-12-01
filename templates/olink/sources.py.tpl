@@ -90,7 +90,7 @@ class {{$class}}Source(IObjectSource):
         if path == "{{.Name}}":
     {{- end }}
             v = api.from_{{snake .Type}}(value)
-            return RemoteNode.notify_property_change(symbol, value)
+            return RemoteNode.notify_property_change(symbol, v)
 {{- end }}
         logging.info("unknown property %s", symbol)    
 {{- end }}
