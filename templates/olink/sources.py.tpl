@@ -32,7 +32,11 @@ class {{$class}}Source(IObjectSource):
         if path == "{{.Name}}":
     {{- end }}
         {{- if not .IsReadOnly }}
+            {{- if .IsArray }}
+            v = [api.as_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in value]
+            {{- else }}
             v = api.as_{{snake .Type}}(value)
+            {{- end }}
             return self.impl.set_{{snake .Name}}(v)
         {{- else }}
             pass
@@ -68,7 +72,11 @@ class {{$class}}Source(IObjectSource):
         props = {}
         {{- range .Properties }}
         v = self.impl.get_{{snake .Name}}()
+        {{- if .IsArray }}
+        props["{{.Name }}"] = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in v]
+        {{- else }}
         props["{{.Name }}"] = api.from_{{snake .Type}}(v)
+        {{- end }}
         {{- end }}
         return props
 
@@ -88,7 +96,12 @@ class {{$class}}Source(IObjectSource):
 {{- range $idx, $p := .Properties }}
 
     def notify_{{snake .Name}}_changed(self, value):
-        return RemoteNode.notify_property_change("{{$ns}}/{{.Name}}", api.from_{{snake .Type}}(value))
+        {{- if .IsArray }}
+        v = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in value]
+        {{- else }}
+        v = api.from_{{snake .Type}}(value)
+        {{- end }}
+        return RemoteNode.notify_property_change("{{$ns}}/{{.Name}}", v)
 {{- end }}
 
 {{- end }}
