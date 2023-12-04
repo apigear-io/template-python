@@ -89,13 +89,17 @@ class EnumInterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.enum.EnumInterface/sig3", [_param3])
 
     def notify_prop0_changed(self, value):
-        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop0", api.from_enum0(value))
+        v = api.from_enum0(value)
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop0", v)
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop1", api.from_enum1(value))
+        v = api.from_enum1(value)
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop2", api.from_enum2(value))
+        v = api.from_enum2(value)
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop2", v)
 
     def notify_prop3_changed(self, value):
-        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop3", api.from_enum3(value))
+        v = api.from_enum3(value)
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop3", v)

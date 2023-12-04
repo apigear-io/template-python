@@ -101,16 +101,20 @@ class ManyParamInterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("testbed2.ManyParamInterface/sig4", [_param1, _param2, _param3, _param4])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop1", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop2", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop2", v)
 
     def notify_prop3_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop3", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop3", v)
 
     def notify_prop4_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop4", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop4", v)
 class NestedStruct1InterfaceSource(IObjectSource):
     impl: api.INestedStruct1Interface
     def __init__(self, impl: api.INestedStruct1Interface):
@@ -152,7 +156,8 @@ class NestedStruct1InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("testbed2.NestedStruct1Interface/sig1", [_param1])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.NestedStruct1Interface/prop1", api.from_nested_struct1(value))
+        v = api.from_nested_struct1(value)
+        return RemoteNode.notify_property_change("testbed2.NestedStruct1Interface/prop1", v)
 class NestedStruct2InterfaceSource(IObjectSource):
     impl: api.INestedStruct2Interface
     def __init__(self, impl: api.INestedStruct2Interface):
@@ -211,10 +216,12 @@ class NestedStruct2InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("testbed2.NestedStruct2Interface/sig2", [_param1, _param2])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.NestedStruct2Interface/prop1", api.from_nested_struct1(value))
+        v = api.from_nested_struct1(value)
+        return RemoteNode.notify_property_change("testbed2.NestedStruct2Interface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.NestedStruct2Interface/prop2", api.from_nested_struct2(value))
+        v = api.from_nested_struct2(value)
+        return RemoteNode.notify_property_change("testbed2.NestedStruct2Interface/prop2", v)
 class NestedStruct3InterfaceSource(IObjectSource):
     impl: api.INestedStruct3Interface
     def __init__(self, impl: api.INestedStruct3Interface):
@@ -292,10 +299,13 @@ class NestedStruct3InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("testbed2.NestedStruct3Interface/sig3", [_param1, _param2, _param3])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop1", api.from_nested_struct1(value))
+        v = api.from_nested_struct1(value)
+        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop2", api.from_nested_struct2(value))
+        v = api.from_nested_struct2(value)
+        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop2", v)
 
     def notify_prop3_changed(self, value):
-        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop3", api.from_nested_struct3(value))
+        v = api.from_nested_struct3(value)
+        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop3", v)

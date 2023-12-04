@@ -161,31 +161,40 @@ class SimpleInterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigString", [_param_string])
 
     def notify_prop_bool_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propBool", api.from_bool(value))
+        v = api.from_bool(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propBool", v)
 
     def notify_prop_int_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propInt", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propInt", v)
 
     def notify_prop_int32_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propInt32", api.from_int32(value))
+        v = api.from_int32(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propInt32", v)
 
     def notify_prop_int64_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propInt64", api.from_int64(value))
+        v = api.from_int64(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propInt64", v)
 
     def notify_prop_float_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propFloat", api.from_float(value))
+        v = api.from_float(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propFloat", v)
 
     def notify_prop_float32_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propFloat32", api.from_float32(value))
+        v = api.from_float32(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propFloat32", v)
 
     def notify_prop_float64_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propFloat64", api.from_float64(value))
+        v = api.from_float64(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propFloat64", v)
 
     def notify_prop_string_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propString", api.from_string(value))
+        v = api.from_string(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propString", v)
 
     def notify_prop_read_only_string_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propReadOnlyString", api.from_string(value))
+        v = api.from_string(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propReadOnlyString", v)
 class SimpleArrayInterfaceSource(IObjectSource):
     impl: api.ISimpleArrayInterface
     def __init__(self, impl: api.ISimpleArrayInterface):
@@ -214,28 +223,28 @@ class SimpleArrayInterfaceSource(IObjectSource):
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
         if path == "propBool":
-            v = api.as_bool(value)
+            v = [api.as_bool(bool) for bool in value]
             return self.impl.set_prop_bool(v)
         elif path == "propInt":
-            v = api.as_int(value)
+            v = [api.as_int(int) for int in value]
             return self.impl.set_prop_int(v)
         elif path == "propInt32":
-            v = api.as_int32(value)
+            v = [api.as_int32(int32) for int32 in value]
             return self.impl.set_prop_int32(v)
         elif path == "propInt64":
-            v = api.as_int64(value)
+            v = [api.as_int64(int64) for int64 in value]
             return self.impl.set_prop_int64(v)
         elif path == "propFloat":
-            v = api.as_float(value)
+            v = [api.as_float(float) for float in value]
             return self.impl.set_prop_float(v)
         elif path == "propFloat32":
-            v = api.as_float32(value)
+            v = [api.as_float32(float32) for float32 in value]
             return self.impl.set_prop_float32(v)
         elif path == "propFloat64":
-            v = api.as_float64(value)
+            v = [api.as_float64(float64) for float64 in value]
             return self.impl.set_prop_float64(v)
         elif path == "propString":
-            v = api.as_string(value)
+            v = [api.as_string(string) for string in value]
             return self.impl.set_prop_string(v)
         logging.info("unknown property: %s", name)
 
@@ -282,21 +291,21 @@ class SimpleArrayInterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         v = self.impl.get_prop_bool()
-        props["propBool"] = api.from_bool(v)
+        props["propBool"] = [api.from_bool(bool) for bool in v]
         v = self.impl.get_prop_int()
-        props["propInt"] = api.from_int(v)
+        props["propInt"] = [api.from_int(int) for int in v]
         v = self.impl.get_prop_int32()
-        props["propInt32"] = api.from_int32(v)
+        props["propInt32"] = [api.from_int32(int32) for int32 in v]
         v = self.impl.get_prop_int64()
-        props["propInt64"] = api.from_int64(v)
+        props["propInt64"] = [api.from_int64(int64) for int64 in v]
         v = self.impl.get_prop_float()
-        props["propFloat"] = api.from_float(v)
+        props["propFloat"] = [api.from_float(float) for float in v]
         v = self.impl.get_prop_float32()
-        props["propFloat32"] = api.from_float32(v)
+        props["propFloat32"] = [api.from_float32(float32) for float32 in v]
         v = self.impl.get_prop_float64()
-        props["propFloat64"] = api.from_float64(v)
+        props["propFloat64"] = [api.from_float64(float64) for float64 in v]
         v = self.impl.get_prop_string()
-        props["propString"] = api.from_string(v)
+        props["propString"] = [api.from_string(string) for string in v]
         return props
 
     def notify_sig_bool(self, param_bool: list[bool]):
@@ -332,28 +341,36 @@ class SimpleArrayInterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigString", [_param_string])
 
     def notify_prop_bool_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propBool", api.from_bool(value))
+        v = [api.from_bool(bool) for bool in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propBool", v)
 
     def notify_prop_int_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propInt", api.from_int(value))
+        v = [api.from_int(int) for int in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propInt", v)
 
     def notify_prop_int32_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propInt32", api.from_int32(value))
+        v = [api.from_int32(int32) for int32 in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propInt32", v)
 
     def notify_prop_int64_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propInt64", api.from_int64(value))
+        v = [api.from_int64(int64) for int64 in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propInt64", v)
 
     def notify_prop_float_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propFloat", api.from_float(value))
+        v = [api.from_float(float) for float in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propFloat", v)
 
     def notify_prop_float32_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propFloat32", api.from_float32(value))
+        v = [api.from_float32(float32) for float32 in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propFloat32", v)
 
     def notify_prop_float64_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propFloat64", api.from_float64(value))
+        v = [api.from_float64(float64) for float64 in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propFloat64", v)
 
     def notify_prop_string_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propString", api.from_string(value))
+        v = [api.from_string(string) for string in value]
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propString", v)
 class NoPropertiesInterfaceSource(IObjectSource):
     impl: api.INoPropertiesInterface
     def __init__(self, impl: api.INoPropertiesInterface):
@@ -441,10 +458,12 @@ class NoOperationsInterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.simple.NoOperationsInterface/sigBool", [_param_bool])
 
     def notify_prop_bool_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.NoOperationsInterface/propBool", api.from_bool(value))
+        v = api.from_bool(value)
+        return RemoteNode.notify_property_change("tb.simple.NoOperationsInterface/propBool", v)
 
     def notify_prop_int_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.NoOperationsInterface/propInt", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("tb.simple.NoOperationsInterface/propInt", v)
 class NoSignalsInterfaceSource(IObjectSource):
     impl: api.INoSignalsInterface
     def __init__(self, impl: api.INoSignalsInterface):
@@ -490,10 +509,12 @@ class NoSignalsInterfaceSource(IObjectSource):
         return props
 
     def notify_prop_bool_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.NoSignalsInterface/propBool", api.from_bool(value))
+        v = api.from_bool(value)
+        return RemoteNode.notify_property_change("tb.simple.NoSignalsInterface/propBool", v)
 
     def notify_prop_int_changed(self, value):
-        return RemoteNode.notify_property_change("tb.simple.NoSignalsInterface/propInt", api.from_int(value))
+        v = api.from_int(value)
+        return RemoteNode.notify_property_change("tb.simple.NoSignalsInterface/propInt", v)
 class EmptyInterfaceSource(IObjectSource):
     impl: api.IEmptyInterface
     def __init__(self, impl: api.IEmptyInterface):

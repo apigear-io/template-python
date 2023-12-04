@@ -44,7 +44,8 @@ class SameStruct1InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.same2.SameStruct1Interface/sig1", [_param1])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("tb.same2.SameStruct1Interface/prop1", api.from_struct1(value))
+        v = api.from_struct1(value)
+        return RemoteNode.notify_property_change("tb.same2.SameStruct1Interface/prop1", v)
 class SameStruct2InterfaceSource(IObjectSource):
     impl: api.ISameStruct2Interface
     def __init__(self, impl: api.ISameStruct2Interface):
@@ -103,10 +104,12 @@ class SameStruct2InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.same2.SameStruct2Interface/sig2", [_param1, _param2])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("tb.same2.SameStruct2Interface/prop1", api.from_struct2(value))
+        v = api.from_struct2(value)
+        return RemoteNode.notify_property_change("tb.same2.SameStruct2Interface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        return RemoteNode.notify_property_change("tb.same2.SameStruct2Interface/prop2", api.from_struct2(value))
+        v = api.from_struct2(value)
+        return RemoteNode.notify_property_change("tb.same2.SameStruct2Interface/prop2", v)
 class SameEnum1InterfaceSource(IObjectSource):
     impl: api.ISameEnum1Interface
     def __init__(self, impl: api.ISameEnum1Interface):
@@ -148,7 +151,8 @@ class SameEnum1InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.same2.SameEnum1Interface/sig1", [_param1])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("tb.same2.SameEnum1Interface/prop1", api.from_enum1(value))
+        v = api.from_enum1(value)
+        return RemoteNode.notify_property_change("tb.same2.SameEnum1Interface/prop1", v)
 class SameEnum2InterfaceSource(IObjectSource):
     impl: api.ISameEnum2Interface
     def __init__(self, impl: api.ISameEnum2Interface):
@@ -207,7 +211,9 @@ class SameEnum2InterfaceSource(IObjectSource):
         return RemoteNode.notify_signal("tb.same2.SameEnum2Interface/sig2", [_param1, _param2])
 
     def notify_prop1_changed(self, value):
-        return RemoteNode.notify_property_change("tb.same2.SameEnum2Interface/prop1", api.from_enum1(value))
+        v = api.from_enum1(value)
+        return RemoteNode.notify_property_change("tb.same2.SameEnum2Interface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        return RemoteNode.notify_property_change("tb.same2.SameEnum2Interface/prop2", api.from_enum2(value))
+        v = api.from_enum2(value)
+        return RemoteNode.notify_property_change("tb.same2.SameEnum2Interface/prop2", v)
