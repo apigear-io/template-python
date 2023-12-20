@@ -8,23 +8,23 @@ from tb_simple_api import api
 class SimpleInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop_bool = False
+        self._prop_bool = False
         self.on_prop_bool_changed = EventHook()
-        self.prop_int = 0
+        self._prop_int = 0
         self.on_prop_int_changed = EventHook()
-        self.prop_int32 = 0
+        self._prop_int32 = 0
         self.on_prop_int32_changed = EventHook()
-        self.prop_int64 = 0
+        self._prop_int64 = 0
         self.on_prop_int64_changed = EventHook()
-        self.prop_float = 0.0
+        self._prop_float = 0.0
         self.on_prop_float_changed = EventHook()
-        self.prop_float32 = 0.0
+        self._prop_float32 = 0.0
         self.on_prop_float32_changed = EventHook()
-        self.prop_float64 = 0.0
+        self._prop_float64 = 0.0
         self.on_prop_float64_changed = EventHook()
-        self.prop_string = ""
+        self._prop_string = ""
         self.on_prop_string_changed = EventHook()
-        self.prop_read_only_string = ""
+        self._prop_read_only_string = ""
         self.on_prop_read_only_string_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
@@ -43,6 +43,73 @@ class SimpleInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.simple.SimpleInterface/SimpleInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
+    def set_prop_bool(self, value):
+        if self._prop_bool == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propBool', value)
+
+    def get_prop_bool(self):
+        return self._prop_bool
+
+    def set_prop_int(self, value):
+        if self._prop_int == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propInt', value)
+
+    def get_prop_int(self):
+        return self._prop_int
+
+    def set_prop_int32(self, value):
+        if self._prop_int32 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propInt32', value)
+
+    def get_prop_int32(self):
+        return self._prop_int32
+
+    def set_prop_int64(self, value):
+        if self._prop_int64 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propInt64', value)
+
+    def get_prop_int64(self):
+        return self._prop_int64
+
+    def set_prop_float(self, value):
+        if self._prop_float == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propFloat', value)
+
+    def get_prop_float(self):
+        return self._prop_float
+
+    def set_prop_float32(self, value):
+        if self._prop_float32 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propFloat32', value)
+
+    def get_prop_float32(self):
+        return self._prop_float32
+
+    def set_prop_float64(self, value):
+        if self._prop_float64 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propFloat64', value)
+
+    def get_prop_float64(self):
+        return self._prop_float64
+
+    def set_prop_string(self, value):
+        if self._prop_string == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleInterface/propString', value)
+
+    def get_prop_string(self):
+        return self._prop_string
+
+    def get_prop_read_only_string(self):
+        return self._prop_read_only_string
 
     async def func_void(self):
         return await self._invoke("funcVoid", [])
@@ -75,14 +142,65 @@ class SimpleInterfaceSink(IObjectSink):
         return 'tb.simple.SimpleInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        self.client = ClientNode.register_sink(self)
         for k in props:
-            setattr(self, k, props[k])
+            if k == "propBool":
+                self._prop_bool =  props[k]
+            elif k == "propInt":
+                self._prop_int =  props[k]
+            elif k == "propInt32":
+                self._prop_int32 =  props[k]
+            elif k == "propInt64":
+                self._prop_int64 =  props[k]
+            elif k == "propFloat":
+                self._prop_float =  props[k]
+            elif k == "propFloat32":
+                self._prop_float32 =  props[k]
+            elif k == "propFloat64":
+                self._prop_float64 =  props[k]
+            elif k == "propString":
+                self._prop_string =  props[k]
+            elif k == "propReadOnlyString":
+                self._prop_read_only_string =  props[k]
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
+        if path == "propBool":
+            self._prop_bool =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_bool)
+        elif path == "propInt":
+            self._prop_int =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int)
+        elif path == "propInt32":
+            self._prop_int32 =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int32)
+        elif path == "propInt64":
+            self._prop_int64 =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int64)
+        elif path == "propFloat":
+            self._prop_float =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_float)
+        elif path == "propFloat32":
+            self._prop_float32 =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_float32)
+        elif path == "propFloat64":
+            self._prop_float64 =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_float64)
+        elif path == "propString":
+            self._prop_string =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_string)
+        elif path == "propReadOnlyString":
+            self._prop_read_only_string =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_read_only_string)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -92,21 +210,21 @@ class SimpleInterfaceSink(IObjectSink):
 class SimpleArrayInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop_bool = []
+        self._prop_bool = []
         self.on_prop_bool_changed = EventHook()
-        self.prop_int = []
+        self._prop_int = []
         self.on_prop_int_changed = EventHook()
-        self.prop_int32 = []
+        self._prop_int32 = []
         self.on_prop_int32_changed = EventHook()
-        self.prop_int64 = []
+        self._prop_int64 = []
         self.on_prop_int64_changed = EventHook()
-        self.prop_float = []
+        self._prop_float = []
         self.on_prop_float_changed = EventHook()
-        self.prop_float32 = []
+        self._prop_float32 = []
         self.on_prop_float32_changed = EventHook()
-        self.prop_float64 = []
+        self._prop_float64 = []
         self.on_prop_float64_changed = EventHook()
-        self.prop_string = []
+        self._prop_string = []
         self.on_prop_string_changed = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
@@ -124,6 +242,70 @@ class SimpleArrayInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.simple.SimpleArrayInterface/SimpleArrayInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
+    def set_prop_bool(self, value):
+        if self._prop_bool == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propBool', [api.from_bool(_) for _ in value])
+
+    def get_prop_bool(self):
+        return self._prop_bool
+
+    def set_prop_int(self, value):
+        if self._prop_int == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propInt', [api.from_int(_) for _ in value])
+
+    def get_prop_int(self):
+        return self._prop_int
+
+    def set_prop_int32(self, value):
+        if self._prop_int32 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propInt32', [api.from_int32(_) for _ in value])
+
+    def get_prop_int32(self):
+        return self._prop_int32
+
+    def set_prop_int64(self, value):
+        if self._prop_int64 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propInt64', [api.from_int64(_) for _ in value])
+
+    def get_prop_int64(self):
+        return self._prop_int64
+
+    def set_prop_float(self, value):
+        if self._prop_float == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propFloat', [api.from_float(_) for _ in value])
+
+    def get_prop_float(self):
+        return self._prop_float
+
+    def set_prop_float32(self, value):
+        if self._prop_float32 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propFloat32', [api.from_float32(_) for _ in value])
+
+    def get_prop_float32(self):
+        return self._prop_float32
+
+    def set_prop_float64(self, value):
+        if self._prop_float64 == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propFloat64', [api.from_float64(_) for _ in value])
+
+    def get_prop_float64(self):
+        return self._prop_float64
+
+    def set_prop_string(self, value):
+        if self._prop_string == value:
+            return
+        self.client.set_remote_property('tb.simple.SimpleArrayInterface/propString', [api.from_string(_) for _ in value])
+
+    def get_prop_string(self):
+        return self._prop_string
 
     async def func_bool(self, param_bool: list[bool]):
         return await self._invoke("funcBool", [param_bool])
@@ -153,14 +335,59 @@ class SimpleArrayInterfaceSink(IObjectSink):
         return 'tb.simple.SimpleArrayInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        self.client = ClientNode.register_sink(self)
         for k in props:
-            setattr(self, k, props[k])
+            if k == "propBool":
+                self._prop_bool = [api.as_bool(_) for _ in props[k]]
+            elif k == "propInt":
+                self._prop_int = [api.as_int(_) for _ in props[k]]
+            elif k == "propInt32":
+                self._prop_int32 = [api.as_int32(_) for _ in props[k]]
+            elif k == "propInt64":
+                self._prop_int64 = [api.as_int64(_) for _ in props[k]]
+            elif k == "propFloat":
+                self._prop_float = [api.as_float(_) for _ in props[k]]
+            elif k == "propFloat32":
+                self._prop_float32 = [api.as_float32(_) for _ in props[k]]
+            elif k == "propFloat64":
+                self._prop_float64 = [api.as_float64(_) for _ in props[k]]
+            elif k == "propString":
+                self._prop_string = [api.as_string(_) for _ in props[k]]
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
+        if path == "propBool":
+            self._prop_bool = [api.as_bool(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_bool)
+        elif path == "propInt":
+            self._prop_int = [api.as_int(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int)
+        elif path == "propInt32":
+            self._prop_int32 = [api.as_int32(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int32)
+        elif path == "propInt64":
+            self._prop_int64 = [api.as_int64(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int64)
+        elif path == "propFloat":
+            self._prop_float = [api.as_float(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_float)
+        elif path == "propFloat32":
+            self._prop_float32 = [api.as_float32(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_float32)
+        elif path == "propFloat64":
+            self._prop_float64 = [api.as_float64(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_float64)
+        elif path == "propString":
+            self._prop_string = [api.as_string(_) for _ in value]
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_string)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -191,14 +418,10 @@ class NoPropertiesInterfaceSink(IObjectSink):
         return 'tb.simple.NoPropertiesInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
-        for k in props:
-            setattr(self, k, props[k])
+        self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -208,9 +431,9 @@ class NoPropertiesInterfaceSink(IObjectSink):
 class NoOperationsInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop_bool = False
+        self._prop_bool = False
         self.on_prop_bool_changed = EventHook()
-        self.prop_int = 0
+        self._prop_int = 0
         self.on_prop_int_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
@@ -223,18 +446,43 @@ class NoOperationsInterfaceSink(IObjectSink):
         self.client.invoke_remote('tb.simple.NoOperationsInterface/NoOperationsInterface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def set_prop_bool(self, value):
+        if self._prop_bool == value:
+            return
+        self.client.set_remote_property('tb.simple.NoOperationsInterface/propBool', value)
+
+    def get_prop_bool(self):
+        return self._prop_bool
+
+    def set_prop_int(self, value):
+        if self._prop_int == value:
+            return
+        self.client.set_remote_property('tb.simple.NoOperationsInterface/propInt', value)
+
+    def get_prop_int(self):
+        return self._prop_int
+
     def olink_object_name(self):
         return 'tb.simple.NoOperationsInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        self.client = ClientNode.register_sink(self)
         for k in props:
-            setattr(self, k, props[k])
+            if k == "propBool":
+                self._prop_bool =  props[k]
+            elif k == "propInt":
+                self._prop_int =  props[k]
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
+        if path == "propBool":
+            self._prop_bool =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_bool)
+        elif path == "propInt":
+            self._prop_int =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -244,9 +492,9 @@ class NoOperationsInterfaceSink(IObjectSink):
 class NoSignalsInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.prop_bool = False
+        self._prop_bool = False
         self.on_prop_bool_changed = EventHook()
-        self.prop_int = 0
+        self._prop_int = 0
         self.on_prop_int_changed = EventHook()
         self.client = ClientNode.register_sink(self)
 
@@ -256,6 +504,22 @@ class NoSignalsInterfaceSink(IObjectSink):
             return future.set_result(args.value)
         self.client.invoke_remote('tb.simple.NoSignalsInterface/NoSignalsInterface', args, func)
         return await asyncio.wait_for(future, 500)
+
+    def set_prop_bool(self, value):
+        if self._prop_bool == value:
+            return
+        self.client.set_remote_property('tb.simple.NoSignalsInterface/propBool', value)
+
+    def get_prop_bool(self):
+        return self._prop_bool
+
+    def set_prop_int(self, value):
+        if self._prop_int == value:
+            return
+        self.client.set_remote_property('tb.simple.NoSignalsInterface/propInt', value)
+
+    def get_prop_int(self):
+        return self._prop_int
 
     async def func_void(self):
         return await self._invoke("funcVoid", [])
@@ -267,14 +531,23 @@ class NoSignalsInterfaceSink(IObjectSink):
         return 'tb.simple.NoSignalsInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        self.client = ClientNode.register_sink(self)
         for k in props:
-            setattr(self, k, props[k])
+            if k == "propBool":
+                self._prop_bool =  props[k]
+            elif k == "propInt":
+                self._prop_int =  props[k]
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
+        if path == "propBool":
+            self._prop_bool =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_bool)
+        elif path == "propInt":
+            self._prop_int =  value
+            hook = getattr(self, f'on_{path}_changed')
+            hook.fire(self._prop_int)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -297,14 +570,10 @@ class EmptyInterfaceSink(IObjectSink):
         return 'tb.simple.EmptyInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
-        for k in props:
-            setattr(self, k, props[k])
+        self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
