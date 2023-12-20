@@ -21,14 +21,10 @@ class EmptyInterfaceSink(IObjectSink):
         return 'tb.empty.EmptyInterface'
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
-        for k in props:
-            setattr(self, k, props[k])
+        self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
-        setattr(self, path, value)
-        hook = getattr(self, f'on_{path}_changed')
-        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
