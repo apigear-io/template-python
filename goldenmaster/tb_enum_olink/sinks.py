@@ -29,6 +29,13 @@ class EnumInterfaceSink(IObjectSink):
         self.client.invoke_remote('tb.enum.EnumInterface/EnumInterface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop0(self, value):
+        if self._prop0 == value:
+            return
+        path = Name.path_from_name("prop0")
+        self._prop0 = value
+        self.on_property_changed.fire(path, self._prop0)
+
     def set_prop0(self, value):
         if self._prop0 == value:
             return
@@ -36,6 +43,13 @@ class EnumInterfaceSink(IObjectSink):
 
     def get_prop0(self):
         return self._prop0
+
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -45,6 +59,13 @@ class EnumInterfaceSink(IObjectSink):
     def get_prop1(self):
         return self._prop1
 
+    def _set_prop2(self, value):
+        if self._prop2 == value:
+            return
+        path = Name.path_from_name("prop2")
+        self._prop2 = value
+        self.on_property_changed.fire(path, self._prop2)
+
     def set_prop2(self, value):
         if self._prop2 == value:
             return
@@ -52,6 +73,13 @@ class EnumInterfaceSink(IObjectSink):
 
     def get_prop2(self):
         return self._prop2
+
+    def _set_prop3(self, value):
+        if self._prop3 == value:
+            return
+        path = Name.path_from_name("prop3")
+        self._prop3 = value
+        self.on_property_changed.fire(path, self._prop3)
 
     def set_prop3(self, value):
         if self._prop3 == value:
@@ -80,13 +108,13 @@ class EnumInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop0":
-                self._prop0 =  props[k]
+                self._set_prop0(props[k])
             elif k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
             elif k == "prop2":
-                self._prop2 =  props[k]
+                self._set_prop2(props[k])
             elif k == "prop3":
-                self._prop3 =  props[k]
+                self._set_prop3(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

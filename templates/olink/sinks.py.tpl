@@ -32,6 +32,17 @@ class {{Camel .Name}}Sink(IObjectSink):
     {{- range .Properties }}
     {{- if not .IsReadOnly }}
 
+    def _set_{{snake .Name}}(self, value):
+        if self._{{snake .Name}} == value:
+            return
+        path = Name.path_from_name("{{.Name}}")
+        {{- if .IsArray }}
+        self._{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in value]
+        {{- else }}
+        self._{{snake .Name}} = value
+        {{- end }}
+        self.on_property_changed.fire(path, self._{{snake .Name}})
+
     def set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:
             return
@@ -66,16 +77,14 @@ class {{Camel .Name}}Sink(IObjectSink):
             {{- else }}
             if k == "{{.Name}}":
             {{- end }}
-                {{- if .IsArray }}
-                self._{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in props[k]]
-                {{- else }}
-                self._{{snake .Name}} =  props[k]
-                {{- end }}
+                self._set_{{snake .Name}}(props[k])
         {{- end }}
         {{- end }}
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
+        {{- if len .Properties }}
         path = Name.path_from_name(name)
+        {{- end }}
         {{- range $idx, $o := .Properties }}
         {{- if $idx }}
         elif path == "{{.Name}}":
@@ -89,6 +98,8 @@ class {{Camel .Name}}Sink(IObjectSink):
             {{- end }}
             hook = getattr(self, f'on_{path}_changed')
             hook.fire(self._{{snake .Name}})
+        {{- else}}
+        pass
         {{- end }}
 
     def olink_on_signal(self, name: str, args: list[Any]):
