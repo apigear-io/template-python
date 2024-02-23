@@ -29,6 +29,13 @@ class ManyParamInterfaceSink(IObjectSink):
         self.client.invoke_remote('testbed2.ManyParamInterface/ManyParamInterface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -36,6 +43,13 @@ class ManyParamInterfaceSink(IObjectSink):
 
     def get_prop1(self):
         return self._prop1
+
+    def _set_prop2(self, value):
+        if self._prop2 == value:
+            return
+        path = Name.path_from_name("prop2")
+        self._prop2 = value
+        self.on_property_changed.fire(path, self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -45,6 +59,13 @@ class ManyParamInterfaceSink(IObjectSink):
     def get_prop2(self):
         return self._prop2
 
+    def _set_prop3(self, value):
+        if self._prop3 == value:
+            return
+        path = Name.path_from_name("prop3")
+        self._prop3 = value
+        self.on_property_changed.fire(path, self._prop3)
+
     def set_prop3(self, value):
         if self._prop3 == value:
             return
@@ -52,6 +73,13 @@ class ManyParamInterfaceSink(IObjectSink):
 
     def get_prop3(self):
         return self._prop3
+
+    def _set_prop4(self, value):
+        if self._prop4 == value:
+            return
+        path = Name.path_from_name("prop4")
+        self._prop4 = value
+        self.on_property_changed.fire(path, self._prop4)
 
     def set_prop4(self, value):
         if self._prop4 == value:
@@ -80,13 +108,13 @@ class ManyParamInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
             elif k == "prop2":
-                self._prop2 =  props[k]
+                self._set_prop2(props[k])
             elif k == "prop3":
-                self._prop3 =  props[k]
+                self._set_prop3(props[k])
             elif k == "prop4":
-                self._prop4 =  props[k]
+                self._set_prop4(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -127,6 +155,13 @@ class NestedStruct1InterfaceSink(IObjectSink):
         self.client.invoke_remote('testbed2.NestedStruct1Interface/NestedStruct1Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -145,7 +180,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -177,6 +212,13 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self.client.invoke_remote('testbed2.NestedStruct2Interface/NestedStruct2Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -184,6 +226,13 @@ class NestedStruct2InterfaceSink(IObjectSink):
 
     def get_prop1(self):
         return self._prop1
+
+    def _set_prop2(self, value):
+        if self._prop2 == value:
+            return
+        path = Name.path_from_name("prop2")
+        self._prop2 = value
+        self.on_property_changed.fire(path, self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -206,9 +255,9 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
             elif k == "prop2":
-                self._prop2 =  props[k]
+                self._set_prop2(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -247,6 +296,13 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self.client.invoke_remote('testbed2.NestedStruct3Interface/NestedStruct3Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -255,6 +311,13 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def get_prop1(self):
         return self._prop1
 
+    def _set_prop2(self, value):
+        if self._prop2 == value:
+            return
+        path = Name.path_from_name("prop2")
+        self._prop2 = value
+        self.on_property_changed.fire(path, self._prop2)
+
     def set_prop2(self, value):
         if self._prop2 == value:
             return
@@ -262,6 +325,13 @@ class NestedStruct3InterfaceSink(IObjectSink):
 
     def get_prop2(self):
         return self._prop2
+
+    def _set_prop3(self, value):
+        if self._prop3 == value:
+            return
+        path = Name.path_from_name("prop3")
+        self._prop3 = value
+        self.on_property_changed.fire(path, self._prop3)
 
     def set_prop3(self, value):
         if self._prop3 == value:
@@ -287,11 +357,11 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
             elif k == "prop2":
-                self._prop2 =  props[k]
+                self._set_prop2(props[k])
             elif k == "prop3":
-                self._prop3 =  props[k]
+                self._set_prop3(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

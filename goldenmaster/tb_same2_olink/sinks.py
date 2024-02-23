@@ -20,6 +20,13 @@ class SameStruct1InterfaceSink(IObjectSink):
         self.client.invoke_remote('tb.same2.SameStruct1Interface/SameStruct1Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -38,7 +45,7 @@ class SameStruct1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -70,6 +77,13 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.client.invoke_remote('tb.same2.SameStruct2Interface/SameStruct2Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -77,6 +91,13 @@ class SameStruct2InterfaceSink(IObjectSink):
 
     def get_prop1(self):
         return self._prop1
+
+    def _set_prop2(self, value):
+        if self._prop2 == value:
+            return
+        path = Name.path_from_name("prop2")
+        self._prop2 = value
+        self.on_property_changed.fire(path, self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -99,9 +120,9 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
             elif k == "prop2":
-                self._prop2 =  props[k]
+                self._set_prop2(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -134,6 +155,13 @@ class SameEnum1InterfaceSink(IObjectSink):
         self.client.invoke_remote('tb.same2.SameEnum1Interface/SameEnum1Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -152,7 +180,7 @@ class SameEnum1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -184,6 +212,13 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.client.invoke_remote('tb.same2.SameEnum2Interface/SameEnum2Interface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop1(self, value):
+        if self._prop1 == value:
+            return
+        path = Name.path_from_name("prop1")
+        self._prop1 = value
+        self.on_property_changed.fire(path, self._prop1)
+
     def set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -191,6 +226,13 @@ class SameEnum2InterfaceSink(IObjectSink):
 
     def get_prop1(self):
         return self._prop1
+
+    def _set_prop2(self, value):
+        if self._prop2 == value:
+            return
+        path = Name.path_from_name("prop2")
+        self._prop2 = value
+        self.on_property_changed.fire(path, self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -213,9 +255,9 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._prop1 =  props[k]
+                self._set_prop1(props[k])
             elif k == "prop2":
-                self._prop2 =  props[k]
+                self._set_prop2(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

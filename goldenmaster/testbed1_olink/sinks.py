@@ -29,6 +29,13 @@ class StructInterfaceSink(IObjectSink):
         self.client.invoke_remote('testbed1.StructInterface/StructInterface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop_bool(self, value):
+        if self._prop_bool == value:
+            return
+        path = Name.path_from_name("propBool")
+        self._prop_bool = value
+        self.on_property_changed.fire(path, self._prop_bool)
+
     def set_prop_bool(self, value):
         if self._prop_bool == value:
             return
@@ -36,6 +43,13 @@ class StructInterfaceSink(IObjectSink):
 
     def get_prop_bool(self):
         return self._prop_bool
+
+    def _set_prop_int(self, value):
+        if self._prop_int == value:
+            return
+        path = Name.path_from_name("propInt")
+        self._prop_int = value
+        self.on_property_changed.fire(path, self._prop_int)
 
     def set_prop_int(self, value):
         if self._prop_int == value:
@@ -45,6 +59,13 @@ class StructInterfaceSink(IObjectSink):
     def get_prop_int(self):
         return self._prop_int
 
+    def _set_prop_float(self, value):
+        if self._prop_float == value:
+            return
+        path = Name.path_from_name("propFloat")
+        self._prop_float = value
+        self.on_property_changed.fire(path, self._prop_float)
+
     def set_prop_float(self, value):
         if self._prop_float == value:
             return
@@ -52,6 +73,13 @@ class StructInterfaceSink(IObjectSink):
 
     def get_prop_float(self):
         return self._prop_float
+
+    def _set_prop_string(self, value):
+        if self._prop_string == value:
+            return
+        path = Name.path_from_name("propString")
+        self._prop_string = value
+        self.on_property_changed.fire(path, self._prop_string)
 
     def set_prop_string(self, value):
         if self._prop_string == value:
@@ -80,13 +108,13 @@ class StructInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._prop_bool =  props[k]
+                self._set_prop_bool(props[k])
             elif k == "propInt":
-                self._prop_int =  props[k]
+                self._set_prop_int(props[k])
             elif k == "propFloat":
-                self._prop_float =  props[k]
+                self._set_prop_float(props[k])
             elif k == "propString":
-                self._prop_string =  props[k]
+                self._set_prop_string(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -136,6 +164,13 @@ class StructArrayInterfaceSink(IObjectSink):
         self.client.invoke_remote('testbed1.StructArrayInterface/StructArrayInterface', args, func)
         return await asyncio.wait_for(future, 500)
 
+    def _set_prop_bool(self, value):
+        if self._prop_bool == value:
+            return
+        path = Name.path_from_name("propBool")
+        self._prop_bool = [api.as_struct_bool(_) for _ in value]
+        self.on_property_changed.fire(path, self._prop_bool)
+
     def set_prop_bool(self, value):
         if self._prop_bool == value:
             return
@@ -143,6 +178,13 @@ class StructArrayInterfaceSink(IObjectSink):
 
     def get_prop_bool(self):
         return self._prop_bool
+
+    def _set_prop_int(self, value):
+        if self._prop_int == value:
+            return
+        path = Name.path_from_name("propInt")
+        self._prop_int = [api.as_struct_int(_) for _ in value]
+        self.on_property_changed.fire(path, self._prop_int)
 
     def set_prop_int(self, value):
         if self._prop_int == value:
@@ -152,6 +194,13 @@ class StructArrayInterfaceSink(IObjectSink):
     def get_prop_int(self):
         return self._prop_int
 
+    def _set_prop_float(self, value):
+        if self._prop_float == value:
+            return
+        path = Name.path_from_name("propFloat")
+        self._prop_float = [api.as_struct_float(_) for _ in value]
+        self.on_property_changed.fire(path, self._prop_float)
+
     def set_prop_float(self, value):
         if self._prop_float == value:
             return
@@ -159,6 +208,13 @@ class StructArrayInterfaceSink(IObjectSink):
 
     def get_prop_float(self):
         return self._prop_float
+
+    def _set_prop_string(self, value):
+        if self._prop_string == value:
+            return
+        path = Name.path_from_name("propString")
+        self._prop_string = [api.as_struct_string(_) for _ in value]
+        self.on_property_changed.fire(path, self._prop_string)
 
     def set_prop_string(self, value):
         if self._prop_string == value:
@@ -187,13 +243,13 @@ class StructArrayInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._prop_bool = [api.as_struct_bool(_) for _ in props[k]]
+                self._set_prop_bool(props[k])
             elif k == "propInt":
-                self._prop_int = [api.as_struct_int(_) for _ in props[k]]
+                self._set_prop_int(props[k])
             elif k == "propFloat":
-                self._prop_float = [api.as_struct_float(_) for _ in props[k]]
+                self._set_prop_float(props[k])
             elif k == "propString":
-                self._prop_string = [api.as_struct_string(_) for _ in props[k]]
+                self._set_prop_string(props[k])
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

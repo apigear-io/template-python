@@ -24,7 +24,7 @@ class EmptyInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
-        path = Name.path_from_name(name)
+        pass
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
