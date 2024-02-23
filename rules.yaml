@@ -1,3 +1,5 @@
+engines:
+  cli: ">= v0.35.0"
 features:
   - name: api
     scopes:
@@ -6,59 +8,57 @@ features:
         documents:
           - source: "api/__init__.py.tpl"
             target: "__init__.py"
-            force: true
           - source: "api/api.py.tpl"
             target: "api.py"
-            force: true
   - name: scaffold
     scopes:
       - match: system
         documents:
           - source: scaffold/requirements.txt
             target: requirements.txt
+            preserve: true
             raw: true
           - source: scaffold/Makefile
             target: Makefile
+            preserve: true
             raw: true
           - source: scaffold/README.md
             target: README.md
+            preserve: true
             raw: true
       - match: module
         prefix: "{{snake .Module.Name}}_impl/"
         documents:
           - source: "scaffold/interface/__init__.py.tpl"
             target: "__init__.py"
+            preserve: true
       - match: interface
         prefix: "{{snake .Module.Name}}_impl/"
         documents:
           - source: "scaffold/interface/interface.py.tpl"
             target: "{{snake .Interface.Name}}.py"
+            preserve: true
           - source: "scaffold/interface/test.py.tpl"
             target: "test_{{snake .Interface.Name}}.py"
-
+            preserve: true
   - name: http
     scopes:
       - match: system
         documents:
           - source: "http/server.py.tpl"
             target: "http/server.py"
-            force: true
       - match: module
         prefix: "{{snake .Module.Name}}_http/"
         documents:
           - source: "http/__init__.py"
             target: "__init__.py"
             raw: true
-            force: true
           - source: "http/client.py.tpl"
             target: "client.py"
-            force: true
           - source: "http/routes.py.tpl"
             target: "routes.py"
-            force: true
           - source: "http/shared.py.tpl"
             target: "shared.py"
-            force: true
   - name: olink
     requires: [api, scaffold]
     scopes:
@@ -67,25 +67,18 @@ features:
           - source: "olink/OLINK_README.md"
             target: "OLINK_README.md"
             raw: true
-            force: true
           - source: "olink/system_server.py.tpl"
             target: "olink_server.py"
-            force: true
           - source: "olink/system_client.py.tpl"
             target: "olink_client.py"
-            force: true
       - match: module
         prefix: "{{snake .Module.Name}}_olink/"
         documents:
           - source: "olink/__init__.py.tpl"
             target: "__init__.py"
-            force: true
           - source: "olink/sources.py.tpl"
             target: "sources.py"
-            force: true
           - source: "olink/sinks.py.tpl"
             target: "sinks.py"
-            force: true
           - source: "olink/shared.py.tpl"
             target: "shared.py"
-            force: true
