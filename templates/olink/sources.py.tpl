@@ -66,7 +66,7 @@ class {{$class}}Source(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
