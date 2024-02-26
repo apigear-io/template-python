@@ -101,7 +101,7 @@ class SimpleInterfaceSource(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -286,7 +286,7 @@ class SimpleArrayInterfaceSource(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -399,7 +399,7 @@ class NoPropertiesInterfaceSource(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -440,7 +440,7 @@ class NoOperationsInterfaceSource(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -498,7 +498,7 @@ class NoSignalsInterfaceSource(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -534,7 +534,7 @@ class EmptyInterfaceSource(IObjectSource):
         logging.info("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
-        print('linked')
+        logging.info("linked: %s", name)
 
     def olink_collect_properties(self) -> object:
         props = {}
