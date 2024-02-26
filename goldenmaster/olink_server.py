@@ -49,6 +49,10 @@ tb_same2_olink.SameEnum2InterfaceSource(tb_same2_impl.SameEnum2Interface())
 
 tb_simple_olink.SimpleInterfaceSource(tb_simple_impl.SimpleInterface())
 tb_simple_olink.SimpleArrayInterfaceSource(tb_simple_impl.SimpleArrayInterface())
+tb_simple_olink.NoPropertiesInterfaceSource(tb_simple_impl.NoPropertiesInterface())
+tb_simple_olink.NoOperationsInterfaceSource(tb_simple_impl.NoOperationsInterface())
+tb_simple_olink.NoSignalsInterfaceSource(tb_simple_impl.NoSignalsInterface())
+tb_simple_olink.EmptyInterfaceSource(tb_simple_impl.EmptyInterface())
 
 testbed1_olink.StructInterfaceSource(testbed1_impl.StructInterface())
 testbed1_olink.StructArrayInterfaceSource(testbed1_impl.StructArrayInterface())
