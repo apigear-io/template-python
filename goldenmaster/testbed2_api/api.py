@@ -3,11 +3,14 @@ from enum import IntEnum
 
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
-    class config:
-        allow_population_by_field_name = True
+    class Config:
+        populate_by_name = True
     def dict(self, **kwargs):
         kwargs.setdefault('by_alias', True)
         return super().dict(**kwargs)
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
 
 class Enum1(IntEnum):
     VALUE1 = 1
@@ -58,22 +61,22 @@ class Struct4(EnhancedModel):
         super().__init__(**kw)
 
 class NestedStruct1(EnhancedModel):
-    field1: Struct1 = Field(default=Struct1(), alias="field1")
+    field1: Struct1 = Field(default_factory=lambda :Struct1(), alias="field1")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class NestedStruct2(EnhancedModel):
-    field1: Struct1 = Field(default=Struct1(), alias="field1")
-    field2: Struct2 = Field(default=Struct2(), alias="field2")
+    field1: Struct1 = Field(default_factory=lambda :Struct1(), alias="field1")
+    field2: Struct2 = Field(default_factory=lambda :Struct2(), alias="field2")
 
     def __init__(self, **kw):
         super().__init__(**kw)
 
 class NestedStruct3(EnhancedModel):
-    field1: Struct1 = Field(default=Struct1(), alias="field1")
-    field2: Struct2 = Field(default=Struct2(), alias="field2")
-    field3: Struct3 = Field(default=Struct3(), alias="field3")
+    field1: Struct1 = Field(default_factory=lambda :Struct1(), alias="field1")
+    field2: Struct2 = Field(default_factory=lambda :Struct2(), alias="field2")
+    field3: Struct3 = Field(default_factory=lambda :Struct3(), alias="field3")
 
     def __init__(self, **kw):
         super().__init__(**kw)

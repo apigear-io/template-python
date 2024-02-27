@@ -3,11 +3,14 @@ from enum import IntEnum
 
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
-    class config:
-        allow_population_by_field_name = True
+    class Config:
+        populate_by_name = True
     def dict(self, **kwargs):
         kwargs.setdefault('by_alias', True)
         return super().dict(**kwargs)
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
 
 {{- range .Module.Enums }}
 
@@ -24,7 +27,11 @@ class {{Camel .Name }}(IntEnum):
 
 class {{Camel .Name }}(EnhancedModel):
     {{- range $struct.Fields }}
+    {{- if eq .KindType "struct" }}
+    {{snake .Name }}: {{pyType "" .}} = Field(default_factory=lambda :{{pyDefault "" .}}, alias="{{.Name}}")
+    {{- else }}
     {{snake .Name }}: {{pyType "" .}} = Field(default={{pyDefault "" .}}, alias="{{.Name}}")
+    {{- end }}
     {{- else }}
     pass
     {{- end }}
