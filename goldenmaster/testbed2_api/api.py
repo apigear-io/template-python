@@ -1,13 +1,13 @@
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from enum import IntEnum
 
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
-    class Config:
-        populate_by_name = True
-    def dict(self, **kwargs):
+    model_config = ConfigDict(populate_by_name=True)
+
+    def model_dump(self, **kwargs):
         kwargs.setdefault('by_alias', True)
-        return super().dict(**kwargs)
+        return super().model_dump(**kwargs)
 
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -231,44 +231,44 @@ def from_enum3(v):
     return v
 
 def as_struct1(v):
-    return Struct1.parse_obj(v)
+    return Struct1.model_validate(v)
 
 def from_struct1(v):
-    return v.dict()
+    return v.model_dump()
 
 def as_struct2(v):
-    return Struct2.parse_obj(v)
+    return Struct2.model_validate(v)
 
 def from_struct2(v):
-    return v.dict()
+    return v.model_dump()
 
 def as_struct3(v):
-    return Struct3.parse_obj(v)
+    return Struct3.model_validate(v)
 
 def from_struct3(v):
-    return v.dict()
+    return v.model_dump()
 
 def as_struct4(v):
-    return Struct4.parse_obj(v)
+    return Struct4.model_validate(v)
 
 def from_struct4(v):
-    return v.dict()
+    return v.model_dump()
 
 def as_nested_struct1(v):
-    return NestedStruct1.parse_obj(v)
+    return NestedStruct1.model_validate(v)
 
 def from_nested_struct1(v):
-    return v.dict()
+    return v.model_dump()
 
 def as_nested_struct2(v):
-    return NestedStruct2.parse_obj(v)
+    return NestedStruct2.model_validate(v)
 
 def from_nested_struct2(v):
-    return v.dict()
+    return v.model_dump()
 
 def as_nested_struct3(v):
-    return NestedStruct3.parse_obj(v)
+    return NestedStruct3.model_validate(v)
 
 def from_nested_struct3(v):
-    return v.dict()
+    return v.model_dump()
 

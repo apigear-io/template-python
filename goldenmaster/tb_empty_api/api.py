@@ -1,13 +1,13 @@
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 from enum import IntEnum
 
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
-    class Config:
-        populate_by_name = True
-    def dict(self, **kwargs):
+    model_config = ConfigDict(populate_by_name=True)
+
+    def model_dump(self, **kwargs):
         kwargs.setdefault('by_alias', True)
-        return super().dict(**kwargs)
+        return super().model_dump(**kwargs)
 
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -54,8 +54,8 @@ def from_empty_enum(v):
     return v
 
 def as_empty_struct(v):
-    return EmptyStruct.parse_obj(v)
+    return EmptyStruct.model_validate(v)
 
 def from_empty_struct(v):
-    return v.dict()
+    return v.model_dump()
 
