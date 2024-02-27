@@ -13,6 +13,10 @@ import tb_simple_olink
 import testbed1_olink
 import tb_empty_olink
 
+# set default log level to WARNING and above
+logging.basicConfig()
+logging.getLogger().setLevel(logging.WARNING)
+
 class Client:
     def __init__(self, node: ClientNode):
         self.send_queue = Queue()

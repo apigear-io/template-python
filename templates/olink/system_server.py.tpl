@@ -26,6 +26,9 @@ import {{$import_impl}}
 {{- end }}
 {{ end }}
 
+# set default log level to WARNING and above
+logging.basicConfig()
+logging.getLogger().setLevel(logging.WARNING)
 
 class RemoteEndpoint(WebSocketEndpoint):
     def __init__(self, scope: Scope, receive: Receive, send: Send):

@@ -8,6 +8,10 @@ import logging
 import {{snake .Name}}_olink
 {{- end }}
 
+# set default log level to WARNING and above
+logging.basicConfig()
+logging.getLogger().setLevel(logging.WARNING)
+
 class Client:
     def __init__(self, node: ClientNode):
         self.send_queue = Queue()
