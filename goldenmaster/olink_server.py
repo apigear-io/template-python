@@ -60,6 +60,9 @@ testbed1_olink.StructArrayInterfaceSource(testbed1_impl.StructArrayInterface())
 tb_empty_olink.EmptyInterfaceSource(tb_empty_impl.EmptyInterface())
 
 
+# set default log level to WARNING and above
+logging.basicConfig()
+logging.getLogger().setLevel(logging.WARNING)
 
 class RemoteEndpoint(WebSocketEndpoint):
     def __init__(self, scope: Scope, receive: Receive, send: Send):
