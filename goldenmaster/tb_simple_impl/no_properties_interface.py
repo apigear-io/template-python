@@ -1,10 +1,13 @@
 from tb_simple_api import api
+from tb_simple_api.shared import EventHook
 from typing import Iterable
 
 class NoPropertiesInterface(api.INoPropertiesInterface):
     def __init__(self, notifier=None):
         super().__init__()
         self._notifier = notifier
+        self.on_sig_void = EventHook()
+        self.on_sig_bool = EventHook()
 
     def func_void(self) -> None:
         return None
@@ -12,12 +15,8 @@ class NoPropertiesInterface(api.INoPropertiesInterface):
     def func_bool(self, param_bool: bool) -> bool:
         return False
 
-    def sig_void(self):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.NoPropertiesInterface/sigVoid", [])
+    def _sig_void(self):
+        self.on_sig_void.fire()
 
-    def sig_bool(self, param_bool: bool):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.NoPropertiesInterface/sigBool", [param_bool])
+    def _sig_bool(self, param_bool: bool):
+        self.on_sig_bool.fire(param_bool)

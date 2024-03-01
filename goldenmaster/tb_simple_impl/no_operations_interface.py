@@ -1,4 +1,5 @@
 from tb_simple_api import api
+from tb_simple_api.shared import EventHook
 from typing import Iterable
 
 class NoOperationsInterface(api.INoOperationsInterface):
@@ -7,6 +8,8 @@ class NoOperationsInterface(api.INoOperationsInterface):
         self._notifier = notifier
         self._prop_bool: bool = False
         self._prop_int: int = 0
+        self.on_sig_void = EventHook()
+        self.on_sig_bool = EventHook()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -36,12 +39,8 @@ class NoOperationsInterface(api.INoOperationsInterface):
             return
         self._notifier.notify_property("tb.simple.NoOperationsInterface/propInt", value)
 
-    def sig_void(self):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.NoOperationsInterface/sigVoid", [])
+    def _sig_void(self):
+        self.on_sig_void.fire()
 
-    def sig_bool(self, param_bool: bool):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.NoOperationsInterface/sigBool", [param_bool])
+    def _sig_bool(self, param_bool: bool):
+        self.on_sig_bool.fire(param_bool)

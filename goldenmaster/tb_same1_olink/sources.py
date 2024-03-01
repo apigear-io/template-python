@@ -8,6 +8,7 @@ class SameStruct1InterfaceSource(IObjectSource):
     def __init__(self, impl: api.ISameStruct1Interface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig1 += self.notify_sig1
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -38,12 +39,9 @@ class SameStruct1InterfaceSource(IObjectSource):
         props["prop1"] = api.from_struct1(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sig1":
-            param1 = api.from_struct1(args[0])
-            return RemoteNode.notify_signal(symbol, [param1])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig1(self, param1: api.Struct1):
+        _param1 = api.from_struct1(param1)
+        return RemoteNode.notify_signal("tb.same1.SameStruct1Interface/sig1", [_param1])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -56,6 +54,8 @@ class SameStruct2InterfaceSource(IObjectSource):
     def __init__(self, impl: api.ISameStruct2Interface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig1 += self.notify_sig1
+        impl.on_sig2 += self.notify_sig2
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -96,16 +96,14 @@ class SameStruct2InterfaceSource(IObjectSource):
         props["prop2"] = api.from_struct2(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sig1":
-            param1 = api.from_struct1(args[0])
-            return RemoteNode.notify_signal(symbol, [param1])
-        elif path == "sig2":
-            param1 = api.from_struct1(args[0])
-            param2 = api.from_struct2(args[1])
-            return RemoteNode.notify_signal(symbol, [param1, param2])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig1(self, param1: api.Struct1):
+        _param1 = api.from_struct1(param1)
+        return RemoteNode.notify_signal("tb.same1.SameStruct2Interface/sig1", [_param1])
+
+    def notify_sig2(self, param1: api.Struct1, param2: api.Struct2):
+        _param1 = api.from_struct1(param1)
+        _param2 = api.from_struct2(param2)
+        return RemoteNode.notify_signal("tb.same1.SameStruct2Interface/sig2", [_param1, _param2])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -121,6 +119,7 @@ class SameEnum1InterfaceSource(IObjectSource):
     def __init__(self, impl: api.ISameEnum1Interface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig1 += self.notify_sig1
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -151,12 +150,9 @@ class SameEnum1InterfaceSource(IObjectSource):
         props["prop1"] = api.from_enum1(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sig1":
-            param1 = api.from_enum1(args[0])
-            return RemoteNode.notify_signal(symbol, [param1])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig1(self, param1: api.Enum1):
+        _param1 = api.from_enum1(param1)
+        return RemoteNode.notify_signal("tb.same1.SameEnum1Interface/sig1", [_param1])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -169,6 +165,8 @@ class SameEnum2InterfaceSource(IObjectSource):
     def __init__(self, impl: api.ISameEnum2Interface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig1 += self.notify_sig1
+        impl.on_sig2 += self.notify_sig2
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -209,16 +207,14 @@ class SameEnum2InterfaceSource(IObjectSource):
         props["prop2"] = api.from_enum2(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sig1":
-            param1 = api.from_enum1(args[0])
-            return RemoteNode.notify_signal(symbol, [param1])
-        elif path == "sig2":
-            param1 = api.from_enum1(args[0])
-            param2 = api.from_enum2(args[1])
-            return RemoteNode.notify_signal(symbol, [param1, param2])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig1(self, param1: api.Enum1):
+        _param1 = api.from_enum1(param1)
+        return RemoteNode.notify_signal("tb.same1.SameEnum2Interface/sig1", [_param1])
+
+    def notify_sig2(self, param1: api.Enum1, param2: api.Enum2):
+        _param1 = api.from_enum1(param1)
+        _param2 = api.from_enum2(param2)
+        return RemoteNode.notify_signal("tb.same1.SameEnum2Interface/sig2", [_param1, _param2])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)

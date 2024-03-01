@@ -1,4 +1,5 @@
 from tb_same1_api import api
+from tb_same1_api.shared import EventHook
 from typing import Iterable
 
 class SameStruct2Interface(api.ISameStruct2Interface):
@@ -7,6 +8,8 @@ class SameStruct2Interface(api.ISameStruct2Interface):
         self._notifier = notifier
         self._prop1: api.Struct2 = api.Struct2()
         self._prop2: api.Struct2 = api.Struct2()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -42,12 +45,8 @@ class SameStruct2Interface(api.ISameStruct2Interface):
     def func2(self, param1: api.Struct1, param2: api.Struct2) -> api.Struct1:
         return api.Struct1()
 
-    def sig1(self, param1: api.Struct1):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.same1.SameStruct2Interface/sig1", [param1])
+    def _sig1(self, param1: api.Struct1):
+        self.on_sig1.fire(param1)
 
-    def sig2(self, param1: api.Struct1, param2: api.Struct2):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.same1.SameStruct2Interface/sig2", [param1, param2])
+    def _sig2(self, param1: api.Struct1, param2: api.Struct2):
+        self.on_sig2.fire(param1, param2)

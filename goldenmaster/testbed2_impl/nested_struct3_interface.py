@@ -1,4 +1,5 @@
 from testbed2_api import api
+from testbed2_api.shared import EventHook
 from typing import Iterable
 
 class NestedStruct3Interface(api.INestedStruct3Interface):
@@ -8,6 +9,9 @@ class NestedStruct3Interface(api.INestedStruct3Interface):
         self._prop1: api.NestedStruct1 = api.NestedStruct1()
         self._prop2: api.NestedStruct2 = api.NestedStruct2()
         self._prop3: api.NestedStruct3 = api.NestedStruct3()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
+        self.on_sig3 = EventHook()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -60,17 +64,11 @@ class NestedStruct3Interface(api.INestedStruct3Interface):
     def func3(self, param1: api.NestedStruct1, param2: api.NestedStruct2, param3: api.NestedStruct3) -> api.NestedStruct1:
         return api.NestedStruct1()
 
-    def sig1(self, param1: api.NestedStruct1):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.NestedStruct3Interface/sig1", [param1])
+    def _sig1(self, param1: api.NestedStruct1):
+        self.on_sig1.fire(param1)
 
-    def sig2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.NestedStruct3Interface/sig2", [param1, param2])
+    def _sig2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
+        self.on_sig2.fire(param1, param2)
 
-    def sig3(self, param1: api.NestedStruct1, param2: api.NestedStruct2, param3: api.NestedStruct3):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.NestedStruct3Interface/sig3", [param1, param2, param3])
+    def _sig3(self, param1: api.NestedStruct1, param2: api.NestedStruct2, param3: api.NestedStruct3):
+        self.on_sig3.fire(param1, param2, param3)

@@ -76,3 +76,58 @@ class TestSimpleArrayInterface:
         o = SimpleArrayInterface()
         o.func_string(param_string=[])
 
+    def test_sig_bool(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_bool += lambda *args: setattr(self, 'called', True)
+        o._sig_bool([])
+        assert self.called == True
+
+    def test_sig_int(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_int += lambda *args: setattr(self, 'called', True)
+        o._sig_int([])
+        assert self.called == True
+
+    def test_sig_int32(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_int32 += lambda *args: setattr(self, 'called', True)
+        o._sig_int32([])
+        assert self.called == True
+
+    def test_sig_int64(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_int64 += lambda *args: setattr(self, 'called', True)
+        o._sig_int64([])
+        assert self.called == True
+
+    def test_sig_float(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_float += lambda *args: setattr(self, 'called', True)
+        o._sig_float([])
+        assert self.called == True
+
+    def test_sig_float32(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_float32 += lambda *args: setattr(self, 'called', True)
+        o._sig_float32([])
+        assert self.called == True
+
+    def test_sig_float64(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_float64 += lambda *args: setattr(self, 'called', True)
+        o._sig_float64([])
+        assert self.called == True
+
+    def test_sig_string(self):
+        o = SimpleArrayInterface()
+        self.called = False
+        o.on_sig_string += lambda *args: setattr(self, 'called', True)
+        o._sig_string([])
+        assert self.called == True

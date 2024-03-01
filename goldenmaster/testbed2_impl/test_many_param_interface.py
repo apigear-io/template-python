@@ -40,3 +40,30 @@ class TestManyParamInterface:
         o = ManyParamInterface()
         o.func4(param1=0, param2=0, param3=0, param4=0)
 
+    def test_sig1(self):
+        o = ManyParamInterface()
+        self.called = False
+        o.on_sig1 += lambda *args: setattr(self, 'called', True)
+        o._sig1(0)
+        assert self.called == True
+
+    def test_sig2(self):
+        o = ManyParamInterface()
+        self.called = False
+        o.on_sig2 += lambda *args: setattr(self, 'called', True)
+        o._sig2(0, 0)
+        assert self.called == True
+
+    def test_sig3(self):
+        o = ManyParamInterface()
+        self.called = False
+        o.on_sig3 += lambda *args: setattr(self, 'called', True)
+        o._sig3(0, 0, 0)
+        assert self.called == True
+
+    def test_sig4(self):
+        o = ManyParamInterface()
+        self.called = False
+        o.on_sig4 += lambda *args: setattr(self, 'called', True)
+        o._sig4(0, 0, 0, 0)
+        assert self.called == True

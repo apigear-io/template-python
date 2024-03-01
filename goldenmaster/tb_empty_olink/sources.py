@@ -29,10 +29,6 @@ class EmptyInterfaceSource(IObjectSource):
         props = {}
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        logging.info("unknown signal %s", symbol)
-
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
         logging.info("unknown property %s", symbol)

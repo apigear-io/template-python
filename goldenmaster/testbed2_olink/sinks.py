@@ -13,10 +13,10 @@ class ManyParamInterfaceSink(IObjectSink):
         self.prop3 = 0
         self.prop4 = 0
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
-        self.sig2 = EventHook()
-        self.sig3 = EventHook()
-        self.sig4 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
+        self.on_sig3 = EventHook()
+        self.on_sig4 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -52,7 +52,7 @@ class ManyParamInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class NestedStruct1InterfaceSink(IObjectSink):
@@ -60,7 +60,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
         super().__init__()
         self.prop1 = api.NestedStruct1()
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
+        self.on_sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -87,7 +87,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class NestedStruct2InterfaceSink(IObjectSink):
@@ -96,8 +96,8 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self.prop1 = api.NestedStruct1()
         self.prop2 = api.NestedStruct2()
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
-        self.sig2 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -127,7 +127,7 @@ class NestedStruct2InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class NestedStruct3InterfaceSink(IObjectSink):
@@ -137,9 +137,9 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self.prop2 = api.NestedStruct2()
         self.prop3 = api.NestedStruct3()
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
-        self.sig2 = EventHook()
-        self.sig3 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
+        self.on_sig3 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -172,5 +172,5 @@ class NestedStruct3InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)

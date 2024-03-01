@@ -5,6 +5,7 @@ from typing import Any
 import logging
 
 {{- range .Module.Interfaces }}
+{{- $ns := printf "%s.%s" $.Module.Name .Name -}}
 {{- $class := Camel .Name }}
 {{- $id := printf "%s.%s" $.Module.Name .Name }}
 class {{$class}}Source(IObjectSource):
@@ -12,6 +13,9 @@ class {{$class}}Source(IObjectSource):
     def __init__(self, impl: api.I{{$class}}):
         self.impl = impl
         impl._notifier = self
+{{- range $idx, $s := .Signals }}
+        impl.on_{{snake .Name}} += self.notify_{{snake .Name}}
+{{- end }}
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -66,20 +70,18 @@ class {{$class}}Source(IObjectSource):
         {{- end }}
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
 {{- range $idx, $s := .Signals }}
-    {{- if $idx }}
-        elif path == "{{.Name}}":
-    {{- else }}
-        if path == "{{.Name}}":
-    {{- end }}
+
+    def notify_{{snake .Name}}({{pyParams "api." .Params}}):
         {{- range $idx, $_ := .Params }}
-            {{snake .Name}} = api.from_{{snake .Type}}(args[{{$idx}}])
+        _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
         {{- end }}
-            return RemoteNode.notify_signal(symbol, [{{pyVars .Params}}])    
+        return RemoteNode.notify_signal("{{$ns}}/{{.Name}}", [
+            {{- range $idx, $_ := .Params -}}{{- if $idx}}, {{ end -}}
+            _{{snake .Name}}
+            {{- end -}}
+        ])
 {{- end }}
-        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)

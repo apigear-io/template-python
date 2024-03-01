@@ -8,6 +8,10 @@ class StructInterfaceSource(IObjectSource):
     def __init__(self, impl: api.IStructInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig_bool += self.notify_sig_bool
+        impl.on_sig_int += self.notify_sig_int
+        impl.on_sig_float += self.notify_sig_float
+        impl.on_sig_string += self.notify_sig_string
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -65,21 +69,21 @@ class StructInterfaceSource(IObjectSource):
         props["propString"] = api.from_struct_string(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sigBool":
-            param_bool = api.from_struct_bool(args[0])
-            return RemoteNode.notify_signal(symbol, [param_bool])
-        elif path == "sigInt":
-            param_int = api.from_struct_int(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int])
-        elif path == "sigFloat":
-            param_float = api.from_struct_float(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float])
-        elif path == "sigString":
-            param_string = api.from_struct_string(args[0])
-            return RemoteNode.notify_signal(symbol, [param_string])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig_bool(self, param_bool: api.StructBool):
+        _param_bool = api.from_struct_bool(param_bool)
+        return RemoteNode.notify_signal("testbed1.StructInterface/sigBool", [_param_bool])
+
+    def notify_sig_int(self, param_int: api.StructInt):
+        _param_int = api.from_struct_int(param_int)
+        return RemoteNode.notify_signal("testbed1.StructInterface/sigInt", [_param_int])
+
+    def notify_sig_float(self, param_float: api.StructFloat):
+        _param_float = api.from_struct_float(param_float)
+        return RemoteNode.notify_signal("testbed1.StructInterface/sigFloat", [_param_float])
+
+    def notify_sig_string(self, param_string: api.StructString):
+        _param_string = api.from_struct_string(param_string)
+        return RemoteNode.notify_signal("testbed1.StructInterface/sigString", [_param_string])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -101,6 +105,10 @@ class StructArrayInterfaceSource(IObjectSource):
     def __init__(self, impl: api.IStructArrayInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig_bool += self.notify_sig_bool
+        impl.on_sig_int += self.notify_sig_int
+        impl.on_sig_float += self.notify_sig_float
+        impl.on_sig_string += self.notify_sig_string
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -158,21 +166,21 @@ class StructArrayInterfaceSource(IObjectSource):
         props["propString"] = api.from_struct_string(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sigBool":
-            param_bool = api.from_struct_bool(args[0])
-            return RemoteNode.notify_signal(symbol, [param_bool])
-        elif path == "sigInt":
-            param_int = api.from_struct_int(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int])
-        elif path == "sigFloat":
-            param_float = api.from_struct_float(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float])
-        elif path == "sigString":
-            param_string = api.from_struct_string(args[0])
-            return RemoteNode.notify_signal(symbol, [param_string])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig_bool(self, param_bool: list[api.StructBool]):
+        _param_bool = api.from_struct_bool(param_bool)
+        return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigBool", [_param_bool])
+
+    def notify_sig_int(self, param_int: list[api.StructInt]):
+        _param_int = api.from_struct_int(param_int)
+        return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigInt", [_param_int])
+
+    def notify_sig_float(self, param_float: list[api.StructFloat]):
+        _param_float = api.from_struct_float(param_float)
+        return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigFloat", [_param_float])
+
+    def notify_sig_string(self, param_string: list[api.StructString]):
+        _param_string = api.from_struct_string(param_string)
+        return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigString", [_param_string])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)

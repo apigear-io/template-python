@@ -1,4 +1,5 @@
 from tb_simple_api import api
+from tb_simple_api.shared import EventHook
 from typing import Iterable
 
 class SimpleInterface(api.ISimpleInterface):
@@ -14,6 +15,15 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float64: float = 0.0
         self._prop_string: str = ""
         self._prop_read_only_string: str = ""
+        self.on_sig_void = EventHook()
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_int32 = EventHook()
+        self.on_sig_int64 = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_float32 = EventHook()
+        self.on_sig_float64 = EventHook()
+        self.on_sig_string = EventHook()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -162,47 +172,29 @@ class SimpleInterface(api.ISimpleInterface):
     def func_string(self, param_string: str) -> str:
         return ""
 
-    def sig_void(self):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigVoid", [])
+    def _sig_void(self):
+        self.on_sig_void.fire()
 
-    def sig_bool(self, param_bool: bool):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigBool", [param_bool])
+    def _sig_bool(self, param_bool: bool):
+        self.on_sig_bool.fire(param_bool)
 
-    def sig_int(self, param_int: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigInt", [param_int])
+    def _sig_int(self, param_int: int):
+        self.on_sig_int.fire(param_int)
 
-    def sig_int32(self, param_int32: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigInt32", [param_int32])
+    def _sig_int32(self, param_int32: int):
+        self.on_sig_int32.fire(param_int32)
 
-    def sig_int64(self, param_int64: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigInt64", [param_int64])
+    def _sig_int64(self, param_int64: int):
+        self.on_sig_int64.fire(param_int64)
 
-    def sig_float(self, param_float: float):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigFloat", [param_float])
+    def _sig_float(self, param_float: float):
+        self.on_sig_float.fire(param_float)
 
-    def sig_float32(self, param_float32: float):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigFloat32", [param_float32])
+    def _sig_float32(self, param_float32: float):
+        self.on_sig_float32.fire(param_float32)
 
-    def sig_float64(self, param_float64: float):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigFloat64", [param_float64])
+    def _sig_float64(self, param_float64: float):
+        self.on_sig_float64.fire(param_float64)
 
-    def sig_string(self, param_string: str):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleInterface/sigString", [param_string])
+    def _sig_string(self, param_string: str):
+        self.on_sig_string.fire(param_string)

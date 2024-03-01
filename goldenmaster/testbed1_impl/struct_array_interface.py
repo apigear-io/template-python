@@ -1,4 +1,5 @@
 from testbed1_api import api
+from testbed1_api.shared import EventHook
 from typing import Iterable
 
 class StructArrayInterface(api.IStructArrayInterface):
@@ -9,6 +10,10 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._prop_int: list[api.StructInt] = []
         self._prop_float: list[api.StructFloat] = []
         self._prop_string: list[api.StructString] = []
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_string = EventHook()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -78,22 +83,14 @@ class StructArrayInterface(api.IStructArrayInterface):
     def func_string(self, param_string: list[api.StructString]) -> api.StructBool:
         return api.StructBool()
 
-    def sig_bool(self, param_bool: list[api.StructBool]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructArrayInterface/sigBool", [param_bool])
+    def _sig_bool(self, param_bool: list[api.StructBool]):
+        self.on_sig_bool.fire(param_bool)
 
-    def sig_int(self, param_int: list[api.StructInt]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructArrayInterface/sigInt", [param_int])
+    def _sig_int(self, param_int: list[api.StructInt]):
+        self.on_sig_int.fire(param_int)
 
-    def sig_float(self, param_float: list[api.StructFloat]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructArrayInterface/sigFloat", [param_float])
+    def _sig_float(self, param_float: list[api.StructFloat]):
+        self.on_sig_float.fire(param_float)
 
-    def sig_string(self, param_string: list[api.StructString]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructArrayInterface/sigString", [param_string])
+    def _sig_string(self, param_string: list[api.StructString]):
+        self.on_sig_string.fire(param_string)

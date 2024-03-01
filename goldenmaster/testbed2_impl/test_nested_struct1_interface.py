@@ -13,3 +13,9 @@ class TestNestedStruct1Interface:
         o = NestedStruct1Interface()
         o.func1(param1=api.NestedStruct1())
 
+    def test_sig1(self):
+        o = NestedStruct1Interface()
+        self.called = False
+        o.on_sig1 += lambda *args: setattr(self, 'called', True)
+        o._sig1(api.NestedStruct1())
+        assert self.called == True

@@ -13,10 +13,10 @@ class EnumInterfaceSink(IObjectSink):
         self.prop2 = api.Enum2.VALUE2
         self.prop3 = api.Enum3.VALUE3
         self.on_property_changed = EventHook()
-        self.sig0 = EventHook()
-        self.sig1 = EventHook()
-        self.sig2 = EventHook()
-        self.sig3 = EventHook()
+        self.on_sig0 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
+        self.on_sig3 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -52,5 +52,5 @@ class EnumInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)

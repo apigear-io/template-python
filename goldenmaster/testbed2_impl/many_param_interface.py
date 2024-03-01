@@ -1,4 +1,5 @@
 from testbed2_api import api
+from testbed2_api.shared import EventHook
 from typing import Iterable
 
 class ManyParamInterface(api.IManyParamInterface):
@@ -9,6 +10,10 @@ class ManyParamInterface(api.IManyParamInterface):
         self._prop2: int = 0
         self._prop3: int = 0
         self._prop4: int = 0
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
+        self.on_sig3 = EventHook()
+        self.on_sig4 = EventHook()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -78,22 +83,14 @@ class ManyParamInterface(api.IManyParamInterface):
     def func4(self, param1: int, param2: int, param3: int, param4: int) -> int:
         return 0
 
-    def sig1(self, param1: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.ManyParamInterface/sig1", [param1])
+    def _sig1(self, param1: int):
+        self.on_sig1.fire(param1)
 
-    def sig2(self, param1: int, param2: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.ManyParamInterface/sig2", [param1, param2])
+    def _sig2(self, param1: int, param2: int):
+        self.on_sig2.fire(param1, param2)
 
-    def sig3(self, param1: int, param2: int, param3: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.ManyParamInterface/sig3", [param1, param2, param3])
+    def _sig3(self, param1: int, param2: int, param3: int):
+        self.on_sig3.fire(param1, param2, param3)
 
-    def sig4(self, param1: int, param2: int, param3: int, param4: int):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.ManyParamInterface/sig4", [param1, param2, param3, param4])
+    def _sig4(self, param1: int, param2: int, param3: int, param4: int):
+        self.on_sig4.fire(param1, param2, param3, param4)

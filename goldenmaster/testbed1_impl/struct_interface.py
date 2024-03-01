@@ -1,4 +1,5 @@
 from testbed1_api import api
+from testbed1_api.shared import EventHook
 from typing import Iterable
 
 class StructInterface(api.IStructInterface):
@@ -9,6 +10,10 @@ class StructInterface(api.IStructInterface):
         self._prop_int: api.StructInt = api.StructInt()
         self._prop_float: api.StructFloat = api.StructFloat()
         self._prop_string: api.StructString = api.StructString()
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_string = EventHook()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -78,22 +83,14 @@ class StructInterface(api.IStructInterface):
     def func_string(self, param_string: api.StructString) -> api.StructString:
         return api.StructString()
 
-    def sig_bool(self, param_bool: api.StructBool):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructInterface/sigBool", [param_bool])
+    def _sig_bool(self, param_bool: api.StructBool):
+        self.on_sig_bool.fire(param_bool)
 
-    def sig_int(self, param_int: api.StructInt):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructInterface/sigInt", [param_int])
+    def _sig_int(self, param_int: api.StructInt):
+        self.on_sig_int.fire(param_int)
 
-    def sig_float(self, param_float: api.StructFloat):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructInterface/sigFloat", [param_float])
+    def _sig_float(self, param_float: api.StructFloat):
+        self.on_sig_float.fire(param_float)
 
-    def sig_string(self, param_string: api.StructString):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed1.StructInterface/sigString", [param_string])
+    def _sig_string(self, param_string: api.StructString):
+        self.on_sig_string.fire(param_string)

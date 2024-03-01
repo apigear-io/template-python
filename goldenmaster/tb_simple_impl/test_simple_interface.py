@@ -84,3 +84,65 @@ class TestSimpleInterface:
         o = SimpleInterface()
         o.func_string(param_string="")
 
+    def test_sig_void(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_void += lambda *args: setattr(self, 'called', True)
+        o._sig_void()
+        assert self.called == True
+
+    def test_sig_bool(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_bool += lambda *args: setattr(self, 'called', True)
+        o._sig_bool(False)
+        assert self.called == True
+
+    def test_sig_int(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_int += lambda *args: setattr(self, 'called', True)
+        o._sig_int(0)
+        assert self.called == True
+
+    def test_sig_int32(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_int32 += lambda *args: setattr(self, 'called', True)
+        o._sig_int32(0)
+        assert self.called == True
+
+    def test_sig_int64(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_int64 += lambda *args: setattr(self, 'called', True)
+        o._sig_int64(0)
+        assert self.called == True
+
+    def test_sig_float(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_float += lambda *args: setattr(self, 'called', True)
+        o._sig_float(0.0)
+        assert self.called == True
+
+    def test_sig_float32(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_float32 += lambda *args: setattr(self, 'called', True)
+        o._sig_float32(0.0)
+        assert self.called == True
+
+    def test_sig_float64(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_float64 += lambda *args: setattr(self, 'called', True)
+        o._sig_float64(0.0)
+        assert self.called == True
+
+    def test_sig_string(self):
+        o = SimpleInterface()
+        self.called = False
+        o.on_sig_string += lambda *args: setattr(self, 'called', True)
+        o._sig_string("")
+        assert self.called == True

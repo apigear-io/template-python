@@ -5,4 +5,4 @@ from tb_simple_impl import EmptyInterface
 class TestEmptyInterface:
     pass
     pass
-
+    pass

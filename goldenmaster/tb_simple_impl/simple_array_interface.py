@@ -1,4 +1,5 @@
 from tb_simple_api import api
+from tb_simple_api.shared import EventHook
 from typing import Iterable
 
 class SimpleArrayInterface(api.ISimpleArrayInterface):
@@ -13,6 +14,14 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._prop_float32: list[float] = []
         self._prop_float64: list[float] = []
         self._prop_string: list[str] = []
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_int32 = EventHook()
+        self.on_sig_int64 = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_float32 = EventHook()
+        self.on_sig_float64 = EventHook()
+        self.on_sig_string = EventHook()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -150,42 +159,26 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
     def func_string(self, param_string: list[str]) -> list[str]:
         return []
 
-    def sig_bool(self, param_bool: list[bool]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigBool", [param_bool])
+    def _sig_bool(self, param_bool: list[bool]):
+        self.on_sig_bool.fire(param_bool)
 
-    def sig_int(self, param_int: list[int]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigInt", [param_int])
+    def _sig_int(self, param_int: list[int]):
+        self.on_sig_int.fire(param_int)
 
-    def sig_int32(self, param_int32: list[int]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigInt32", [param_int32])
+    def _sig_int32(self, param_int32: list[int]):
+        self.on_sig_int32.fire(param_int32)
 
-    def sig_int64(self, param_int64: list[int]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigInt64", [param_int64])
+    def _sig_int64(self, param_int64: list[int]):
+        self.on_sig_int64.fire(param_int64)
 
-    def sig_float(self, param_float: list[float]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigFloat", [param_float])
+    def _sig_float(self, param_float: list[float]):
+        self.on_sig_float.fire(param_float)
 
-    def sig_float32(self, param_float32: list[float]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigFloat32", [param_float32])
+    def _sig_float32(self, param_float32: list[float]):
+        self.on_sig_float32.fire(param_float32)
 
-    def sig_float64(self, param_float64: list[float]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigFloat64", [param_float64])
+    def _sig_float64(self, param_float64: list[float]):
+        self.on_sig_float64.fire(param_float64)
 
-    def sig_string(self, param_string: list[str]):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.simple.SimpleArrayInterface/sigString", [param_string])
+    def _sig_string(self, param_string: list[str]):
+        self.on_sig_string.fire(param_string)

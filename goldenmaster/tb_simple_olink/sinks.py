@@ -18,15 +18,15 @@ class SimpleInterfaceSink(IObjectSink):
         self.prop_string = ""
         self.prop_read_only_string = ""
         self.on_property_changed = EventHook()
-        self.sig_void = EventHook()
-        self.sig_bool = EventHook()
-        self.sig_int = EventHook()
-        self.sig_int32 = EventHook()
-        self.sig_int64 = EventHook()
-        self.sig_float = EventHook()
-        self.sig_float32 = EventHook()
-        self.sig_float64 = EventHook()
-        self.sig_string = EventHook()
+        self.on_sig_void = EventHook()
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_int32 = EventHook()
+        self.on_sig_int64 = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_float32 = EventHook()
+        self.on_sig_float64 = EventHook()
+        self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -77,7 +77,7 @@ class SimpleInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class SimpleArrayInterfaceSink(IObjectSink):
@@ -92,14 +92,14 @@ class SimpleArrayInterfaceSink(IObjectSink):
         self.prop_float64 = []
         self.prop_string = []
         self.on_property_changed = EventHook()
-        self.sig_bool = EventHook()
-        self.sig_int = EventHook()
-        self.sig_int32 = EventHook()
-        self.sig_int64 = EventHook()
-        self.sig_float = EventHook()
-        self.sig_float32 = EventHook()
-        self.sig_float64 = EventHook()
-        self.sig_string = EventHook()
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_int32 = EventHook()
+        self.on_sig_int64 = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_float32 = EventHook()
+        self.on_sig_float64 = EventHook()
+        self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -147,15 +147,15 @@ class SimpleArrayInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class NoPropertiesInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.on_property_changed = EventHook()
-        self.sig_void = EventHook()
-        self.sig_bool = EventHook()
+        self.on_sig_void = EventHook()
+        self.on_sig_bool = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -185,7 +185,7 @@ class NoPropertiesInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class NoOperationsInterfaceSink(IObjectSink):
@@ -194,8 +194,8 @@ class NoOperationsInterfaceSink(IObjectSink):
         self.prop_bool = False
         self.prop_int = 0
         self.on_property_changed = EventHook()
-        self.sig_void = EventHook()
-        self.sig_bool = EventHook()
+        self.on_sig_void = EventHook()
+        self.on_sig_bool = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -219,7 +219,7 @@ class NoOperationsInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class NoSignalsInterfaceSink(IObjectSink):
@@ -257,7 +257,7 @@ class NoSignalsInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class EmptyInterfaceSink(IObjectSink):
@@ -287,5 +287,5 @@ class EmptyInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)

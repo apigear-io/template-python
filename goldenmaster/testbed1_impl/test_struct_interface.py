@@ -40,3 +40,30 @@ class TestStructInterface:
         o = StructInterface()
         o.func_string(param_string=api.StructString())
 
+    def test_sig_bool(self):
+        o = StructInterface()
+        self.called = False
+        o.on_sig_bool += lambda *args: setattr(self, 'called', True)
+        o._sig_bool(api.StructBool())
+        assert self.called == True
+
+    def test_sig_int(self):
+        o = StructInterface()
+        self.called = False
+        o.on_sig_int += lambda *args: setattr(self, 'called', True)
+        o._sig_int(api.StructInt())
+        assert self.called == True
+
+    def test_sig_float(self):
+        o = StructInterface()
+        self.called = False
+        o.on_sig_float += lambda *args: setattr(self, 'called', True)
+        o._sig_float(api.StructFloat())
+        assert self.called == True
+
+    def test_sig_string(self):
+        o = StructInterface()
+        self.called = False
+        o.on_sig_string += lambda *args: setattr(self, 'called', True)
+        o._sig_string(api.StructString())
+        assert self.called == True
