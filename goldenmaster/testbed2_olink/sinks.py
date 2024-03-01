@@ -32,9 +32,8 @@ class ManyParamInterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -47,9 +46,8 @@ class ManyParamInterfaceSink(IObjectSink):
     def _set_prop2(self, value):
         if self._prop2 == value:
             return
-        path = Name.path_from_name("prop2")
         self._prop2 = value
-        self.on_property_changed.fire(path, self._prop2)
+        self.on_prop2_changed.fire(self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -62,9 +60,8 @@ class ManyParamInterfaceSink(IObjectSink):
     def _set_prop3(self, value):
         if self._prop3 == value:
             return
-        path = Name.path_from_name("prop3")
         self._prop3 = value
-        self.on_property_changed.fire(path, self._prop3)
+        self.on_prop3_changed.fire(self._prop3)
 
     def set_prop3(self, value):
         if self._prop3 == value:
@@ -77,9 +74,8 @@ class ManyParamInterfaceSink(IObjectSink):
     def _set_prop4(self, value):
         if self._prop4 == value:
             return
-        path = Name.path_from_name("prop4")
         self._prop4 = value
-        self.on_property_changed.fire(path, self._prop4)
+        self.on_prop4_changed.fire(self._prop4)
 
     def set_prop4(self, value):
         if self._prop4 == value:
@@ -119,21 +115,17 @@ class ManyParamInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_int(value)
+            self._set_prop1(v)
         elif path == "prop2":
-            self._prop2 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop2)
+            v =  api.as_int(value)
+            self._set_prop2(v)
         elif path == "prop3":
-            self._prop3 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop3)
+            v =  api.as_int(value)
+            self._set_prop3(v)
         elif path == "prop4":
-            self._prop4 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop4)
+            v =  api.as_int(value)
+            self._set_prop4(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -174,9 +166,8 @@ class NestedStruct1InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -201,9 +192,8 @@ class NestedStruct1InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_nested_struct1(value)
+            self._set_prop1(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -232,9 +222,8 @@ class NestedStruct2InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -247,9 +236,8 @@ class NestedStruct2InterfaceSink(IObjectSink):
     def _set_prop2(self, value):
         if self._prop2 == value:
             return
-        path = Name.path_from_name("prop2")
         self._prop2 = value
-        self.on_property_changed.fire(path, self._prop2)
+        self.on_prop2_changed.fire(self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -279,13 +267,11 @@ class NestedStruct2InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_nested_struct1(value)
+            self._set_prop1(v)
         elif path == "prop2":
-            self._prop2 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop2)
+            v =  api.as_nested_struct2(value)
+            self._set_prop2(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -321,9 +307,8 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -336,9 +321,8 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def _set_prop2(self, value):
         if self._prop2 == value:
             return
-        path = Name.path_from_name("prop2")
         self._prop2 = value
-        self.on_property_changed.fire(path, self._prop2)
+        self.on_prop2_changed.fire(self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -351,9 +335,8 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def _set_prop3(self, value):
         if self._prop3 == value:
             return
-        path = Name.path_from_name("prop3")
         self._prop3 = value
-        self.on_property_changed.fire(path, self._prop3)
+        self.on_prop3_changed.fire(self._prop3)
 
     def set_prop3(self, value):
         if self._prop3 == value:
@@ -388,17 +371,14 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_nested_struct1(value)
+            self._set_prop1(v)
         elif path == "prop2":
-            self._prop2 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop2)
+            v =  api.as_nested_struct2(value)
+            self._set_prop2(v)
         elif path == "prop3":
-            self._prop3 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop3)
+            v =  api.as_nested_struct3(value)
+            self._set_prop3(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)

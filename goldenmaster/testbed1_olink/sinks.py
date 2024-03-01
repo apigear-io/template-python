@@ -32,9 +32,8 @@ class StructInterfaceSink(IObjectSink):
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
             return
-        path = Name.path_from_name("propBool")
         self._prop_bool = value
-        self.on_property_changed.fire(path, self._prop_bool)
+        self.on_prop_bool_changed.fire(self._prop_bool)
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -47,9 +46,8 @@ class StructInterfaceSink(IObjectSink):
     def _set_prop_int(self, value):
         if self._prop_int == value:
             return
-        path = Name.path_from_name("propInt")
         self._prop_int = value
-        self.on_property_changed.fire(path, self._prop_int)
+        self.on_prop_int_changed.fire(self._prop_int)
 
     def set_prop_int(self, value):
         if self._prop_int == value:
@@ -62,9 +60,8 @@ class StructInterfaceSink(IObjectSink):
     def _set_prop_float(self, value):
         if self._prop_float == value:
             return
-        path = Name.path_from_name("propFloat")
         self._prop_float = value
-        self.on_property_changed.fire(path, self._prop_float)
+        self.on_prop_float_changed.fire(self._prop_float)
 
     def set_prop_float(self, value):
         if self._prop_float == value:
@@ -77,9 +74,8 @@ class StructInterfaceSink(IObjectSink):
     def _set_prop_string(self, value):
         if self._prop_string == value:
             return
-        path = Name.path_from_name("propString")
         self._prop_string = value
-        self.on_property_changed.fire(path, self._prop_string)
+        self.on_prop_string_changed.fire(self._prop_string)
 
     def set_prop_string(self, value):
         if self._prop_string == value:
@@ -119,21 +115,17 @@ class StructInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "propBool":
-            self._prop_bool =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_bool)
+            v =  api.as_struct_bool(value)
+            self._set_prop_bool(v)
         elif path == "propInt":
-            self._prop_int =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_int)
+            v =  api.as_struct_int(value)
+            self._set_prop_int(v)
         elif path == "propFloat":
-            self._prop_float =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_float)
+            v =  api.as_struct_float(value)
+            self._set_prop_float(v)
         elif path == "propString":
-            self._prop_string =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_string)
+            v =  api.as_struct_string(value)
+            self._set_prop_string(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -177,9 +169,8 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
             return
-        path = Name.path_from_name("propBool")
         self._prop_bool = [api.as_struct_bool(_) for _ in value]
-        self.on_property_changed.fire(path, self._prop_bool)
+        self.on_prop_bool_changed.fire(self._prop_bool)
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -192,9 +183,8 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_int(self, value):
         if self._prop_int == value:
             return
-        path = Name.path_from_name("propInt")
         self._prop_int = [api.as_struct_int(_) for _ in value]
-        self.on_property_changed.fire(path, self._prop_int)
+        self.on_prop_int_changed.fire(self._prop_int)
 
     def set_prop_int(self, value):
         if self._prop_int == value:
@@ -207,9 +197,8 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_float(self, value):
         if self._prop_float == value:
             return
-        path = Name.path_from_name("propFloat")
         self._prop_float = [api.as_struct_float(_) for _ in value]
-        self.on_property_changed.fire(path, self._prop_float)
+        self.on_prop_float_changed.fire(self._prop_float)
 
     def set_prop_float(self, value):
         if self._prop_float == value:
@@ -222,9 +211,8 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_string(self, value):
         if self._prop_string == value:
             return
-        path = Name.path_from_name("propString")
         self._prop_string = [api.as_struct_string(_) for _ in value]
-        self.on_property_changed.fire(path, self._prop_string)
+        self.on_prop_string_changed.fire(self._prop_string)
 
     def set_prop_string(self, value):
         if self._prop_string == value:
@@ -264,21 +252,17 @@ class StructArrayInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "propBool":
-            self._prop_bool = [api.as_struct_bool(_) for _ in value]
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_bool)
+            v = [api.as_struct_bool(_) for _ in value]
+            self._set_prop_bool(v)
         elif path == "propInt":
-            self._prop_int = [api.as_struct_int(_) for _ in value]
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_int)
+            v = [api.as_struct_int(_) for _ in value]
+            self._set_prop_int(v)
         elif path == "propFloat":
-            self._prop_float = [api.as_struct_float(_) for _ in value]
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_float)
+            v = [api.as_struct_float(_) for _ in value]
+            self._set_prop_float(v)
         elif path == "propString":
-            self._prop_string = [api.as_struct_string(_) for _ in value]
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop_string)
+            v = [api.as_struct_string(_) for _ in value]
+            self._set_prop_string(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
