@@ -7,7 +7,6 @@ class EmptyInterfaceSource(IObjectSource):
     impl: api.IEmptyInterface
     def __init__(self, impl: api.IEmptyInterface):
         self.impl = impl
-        impl._notifier = self
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -28,7 +27,3 @@ class EmptyInterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         return props
-
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        logging.info("unknown property %s", symbol)

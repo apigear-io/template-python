@@ -9,10 +9,13 @@ class EnumInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop0 = api.Enum0.VALUE0
+        self.on_prop0_changed = EventHook()
         self.prop1 = api.Enum1.VALUE1
+        self.on_prop1_changed = EventHook()
         self.prop2 = api.Enum2.VALUE2
+        self.on_prop2_changed = EventHook()
         self.prop3 = api.Enum3.VALUE3
-        self.on_property_changed = EventHook()
+        self.on_prop3_changed = EventHook()
         self.on_sig0 = EventHook()
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
@@ -48,7 +51,8 @@ class EnumInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)

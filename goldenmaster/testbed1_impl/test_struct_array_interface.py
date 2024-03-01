@@ -6,22 +6,38 @@ class TestStructArrayInterface:
 
     def test_prop_bool(self):
         o = StructArrayInterface()
+        self.called = False
+        o.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_bool([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_bool() == []
 
     def test_prop_int(self):
         o = StructArrayInterface()
+        self.called = False
+        o.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int() == []
 
     def test_prop_float(self):
         o = StructArrayInterface()
+        self.called = False
+        o.on_prop_float_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float() == []
 
     def test_prop_string(self):
         o = StructArrayInterface()
+        self.called = False
+        o.on_prop_string_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_string([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_string() == []
 
     def test_func_bool(self):

@@ -2,14 +2,15 @@ from {{ snake .Module.Name}}_api import api
 from {{snake .Module.Name}}_api.shared import EventHook
 from typing import Iterable
 {{- $class := Camel .Interface.Name }}
-{{- $ns := printf "%s.%s" $.Module.Name $.Interface.Name }}
 
 class {{$class}}(api.I{{$class}}):
-    def __init__(self, notifier=None):
+    def __init__(self):
         super().__init__()
-        self._notifier = notifier
 {{- range .Interface.Properties }}
         self._{{snake .Name}}: {{pyType "api." .}} = {{pyDefault "api." .}}
+{{- end }}
+{{- range .Interface.Properties }}
+        self.on_{{snake .Name}}_changed: {{pyType "api." .}} = EventHook()
 {{- end }}
 {{- range .Interface.Signals }}
         self.on_{{snake .Name}} = EventHook()
@@ -22,16 +23,14 @@ class {{$class}}(api.I{{$class}}):
         if self._{{snake .Name}} == value:
             return
         self._{{snake .Name}} = value
-        self.push_{{snake .Name}}(self._{{snake .Name}})
+        self._push_{{snake .Name}}(self._{{snake .Name}})
     {{- end }}
     
     def get_{{snake .Name}}(self):
         return self._{{snake .Name}}        
 
-    def push_{{snake .Name}}(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("{{$ns}}/{{.Name}}", value)
+    def _push_{{snake .Name}}(self, value):
+        self.on_{{snake .Name}}_changed.fire(value)
 {{- end }}
 
 {{- range .Interface.Operations }}

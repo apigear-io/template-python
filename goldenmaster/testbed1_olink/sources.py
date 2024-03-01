@@ -7,7 +7,10 @@ class StructInterfaceSource(IObjectSource):
     impl: api.IStructInterface
     def __init__(self, impl: api.IStructInterface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop_bool_changed += self.notify_prop_bool_changed
+        impl.on_prop_int_changed += self.notify_prop_int_changed
+        impl.on_prop_float_changed += self.notify_prop_float_changed
+        impl.on_prop_string_changed += self.notify_prop_string_changed
         impl.on_sig_bool += self.notify_sig_bool
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_float += self.notify_sig_float
@@ -85,26 +88,25 @@ class StructInterfaceSource(IObjectSource):
         _param_string = api.from_struct_string(param_string)
         return RemoteNode.notify_signal("testbed1.StructInterface/sigString", [_param_string])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "propBool":
-            v = api.from_struct_bool(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "propInt":
-            v = api.from_struct_int(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "propFloat":
-            v = api.from_struct_float(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "propString":
-            v = api.from_struct_string(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop_bool_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructInterface/propBool", api.from_struct_bool(value))
+
+    def notify_prop_int_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructInterface/propInt", api.from_struct_int(value))
+
+    def notify_prop_float_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructInterface/propFloat", api.from_struct_float(value))
+
+    def notify_prop_string_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructInterface/propString", api.from_struct_string(value))
 class StructArrayInterfaceSource(IObjectSource):
     impl: api.IStructArrayInterface
     def __init__(self, impl: api.IStructArrayInterface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop_bool_changed += self.notify_prop_bool_changed
+        impl.on_prop_int_changed += self.notify_prop_int_changed
+        impl.on_prop_float_changed += self.notify_prop_float_changed
+        impl.on_prop_string_changed += self.notify_prop_string_changed
         impl.on_sig_bool += self.notify_sig_bool
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_float += self.notify_sig_float
@@ -182,18 +184,14 @@ class StructArrayInterfaceSource(IObjectSource):
         _param_string = api.from_struct_string(param_string)
         return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigString", [_param_string])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "propBool":
-            v = api.from_struct_bool(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "propInt":
-            v = api.from_struct_int(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "propFloat":
-            v = api.from_struct_float(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "propString":
-            v = api.from_struct_string(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop_bool_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propBool", api.from_struct_bool(value))
+
+    def notify_prop_int_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propInt", api.from_struct_int(value))
+
+    def notify_prop_float_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propFloat", api.from_struct_float(value))
+
+    def notify_prop_string_changed(self, value):
+        return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propString", api.from_struct_string(value))

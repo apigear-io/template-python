@@ -9,10 +9,13 @@ class StructInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop_bool = api.StructBool()
+        self.on_prop_bool_changed = EventHook()
         self.prop_int = api.StructInt()
+        self.on_prop_int_changed = EventHook()
         self.prop_float = api.StructFloat()
+        self.on_prop_float_changed = EventHook()
         self.prop_string = api.StructString()
-        self.on_property_changed = EventHook()
+        self.on_prop_string_changed = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
@@ -48,7 +51,8 @@ class StructInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -59,10 +63,13 @@ class StructArrayInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop_bool = []
+        self.on_prop_bool_changed = EventHook()
         self.prop_int = []
+        self.on_prop_int_changed = EventHook()
         self.prop_float = []
+        self.on_prop_float_changed = EventHook()
         self.prop_string = []
-        self.on_property_changed = EventHook()
+        self.on_prop_string_changed = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
@@ -98,7 +105,8 @@ class StructArrayInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)

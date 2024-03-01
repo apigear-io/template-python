@@ -12,7 +12,9 @@ class {{$class}}Source(IObjectSource):
     impl: api.I{{$class}}
     def __init__(self, impl: api.I{{$class}}):
         self.impl = impl
-        impl._notifier = self
+{{- range $idx, $p := .Properties }}
+        impl.on_{{snake .Name}}_changed += self.notify_{{snake .Name}}_changed
+{{- end }}
 {{- range $idx, $s := .Signals }}
         impl.on_{{snake .Name}} += self.notify_{{snake .Name}}
 {{- end }}
@@ -83,16 +85,10 @@ class {{$class}}Source(IObjectSource):
         ])
 {{- end }}
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
 {{- range $idx, $p := .Properties }}
-    {{- if $idx }}
-        elif path == "{{.Name}}":
-    {{- else }}
-        if path == "{{.Name}}":
-    {{- end }}
-            v = api.from_{{snake .Type}}(value)
-            return RemoteNode.notify_property_change(symbol, v)
+
+    def notify_{{snake .Name}}_changed(self, value):
+        return RemoteNode.notify_property_change("{{$ns}}/{{.Name}}", api.from_{{snake .Type}}(value))
 {{- end }}
-        logging.info("unknown property %s", symbol)    
+
 {{- end }}

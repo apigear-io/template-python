@@ -6,12 +6,20 @@ class TestSameEnum2Interface:
 
     def test_prop1(self):
         o = SameEnum2Interface()
+        self.called = False
+        o.on_prop1_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop1(api.Enum1.VALUE1)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop1() == api.Enum1.VALUE1
 
     def test_prop2(self):
         o = SameEnum2Interface()
+        self.called = False
+        o.on_prop2_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop2(api.Enum2.VALUE1)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop2() == api.Enum2.VALUE1
 
     def test_func1(self):
