@@ -6,42 +6,74 @@ class TestSimpleInterface:
 
     def test_prop_bool(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_bool(False)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_bool() == False
 
     def test_prop_int(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int() == 0
 
     def test_prop_int32(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_int32_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int32(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int32() == 0
 
     def test_prop_int64(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_int64_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int64(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int64() == 0
 
     def test_prop_float(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_float_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float(0.0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float() == 0.0
 
     def test_prop_float32(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_float32_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float32(0.0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float32() == 0.0
 
     def test_prop_float64(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_float64_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float64(0.0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float64() == 0.0
 
     def test_prop_string(self):
         o = SimpleInterface()
+        self.called = False
+        o.on_prop_string_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_string("")
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_string() == ""
 
     def test_prop_read_only_string(self):

@@ -3,9 +3,8 @@ from tb_simple_api.shared import EventHook
 from typing import Iterable
 
 class NoPropertiesInterface(api.INoPropertiesInterface):
-    def __init__(self, notifier=None):
+    def __init__(self):
         super().__init__()
-        self._notifier = notifier
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
 

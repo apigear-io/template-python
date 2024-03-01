@@ -6,17 +6,29 @@ class TestNestedStruct3Interface:
 
     def test_prop1(self):
         o = NestedStruct3Interface()
+        self.called = False
+        o.on_prop1_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop1(api.NestedStruct1())
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop1() == api.NestedStruct1()
 
     def test_prop2(self):
         o = NestedStruct3Interface()
+        self.called = False
+        o.on_prop2_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop2(api.NestedStruct2())
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop2() == api.NestedStruct2()
 
     def test_prop3(self):
         o = NestedStruct3Interface()
+        self.called = False
+        o.on_prop3_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop3(api.NestedStruct3())
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop3() == api.NestedStruct3()
 
     def test_func1(self):

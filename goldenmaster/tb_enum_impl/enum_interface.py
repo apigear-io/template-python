@@ -3,13 +3,16 @@ from tb_enum_api.shared import EventHook
 from typing import Iterable
 
 class EnumInterface(api.IEnumInterface):
-    def __init__(self, notifier=None):
+    def __init__(self):
         super().__init__()
-        self._notifier = notifier
         self._prop0: api.Enum0 = api.Enum0.VALUE0
         self._prop1: api.Enum1 = api.Enum1.VALUE1
         self._prop2: api.Enum2 = api.Enum2.VALUE2
         self._prop3: api.Enum3 = api.Enum3.VALUE3
+        self.on_prop0_changed: api.Enum0 = EventHook()
+        self.on_prop1_changed: api.Enum1 = EventHook()
+        self.on_prop2_changed: api.Enum2 = EventHook()
+        self.on_prop3_changed: api.Enum3 = EventHook()
         self.on_sig0 = EventHook()
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
@@ -19,57 +22,49 @@ class EnumInterface(api.IEnumInterface):
         if self._prop0 == value:
             return
         self._prop0 = value
-        self.push_prop0(self._prop0)
+        self._push_prop0(self._prop0)
     
     def get_prop0(self):
         return self._prop0        
 
-    def push_prop0(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.enum.EnumInterface/prop0", value)
+    def _push_prop0(self, value):
+        self.on_prop0_changed.fire(value)
 
     def set_prop1(self, value):
         if self._prop1 == value:
             return
         self._prop1 = value
-        self.push_prop1(self._prop1)
+        self._push_prop1(self._prop1)
     
     def get_prop1(self):
         return self._prop1        
 
-    def push_prop1(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.enum.EnumInterface/prop1", value)
+    def _push_prop1(self, value):
+        self.on_prop1_changed.fire(value)
 
     def set_prop2(self, value):
         if self._prop2 == value:
             return
         self._prop2 = value
-        self.push_prop2(self._prop2)
+        self._push_prop2(self._prop2)
     
     def get_prop2(self):
         return self._prop2        
 
-    def push_prop2(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.enum.EnumInterface/prop2", value)
+    def _push_prop2(self, value):
+        self.on_prop2_changed.fire(value)
 
     def set_prop3(self, value):
         if self._prop3 == value:
             return
         self._prop3 = value
-        self.push_prop3(self._prop3)
+        self._push_prop3(self._prop3)
     
     def get_prop3(self):
         return self._prop3        
 
-    def push_prop3(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.enum.EnumInterface/prop3", value)
+    def _push_prop3(self, value):
+        self.on_prop3_changed.fire(value)
 
     def func0(self, param0: api.Enum0) -> api.Enum0:
         return api.Enum0.VALUE0

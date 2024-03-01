@@ -3,9 +3,8 @@ from tb_simple_api.shared import EventHook
 from typing import Iterable
 
 class SimpleInterface(api.ISimpleInterface):
-    def __init__(self, notifier=None):
+    def __init__(self):
         super().__init__()
-        self._notifier = notifier
         self._prop_bool: bool = False
         self._prop_int: int = 0
         self._prop_int32: int = 0
@@ -15,6 +14,15 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float64: float = 0.0
         self._prop_string: str = ""
         self._prop_read_only_string: str = ""
+        self.on_prop_bool_changed: bool = EventHook()
+        self.on_prop_int_changed: int = EventHook()
+        self.on_prop_int32_changed: int = EventHook()
+        self.on_prop_int64_changed: int = EventHook()
+        self.on_prop_float_changed: float = EventHook()
+        self.on_prop_float32_changed: float = EventHook()
+        self.on_prop_float64_changed: float = EventHook()
+        self.on_prop_string_changed: str = EventHook()
+        self.on_prop_read_only_string_changed: str = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
@@ -29,121 +37,103 @@ class SimpleInterface(api.ISimpleInterface):
         if self._prop_bool == value:
             return
         self._prop_bool = value
-        self.push_prop_bool(self._prop_bool)
+        self._push_prop_bool(self._prop_bool)
     
     def get_prop_bool(self):
         return self._prop_bool        
 
-    def push_prop_bool(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propBool", value)
+    def _push_prop_bool(self, value):
+        self.on_prop_bool_changed.fire(value)
 
     def set_prop_int(self, value):
         if self._prop_int == value:
             return
         self._prop_int = value
-        self.push_prop_int(self._prop_int)
+        self._push_prop_int(self._prop_int)
     
     def get_prop_int(self):
         return self._prop_int        
 
-    def push_prop_int(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propInt", value)
+    def _push_prop_int(self, value):
+        self.on_prop_int_changed.fire(value)
 
     def set_prop_int32(self, value):
         if self._prop_int32 == value:
             return
         self._prop_int32 = value
-        self.push_prop_int32(self._prop_int32)
+        self._push_prop_int32(self._prop_int32)
     
     def get_prop_int32(self):
         return self._prop_int32        
 
-    def push_prop_int32(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propInt32", value)
+    def _push_prop_int32(self, value):
+        self.on_prop_int32_changed.fire(value)
 
     def set_prop_int64(self, value):
         if self._prop_int64 == value:
             return
         self._prop_int64 = value
-        self.push_prop_int64(self._prop_int64)
+        self._push_prop_int64(self._prop_int64)
     
     def get_prop_int64(self):
         return self._prop_int64        
 
-    def push_prop_int64(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propInt64", value)
+    def _push_prop_int64(self, value):
+        self.on_prop_int64_changed.fire(value)
 
     def set_prop_float(self, value):
         if self._prop_float == value:
             return
         self._prop_float = value
-        self.push_prop_float(self._prop_float)
+        self._push_prop_float(self._prop_float)
     
     def get_prop_float(self):
         return self._prop_float        
 
-    def push_prop_float(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propFloat", value)
+    def _push_prop_float(self, value):
+        self.on_prop_float_changed.fire(value)
 
     def set_prop_float32(self, value):
         if self._prop_float32 == value:
             return
         self._prop_float32 = value
-        self.push_prop_float32(self._prop_float32)
+        self._push_prop_float32(self._prop_float32)
     
     def get_prop_float32(self):
         return self._prop_float32        
 
-    def push_prop_float32(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propFloat32", value)
+    def _push_prop_float32(self, value):
+        self.on_prop_float32_changed.fire(value)
 
     def set_prop_float64(self, value):
         if self._prop_float64 == value:
             return
         self._prop_float64 = value
-        self.push_prop_float64(self._prop_float64)
+        self._push_prop_float64(self._prop_float64)
     
     def get_prop_float64(self):
         return self._prop_float64        
 
-    def push_prop_float64(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propFloat64", value)
+    def _push_prop_float64(self, value):
+        self.on_prop_float64_changed.fire(value)
 
     def set_prop_string(self, value):
         if self._prop_string == value:
             return
         self._prop_string = value
-        self.push_prop_string(self._prop_string)
+        self._push_prop_string(self._prop_string)
     
     def get_prop_string(self):
         return self._prop_string        
 
-    def push_prop_string(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propString", value)
+    def _push_prop_string(self, value):
+        self.on_prop_string_changed.fire(value)
     
     def get_prop_read_only_string(self):
         return self._prop_read_only_string        
 
-    def push_prop_read_only_string(self, value):
-        if not self._notifier:
-            return
-        self._notifier.notify_property("tb.simple.SimpleInterface/propReadOnlyString", value)
+    def _push_prop_read_only_string(self, value):
+        self.on_prop_read_only_string_changed.fire(value)
 
     def func_void(self) -> None:
         return None

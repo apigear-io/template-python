@@ -7,7 +7,10 @@ class EnumInterfaceSource(IObjectSource):
     impl: api.IEnumInterface
     def __init__(self, impl: api.IEnumInterface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop0_changed += self.notify_prop0_changed
+        impl.on_prop1_changed += self.notify_prop1_changed
+        impl.on_prop2_changed += self.notify_prop2_changed
+        impl.on_prop3_changed += self.notify_prop3_changed
         impl.on_sig0 += self.notify_sig0
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
@@ -85,18 +88,14 @@ class EnumInterfaceSource(IObjectSource):
         _param3 = api.from_enum3(param3)
         return RemoteNode.notify_signal("tb.enum.EnumInterface/sig3", [_param3])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop0":
-            v = api.from_enum0(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop1":
-            v = api.from_enum1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop2":
-            v = api.from_enum2(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop3":
-            v = api.from_enum3(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop0_changed(self, value):
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop0", api.from_enum0(value))
+
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop1", api.from_enum1(value))
+
+    def notify_prop2_changed(self, value):
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop2", api.from_enum2(value))
+
+    def notify_prop3_changed(self, value):
+        return RemoteNode.notify_property_change("tb.enum.EnumInterface/prop3", api.from_enum3(value))

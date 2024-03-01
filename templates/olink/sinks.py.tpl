@@ -16,8 +16,8 @@ class {{Camel .Name}}Sink(IObjectSink):
         super().__init__()
 {{- range .Properties }}
         self.{{snake .Name}} = {{pyDefault "api." .}}
+        self.on_{{snake .Name}}_changed = EventHook()
 {{- end }}
-        self.on_property_changed = EventHook()
 {{- range .Signals }}
         self.on_{{snake .Name}} = EventHook()
 {{- end }}
@@ -46,7 +46,8 @@ class {{Camel .Name}}Sink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)

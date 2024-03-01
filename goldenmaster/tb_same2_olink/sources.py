@@ -7,7 +7,7 @@ class SameStruct1InterfaceSource(IObjectSource):
     impl: api.ISameStruct1Interface
     def __init__(self, impl: api.ISameStruct1Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
         RemoteNode.register_source(self)
 
@@ -43,17 +43,14 @@ class SameStruct1InterfaceSource(IObjectSource):
         _param1 = api.from_struct1(param1)
         return RemoteNode.notify_signal("tb.same2.SameStruct1Interface/sig1", [_param1])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_struct1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("tb.same2.SameStruct1Interface/prop1", api.from_struct1(value))
 class SameStruct2InterfaceSource(IObjectSource):
     impl: api.ISameStruct2Interface
     def __init__(self, impl: api.ISameStruct2Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
+        impl.on_prop2_changed += self.notify_prop2_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         RemoteNode.register_source(self)
@@ -105,20 +102,16 @@ class SameStruct2InterfaceSource(IObjectSource):
         _param2 = api.from_struct2(param2)
         return RemoteNode.notify_signal("tb.same2.SameStruct2Interface/sig2", [_param1, _param2])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_struct2(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop2":
-            v = api.from_struct2(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("tb.same2.SameStruct2Interface/prop1", api.from_struct2(value))
+
+    def notify_prop2_changed(self, value):
+        return RemoteNode.notify_property_change("tb.same2.SameStruct2Interface/prop2", api.from_struct2(value))
 class SameEnum1InterfaceSource(IObjectSource):
     impl: api.ISameEnum1Interface
     def __init__(self, impl: api.ISameEnum1Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
         RemoteNode.register_source(self)
 
@@ -154,17 +147,14 @@ class SameEnum1InterfaceSource(IObjectSource):
         _param1 = api.from_enum1(param1)
         return RemoteNode.notify_signal("tb.same2.SameEnum1Interface/sig1", [_param1])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_enum1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("tb.same2.SameEnum1Interface/prop1", api.from_enum1(value))
 class SameEnum2InterfaceSource(IObjectSource):
     impl: api.ISameEnum2Interface
     def __init__(self, impl: api.ISameEnum2Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
+        impl.on_prop2_changed += self.notify_prop2_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         RemoteNode.register_source(self)
@@ -216,12 +206,8 @@ class SameEnum2InterfaceSource(IObjectSource):
         _param2 = api.from_enum2(param2)
         return RemoteNode.notify_signal("tb.same2.SameEnum2Interface/sig2", [_param1, _param2])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_enum1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop2":
-            v = api.from_enum2(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("tb.same2.SameEnum2Interface/prop1", api.from_enum1(value))
+
+    def notify_prop2_changed(self, value):
+        return RemoteNode.notify_property_change("tb.same2.SameEnum2Interface/prop2", api.from_enum2(value))

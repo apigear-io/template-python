@@ -6,42 +6,74 @@ class TestSimpleArrayInterface:
 
     def test_prop_bool(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_bool([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_bool() == []
 
     def test_prop_int(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int() == []
 
     def test_prop_int32(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_int32_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int32([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int32() == []
 
     def test_prop_int64(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_int64_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_int64([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_int64() == []
 
     def test_prop_float(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_float_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float() == []
 
     def test_prop_float32(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_float32_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float32([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float32() == []
 
     def test_prop_float64(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_float64_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_float64([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_float64() == []
 
     def test_prop_string(self):
         o = SimpleArrayInterface()
+        self.called = False
+        o.on_prop_string_changed += lambda *args: setattr(self, 'called', True)
         o.set_prop_string([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
         assert o.get_prop_string() == []
 
     def test_func_bool(self):

@@ -9,15 +9,23 @@ class SimpleInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop_bool = False
+        self.on_prop_bool_changed = EventHook()
         self.prop_int = 0
+        self.on_prop_int_changed = EventHook()
         self.prop_int32 = 0
+        self.on_prop_int32_changed = EventHook()
         self.prop_int64 = 0
+        self.on_prop_int64_changed = EventHook()
         self.prop_float = 0.0
+        self.on_prop_float_changed = EventHook()
         self.prop_float32 = 0.0
+        self.on_prop_float32_changed = EventHook()
         self.prop_float64 = 0.0
+        self.on_prop_float64_changed = EventHook()
         self.prop_string = ""
+        self.on_prop_string_changed = EventHook()
         self.prop_read_only_string = ""
-        self.on_property_changed = EventHook()
+        self.on_prop_read_only_string_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
@@ -73,7 +81,8 @@ class SimpleInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -84,14 +93,21 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop_bool = []
+        self.on_prop_bool_changed = EventHook()
         self.prop_int = []
+        self.on_prop_int_changed = EventHook()
         self.prop_int32 = []
+        self.on_prop_int32_changed = EventHook()
         self.prop_int64 = []
+        self.on_prop_int64_changed = EventHook()
         self.prop_float = []
+        self.on_prop_float_changed = EventHook()
         self.prop_float32 = []
+        self.on_prop_float32_changed = EventHook()
         self.prop_float64 = []
+        self.on_prop_float64_changed = EventHook()
         self.prop_string = []
-        self.on_property_changed = EventHook()
+        self.on_prop_string_changed = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_int32 = EventHook()
@@ -143,7 +159,8 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -153,7 +170,6 @@ class SimpleArrayInterfaceSink(IObjectSink):
 class NoPropertiesInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.on_property_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
         self.client = ClientNode.register_sink(self)
@@ -181,7 +197,8 @@ class NoPropertiesInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -192,8 +209,9 @@ class NoOperationsInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop_bool = False
+        self.on_prop_bool_changed = EventHook()
         self.prop_int = 0
-        self.on_property_changed = EventHook()
+        self.on_prop_int_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
         self.client = ClientNode.register_sink(self)
@@ -215,7 +233,8 @@ class NoOperationsInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -226,8 +245,9 @@ class NoSignalsInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
         self.prop_bool = False
+        self.on_prop_bool_changed = EventHook()
         self.prop_int = 0
-        self.on_property_changed = EventHook()
+        self.on_prop_int_changed = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -253,7 +273,8 @@ class NoSignalsInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -263,7 +284,6 @@ class NoSignalsInterfaceSink(IObjectSink):
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
-        self.on_property_changed = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -283,7 +303,8 @@ class EmptyInterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         setattr(self, path, value)
-        self.on_property_changed.fire(path, value)
+        hook = getattr(self, f'on_{path}_changed')
+        hook.fire(*args)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)

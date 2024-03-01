@@ -7,7 +7,10 @@ class ManyParamInterfaceSource(IObjectSource):
     impl: api.IManyParamInterface
     def __init__(self, impl: api.IManyParamInterface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
+        impl.on_prop2_changed += self.notify_prop2_changed
+        impl.on_prop3_changed += self.notify_prop3_changed
+        impl.on_prop4_changed += self.notify_prop4_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         impl.on_sig3 += self.notify_sig3
@@ -97,26 +100,22 @@ class ManyParamInterfaceSource(IObjectSource):
         _param4 = api.from_int(param4)
         return RemoteNode.notify_signal("testbed2.ManyParamInterface/sig4", [_param1, _param2, _param3, _param4])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop2":
-            v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop3":
-            v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop4":
-            v = api.from_int(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop1", api.from_int(value))
+
+    def notify_prop2_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop2", api.from_int(value))
+
+    def notify_prop3_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop3", api.from_int(value))
+
+    def notify_prop4_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.ManyParamInterface/prop4", api.from_int(value))
 class NestedStruct1InterfaceSource(IObjectSource):
     impl: api.INestedStruct1Interface
     def __init__(self, impl: api.INestedStruct1Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
         RemoteNode.register_source(self)
 
@@ -152,17 +151,14 @@ class NestedStruct1InterfaceSource(IObjectSource):
         _param1 = api.from_nested_struct1(param1)
         return RemoteNode.notify_signal("testbed2.NestedStruct1Interface/sig1", [_param1])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_nested_struct1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.NestedStruct1Interface/prop1", api.from_nested_struct1(value))
 class NestedStruct2InterfaceSource(IObjectSource):
     impl: api.INestedStruct2Interface
     def __init__(self, impl: api.INestedStruct2Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
+        impl.on_prop2_changed += self.notify_prop2_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         RemoteNode.register_source(self)
@@ -214,20 +210,18 @@ class NestedStruct2InterfaceSource(IObjectSource):
         _param2 = api.from_nested_struct2(param2)
         return RemoteNode.notify_signal("testbed2.NestedStruct2Interface/sig2", [_param1, _param2])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_nested_struct1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop2":
-            v = api.from_nested_struct2(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.NestedStruct2Interface/prop1", api.from_nested_struct1(value))
+
+    def notify_prop2_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.NestedStruct2Interface/prop2", api.from_nested_struct2(value))
 class NestedStruct3InterfaceSource(IObjectSource):
     impl: api.INestedStruct3Interface
     def __init__(self, impl: api.INestedStruct3Interface):
         self.impl = impl
-        impl._notifier = self
+        impl.on_prop1_changed += self.notify_prop1_changed
+        impl.on_prop2_changed += self.notify_prop2_changed
+        impl.on_prop3_changed += self.notify_prop3_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         impl.on_sig3 += self.notify_sig3
@@ -297,15 +291,11 @@ class NestedStruct3InterfaceSource(IObjectSource):
         _param3 = api.from_nested_struct3(param3)
         return RemoteNode.notify_signal("testbed2.NestedStruct3Interface/sig3", [_param1, _param2, _param3])
 
-    def notify_property(self, symbol, value):
-        path = Name.path_from_name(symbol)
-        if path == "prop1":
-            v = api.from_nested_struct1(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop2":
-            v = api.from_nested_struct2(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        elif path == "prop3":
-            v = api.from_nested_struct3(value)
-            return RemoteNode.notify_property_change(symbol, v)
-        logging.info("unknown property %s", symbol)
+    def notify_prop1_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop1", api.from_nested_struct1(value))
+
+    def notify_prop2_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop2", api.from_nested_struct2(value))
+
+    def notify_prop3_changed(self, value):
+        return RemoteNode.notify_property_change("testbed2.NestedStruct3Interface/prop3", api.from_nested_struct3(value))

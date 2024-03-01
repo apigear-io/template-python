@@ -8,7 +8,11 @@ class Test{{$class}}:
     def test_{{snake .Name}}(self):
         o = {{$class}}()
         {{- if not .IsReadOnly }}
+        self.called = False
+        o.on_{{snake .Name}}_changed += lambda *args: setattr(self, 'called', True)
         o.set_{{snake .Name}}({{ pyDefault "api." .}})
+        # should not be true since we are not changing the default value
+        assert self.called == False
         {{- end }}
         assert o.get_{{snake .Name}}() == {{ pyDefault "api." .}}
 {{- else }}
