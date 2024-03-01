@@ -10,6 +10,10 @@ features:
             target: "__init__.py"
           - source: "api/api.py.tpl"
             target: "api.py"
+          - source: "api/shared.py"
+            target: "shared.py"
+            raw: true
+
   - name: scaffold
     scopes:
       - match: system
@@ -80,5 +84,3 @@ features:
             target: "sources.py"
           - source: "olink/sinks.py.tpl"
             target: "sinks.py"
-          - source: "olink/shared.py.tpl"
-            target: "shared.py"

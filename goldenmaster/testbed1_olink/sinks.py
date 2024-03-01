@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 from olink.core import Name
 from olink.client import IObjectSink, ClientNode
-from .shared import EventHook
+from testbed1_api.shared import EventHook
 from testbed1_api import api
 
 class StructInterfaceSink(IObjectSink):
