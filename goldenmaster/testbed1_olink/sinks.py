@@ -137,8 +137,18 @@ class StructInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sigBool":
+            _param_bool =  args[0]
+            self.on_sig_bool.fire(_param_bool)
+        elif path == "sigInt":
+            _param_int =  args[0]
+            self.on_sig_int.fire(_param_int)
+        elif path == "sigFloat":
+            _param_float =  args[0]
+            self.on_sig_float.fire(_param_float)
+        elif path == "sigString":
+            _param_string =  args[0]
+            self.on_sig_string.fire(_param_string)
 
 class StructArrayInterfaceSink(IObjectSink):
     def __init__(self):
@@ -272,5 +282,15 @@ class StructArrayInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sigBool":
+            _param_bool = [api.as_struct_bool(_) for _ in args[0]]
+            self.on_sig_bool.fire(_param_bool)
+        elif path == "sigInt":
+            _param_int = [api.as_struct_int(_) for _ in args[0]]
+            self.on_sig_int.fire(_param_int)
+        elif path == "sigFloat":
+            _param_float = [api.as_struct_float(_) for _ in args[0]]
+            self.on_sig_float.fire(_param_float)
+        elif path == "sigString":
+            _param_string = [api.as_struct_string(_) for _ in args[0]]
+            self.on_sig_string.fire(_param_string)

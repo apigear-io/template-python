@@ -137,8 +137,24 @@ class ManyParamInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
+        elif path == "sig2":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            self.on_sig2.fire(_param1, _param2)
+        elif path == "sig3":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            _param3 =  args[2]
+            self.on_sig3.fire(_param1, _param2, _param3)
+        elif path == "sig4":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            _param3 =  args[2]
+            _param4 =  args[3]
+            self.on_sig4.fire(_param1, _param2, _param3, _param4)
 
 class NestedStruct1InterfaceSink(IObjectSink):
     def __init__(self):
@@ -191,8 +207,9 @@ class NestedStruct1InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
 
 class NestedStruct2InterfaceSink(IObjectSink):
     def __init__(self):
@@ -272,8 +289,13 @@ class NestedStruct2InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
+        elif path == "sig2":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            self.on_sig2.fire(_param1, _param2)
 
 class NestedStruct3InterfaceSink(IObjectSink):
     def __init__(self):
@@ -380,5 +402,15 @@ class NestedStruct3InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
+        elif path == "sig2":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            self.on_sig2.fire(_param1, _param2)
+        elif path == "sig3":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            _param3 =  args[2]
+            self.on_sig3.fire(_param1, _param2, _param3)

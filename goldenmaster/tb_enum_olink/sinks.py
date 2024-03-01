@@ -137,5 +137,15 @@ class EnumInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig0":
+            _param0 =  args[0]
+            self.on_sig0.fire(_param0)
+        elif path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
+        elif path == "sig2":
+            _param2 =  args[0]
+            self.on_sig2.fire(_param2)
+        elif path == "sig3":
+            _param3 =  args[0]
+            self.on_sig3.fire(_param3)

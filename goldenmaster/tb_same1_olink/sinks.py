@@ -56,8 +56,9 @@ class SameStruct1InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
 
 class SameStruct2InterfaceSink(IObjectSink):
     def __init__(self):
@@ -137,8 +138,13 @@ class SameStruct2InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
+        elif path == "sig2":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            self.on_sig2.fire(_param1, _param2)
 
 class SameEnum1InterfaceSink(IObjectSink):
     def __init__(self):
@@ -191,8 +197,9 @@ class SameEnum1InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
 
 class SameEnum2InterfaceSink(IObjectSink):
     def __init__(self):
@@ -272,5 +279,10 @@ class SameEnum2InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sig1":
+            _param1 =  args[0]
+            self.on_sig1.fire(_param1)
+        elif path == "sig2":
+            _param1 =  args[0]
+            _param2 =  args[1]
+            self.on_sig2.fire(_param1, _param2)
