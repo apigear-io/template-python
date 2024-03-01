@@ -260,8 +260,32 @@ class SimpleInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sigVoid":
+            self.on_sig_void.fire()
+        elif path == "sigBool":
+            _param_bool =  args[0]
+            self.on_sig_bool.fire(_param_bool)
+        elif path == "sigInt":
+            _param_int =  args[0]
+            self.on_sig_int.fire(_param_int)
+        elif path == "sigInt32":
+            _param_int32 =  args[0]
+            self.on_sig_int32.fire(_param_int32)
+        elif path == "sigInt64":
+            _param_int64 =  args[0]
+            self.on_sig_int64.fire(_param_int64)
+        elif path == "sigFloat":
+            _param_float =  args[0]
+            self.on_sig_float.fire(_param_float)
+        elif path == "sigFloat32":
+            _param_float32 =  args[0]
+            self.on_sig_float32.fire(_param_float32)
+        elif path == "sigFloat64":
+            _param_float64 =  args[0]
+            self.on_sig_float64.fire(_param_float64)
+        elif path == "sigString":
+            _param_string =  args[0]
+            self.on_sig_string.fire(_param_string)
 
 class SimpleArrayInterfaceSink(IObjectSink):
     def __init__(self):
@@ -503,8 +527,30 @@ class SimpleArrayInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sigBool":
+            _param_bool = [api.as_bool(_) for _ in args[0]]
+            self.on_sig_bool.fire(_param_bool)
+        elif path == "sigInt":
+            _param_int = [api.as_int(_) for _ in args[0]]
+            self.on_sig_int.fire(_param_int)
+        elif path == "sigInt32":
+            _param_int32 = [api.as_int32(_) for _ in args[0]]
+            self.on_sig_int32.fire(_param_int32)
+        elif path == "sigInt64":
+            _param_int64 = [api.as_int64(_) for _ in args[0]]
+            self.on_sig_int64.fire(_param_int64)
+        elif path == "sigFloat":
+            _param_float = [api.as_float(_) for _ in args[0]]
+            self.on_sig_float.fire(_param_float)
+        elif path == "sigFloat32":
+            _param_float32 = [api.as_float32(_) for _ in args[0]]
+            self.on_sig_float32.fire(_param_float32)
+        elif path == "sigFloat64":
+            _param_float64 = [api.as_float64(_) for _ in args[0]]
+            self.on_sig_float64.fire(_param_float64)
+        elif path == "sigString":
+            _param_string = [api.as_string(_) for _ in args[0]]
+            self.on_sig_string.fire(_param_string)
 
 class NoPropertiesInterfaceSink(IObjectSink):
     def __init__(self):
@@ -537,8 +583,11 @@ class NoPropertiesInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sigVoid":
+            self.on_sig_void.fire()
+        elif path == "sigBool":
+            _param_bool =  args[0]
+            self.on_sig_bool.fire(_param_bool)
 
 class NoOperationsInterfaceSink(IObjectSink):
     def __init__(self):
@@ -612,8 +661,11 @@ class NoOperationsInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        if path == "sigVoid":
+            self.on_sig_void.fire()
+        elif path == "sigBool":
+            _param_bool =  args[0]
+            self.on_sig_bool.fire(_param_bool)
 
 class NoSignalsInterfaceSink(IObjectSink):
     def __init__(self):
@@ -690,9 +742,7 @@ class NoSignalsInterfaceSink(IObjectSink):
             hook.fire(self._prop_int)
 
     def olink_on_signal(self, name: str, args: list[Any]):
-        path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        pass
 
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
@@ -716,6 +766,4 @@ class EmptyInterfaceSink(IObjectSink):
         pass
 
     def olink_on_signal(self, name: str, args: list[Any]):
-        path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        pass

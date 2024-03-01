@@ -103,8 +103,29 @@ class {{Camel .Name}}Sink(IObjectSink):
         {{- end }}
 
     def olink_on_signal(self, name: str, args: list[Any]):
+        {{- if len .Signals }}
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')
-        hook.fire(*args)
+        {{- end }}
+        {{- range $idx, $o := .Signals }}
+        {{- if $idx }}
+        elif path == "{{.Name}}":
+        {{- else }}
+        if path == "{{.Name}}":
+        {{- end }}
+            {{- range $index, $_ := .Params }}
+            {{- if .IsArray }}
+            _{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$index}}]]
+            {{- else }}
+            _{{snake .Name}} =  args[{{$index}}]
+            {{- end }}
+            {{- end }}
+            self.on_{{snake .Name}}.fire(
+            {{- range $index, $_ := .Params -}}{{- if $index}}, {{ end -}}
+            _{{snake .Name}}
+            {{- end -}}
+            )
+        {{- else}}
+        pass
+        {{- end }}
 
 {{- end }}
