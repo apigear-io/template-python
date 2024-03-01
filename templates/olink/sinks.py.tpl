@@ -35,13 +35,12 @@ class {{Camel .Name}}Sink(IObjectSink):
     def _set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:
             return
-        path = Name.path_from_name("{{.Name}}")
         {{- if .IsArray }}
         self._{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in value]
         {{- else }}
         self._{{snake .Name}} = value
         {{- end }}
-        self.on_property_changed.fire(path, self._{{snake .Name}})
+        self.on_{{snake .Name}}_changed.fire(self._{{snake .Name}})
 
     def set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:
@@ -92,12 +91,11 @@ class {{Camel .Name}}Sink(IObjectSink):
         if path == "{{.Name}}":
         {{- end }}
             {{- if .IsArray }}
-            self._{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in value]
+            v = [api.as_{{snake .Type}}(_) for _ in value]
             {{- else }}
-            self._{{snake .Name}} =  value
+            v =  api.as_{{snake .Type}}(value)
             {{- end }}
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._{{snake .Name}})
+            self._set_{{snake .Name}}(v)
         {{- else}}
         pass
         {{- end }}

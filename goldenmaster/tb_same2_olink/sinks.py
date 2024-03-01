@@ -23,9 +23,8 @@ class SameStruct1InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -50,9 +49,8 @@ class SameStruct1InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_struct1(value)
+            self._set_prop1(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -81,9 +79,8 @@ class SameStruct2InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -96,9 +93,8 @@ class SameStruct2InterfaceSink(IObjectSink):
     def _set_prop2(self, value):
         if self._prop2 == value:
             return
-        path = Name.path_from_name("prop2")
         self._prop2 = value
-        self.on_property_changed.fire(path, self._prop2)
+        self.on_prop2_changed.fire(self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -128,13 +124,11 @@ class SameStruct2InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_struct2(value)
+            self._set_prop1(v)
         elif path == "prop2":
-            self._prop2 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop2)
+            v =  api.as_struct2(value)
+            self._set_prop2(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -164,9 +158,8 @@ class SameEnum1InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -191,9 +184,8 @@ class SameEnum1InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_enum1(value)
+            self._set_prop1(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
@@ -222,9 +214,8 @@ class SameEnum2InterfaceSink(IObjectSink):
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
-        path = Name.path_from_name("prop1")
         self._prop1 = value
-        self.on_property_changed.fire(path, self._prop1)
+        self.on_prop1_changed.fire(self._prop1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -237,9 +228,8 @@ class SameEnum2InterfaceSink(IObjectSink):
     def _set_prop2(self, value):
         if self._prop2 == value:
             return
-        path = Name.path_from_name("prop2")
         self._prop2 = value
-        self.on_property_changed.fire(path, self._prop2)
+        self.on_prop2_changed.fire(self._prop2)
 
     def set_prop2(self, value):
         if self._prop2 == value:
@@ -269,13 +259,11 @@ class SameEnum2InterfaceSink(IObjectSink):
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
         if path == "prop1":
-            self._prop1 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop1)
+            v =  api.as_enum1(value)
+            self._set_prop1(v)
         elif path == "prop2":
-            self._prop2 =  value
-            hook = getattr(self, f'on_{path}_changed')
-            hook.fire(self._prop2)
+            v =  api.as_enum2(value)
+            self._set_prop2(v)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
