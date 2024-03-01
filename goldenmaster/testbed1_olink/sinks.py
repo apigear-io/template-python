@@ -13,10 +13,10 @@ class StructInterfaceSink(IObjectSink):
         self.prop_float = api.StructFloat()
         self.prop_string = api.StructString()
         self.on_property_changed = EventHook()
-        self.sig_bool = EventHook()
-        self.sig_int = EventHook()
-        self.sig_float = EventHook()
-        self.sig_string = EventHook()
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -52,7 +52,7 @@ class StructInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class StructArrayInterfaceSink(IObjectSink):
@@ -63,10 +63,10 @@ class StructArrayInterfaceSink(IObjectSink):
         self.prop_float = []
         self.prop_string = []
         self.on_property_changed = EventHook()
-        self.sig_bool = EventHook()
-        self.sig_int = EventHook()
-        self.sig_float = EventHook()
-        self.sig_string = EventHook()
+        self.on_sig_bool = EventHook()
+        self.on_sig_int = EventHook()
+        self.on_sig_float = EventHook()
+        self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -102,5 +102,5 @@ class StructArrayInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)

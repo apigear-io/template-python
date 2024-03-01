@@ -32,5 +32,5 @@ class EmptyInterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)

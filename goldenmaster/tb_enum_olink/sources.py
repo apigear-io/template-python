@@ -8,6 +8,10 @@ class EnumInterfaceSource(IObjectSource):
     def __init__(self, impl: api.IEnumInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig0 += self.notify_sig0
+        impl.on_sig1 += self.notify_sig1
+        impl.on_sig2 += self.notify_sig2
+        impl.on_sig3 += self.notify_sig3
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -65,21 +69,21 @@ class EnumInterfaceSource(IObjectSource):
         props["prop3"] = api.from_enum3(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sig0":
-            param0 = api.from_enum0(args[0])
-            return RemoteNode.notify_signal(symbol, [param0])
-        elif path == "sig1":
-            param1 = api.from_enum1(args[0])
-            return RemoteNode.notify_signal(symbol, [param1])
-        elif path == "sig2":
-            param2 = api.from_enum2(args[0])
-            return RemoteNode.notify_signal(symbol, [param2])
-        elif path == "sig3":
-            param3 = api.from_enum3(args[0])
-            return RemoteNode.notify_signal(symbol, [param3])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig0(self, param0: api.Enum0):
+        _param0 = api.from_enum0(param0)
+        return RemoteNode.notify_signal("tb.enum.EnumInterface/sig0", [_param0])
+
+    def notify_sig1(self, param1: api.Enum1):
+        _param1 = api.from_enum1(param1)
+        return RemoteNode.notify_signal("tb.enum.EnumInterface/sig1", [_param1])
+
+    def notify_sig2(self, param2: api.Enum2):
+        _param2 = api.from_enum2(param2)
+        return RemoteNode.notify_signal("tb.enum.EnumInterface/sig2", [_param2])
+
+    def notify_sig3(self, param3: api.Enum3):
+        _param3 = api.from_enum3(param3)
+        return RemoteNode.notify_signal("tb.enum.EnumInterface/sig3", [_param3])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)

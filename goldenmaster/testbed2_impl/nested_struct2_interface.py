@@ -1,4 +1,5 @@
 from testbed2_api import api
+from testbed2_api.shared import EventHook
 from typing import Iterable
 
 class NestedStruct2Interface(api.INestedStruct2Interface):
@@ -7,6 +8,8 @@ class NestedStruct2Interface(api.INestedStruct2Interface):
         self._notifier = notifier
         self._prop1: api.NestedStruct1 = api.NestedStruct1()
         self._prop2: api.NestedStruct2 = api.NestedStruct2()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -42,12 +45,8 @@ class NestedStruct2Interface(api.INestedStruct2Interface):
     def func2(self, param1: api.NestedStruct1, param2: api.NestedStruct2) -> api.NestedStruct1:
         return api.NestedStruct1()
 
-    def sig1(self, param1: api.NestedStruct1):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.NestedStruct2Interface/sig1", [param1])
+    def _sig1(self, param1: api.NestedStruct1):
+        self.on_sig1.fire(param1)
 
-    def sig2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("testbed2.NestedStruct2Interface/sig2", [param1, param2])
+    def _sig2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
+        self.on_sig2.fire(param1, param2)

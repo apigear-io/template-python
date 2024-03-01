@@ -1,4 +1,5 @@
 from tb_enum_api import api
+from tb_enum_api.shared import EventHook
 from typing import Iterable
 
 class EnumInterface(api.IEnumInterface):
@@ -9,6 +10,10 @@ class EnumInterface(api.IEnumInterface):
         self._prop1: api.Enum1 = api.Enum1.VALUE1
         self._prop2: api.Enum2 = api.Enum2.VALUE2
         self._prop3: api.Enum3 = api.Enum3.VALUE3
+        self.on_sig0 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
+        self.on_sig3 = EventHook()
 
     def set_prop0(self, value):
         if self._prop0 == value:
@@ -78,22 +83,14 @@ class EnumInterface(api.IEnumInterface):
     def func3(self, param3: api.Enum3) -> api.Enum3:
         return api.Enum3.VALUE3
 
-    def sig0(self, param0: api.Enum0):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.enum.EnumInterface/sig0", [param0])
+    def _sig0(self, param0: api.Enum0):
+        self.on_sig0.fire(param0)
 
-    def sig1(self, param1: api.Enum1):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.enum.EnumInterface/sig1", [param1])
+    def _sig1(self, param1: api.Enum1):
+        self.on_sig1.fire(param1)
 
-    def sig2(self, param2: api.Enum2):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.enum.EnumInterface/sig2", [param2])
+    def _sig2(self, param2: api.Enum2):
+        self.on_sig2.fire(param2)
 
-    def sig3(self, param3: api.Enum3):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.enum.EnumInterface/sig3", [param3])
+    def _sig3(self, param3: api.Enum3):
+        self.on_sig3.fire(param3)

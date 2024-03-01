@@ -29,3 +29,19 @@ class Test{{$class}}:
     pass
 {{- end }}
 
+{{- range .Interface.Signals }}
+
+    def test_{{snake .Name}}(self):
+        o = {{$class}}()
+        self.called = False
+        o.on_{{snake .Name}} += lambda *args: setattr(self, 'called', True)
+        o._{{snake .Name}}(
+    {{- range $idx, $p := .Params -}}
+            {{- if $idx }}, {{end -}}
+            {{ pyDefault "api." .}}
+    {{- end -}}
+        )
+        assert self.called == True
+{{- else }}
+    pass
+{{- end }}

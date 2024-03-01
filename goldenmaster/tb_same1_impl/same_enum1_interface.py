@@ -1,4 +1,5 @@
 from tb_same1_api import api
+from tb_same1_api.shared import EventHook
 from typing import Iterable
 
 class SameEnum1Interface(api.ISameEnum1Interface):
@@ -6,6 +7,7 @@ class SameEnum1Interface(api.ISameEnum1Interface):
         super().__init__()
         self._notifier = notifier
         self._prop1: api.Enum1 = api.Enum1.VALUE1
+        self.on_sig1 = EventHook()
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -24,7 +26,5 @@ class SameEnum1Interface(api.ISameEnum1Interface):
     def func1(self, param1: api.Enum1) -> api.Enum1:
         return api.Enum1.VALUE1
 
-    def sig1(self, param1: api.Enum1):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("tb.same1.SameEnum1Interface/sig1", [param1])
+    def _sig1(self, param1: api.Enum1):
+        self.on_sig1.fire(param1)

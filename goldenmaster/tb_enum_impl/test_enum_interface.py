@@ -40,3 +40,30 @@ class TestEnumInterface:
         o = EnumInterface()
         o.func3(param3=api.Enum3.VALUE3)
 
+    def test_sig0(self):
+        o = EnumInterface()
+        self.called = False
+        o.on_sig0 += lambda *args: setattr(self, 'called', True)
+        o._sig0(api.Enum0.VALUE0)
+        assert self.called == True
+
+    def test_sig1(self):
+        o = EnumInterface()
+        self.called = False
+        o.on_sig1 += lambda *args: setattr(self, 'called', True)
+        o._sig1(api.Enum1.VALUE1)
+        assert self.called == True
+
+    def test_sig2(self):
+        o = EnumInterface()
+        self.called = False
+        o.on_sig2 += lambda *args: setattr(self, 'called', True)
+        o._sig2(api.Enum2.VALUE2)
+        assert self.called == True
+
+    def test_sig3(self):
+        o = EnumInterface()
+        self.called = False
+        o.on_sig3 += lambda *args: setattr(self, 'called', True)
+        o._sig3(api.Enum3.VALUE3)
+        assert self.called == True

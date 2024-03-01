@@ -10,7 +10,7 @@ class SameStruct1InterfaceSink(IObjectSink):
         super().__init__()
         self.prop1 = api.Struct1()
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
+        self.on_sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -37,7 +37,7 @@ class SameStruct1InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class SameStruct2InterfaceSink(IObjectSink):
@@ -46,8 +46,8 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.prop1 = api.Struct2()
         self.prop2 = api.Struct2()
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
-        self.sig2 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -77,7 +77,7 @@ class SameStruct2InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class SameEnum1InterfaceSink(IObjectSink):
@@ -85,7 +85,7 @@ class SameEnum1InterfaceSink(IObjectSink):
         super().__init__()
         self.prop1 = api.Enum1.VALUE1
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
+        self.on_sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -112,7 +112,7 @@ class SameEnum1InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 class SameEnum2InterfaceSink(IObjectSink):
@@ -121,8 +121,8 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.prop1 = api.Enum1.VALUE1
         self.prop2 = api.Enum2.VALUE1
         self.on_property_changed = EventHook()
-        self.sig1 = EventHook()
-        self.sig2 = EventHook()
+        self.on_sig1 = EventHook()
+        self.on_sig2 = EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args):
@@ -152,5 +152,5 @@ class SameEnum2InterfaceSink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)

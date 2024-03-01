@@ -19,7 +19,7 @@ class {{Camel .Name}}Sink(IObjectSink):
 {{- end }}
         self.on_property_changed = EventHook()
 {{- range .Signals }}
-        self.{{snake .Name}} = EventHook()
+        self.on_{{snake .Name}} = EventHook()
 {{- end }}
         self.client = ClientNode.register_sink(self)
 
@@ -50,7 +50,7 @@ class {{Camel .Name}}Sink(IObjectSink):
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        hook = getattr(self, f'on_{path}')        
+        hook = getattr(self, f'on_{path}')
         hook.fire(*args)
 
 {{- end }}

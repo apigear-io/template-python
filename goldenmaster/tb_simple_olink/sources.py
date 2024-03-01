@@ -8,6 +8,15 @@ class SimpleInterfaceSource(IObjectSource):
     def __init__(self, impl: api.ISimpleInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig_void += self.notify_sig_void
+        impl.on_sig_bool += self.notify_sig_bool
+        impl.on_sig_int += self.notify_sig_int
+        impl.on_sig_int32 += self.notify_sig_int32
+        impl.on_sig_int64 += self.notify_sig_int64
+        impl.on_sig_float += self.notify_sig_float
+        impl.on_sig_float32 += self.notify_sig_float32
+        impl.on_sig_float64 += self.notify_sig_float64
+        impl.on_sig_string += self.notify_sig_string
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -108,35 +117,40 @@ class SimpleInterfaceSource(IObjectSource):
         props["propReadOnlyString"] = api.from_string(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sigVoid":
-            return RemoteNode.notify_signal(symbol, [])
-        elif path == "sigBool":
-            param_bool = api.from_bool(args[0])
-            return RemoteNode.notify_signal(symbol, [param_bool])
-        elif path == "sigInt":
-            param_int = api.from_int(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int])
-        elif path == "sigInt32":
-            param_int32 = api.from_int32(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int32])
-        elif path == "sigInt64":
-            param_int64 = api.from_int64(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int64])
-        elif path == "sigFloat":
-            param_float = api.from_float(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float])
-        elif path == "sigFloat32":
-            param_float32 = api.from_float32(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float32])
-        elif path == "sigFloat64":
-            param_float64 = api.from_float64(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float64])
-        elif path == "sigString":
-            param_string = api.from_string(args[0])
-            return RemoteNode.notify_signal(symbol, [param_string])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig_void(self):
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigVoid", [])
+
+    def notify_sig_bool(self, param_bool: bool):
+        _param_bool = api.from_bool(param_bool)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigBool", [_param_bool])
+
+    def notify_sig_int(self, param_int: int):
+        _param_int = api.from_int(param_int)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigInt", [_param_int])
+
+    def notify_sig_int32(self, param_int32: int):
+        _param_int32 = api.from_int32(param_int32)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigInt32", [_param_int32])
+
+    def notify_sig_int64(self, param_int64: int):
+        _param_int64 = api.from_int64(param_int64)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigInt64", [_param_int64])
+
+    def notify_sig_float(self, param_float: float):
+        _param_float = api.from_float(param_float)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigFloat", [_param_float])
+
+    def notify_sig_float32(self, param_float32: float):
+        _param_float32 = api.from_float32(param_float32)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigFloat32", [_param_float32])
+
+    def notify_sig_float64(self, param_float64: float):
+        _param_float64 = api.from_float64(param_float64)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigFloat64", [_param_float64])
+
+    def notify_sig_string(self, param_string: str):
+        _param_string = api.from_string(param_string)
+        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigString", [_param_string])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -173,6 +187,14 @@ class SimpleArrayInterfaceSource(IObjectSource):
     def __init__(self, impl: api.ISimpleArrayInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig_bool += self.notify_sig_bool
+        impl.on_sig_int += self.notify_sig_int
+        impl.on_sig_int32 += self.notify_sig_int32
+        impl.on_sig_int64 += self.notify_sig_int64
+        impl.on_sig_float += self.notify_sig_float
+        impl.on_sig_float32 += self.notify_sig_float32
+        impl.on_sig_float64 += self.notify_sig_float64
+        impl.on_sig_string += self.notify_sig_string
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -266,33 +288,37 @@ class SimpleArrayInterfaceSource(IObjectSource):
         props["propString"] = api.from_string(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sigBool":
-            param_bool = api.from_bool(args[0])
-            return RemoteNode.notify_signal(symbol, [param_bool])
-        elif path == "sigInt":
-            param_int = api.from_int(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int])
-        elif path == "sigInt32":
-            param_int32 = api.from_int32(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int32])
-        elif path == "sigInt64":
-            param_int64 = api.from_int64(args[0])
-            return RemoteNode.notify_signal(symbol, [param_int64])
-        elif path == "sigFloat":
-            param_float = api.from_float(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float])
-        elif path == "sigFloat32":
-            param_float32 = api.from_float32(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float32])
-        elif path == "sigFloat64":
-            param_float64 = api.from_float64(args[0])
-            return RemoteNode.notify_signal(symbol, [param_float64])
-        elif path == "sigString":
-            param_string = api.from_string(args[0])
-            return RemoteNode.notify_signal(symbol, [param_string])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig_bool(self, param_bool: list[bool]):
+        _param_bool = api.from_bool(param_bool)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigBool", [_param_bool])
+
+    def notify_sig_int(self, param_int: list[int]):
+        _param_int = api.from_int(param_int)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt", [_param_int])
+
+    def notify_sig_int32(self, param_int32: list[int]):
+        _param_int32 = api.from_int32(param_int32)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt32", [_param_int32])
+
+    def notify_sig_int64(self, param_int64: list[int]):
+        _param_int64 = api.from_int64(param_int64)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt64", [_param_int64])
+
+    def notify_sig_float(self, param_float: list[float]):
+        _param_float = api.from_float(param_float)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat", [_param_float])
+
+    def notify_sig_float32(self, param_float32: list[float]):
+        _param_float32 = api.from_float32(param_float32)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat32", [_param_float32])
+
+    def notify_sig_float64(self, param_float64: list[float]):
+        _param_float64 = api.from_float64(param_float64)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat64", [_param_float64])
+
+    def notify_sig_string(self, param_string: list[str]):
+        _param_string = api.from_string(param_string)
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigString", [_param_string])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -326,6 +352,8 @@ class NoPropertiesInterfaceSource(IObjectSource):
     def __init__(self, impl: api.INoPropertiesInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig_void += self.notify_sig_void
+        impl.on_sig_bool += self.notify_sig_bool
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -354,14 +382,12 @@ class NoPropertiesInterfaceSource(IObjectSource):
         props = {}
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sigVoid":
-            return RemoteNode.notify_signal(symbol, [])
-        elif path == "sigBool":
-            param_bool = api.from_bool(args[0])
-            return RemoteNode.notify_signal(symbol, [param_bool])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig_void(self):
+        return RemoteNode.notify_signal("tb.simple.NoPropertiesInterface/sigVoid", [])
+
+    def notify_sig_bool(self, param_bool: bool):
+        _param_bool = api.from_bool(param_bool)
+        return RemoteNode.notify_signal("tb.simple.NoPropertiesInterface/sigBool", [_param_bool])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -371,6 +397,8 @@ class NoOperationsInterfaceSource(IObjectSource):
     def __init__(self, impl: api.INoOperationsInterface):
         self.impl = impl
         impl._notifier = self
+        impl.on_sig_void += self.notify_sig_void
+        impl.on_sig_bool += self.notify_sig_bool
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -402,14 +430,12 @@ class NoOperationsInterfaceSource(IObjectSource):
         props["propInt"] = api.from_int(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        if path == "sigVoid":
-            return RemoteNode.notify_signal(symbol, [])
-        elif path == "sigBool":
-            param_bool = api.from_bool(args[0])
-            return RemoteNode.notify_signal(symbol, [param_bool])
-        logging.info("unknown signal %s", symbol)
+    def notify_sig_void(self):
+        return RemoteNode.notify_signal("tb.simple.NoOperationsInterface/sigVoid", [])
+
+    def notify_sig_bool(self, param_bool: bool):
+        _param_bool = api.from_bool(param_bool)
+        return RemoteNode.notify_signal("tb.simple.NoOperationsInterface/sigBool", [_param_bool])
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
@@ -463,10 +489,6 @@ class NoSignalsInterfaceSource(IObjectSource):
         props["propInt"] = api.from_int(v)
         return props
 
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        logging.info("unknown signal %s", symbol)
-
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)
         if path == "propBool":
@@ -501,10 +523,6 @@ class EmptyInterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         return props
-
-    def notify_signal(self, symbol, args):
-        path = Name.path_from_name(symbol)
-        logging.info("unknown signal %s", symbol)
 
     def notify_property(self, symbol, value):
         path = Name.path_from_name(symbol)

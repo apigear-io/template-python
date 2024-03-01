@@ -21,4 +21,4 @@ class TestNoSignalsInterface:
     def test_func_bool(self):
         o = NoSignalsInterface()
         o.func_bool(param_bool=False)
-
+    pass

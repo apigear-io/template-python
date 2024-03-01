@@ -1,4 +1,5 @@
 from {{ snake .Module.Name}}_api import api
+from {{snake .Module.Name}}_api.shared import EventHook
 from typing import Iterable
 {{- $class := Camel .Interface.Name }}
 {{- $ns := printf "%s.%s" $.Module.Name $.Interface.Name }}
@@ -9,6 +10,9 @@ class {{$class}}(api.I{{$class}}):
         self._notifier = notifier
 {{- range .Interface.Properties }}
         self._{{snake .Name}}: {{pyType "api." .}} = {{pyDefault "api." .}}
+{{- end }}
+{{- range .Interface.Signals }}
+        self.on_{{snake .Name}} = EventHook()
 {{- end }}
 
 {{- range .Interface.Properties }}
@@ -42,8 +46,6 @@ class {{$class}}(api.I{{$class}}):
 
 {{- range .Interface.Signals }}
 
-    def {{snake .Name}}({{pyParams "api." .Params }}):
-        if not self._notifier:
-            return
-        self._notifier.notify_signal("{{$ns}}/{{.Name}}", [{{pyVars .Params}}])
+    def _{{snake .Name}}({{pyParams "api." .Params }}):
+        self.on_{{snake .Name}}.fire({{pyVars .Params}})
 {{- end }}

@@ -13,3 +13,9 @@ class TestSameEnum1Interface:
         o = SameEnum1Interface()
         o.func1(param1=api.Enum1.VALUE1)
 
+    def test_sig1(self):
+        o = SameEnum1Interface()
+        self.called = False
+        o.on_sig1 += lambda *args: setattr(self, 'called', True)
+        o._sig1(api.Enum1.VALUE1)
+        assert self.called == True
