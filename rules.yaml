@@ -73,8 +73,10 @@ features:
             raw: true
           - source: "olink/system_server.py.tpl"
             target: "olink_server.py"
+            preserve: true
           - source: "olink/system_client.py.tpl"
             target: "olink_client.py"
+            preserve: true
       - match: module
         prefix: "{{snake .Module.Name}}_olink/"
         documents:
