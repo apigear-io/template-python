@@ -34,7 +34,7 @@ class ManyParamInterfaceSource(IObjectSource):
         elif path == "prop4":
             v = api.as_int(value)
             return self.impl.set_prop4(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -61,7 +61,7 @@ class ManyParamInterfaceSource(IObjectSource):
             param4 = api.as_int(args[3])
             reply = self.impl.func4(param1, param2, param3, param4)
             return api.from_int(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -131,7 +131,7 @@ class NestedStruct1InterfaceSource(IObjectSource):
         if path == "prop1":
             v = api.as_nested_struct1(value)
             return self.impl.set_prop1(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -140,7 +140,7 @@ class NestedStruct1InterfaceSource(IObjectSource):
             param1 = api.as_nested_struct1(args[0])
             reply = self.impl.func1(param1)
             return api.from_nested_struct1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -179,7 +179,7 @@ class NestedStruct2InterfaceSource(IObjectSource):
         elif path == "prop2":
             v = api.as_nested_struct2(value)
             return self.impl.set_prop2(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -193,7 +193,7 @@ class NestedStruct2InterfaceSource(IObjectSource):
             param2 = api.as_nested_struct2(args[1])
             reply = self.impl.func2(param1, param2)
             return api.from_nested_struct1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -248,7 +248,7 @@ class NestedStruct3InterfaceSource(IObjectSource):
         elif path == "prop3":
             v = api.as_nested_struct3(value)
             return self.impl.set_prop3(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -268,7 +268,7 @@ class NestedStruct3InterfaceSource(IObjectSource):
             param3 = api.as_nested_struct3(args[2])
             reply = self.impl.func3(param1, param2, param3)
             return api.from_nested_struct1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)

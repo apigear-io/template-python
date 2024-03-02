@@ -13,16 +13,27 @@ import tb_simple_olink
 import testbed1_olink
 import tb_empty_olink
 
-# set default log level to WARNING and above
+# set default log level to INFO and above
 logging.basicConfig()
-logging.getLogger().setLevel(logging.WARNING)
+logging.getLogger().setLevel(logging.INFO)
 
 class Client:
     def __init__(self, node: ClientNode):
         self.send_queue = Queue()
         self.node = node
+        self.node.on_log(self._olink_log_writer)
         self.node.on_write(self._write)
         self.conn = None
+
+    def _olink_log_writer(self, level, msg):
+        if level[0] == 1:
+            logging.debug(msg)
+        elif level[0] == 2:
+            logging.info(msg)
+        elif level[0] == 3:
+            logging.warning(msg)
+        else:
+            logging.error(msg)
 
     def _write(self, data):
         self.send_queue.put_nowait(data)
@@ -32,14 +43,14 @@ class Client:
             data = await self.send_queue.get()
             if data is None:
                 break
-            logging.info("client send %s", data)
+            logging.debug("client send %s", data)
             await self.conn.send(data)
 
     async def _reader(self):
         while True:
             try:
                 data = await self.conn.recv()
-                logging.info("client recv %s", data)
+                logging.debug("client recv %s", data)
                 self.node.handle_message(data)
             except websockets.ConnectionClosed:
                 break

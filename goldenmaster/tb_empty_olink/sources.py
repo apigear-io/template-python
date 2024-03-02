@@ -14,12 +14,12 @@ class EmptyInterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)

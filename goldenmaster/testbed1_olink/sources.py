@@ -34,7 +34,7 @@ class StructInterfaceSource(IObjectSource):
         elif path == "propString":
             v = api.as_struct_string(value)
             return self.impl.set_prop_string(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -55,7 +55,7 @@ class StructInterfaceSource(IObjectSource):
             param_string = api.as_struct_string(args[0])
             reply = self.impl.func_string(param_string)
             return api.from_struct_string(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -134,7 +134,7 @@ class StructArrayInterfaceSource(IObjectSource):
         elif path == "propString":
             v = [api.as_struct_string(struct_string) for struct_string in value]
             return self.impl.set_prop_string(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -155,7 +155,7 @@ class StructArrayInterfaceSource(IObjectSource):
             param_string = api.as_struct_string(args[0])
             reply = self.impl.func_string(param_string)
             return api.from_struct_bool(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)

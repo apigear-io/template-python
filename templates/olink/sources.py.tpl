@@ -42,7 +42,7 @@ class {{$class}}Source(IObjectSource):
             pass
         {{- end }}
 {{- end }}
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -63,7 +63,7 @@ class {{$class}}Source(IObjectSource):
             return api.from_{{snake .Return.Type}}(reply)
         {{- end }}
 {{- end }}      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)

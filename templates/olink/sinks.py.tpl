@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from {{snake .Module.Name}}_api.shared import EventHook
 from {{snake .Module.Name}}_api import api
+import logging
 
 {{- $m := .Module }}
 {{- range .Module.Interfaces }}
@@ -96,9 +97,9 @@ class {{Camel .Name}}Sink(IObjectSink):
             v =  api.as_{{snake .Type}}(value)
             {{- end }}
             self._set_{{snake .Name}}(v)
-        {{- else}}
-        pass
+            return
         {{- end }}
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         {{- if len .Signals }}
@@ -122,8 +123,8 @@ class {{Camel .Name}}Sink(IObjectSink):
             _{{snake .Name}}
             {{- end -}}
             )
-        {{- else}}
-        pass
+            return
         {{- end }}
+        logging.error("unknown signal: %s", name)
 
 {{- end }}

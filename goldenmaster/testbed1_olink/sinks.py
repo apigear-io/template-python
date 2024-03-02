@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from testbed1_api.shared import EventHook
 from testbed1_api import api
+import logging
 
 class StructInterfaceSink(IObjectSink):
     def __init__(self):
@@ -117,30 +118,40 @@ class StructInterfaceSink(IObjectSink):
         if path == "propBool":
             v =  api.as_struct_bool(value)
             self._set_prop_bool(v)
+            return
         elif path == "propInt":
             v =  api.as_struct_int(value)
             self._set_prop_int(v)
+            return
         elif path == "propFloat":
             v =  api.as_struct_float(value)
             self._set_prop_float(v)
+            return
         elif path == "propString":
             v =  api.as_struct_string(value)
             self._set_prop_string(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigBool":
             _param_bool =  args[0]
             self.on_sig_bool.fire(_param_bool)
+            return
         elif path == "sigInt":
             _param_int =  args[0]
             self.on_sig_int.fire(_param_int)
+            return
         elif path == "sigFloat":
             _param_float =  args[0]
             self.on_sig_float.fire(_param_float)
+            return
         elif path == "sigString":
             _param_string =  args[0]
             self.on_sig_string.fire(_param_string)
+            return
+        logging.error("unknown signal: %s", name)
 
 class StructArrayInterfaceSink(IObjectSink):
     def __init__(self):
@@ -254,27 +265,37 @@ class StructArrayInterfaceSink(IObjectSink):
         if path == "propBool":
             v = [api.as_struct_bool(_) for _ in value]
             self._set_prop_bool(v)
+            return
         elif path == "propInt":
             v = [api.as_struct_int(_) for _ in value]
             self._set_prop_int(v)
+            return
         elif path == "propFloat":
             v = [api.as_struct_float(_) for _ in value]
             self._set_prop_float(v)
+            return
         elif path == "propString":
             v = [api.as_struct_string(_) for _ in value]
             self._set_prop_string(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigBool":
             _param_bool = [api.as_struct_bool(_) for _ in args[0]]
             self.on_sig_bool.fire(_param_bool)
+            return
         elif path == "sigInt":
             _param_int = [api.as_struct_int(_) for _ in args[0]]
             self.on_sig_int.fire(_param_int)
+            return
         elif path == "sigFloat":
             _param_float = [api.as_struct_float(_) for _ in args[0]]
             self.on_sig_float.fire(_param_float)
+            return
         elif path == "sigString":
             _param_string = [api.as_struct_string(_) for _ in args[0]]
             self.on_sig_string.fire(_param_string)
+            return
+        logging.error("unknown signal: %s", name)

@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from tb_enum_api.shared import EventHook
 from tb_enum_api import api
+import logging
 
 class EnumInterfaceSink(IObjectSink):
     def __init__(self):
@@ -117,27 +118,37 @@ class EnumInterfaceSink(IObjectSink):
         if path == "prop0":
             v =  api.as_enum0(value)
             self._set_prop0(v)
+            return
         elif path == "prop1":
             v =  api.as_enum1(value)
             self._set_prop1(v)
+            return
         elif path == "prop2":
             v =  api.as_enum2(value)
             self._set_prop2(v)
+            return
         elif path == "prop3":
             v =  api.as_enum3(value)
             self._set_prop3(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig0":
             _param0 =  args[0]
             self.on_sig0.fire(_param0)
+            return
         elif path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
         elif path == "sig2":
             _param2 =  args[0]
             self.on_sig2.fire(_param2)
+            return
         elif path == "sig3":
             _param3 =  args[0]
             self.on_sig3.fire(_param3)
+            return
+        logging.error("unknown signal: %s", name)

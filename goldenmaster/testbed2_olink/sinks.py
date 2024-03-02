@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from testbed2_api.shared import EventHook
 from testbed2_api import api
+import logging
 
 class ManyParamInterfaceSink(IObjectSink):
     def __init__(self):
@@ -117,36 +118,46 @@ class ManyParamInterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_int(value)
             self._set_prop1(v)
+            return
         elif path == "prop2":
             v =  api.as_int(value)
             self._set_prop2(v)
+            return
         elif path == "prop3":
             v =  api.as_int(value)
             self._set_prop3(v)
+            return
         elif path == "prop4":
             v =  api.as_int(value)
             self._set_prop4(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
         elif path == "sig2":
             _param1 =  args[0]
             _param2 =  args[1]
             self.on_sig2.fire(_param1, _param2)
+            return
         elif path == "sig3":
             _param1 =  args[0]
             _param2 =  args[1]
             _param3 =  args[2]
             self.on_sig3.fire(_param1, _param2, _param3)
+            return
         elif path == "sig4":
             _param1 =  args[0]
             _param2 =  args[1]
             _param3 =  args[2]
             _param4 =  args[3]
             self.on_sig4.fire(_param1, _param2, _param3, _param4)
+            return
+        logging.error("unknown signal: %s", name)
 
 class NestedStruct1InterfaceSink(IObjectSink):
     def __init__(self):
@@ -194,12 +205,16 @@ class NestedStruct1InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_nested_struct1(value)
             self._set_prop1(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
+        logging.error("unknown signal: %s", name)
 
 class NestedStruct2InterfaceSink(IObjectSink):
     def __init__(self):
@@ -269,19 +284,25 @@ class NestedStruct2InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_nested_struct1(value)
             self._set_prop1(v)
+            return
         elif path == "prop2":
             v =  api.as_nested_struct2(value)
             self._set_prop2(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
         elif path == "sig2":
             _param1 =  args[0]
             _param2 =  args[1]
             self.on_sig2.fire(_param1, _param2)
+            return
+        logging.error("unknown signal: %s", name)
 
 class NestedStruct3InterfaceSink(IObjectSink):
     def __init__(self):
@@ -373,24 +394,32 @@ class NestedStruct3InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_nested_struct1(value)
             self._set_prop1(v)
+            return
         elif path == "prop2":
             v =  api.as_nested_struct2(value)
             self._set_prop2(v)
+            return
         elif path == "prop3":
             v =  api.as_nested_struct3(value)
             self._set_prop3(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
         elif path == "sig2":
             _param1 =  args[0]
             _param2 =  args[1]
             self.on_sig2.fire(_param1, _param2)
+            return
         elif path == "sig3":
             _param1 =  args[0]
             _param2 =  args[1]
             _param3 =  args[2]
             self.on_sig3.fire(_param1, _param2, _param3)
+            return
+        logging.error("unknown signal: %s", name)

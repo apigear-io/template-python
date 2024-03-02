@@ -58,7 +58,7 @@ class SimpleInterfaceSource(IObjectSource):
             return self.impl.set_prop_string(v)
         elif path == "propReadOnlyString":
             pass
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -98,7 +98,7 @@ class SimpleInterfaceSource(IObjectSource):
             param_string = api.as_string(args[0])
             reply = self.impl.func_string(param_string)
             return api.from_string(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -246,7 +246,7 @@ class SimpleArrayInterfaceSource(IObjectSource):
         elif path == "propString":
             v = [api.as_string(string) for string in value]
             return self.impl.set_prop_string(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -283,7 +283,7 @@ class SimpleArrayInterfaceSource(IObjectSource):
             param_string = api.as_string(args[0])
             reply = self.impl.func_string(param_string)
             return api.from_string(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -384,7 +384,7 @@ class NoPropertiesInterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -396,7 +396,7 @@ class NoPropertiesInterfaceSource(IObjectSource):
             param_bool = api.as_bool(args[0])
             reply = self.impl.func_bool(param_bool)
             return api.from_bool(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -432,12 +432,12 @@ class NoOperationsInterfaceSource(IObjectSource):
         elif path == "propInt":
             v = api.as_int(value)
             return self.impl.set_prop_int(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -483,7 +483,7 @@ class NoSignalsInterfaceSource(IObjectSource):
         elif path == "propInt":
             v = api.as_int(value)
             return self.impl.set_prop_int(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -495,7 +495,7 @@ class NoSignalsInterfaceSource(IObjectSource):
             param_bool = api.as_bool(args[0])
             reply = self.impl.func_bool(param_bool)
             return api.from_bool(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -526,12 +526,12 @@ class EmptyInterfaceSource(IObjectSource):
 
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
