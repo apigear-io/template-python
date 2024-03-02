@@ -45,7 +45,7 @@ class SameStruct1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(props[k])
+                self._set_prop1(api.as_struct1(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -58,8 +58,8 @@ class SameStruct1InterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
-            _param1 =  args[0]
-            self.on_sig1.fire(_param1)
+            param1 =  api.as_struct1(args[0])
+            self.on_sig1.fire(param1)
             return
         logging.error("unknown signal: %s", name)
 
@@ -122,9 +122,9 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(props[k])
+                self._set_prop1(api.as_struct2(props[k]))
             elif k == "prop2":
-                self._set_prop2(props[k])
+                self._set_prop2(api.as_struct2(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -141,13 +141,13 @@ class SameStruct2InterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
-            _param1 =  args[0]
-            self.on_sig1.fire(_param1)
+            param1 =  api.as_struct1(args[0])
+            self.on_sig1.fire(param1)
             return
         elif path == "sig2":
-            _param1 =  args[0]
-            _param2 =  args[1]
-            self.on_sig2.fire(_param1, _param2)
+            param1 =  api.as_struct1(args[0])
+            param2 =  api.as_struct2(args[1])
+            self.on_sig2.fire(param1, param2)
             return
         logging.error("unknown signal: %s", name)
 
@@ -190,7 +190,7 @@ class SameEnum1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(props[k])
+                self._set_prop1(api.as_enum1(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -203,8 +203,8 @@ class SameEnum1InterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
-            _param1 =  args[0]
-            self.on_sig1.fire(_param1)
+            param1 =  api.as_enum1(args[0])
+            self.on_sig1.fire(param1)
             return
         logging.error("unknown signal: %s", name)
 
@@ -267,9 +267,9 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(props[k])
+                self._set_prop1(api.as_enum1(props[k]))
             elif k == "prop2":
-                self._set_prop2(props[k])
+                self._set_prop2(api.as_enum2(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -286,12 +286,12 @@ class SameEnum2InterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
-            _param1 =  args[0]
-            self.on_sig1.fire(_param1)
+            param1 =  api.as_enum1(args[0])
+            self.on_sig1.fire(param1)
             return
         elif path == "sig2":
-            _param1 =  args[0]
-            _param2 =  args[1]
-            self.on_sig2.fire(_param1, _param2)
+            param1 =  api.as_enum1(args[0])
+            param2 =  api.as_enum2(args[1])
+            self.on_sig2.fire(param1, param2)
             return
         logging.error("unknown signal: %s", name)

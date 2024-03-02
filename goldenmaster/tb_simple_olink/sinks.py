@@ -194,23 +194,23 @@ class SimpleInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(props[k])
+                self._set_prop_bool(api.as_bool(props[k]))
             elif k == "propInt":
-                self._set_prop_int(props[k])
+                self._set_prop_int(api.as_int(props[k]))
             elif k == "propInt32":
-                self._set_prop_int32(props[k])
+                self._set_prop_int32(api.as_int32(props[k]))
             elif k == "propInt64":
-                self._set_prop_int64(props[k])
+                self._set_prop_int64(api.as_int64(props[k]))
             elif k == "propFloat":
-                self._set_prop_float(props[k])
+                self._set_prop_float(api.as_float(props[k]))
             elif k == "propFloat32":
-                self._set_prop_float32(props[k])
+                self._set_prop_float32(api.as_float32(props[k]))
             elif k == "propFloat64":
-                self._set_prop_float64(props[k])
+                self._set_prop_float64(api.as_float64(props[k]))
             elif k == "propString":
-                self._set_prop_string(props[k])
+                self._set_prop_string(api.as_string(props[k]))
             elif k == "propReadOnlyString":
-                self._set_prop_read_only_string(props[k])
+                self._set_prop_read_only_string(api.as_string(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -258,36 +258,36 @@ class SimpleInterfaceSink(IObjectSink):
             self.on_sig_void.fire()
             return
         elif path == "sigBool":
-            _param_bool =  args[0]
-            self.on_sig_bool.fire(_param_bool)
+            param_bool =  api.as_bool(args[0])
+            self.on_sig_bool.fire(param_bool)
             return
         elif path == "sigInt":
-            _param_int =  args[0]
-            self.on_sig_int.fire(_param_int)
+            param_int =  api.as_int(args[0])
+            self.on_sig_int.fire(param_int)
             return
         elif path == "sigInt32":
-            _param_int32 =  args[0]
-            self.on_sig_int32.fire(_param_int32)
+            param_int32 =  api.as_int32(args[0])
+            self.on_sig_int32.fire(param_int32)
             return
         elif path == "sigInt64":
-            _param_int64 =  args[0]
-            self.on_sig_int64.fire(_param_int64)
+            param_int64 =  api.as_int64(args[0])
+            self.on_sig_int64.fire(param_int64)
             return
         elif path == "sigFloat":
-            _param_float =  args[0]
-            self.on_sig_float.fire(_param_float)
+            param_float =  api.as_float(args[0])
+            self.on_sig_float.fire(param_float)
             return
         elif path == "sigFloat32":
-            _param_float32 =  args[0]
-            self.on_sig_float32.fire(_param_float32)
+            param_float32 =  api.as_float32(args[0])
+            self.on_sig_float32.fire(param_float32)
             return
         elif path == "sigFloat64":
-            _param_float64 =  args[0]
-            self.on_sig_float64.fire(_param_float64)
+            param_float64 =  api.as_float64(args[0])
+            self.on_sig_float64.fire(param_float64)
             return
         elif path == "sigString":
-            _param_string =  args[0]
-            self.on_sig_string.fire(_param_string)
+            param_string =  api.as_string(args[0])
+            self.on_sig_string.fire(param_string)
             return
         logging.error("unknown signal: %s", name)
 
@@ -470,21 +470,21 @@ class SimpleArrayInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(props[k])
+                self._set_prop_bool(api.as_bool(props[k]))
             elif k == "propInt":
-                self._set_prop_int(props[k])
+                self._set_prop_int(api.as_int(props[k]))
             elif k == "propInt32":
-                self._set_prop_int32(props[k])
+                self._set_prop_int32(api.as_int32(props[k]))
             elif k == "propInt64":
-                self._set_prop_int64(props[k])
+                self._set_prop_int64(api.as_int64(props[k]))
             elif k == "propFloat":
-                self._set_prop_float(props[k])
+                self._set_prop_float(api.as_float(props[k]))
             elif k == "propFloat32":
-                self._set_prop_float32(props[k])
+                self._set_prop_float32(api.as_float32(props[k]))
             elif k == "propFloat64":
-                self._set_prop_float64(props[k])
+                self._set_prop_float64(api.as_float64(props[k]))
             elif k == "propString":
-                self._set_prop_string(props[k])
+                self._set_prop_string(api.as_string(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -525,36 +525,36 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigBool":
-            _param_bool = [api.as_bool(_) for _ in args[0]]
-            self.on_sig_bool.fire(_param_bool)
+            param_bool = [api.as_bool(_) for _ in args[0]]
+            self.on_sig_bool.fire(param_bool)
             return
         elif path == "sigInt":
-            _param_int = [api.as_int(_) for _ in args[0]]
-            self.on_sig_int.fire(_param_int)
+            param_int = [api.as_int(_) for _ in args[0]]
+            self.on_sig_int.fire(param_int)
             return
         elif path == "sigInt32":
-            _param_int32 = [api.as_int32(_) for _ in args[0]]
-            self.on_sig_int32.fire(_param_int32)
+            param_int32 = [api.as_int32(_) for _ in args[0]]
+            self.on_sig_int32.fire(param_int32)
             return
         elif path == "sigInt64":
-            _param_int64 = [api.as_int64(_) for _ in args[0]]
-            self.on_sig_int64.fire(_param_int64)
+            param_int64 = [api.as_int64(_) for _ in args[0]]
+            self.on_sig_int64.fire(param_int64)
             return
         elif path == "sigFloat":
-            _param_float = [api.as_float(_) for _ in args[0]]
-            self.on_sig_float.fire(_param_float)
+            param_float = [api.as_float(_) for _ in args[0]]
+            self.on_sig_float.fire(param_float)
             return
         elif path == "sigFloat32":
-            _param_float32 = [api.as_float32(_) for _ in args[0]]
-            self.on_sig_float32.fire(_param_float32)
+            param_float32 = [api.as_float32(_) for _ in args[0]]
+            self.on_sig_float32.fire(param_float32)
             return
         elif path == "sigFloat64":
-            _param_float64 = [api.as_float64(_) for _ in args[0]]
-            self.on_sig_float64.fire(_param_float64)
+            param_float64 = [api.as_float64(_) for _ in args[0]]
+            self.on_sig_float64.fire(param_float64)
             return
         elif path == "sigString":
-            _param_string = [api.as_string(_) for _ in args[0]]
-            self.on_sig_string.fire(_param_string)
+            param_string = [api.as_string(_) for _ in args[0]]
+            self.on_sig_string.fire(param_string)
             return
         logging.error("unknown signal: %s", name)
 
@@ -593,8 +593,8 @@ class NoPropertiesInterfaceSink(IObjectSink):
             self.on_sig_void.fire()
             return
         elif path == "sigBool":
-            _param_bool =  args[0]
-            self.on_sig_bool.fire(_param_bool)
+            param_bool =  api.as_bool(args[0])
+            self.on_sig_bool.fire(param_bool)
             return
         logging.error("unknown signal: %s", name)
 
@@ -651,9 +651,9 @@ class NoOperationsInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(props[k])
+                self._set_prop_bool(api.as_bool(props[k]))
             elif k == "propInt":
-                self._set_prop_int(props[k])
+                self._set_prop_int(api.as_int(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -673,8 +673,8 @@ class NoOperationsInterfaceSink(IObjectSink):
             self.on_sig_void.fire()
             return
         elif path == "sigBool":
-            _param_bool =  args[0]
-            self.on_sig_bool.fire(_param_bool)
+            param_bool =  api.as_bool(args[0])
+            self.on_sig_bool.fire(param_bool)
             return
         logging.error("unknown signal: %s", name)
 
@@ -735,9 +735,9 @@ class NoSignalsInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(props[k])
+                self._set_prop_bool(api.as_bool(props[k]))
             elif k == "propInt":
-                self._set_prop_int(props[k])
+                self._set_prop_int(api.as_int(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

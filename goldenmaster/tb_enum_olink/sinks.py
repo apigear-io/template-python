@@ -105,13 +105,13 @@ class EnumInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop0":
-                self._set_prop0(props[k])
+                self._set_prop0(api.as_enum0(props[k]))
             elif k == "prop1":
-                self._set_prop1(props[k])
+                self._set_prop1(api.as_enum1(props[k]))
             elif k == "prop2":
-                self._set_prop2(props[k])
+                self._set_prop2(api.as_enum2(props[k]))
             elif k == "prop3":
-                self._set_prop3(props[k])
+                self._set_prop3(api.as_enum3(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -136,19 +136,19 @@ class EnumInterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig0":
-            _param0 =  args[0]
-            self.on_sig0.fire(_param0)
+            param0 =  api.as_enum0(args[0])
+            self.on_sig0.fire(param0)
             return
         elif path == "sig1":
-            _param1 =  args[0]
-            self.on_sig1.fire(_param1)
+            param1 =  api.as_enum1(args[0])
+            self.on_sig1.fire(param1)
             return
         elif path == "sig2":
-            _param2 =  args[0]
-            self.on_sig2.fire(_param2)
+            param2 =  api.as_enum2(args[0])
+            self.on_sig2.fire(param2)
             return
         elif path == "sig3":
-            _param3 =  args[0]
-            self.on_sig3.fire(_param3)
+            param3 =  api.as_enum3(args[0])
+            self.on_sig3.fire(param3)
             return
         logging.error("unknown signal: %s", name)

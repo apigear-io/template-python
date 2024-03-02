@@ -105,13 +105,13 @@ class StructInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(props[k])
+                self._set_prop_bool(api.as_struct_bool(props[k]))
             elif k == "propInt":
-                self._set_prop_int(props[k])
+                self._set_prop_int(api.as_struct_int(props[k]))
             elif k == "propFloat":
-                self._set_prop_float(props[k])
+                self._set_prop_float(api.as_struct_float(props[k]))
             elif k == "propString":
-                self._set_prop_string(props[k])
+                self._set_prop_string(api.as_struct_string(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -136,20 +136,20 @@ class StructInterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigBool":
-            _param_bool =  args[0]
-            self.on_sig_bool.fire(_param_bool)
+            param_bool =  api.as_struct_bool(args[0])
+            self.on_sig_bool.fire(param_bool)
             return
         elif path == "sigInt":
-            _param_int =  args[0]
-            self.on_sig_int.fire(_param_int)
+            param_int =  api.as_struct_int(args[0])
+            self.on_sig_int.fire(param_int)
             return
         elif path == "sigFloat":
-            _param_float =  args[0]
-            self.on_sig_float.fire(_param_float)
+            param_float =  api.as_struct_float(args[0])
+            self.on_sig_float.fire(param_float)
             return
         elif path == "sigString":
-            _param_string =  args[0]
-            self.on_sig_string.fire(_param_string)
+            param_string =  api.as_struct_string(args[0])
+            self.on_sig_string.fire(param_string)
             return
         logging.error("unknown signal: %s", name)
 
@@ -252,13 +252,13 @@ class StructArrayInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(props[k])
+                self._set_prop_bool(api.as_struct_bool(props[k]))
             elif k == "propInt":
-                self._set_prop_int(props[k])
+                self._set_prop_int(api.as_struct_int(props[k]))
             elif k == "propFloat":
-                self._set_prop_float(props[k])
+                self._set_prop_float(api.as_struct_float(props[k]))
             elif k == "propString":
-                self._set_prop_string(props[k])
+                self._set_prop_string(api.as_struct_string(props[k]))
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -283,19 +283,19 @@ class StructArrayInterfaceSink(IObjectSink):
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigBool":
-            _param_bool = [api.as_struct_bool(_) for _ in args[0]]
-            self.on_sig_bool.fire(_param_bool)
+            param_bool = [api.as_struct_bool(_) for _ in args[0]]
+            self.on_sig_bool.fire(param_bool)
             return
         elif path == "sigInt":
-            _param_int = [api.as_struct_int(_) for _ in args[0]]
-            self.on_sig_int.fire(_param_int)
+            param_int = [api.as_struct_int(_) for _ in args[0]]
+            self.on_sig_int.fire(param_int)
             return
         elif path == "sigFloat":
-            _param_float = [api.as_struct_float(_) for _ in args[0]]
-            self.on_sig_float.fire(_param_float)
+            param_float = [api.as_struct_float(_) for _ in args[0]]
+            self.on_sig_float.fire(param_float)
             return
         elif path == "sigString":
-            _param_string = [api.as_struct_string(_) for _ in args[0]]
-            self.on_sig_string.fire(_param_string)
+            param_string = [api.as_struct_string(_) for _ in args[0]]
+            self.on_sig_string.fire(param_string)
             return
         logging.error("unknown signal: %s", name)

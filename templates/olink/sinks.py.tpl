@@ -77,7 +77,7 @@ class {{Camel .Name}}Sink(IObjectSink):
             {{- else }}
             if k == "{{.Name}}":
             {{- end }}
-                self._set_{{snake .Name}}(props[k])
+                self._set_{{snake .Name}}(api.as_{{snake .Type}}(props[k]))
         {{- end }}
         {{- end }}
 
@@ -113,14 +113,14 @@ class {{Camel .Name}}Sink(IObjectSink):
         {{- end }}
             {{- range $index, $_ := .Params }}
             {{- if .IsArray }}
-            _{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$index}}]]
+            {{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$index}}]]
             {{- else }}
-            _{{snake .Name}} =  args[{{$index}}]
+            {{snake .Name}} =  api.as_{{snake .Type}}(args[{{$index}}])
             {{- end }}
             {{- end }}
             self.on_{{snake .Name}}.fire(
             {{- range $index, $_ := .Params -}}{{- if $index}}, {{ end -}}
-            _{{snake .Name}}
+            {{snake .Name}}
             {{- end -}}
             )
             return
