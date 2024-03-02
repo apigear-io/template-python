@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = ManyParamInterface()
-    source = ManyParamInterfaceSource(impl)
+    ManyParamInterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,46 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkManyParamInterface:
+
+    def test_prop1(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop1_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop1(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop1() == 0
+        assert sink.get_prop1() == 0
+
+    def test_prop2(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop2_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop2(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop2() == 0
+        assert sink.get_prop2() == 0
+
+    def test_prop3(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop3_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop3(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop3() == 0
+        assert sink.get_prop3() == 0
+
+    def test_prop4(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop4_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop4(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop4() == 0
+        assert sink.get_prop4() == 0
 
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects

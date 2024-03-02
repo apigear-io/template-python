@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = NestedStruct2Interface()
-    source = NestedStruct2InterfaceSource(impl)
+    NestedStruct2InterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,26 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkNestedStruct2Interface:
+
+    def test_prop1(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop1_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop1(api.NestedStruct1())
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop1() == api.NestedStruct1()
+        assert sink.get_prop1() == api.NestedStruct1()
+
+    def test_prop2(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop2_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop2(api.NestedStruct2())
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop2() == api.NestedStruct2()
+        assert sink.get_prop2() == api.NestedStruct2()
 
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
