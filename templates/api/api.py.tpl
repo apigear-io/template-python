@@ -44,6 +44,7 @@ class {{Camel .Name }}(EnhancedModel):
 {{- end }}
 
 {{- range .Module.Interfaces }}
+{{- $Interface := . }}
 
 class I{{Camel .Name}}:
     def __init__(self):
@@ -51,17 +52,17 @@ class I{{Camel .Name}}:
     {{- range .Properties }}
 
     def get_{{snake .Name}}(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method {{$.Module.Name}}/{{snake $Interface.Name}}:get_{{snake .Name}} is not implemented.")
     {{- if not .IsReadOnly }}
 
     def set_{{snake .Name}}(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method {{$.Module.Name}}/{{snake $Interface.Name}}:set_{{snake .Name}} is not implemented.")
     {{- end }}
     {{- end }}
     {{- range .Operations }}
 
     def {{snake .Name}}({{pyParams "" .Params}}):
-        raise NotImplementedError
+        raise NotImplementedError("Method {{$.Module.Name}}/{{snake $Interface.Name}}:{{snake .Name}} is not implemented.")
     {{- end }}
 {{- end }}
 

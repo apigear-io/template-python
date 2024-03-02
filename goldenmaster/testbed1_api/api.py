@@ -41,80 +41,80 @@ class IStructInterface:
         pass
 
     def get_prop_bool(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:get_prop_bool is not implemented.")
 
     def set_prop_bool(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:set_prop_bool is not implemented.")
 
     def get_prop_int(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:get_prop_int is not implemented.")
 
     def set_prop_int(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:set_prop_int is not implemented.")
 
     def get_prop_float(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:get_prop_float is not implemented.")
 
     def set_prop_float(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:set_prop_float is not implemented.")
 
     def get_prop_string(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:get_prop_string is not implemented.")
 
     def set_prop_string(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:set_prop_string is not implemented.")
 
     def func_bool(self, param_bool: StructBool):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:func_bool is not implemented.")
 
     def func_int(self, param_int: StructInt):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:func_int is not implemented.")
 
     def func_float(self, param_float: StructFloat):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:func_float is not implemented.")
 
     def func_string(self, param_string: StructString):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_interface:func_string is not implemented.")
 
 class IStructArrayInterface:
     def __init__(self):
         pass
 
     def get_prop_bool(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:get_prop_bool is not implemented.")
 
     def set_prop_bool(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:set_prop_bool is not implemented.")
 
     def get_prop_int(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:get_prop_int is not implemented.")
 
     def set_prop_int(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:set_prop_int is not implemented.")
 
     def get_prop_float(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:get_prop_float is not implemented.")
 
     def set_prop_float(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:set_prop_float is not implemented.")
 
     def get_prop_string(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:get_prop_string is not implemented.")
 
     def set_prop_string(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:set_prop_string is not implemented.")
 
     def func_bool(self, param_bool: list[StructBool]):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:func_bool is not implemented.")
 
     def func_int(self, param_int: list[StructInt]):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:func_int is not implemented.")
 
     def func_float(self, param_float: list[StructFloat]):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:func_float is not implemented.")
 
     def func_string(self, param_string: list[StructString]):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed1/struct_array_interface:func_string is not implemented.")
 
 
 def as_int(v):

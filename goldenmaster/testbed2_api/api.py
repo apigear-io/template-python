@@ -86,106 +86,106 @@ class IManyParamInterface:
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:set_prop1 is not implemented.")
 
     def get_prop2(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:get_prop2 is not implemented.")
 
     def set_prop2(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:set_prop2 is not implemented.")
 
     def get_prop3(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:get_prop3 is not implemented.")
 
     def set_prop3(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:set_prop3 is not implemented.")
 
     def get_prop4(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:get_prop4 is not implemented.")
 
     def set_prop4(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:set_prop4 is not implemented.")
 
     def func1(self, param1: int):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:func1 is not implemented.")
 
     def func2(self, param1: int, param2: int):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:func2 is not implemented.")
 
     def func3(self, param1: int, param2: int, param3: int):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:func3 is not implemented.")
 
     def func4(self, param1: int, param2: int, param3: int, param4: int):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/many_param_interface:func4 is not implemented.")
 
 class INestedStruct1Interface:
     def __init__(self):
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct1_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct1_interface:set_prop1 is not implemented.")
 
     def func1(self, param1: NestedStruct1):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct1_interface:func1 is not implemented.")
 
 class INestedStruct2Interface:
     def __init__(self):
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct2_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct2_interface:set_prop1 is not implemented.")
 
     def get_prop2(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct2_interface:get_prop2 is not implemented.")
 
     def set_prop2(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct2_interface:set_prop2 is not implemented.")
 
     def func1(self, param1: NestedStruct1):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct2_interface:func1 is not implemented.")
 
     def func2(self, param1: NestedStruct1, param2: NestedStruct2):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct2_interface:func2 is not implemented.")
 
 class INestedStruct3Interface:
     def __init__(self):
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:set_prop1 is not implemented.")
 
     def get_prop2(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:get_prop2 is not implemented.")
 
     def set_prop2(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:set_prop2 is not implemented.")
 
     def get_prop3(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:get_prop3 is not implemented.")
 
     def set_prop3(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:set_prop3 is not implemented.")
 
     def func1(self, param1: NestedStruct1):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:func1 is not implemented.")
 
     def func2(self, param1: NestedStruct1, param2: NestedStruct2):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:func2 is not implemented.")
 
     def func3(self, param1: NestedStruct1, param2: NestedStruct2, param3: NestedStruct3):
-        raise NotImplementedError
+        raise NotImplementedError("Method testbed2/nested_struct3_interface:func3 is not implemented.")
 
 
 def as_int(v):
