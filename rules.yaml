@@ -86,3 +86,9 @@ features:
             target: "sources.py"
           - source: "olink/sinks.py.tpl"
             target: "sinks.py"
+      - match: interface
+        prefix: "{{snake .Module.Name}}_olink/"
+        documents:
+          - source: "olink/test.py.tpl"
+            target: "test_olink_{{snake .Interface.Name}}.py"
+            preserve: true
