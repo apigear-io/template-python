@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = StructInterface()
-    source = StructInterfaceSource(impl)
+    StructInterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,46 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkStructInterface:
+
+    def test_prop_bool(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_bool(api.StructBool())
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_bool() == api.StructBool()
+        assert sink.get_prop_bool() == api.StructBool()
+
+    def test_prop_int(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_int(api.StructInt())
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_int() == api.StructInt()
+        assert sink.get_prop_int() == api.StructInt()
+
+    def test_prop_float(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_float_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_float(api.StructFloat())
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_float() == api.StructFloat()
+        assert sink.get_prop_float() == api.StructFloat()
+
+    def test_prop_string(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_string_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_string(api.StructString())
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_string() == api.StructString()
+        assert sink.get_prop_string() == api.StructString()
 
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects

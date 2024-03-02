@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = StructArrayInterface()
-    source = StructArrayInterfaceSource(impl)
+    StructArrayInterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,46 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkStructArrayInterface:
+
+    def test_prop_bool(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_bool([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_bool() == []
+        assert sink.get_prop_bool() == []
+
+    def test_prop_int(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_int([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_int() == []
+        assert sink.get_prop_int() == []
+
+    def test_prop_float(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_float_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_float([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_float() == []
+        assert sink.get_prop_float() == []
+
+    def test_prop_string(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_string_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_string([])
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_string() == []
+        assert sink.get_prop_string() == []
 
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects

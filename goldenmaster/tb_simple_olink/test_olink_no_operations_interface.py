@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = NoOperationsInterface()
-    source = NoOperationsInterfaceSource(impl)
+    NoOperationsInterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,26 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkNoOperationsInterface:
+
+    def test_prop_bool(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_bool(False)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_bool() == False
+        assert sink.get_prop_bool() == False
+
+    def test_prop_int(self, olink_objects):
+        impl, sink = olink_objects
+        self.called = False
+        sink.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_prop_int(0)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert impl.get_prop_int() == 0
+        assert sink.get_prop_int() == 0
 
     def test_sig_void(self, olink_objects):
         impl, sink = olink_objects

@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = {{$class}}()
-    source = {{$class}}Source(impl)
+    {{$class}}Source(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,23 @@ def olink_objects():
     yield impl, sink
 
 class TestOLink{{$class}}:
+{{- range .Interface.Properties }}
+
+    def test_{{snake .Name}}(self, olink_objects):
+        impl, sink = olink_objects
+        {{- if not .IsReadOnly }}
+        self.called = False
+        sink.on_{{snake .Name}}_changed += lambda *args: setattr(self, 'called', True)
+        sink.set_{{snake .Name}}({{ pyDefault "api." .}})
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        {{- end }}
+        assert impl.get_{{snake .Name}}() == {{ pyDefault "api." .}}
+        assert sink.get_{{snake .Name}}() == {{ pyDefault "api." .}}
+{{- else }}
+    pass
+{{- end }}
+
 {{- range .Interface.Signals }}
 
     def test_{{snake .Name}}(self, olink_objects):

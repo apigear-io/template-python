@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def olink_objects():
     impl = NoPropertiesInterface()
-    source = NoPropertiesInterfaceSource(impl)
+    NoPropertiesInterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
@@ -21,6 +21,7 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkNoPropertiesInterface:
+    pass
 
     def test_sig_void(self, olink_objects):
         impl, sink = olink_objects
