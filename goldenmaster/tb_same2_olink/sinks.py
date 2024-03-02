@@ -17,7 +17,7 @@ class SameStruct1InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.same2.SameStruct1Interface/SameStruct1Interface', args, func)
+        self.client.invoke_remote(f"tb.same2.SameStruct1Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
@@ -73,7 +73,7 @@ class SameStruct2InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.same2.SameStruct2Interface/SameStruct2Interface', args, func)
+        self.client.invoke_remote(f"tb.same2.SameStruct2Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
@@ -152,7 +152,7 @@ class SameEnum1InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.same2.SameEnum1Interface/SameEnum1Interface', args, func)
+        self.client.invoke_remote(f"tb.same2.SameEnum1Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
@@ -208,7 +208,7 @@ class SameEnum2InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.same2.SameEnum2Interface/SameEnum2Interface', args, func)
+        self.client.invoke_remote(f"tb.same2.SameEnum2Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):

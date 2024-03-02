@@ -26,7 +26,7 @@ class StructInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('testbed1.StructInterface/StructInterface', args, func)
+        self.client.invoke_remote(f"testbed1.StructInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
@@ -163,7 +163,7 @@ class StructArrayInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('testbed1.StructArrayInterface/StructArrayInterface', args, func)
+        self.client.invoke_remote(f"testbed1.StructArrayInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
