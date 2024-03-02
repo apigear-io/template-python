@@ -34,7 +34,7 @@ def main():
     def print_change(name, value):
         print('property changed', name, value)
 
-    sink = node.get_object_sink('demo.Calc')
+    sink = node.get_sink('demo.Calc')
     sink.on_property_changed += print_change
 
     # get event loop
