@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from tb_empty_api.shared import EventHook
 from tb_empty_api import api
+import logging
 
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
@@ -24,7 +25,7 @@ class EmptyInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
-        pass
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
-        pass
+        logging.error("unknown signal: %s", name)

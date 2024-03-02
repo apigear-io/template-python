@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from tb_simple_api.shared import EventHook
 from tb_simple_api import api
+import logging
 
 class SimpleInterfaceSink(IObjectSink):
     def __init__(self):
@@ -216,59 +217,79 @@ class SimpleInterfaceSink(IObjectSink):
         if path == "propBool":
             v =  api.as_bool(value)
             self._set_prop_bool(v)
+            return
         elif path == "propInt":
             v =  api.as_int(value)
             self._set_prop_int(v)
+            return
         elif path == "propInt32":
             v =  api.as_int32(value)
             self._set_prop_int32(v)
+            return
         elif path == "propInt64":
             v =  api.as_int64(value)
             self._set_prop_int64(v)
+            return
         elif path == "propFloat":
             v =  api.as_float(value)
             self._set_prop_float(v)
+            return
         elif path == "propFloat32":
             v =  api.as_float32(value)
             self._set_prop_float32(v)
+            return
         elif path == "propFloat64":
             v =  api.as_float64(value)
             self._set_prop_float64(v)
+            return
         elif path == "propString":
             v =  api.as_string(value)
             self._set_prop_string(v)
+            return
         elif path == "propReadOnlyString":
             v =  api.as_string(value)
             self._set_prop_read_only_string(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigVoid":
             self.on_sig_void.fire()
+            return
         elif path == "sigBool":
             _param_bool =  args[0]
             self.on_sig_bool.fire(_param_bool)
+            return
         elif path == "sigInt":
             _param_int =  args[0]
             self.on_sig_int.fire(_param_int)
+            return
         elif path == "sigInt32":
             _param_int32 =  args[0]
             self.on_sig_int32.fire(_param_int32)
+            return
         elif path == "sigInt64":
             _param_int64 =  args[0]
             self.on_sig_int64.fire(_param_int64)
+            return
         elif path == "sigFloat":
             _param_float =  args[0]
             self.on_sig_float.fire(_param_float)
+            return
         elif path == "sigFloat32":
             _param_float32 =  args[0]
             self.on_sig_float32.fire(_param_float32)
+            return
         elif path == "sigFloat64":
             _param_float64 =  args[0]
             self.on_sig_float64.fire(_param_float64)
+            return
         elif path == "sigString":
             _param_string =  args[0]
             self.on_sig_string.fire(_param_string)
+            return
+        logging.error("unknown signal: %s", name)
 
 class SimpleArrayInterfaceSink(IObjectSink):
     def __init__(self):
@@ -470,54 +491,72 @@ class SimpleArrayInterfaceSink(IObjectSink):
         if path == "propBool":
             v = [api.as_bool(_) for _ in value]
             self._set_prop_bool(v)
+            return
         elif path == "propInt":
             v = [api.as_int(_) for _ in value]
             self._set_prop_int(v)
+            return
         elif path == "propInt32":
             v = [api.as_int32(_) for _ in value]
             self._set_prop_int32(v)
+            return
         elif path == "propInt64":
             v = [api.as_int64(_) for _ in value]
             self._set_prop_int64(v)
+            return
         elif path == "propFloat":
             v = [api.as_float(_) for _ in value]
             self._set_prop_float(v)
+            return
         elif path == "propFloat32":
             v = [api.as_float32(_) for _ in value]
             self._set_prop_float32(v)
+            return
         elif path == "propFloat64":
             v = [api.as_float64(_) for _ in value]
             self._set_prop_float64(v)
+            return
         elif path == "propString":
             v = [api.as_string(_) for _ in value]
             self._set_prop_string(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigBool":
             _param_bool = [api.as_bool(_) for _ in args[0]]
             self.on_sig_bool.fire(_param_bool)
+            return
         elif path == "sigInt":
             _param_int = [api.as_int(_) for _ in args[0]]
             self.on_sig_int.fire(_param_int)
+            return
         elif path == "sigInt32":
             _param_int32 = [api.as_int32(_) for _ in args[0]]
             self.on_sig_int32.fire(_param_int32)
+            return
         elif path == "sigInt64":
             _param_int64 = [api.as_int64(_) for _ in args[0]]
             self.on_sig_int64.fire(_param_int64)
+            return
         elif path == "sigFloat":
             _param_float = [api.as_float(_) for _ in args[0]]
             self.on_sig_float.fire(_param_float)
+            return
         elif path == "sigFloat32":
             _param_float32 = [api.as_float32(_) for _ in args[0]]
             self.on_sig_float32.fire(_param_float32)
+            return
         elif path == "sigFloat64":
             _param_float64 = [api.as_float64(_) for _ in args[0]]
             self.on_sig_float64.fire(_param_float64)
+            return
         elif path == "sigString":
             _param_string = [api.as_string(_) for _ in args[0]]
             self.on_sig_string.fire(_param_string)
+            return
+        logging.error("unknown signal: %s", name)
 
 class NoPropertiesInterfaceSink(IObjectSink):
     def __init__(self):
@@ -546,15 +585,18 @@ class NoPropertiesInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
-        pass
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigVoid":
             self.on_sig_void.fire()
+            return
         elif path == "sigBool":
             _param_bool =  args[0]
             self.on_sig_bool.fire(_param_bool)
+            return
+        logging.error("unknown signal: %s", name)
 
 class NoOperationsInterfaceSink(IObjectSink):
     def __init__(self):
@@ -618,17 +660,23 @@ class NoOperationsInterfaceSink(IObjectSink):
         if path == "propBool":
             v =  api.as_bool(value)
             self._set_prop_bool(v)
+            return
         elif path == "propInt":
             v =  api.as_int(value)
             self._set_prop_int(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sigVoid":
             self.on_sig_void.fire()
+            return
         elif path == "sigBool":
             _param_bool =  args[0]
             self.on_sig_bool.fire(_param_bool)
+            return
+        logging.error("unknown signal: %s", name)
 
 class NoSignalsInterfaceSink(IObjectSink):
     def __init__(self):
@@ -696,12 +744,15 @@ class NoSignalsInterfaceSink(IObjectSink):
         if path == "propBool":
             v =  api.as_bool(value)
             self._set_prop_bool(v)
+            return
         elif path == "propInt":
             v =  api.as_int(value)
             self._set_prop_int(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
-        pass
+        logging.error("unknown signal: %s", name)
 
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
@@ -722,7 +773,7 @@ class EmptyInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
-        pass
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
-        pass
+        logging.error("unknown signal: %s", name)

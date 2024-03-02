@@ -34,7 +34,7 @@ class EnumInterfaceSource(IObjectSource):
         elif path == "prop3":
             v = api.as_enum3(value)
             return self.impl.set_prop3(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -55,7 +55,7 @@ class EnumInterfaceSource(IObjectSource):
             param3 = api.as_enum3(args[0])
             reply = self.impl.func3(param3)
             return api.from_enum3(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)

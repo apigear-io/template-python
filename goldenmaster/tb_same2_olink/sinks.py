@@ -4,6 +4,7 @@ from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from tb_same2_api.shared import EventHook
 from tb_same2_api import api
+import logging
 
 class SameStruct1InterfaceSink(IObjectSink):
     def __init__(self):
@@ -51,12 +52,16 @@ class SameStruct1InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_struct1(value)
             self._set_prop1(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
+        logging.error("unknown signal: %s", name)
 
 class SameStruct2InterfaceSink(IObjectSink):
     def __init__(self):
@@ -126,19 +131,25 @@ class SameStruct2InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_struct2(value)
             self._set_prop1(v)
+            return
         elif path == "prop2":
             v =  api.as_struct2(value)
             self._set_prop2(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
         elif path == "sig2":
             _param1 =  args[0]
             _param2 =  args[1]
             self.on_sig2.fire(_param1, _param2)
+            return
+        logging.error("unknown signal: %s", name)
 
 class SameEnum1InterfaceSink(IObjectSink):
     def __init__(self):
@@ -186,12 +197,16 @@ class SameEnum1InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_enum1(value)
             self._set_prop1(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
+        logging.error("unknown signal: %s", name)
 
 class SameEnum2InterfaceSink(IObjectSink):
     def __init__(self):
@@ -261,16 +276,22 @@ class SameEnum2InterfaceSink(IObjectSink):
         if path == "prop1":
             v =  api.as_enum1(value)
             self._set_prop1(v)
+            return
         elif path == "prop2":
             v =  api.as_enum2(value)
             self._set_prop2(v)
+            return
+        logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
         if path == "sig1":
             _param1 =  args[0]
             self.on_sig1.fire(_param1)
+            return
         elif path == "sig2":
             _param1 =  args[0]
             _param2 =  args[1]
             self.on_sig2.fire(_param1, _param2)
+            return
+        logging.error("unknown signal: %s", name)

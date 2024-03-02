@@ -19,7 +19,7 @@ class SameStruct1InterfaceSource(IObjectSource):
         if path == "prop1":
             v = api.as_struct1(value)
             return self.impl.set_prop1(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -28,7 +28,7 @@ class SameStruct1InterfaceSource(IObjectSource):
             param1 = api.as_struct1(args[0])
             reply = self.impl.func1(param1)
             return api.from_struct1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -67,7 +67,7 @@ class SameStruct2InterfaceSource(IObjectSource):
         elif path == "prop2":
             v = api.as_struct2(value)
             return self.impl.set_prop2(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -81,7 +81,7 @@ class SameStruct2InterfaceSource(IObjectSource):
             param2 = api.as_struct2(args[1])
             reply = self.impl.func2(param1, param2)
             return api.from_struct1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -126,7 +126,7 @@ class SameEnum1InterfaceSource(IObjectSource):
         if path == "prop1":
             v = api.as_enum1(value)
             return self.impl.set_prop1(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -135,7 +135,7 @@ class SameEnum1InterfaceSource(IObjectSource):
             param1 = api.as_enum1(args[0])
             reply = self.impl.func1(param1)
             return api.from_enum1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
@@ -174,7 +174,7 @@ class SameEnum2InterfaceSource(IObjectSource):
         elif path == "prop2":
             v = api.as_enum2(value)
             return self.impl.set_prop2(v)
-        logging.info("unknown property: %s", name)
+        logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
@@ -188,7 +188,7 @@ class SameEnum2InterfaceSource(IObjectSource):
             param2 = api.as_enum2(args[1])
             reply = self.impl.func2(param1, param2)
             return api.from_enum1(reply)      
-        logging.info("unknown operation: %s", name)
+        logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
