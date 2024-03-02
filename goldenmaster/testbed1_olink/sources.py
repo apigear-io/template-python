@@ -173,19 +173,19 @@ class StructArrayInterfaceSource(IObjectSource):
         return props
 
     def notify_sig_bool(self, param_bool: list[api.StructBool]):
-        _param_bool = api.from_struct_bool(param_bool)
+        _param_bool = [api.from_struct_bool(struct_bool) for struct_bool in param_bool]
         return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigBool", [_param_bool])
 
     def notify_sig_int(self, param_int: list[api.StructInt]):
-        _param_int = api.from_struct_int(param_int)
+        _param_int = [api.from_struct_int(struct_int) for struct_int in param_int]
         return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigInt", [_param_int])
 
     def notify_sig_float(self, param_float: list[api.StructFloat]):
-        _param_float = api.from_struct_float(param_float)
+        _param_float = [api.from_struct_float(struct_float) for struct_float in param_float]
         return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigFloat", [_param_float])
 
     def notify_sig_string(self, param_string: list[api.StructString]):
-        _param_string = api.from_struct_string(param_string)
+        _param_string = [api.from_struct_string(struct_string) for struct_string in param_string]
         return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigString", [_param_string])
 
     def notify_prop_bool_changed(self, value):

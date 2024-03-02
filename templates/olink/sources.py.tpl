@@ -84,7 +84,11 @@ class {{$class}}Source(IObjectSource):
 
     def notify_{{snake .Name}}({{pyParams "api." .Params}}):
         {{- range $idx, $_ := .Params }}
+        {{- if .IsArray }}
+        _{{snake .Name}} = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
+        {{- else }}
         _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
+        {{- end }}
         {{- end }}
         return RemoteNode.notify_signal("{{$ns}}/{{.Name}}", [
             {{- range $idx, $_ := .Params -}}{{- if $idx}}, {{ end -}}
