@@ -107,6 +107,51 @@ class TestOLinkSimpleInterface:
         assert impl.get_prop_read_only_string() == ""
         assert sink.get_prop_read_only_string() == ""
 
+    @pytest.mark.asyncio
+    async def test_func_void(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_void()
+
+    @pytest.mark.asyncio
+    async def test_func_bool(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_bool(param_bool=False)
+
+    @pytest.mark.asyncio
+    async def test_func_int(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int(param_int=0)
+
+    @pytest.mark.asyncio
+    async def test_func_int32(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int32(param_int32=0)
+
+    @pytest.mark.asyncio
+    async def test_func_int64(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int64(param_int64=0)
+
+    @pytest.mark.asyncio
+    async def test_func_float(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float(param_float=0.0)
+
+    @pytest.mark.asyncio
+    async def test_func_float32(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float32(param_float32=0.0)
+
+    @pytest.mark.asyncio
+    async def test_func_float64(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float64(param_float=0.0)
+
+    @pytest.mark.asyncio
+    async def test_func_string(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_string(param_string="")
+
     def test_sig_void(self, olink_objects):
         impl, sink = olink_objects
         self.called = False

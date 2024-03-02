@@ -32,6 +32,11 @@ class TestOLinkSameStruct1Interface:
         assert impl.get_prop1() == api.Struct1()
         assert sink.get_prop1() == api.Struct1()
 
+    @pytest.mark.asyncio
+    async def test_func1(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func1(param1=api.Struct1())
+
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
         self.called = False

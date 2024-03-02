@@ -38,6 +38,21 @@ class TestOLink{{$class}}:
     pass
 {{- end }}
 
+{{- range .Interface.Operations }}
+
+    @pytest.mark.asyncio
+    async def test_{{snake .Name}}(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.{{snake .Name}}(
+    {{- range $idx, $p := .Params -}}
+            {{- if $idx }}, {{end -}}
+            {{snake .Name}}={{ pyDefault "api." .}}
+    {{- end -}}
+        )
+{{- else }}
+    pass
+{{- end }}
+
 {{- range .Interface.Signals }}
 
     def test_{{snake .Name}}(self, olink_objects):

@@ -62,6 +62,26 @@ class TestOLinkStructInterface:
         assert impl.get_prop_string() == api.StructString()
         assert sink.get_prop_string() == api.StructString()
 
+    @pytest.mark.asyncio
+    async def test_func_bool(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_bool(param_bool=api.StructBool())
+
+    @pytest.mark.asyncio
+    async def test_func_int(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int(param_int=api.StructInt())
+
+    @pytest.mark.asyncio
+    async def test_func_float(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float(param_float=api.StructFloat())
+
+    @pytest.mark.asyncio
+    async def test_func_string(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_string(param_string=api.StructString())
+
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects
         self.called = False

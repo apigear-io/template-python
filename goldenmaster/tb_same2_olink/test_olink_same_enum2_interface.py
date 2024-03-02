@@ -42,6 +42,16 @@ class TestOLinkSameEnum2Interface:
         assert impl.get_prop2() == api.Enum2.VALUE1
         assert sink.get_prop2() == api.Enum2.VALUE1
 
+    @pytest.mark.asyncio
+    async def test_func1(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func1(param1=api.Enum1.VALUE1)
+
+    @pytest.mark.asyncio
+    async def test_func2(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func2(param1=api.Enum1.VALUE1, param2=api.Enum2.VALUE1)
+
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
         self.called = False
