@@ -37,40 +37,40 @@ class IEnumInterface:
         pass
 
     def get_prop0(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:get_prop0 is not implemented.")
 
     def set_prop0(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:set_prop0 is not implemented.")
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:set_prop1 is not implemented.")
 
     def get_prop2(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:get_prop2 is not implemented.")
 
     def set_prop2(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:set_prop2 is not implemented.")
 
     def get_prop3(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:get_prop3 is not implemented.")
 
     def set_prop3(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:set_prop3 is not implemented.")
 
     def func0(self, param0: Enum0):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:func0 is not implemented.")
 
     def func1(self, param1: Enum1):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:func1 is not implemented.")
 
     def func2(self, param2: Enum2):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:func2 is not implemented.")
 
     def func3(self, param3: Enum3):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.enum/enum_interface:func3 is not implemented.")
 
 
 def as_int(v):

@@ -41,70 +41,70 @@ class ISameStruct1Interface:
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct1_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct1_interface:set_prop1 is not implemented.")
 
     def func1(self, param1: Struct1):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct1_interface:func1 is not implemented.")
 
 class ISameStruct2Interface:
     def __init__(self):
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct2_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct2_interface:set_prop1 is not implemented.")
 
     def get_prop2(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct2_interface:get_prop2 is not implemented.")
 
     def set_prop2(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct2_interface:set_prop2 is not implemented.")
 
     def func1(self, param1: Struct1):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct2_interface:func1 is not implemented.")
 
     def func2(self, param1: Struct1, param2: Struct2):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_struct2_interface:func2 is not implemented.")
 
 class ISameEnum1Interface:
     def __init__(self):
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum1_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum1_interface:set_prop1 is not implemented.")
 
     def func1(self, param1: Enum1):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum1_interface:func1 is not implemented.")
 
 class ISameEnum2Interface:
     def __init__(self):
         pass
 
     def get_prop1(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum2_interface:get_prop1 is not implemented.")
 
     def set_prop1(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum2_interface:set_prop1 is not implemented.")
 
     def get_prop2(self):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum2_interface:get_prop2 is not implemented.")
 
     def set_prop2(self, value):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum2_interface:set_prop2 is not implemented.")
 
     def func1(self, param1: Enum1):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum2_interface:func1 is not implemented.")
 
     def func2(self, param1: Enum1, param2: Enum2):
-        raise NotImplementedError
+        raise NotImplementedError("Method tb.same1/same_enum2_interface:func2 is not implemented.")
 
 
 def as_int(v):
