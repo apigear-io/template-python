@@ -26,7 +26,7 @@ class {{Camel .Name}}Sink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('{{$id}}/{{.Name}}', args, func)
+        self.client.invoke_remote(f"{{$id}}/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     {{- range .Properties }}

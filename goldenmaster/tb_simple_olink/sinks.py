@@ -41,7 +41,7 @@ class SimpleInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.simple.SimpleInterface/SimpleInterface', args, func)
+        self.client.invoke_remote(f"tb.simple.SimpleInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
@@ -303,7 +303,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.simple.SimpleArrayInterface/SimpleArrayInterface', args, func)
+        self.client.invoke_remote(f"tb.simple.SimpleArrayInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
@@ -530,7 +530,7 @@ class NoPropertiesInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.simple.NoPropertiesInterface/NoPropertiesInterface', args, func)
+        self.client.invoke_remote(f"tb.simple.NoPropertiesInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     async def func_void(self):
@@ -571,7 +571,7 @@ class NoOperationsInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.simple.NoOperationsInterface/NoOperationsInterface', args, func)
+        self.client.invoke_remote(f"tb.simple.NoOperationsInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
@@ -643,7 +643,7 @@ class NoSignalsInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.simple.NoSignalsInterface/NoSignalsInterface', args, func)
+        self.client.invoke_remote(f"tb.simple.NoSignalsInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
@@ -712,7 +712,7 @@ class EmptyInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.simple.EmptyInterface/EmptyInterface', args, func)
+        self.client.invoke_remote(f"tb.simple.EmptyInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):

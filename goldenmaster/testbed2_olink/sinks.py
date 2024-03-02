@@ -26,7 +26,7 @@ class ManyParamInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('testbed2.ManyParamInterface/ManyParamInterface', args, func)
+        self.client.invoke_remote(f"testbed2.ManyParamInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
@@ -160,7 +160,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('testbed2.NestedStruct1Interface/NestedStruct1Interface', args, func)
+        self.client.invoke_remote(f"testbed2.NestedStruct1Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
@@ -216,7 +216,7 @@ class NestedStruct2InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('testbed2.NestedStruct2Interface/NestedStruct2Interface', args, func)
+        self.client.invoke_remote(f"testbed2.NestedStruct2Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
@@ -301,7 +301,7 @@ class NestedStruct3InterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('testbed2.NestedStruct3Interface/NestedStruct3Interface', args, func)
+        self.client.invoke_remote(f"testbed2.NestedStruct3Interface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):

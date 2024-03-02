@@ -14,7 +14,7 @@ class EmptyInterfaceSink(IObjectSink):
         future = asyncio.get_running_loop().create_future()
         def func(args):
             return future.set_result(args.value)
-        self.client.invoke_remote('tb.empty.EmptyInterface/EmptyInterface', args, func)
+        self.client.invoke_remote(f"tb.empty.EmptyInterface/{name}", args, func)
         return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
