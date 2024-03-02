@@ -1,5 +1,21 @@
 # ObjectLink for Python
 
+## Server
+
+Implement the services, see the files in the `*_impl` folders.
+
+Run the server with uvicorn
+
+```py
+uvicorn olink_server:app
+```
+
+If server is not run on the local device or on a different port, specify `0.0.0.0` as source address and the preferred port
+
+```py
+uvicorn olink_server:app --host 0.0.0.0 --port 8080
+```
+
 ## Client
 
 use the `olinkclient.py` implementation as a starting point.
@@ -34,14 +50,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-```
-
-## Server
-
-implement the services, see `services.py`
-
-run the server with uvicorn
-
-```py
-uvicorn olinkserver:app
 ```
