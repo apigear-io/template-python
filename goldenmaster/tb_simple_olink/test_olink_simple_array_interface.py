@@ -102,6 +102,46 @@ class TestOLinkSimpleArrayInterface:
         assert impl.get_prop_string() == []
         assert sink.get_prop_string() == []
 
+    @pytest.mark.asyncio
+    async def test_func_bool(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_bool(param_bool=[])
+
+    @pytest.mark.asyncio
+    async def test_func_int(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int(param_int=[])
+
+    @pytest.mark.asyncio
+    async def test_func_int32(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int32(param_int32=[])
+
+    @pytest.mark.asyncio
+    async def test_func_int64(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_int64(param_int64=[])
+
+    @pytest.mark.asyncio
+    async def test_func_float(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float(param_float=[])
+
+    @pytest.mark.asyncio
+    async def test_func_float32(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float32(param_float32=[])
+
+    @pytest.mark.asyncio
+    async def test_func_float64(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_float64(param_float=[])
+
+    @pytest.mark.asyncio
+    async def test_func_string(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_string(param_string=[])
+
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects
         self.called = False

@@ -41,6 +41,7 @@ class TestOLinkNoOperationsInterface:
         assert self.called == False
         assert impl.get_prop_int() == 0
         assert sink.get_prop_int() == 0
+    pass
 
     def test_sig_void(self, olink_objects):
         impl, sink = olink_objects

@@ -62,6 +62,26 @@ class TestOLinkManyParamInterface:
         assert impl.get_prop4() == 0
         assert sink.get_prop4() == 0
 
+    @pytest.mark.asyncio
+    async def test_func1(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func1(param1=0)
+
+    @pytest.mark.asyncio
+    async def test_func2(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func2(param1=0, param2=0)
+
+    @pytest.mark.asyncio
+    async def test_func3(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func3(param1=0, param2=0, param3=0)
+
+    @pytest.mark.asyncio
+    async def test_func4(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func4(param1=0, param2=0, param3=0, param4=0)
+
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
         self.called = False

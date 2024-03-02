@@ -41,4 +41,14 @@ class TestOLinkNoSignalsInterface:
         assert self.called == False
         assert impl.get_prop_int() == 0
         assert sink.get_prop_int() == 0
+
+    @pytest.mark.asyncio
+    async def test_func_void(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_void()
+
+    @pytest.mark.asyncio
+    async def test_func_bool(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_bool(param_bool=False)
     pass

@@ -23,3 +23,4 @@ def olink_objects():
 class TestOLinkEmptyInterface:
     pass
     pass
+    pass

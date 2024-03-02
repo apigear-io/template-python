@@ -42,6 +42,16 @@ class TestOLinkNestedStruct2Interface:
         assert impl.get_prop2() == api.NestedStruct2()
         assert sink.get_prop2() == api.NestedStruct2()
 
+    @pytest.mark.asyncio
+    async def test_func1(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func1(param1=api.NestedStruct1())
+
+    @pytest.mark.asyncio
+    async def test_func2(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func2(param1=api.NestedStruct1(), param2=api.NestedStruct2())
+
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
         self.called = False
