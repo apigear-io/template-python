@@ -72,6 +72,18 @@ def as_int(v):
 def from_int(v):
     return v
 
+def as_int32(v):
+    return as_int(v)
+
+def from_int32(v):
+    return from_int(v)
+
+def as_int64(v):
+    return as_int(v)
+
+def from_int64(v):
+    return from_int(v)
+
 def as_string(v):
     return str(v)
 
@@ -89,6 +101,18 @@ def as_float(v):
 
 def from_float(v):
     return v
+
+def as_float32(v):
+    return as_float(v)
+
+def from_float32(v):
+    return from_float(v)
+
+def as_float64(v):
+    return as_float(v)
+
+def from_float64(v):
+    return from_float(v)
 
 {{- range .Module.Enums }}
 
