@@ -36,7 +36,8 @@ class SameStruct1InterfaceSink(IObjectSink):
         return self._prop1
 
     async def func1(self, param1: api.Struct1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_struct1(param1)
+        return await self._invoke("func1", [_param1])
 
     def olink_object_name(self):
         return 'tb.same1.SameStruct1Interface'
@@ -110,10 +111,13 @@ class SameStruct2InterfaceSink(IObjectSink):
         return self._prop2
 
     async def func1(self, param1: api.Struct1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_struct1(param1)
+        return await self._invoke("func1", [_param1])
 
     async def func2(self, param1: api.Struct1, param2: api.Struct2):
-        return await self._invoke("func2", [param1, param2])
+        _param1 = api.from_struct1(param1)
+        _param2 = api.from_struct2(param2)
+        return await self._invoke("func2", [_param1, _param2])
 
     def olink_object_name(self):
         return 'tb.same1.SameStruct2Interface'
@@ -181,7 +185,8 @@ class SameEnum1InterfaceSink(IObjectSink):
         return self._prop1
 
     async def func1(self, param1: api.Enum1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_enum1(param1)
+        return await self._invoke("func1", [_param1])
 
     def olink_object_name(self):
         return 'tb.same1.SameEnum1Interface'
@@ -255,10 +260,13 @@ class SameEnum2InterfaceSink(IObjectSink):
         return self._prop2
 
     async def func1(self, param1: api.Enum1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_enum1(param1)
+        return await self._invoke("func1", [_param1])
 
     async def func2(self, param1: api.Enum1, param2: api.Enum2):
-        return await self._invoke("func2", [param1, param2])
+        _param1 = api.from_enum1(param1)
+        _param2 = api.from_enum2(param2)
+        return await self._invoke("func2", [_param1, _param2])
 
     def olink_object_name(self):
         return 'tb.same1.SameEnum2Interface'

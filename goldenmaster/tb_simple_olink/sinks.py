@@ -164,28 +164,36 @@ class SimpleInterfaceSink(IObjectSink):
         return await self._invoke("funcVoid", [])
 
     async def func_bool(self, param_bool: bool):
-        return await self._invoke("funcBool", [param_bool])
+        _param_bool = api.from_bool(param_bool)
+        return await self._invoke("funcBool", [_param_bool])
 
     async def func_int(self, param_int: int):
-        return await self._invoke("funcInt", [param_int])
+        _param_int = api.from_int(param_int)
+        return await self._invoke("funcInt", [_param_int])
 
     async def func_int32(self, param_int32: int):
-        return await self._invoke("funcInt32", [param_int32])
+        _param_int32 = api.from_int32(param_int32)
+        return await self._invoke("funcInt32", [_param_int32])
 
     async def func_int64(self, param_int64: int):
-        return await self._invoke("funcInt64", [param_int64])
+        _param_int64 = api.from_int64(param_int64)
+        return await self._invoke("funcInt64", [_param_int64])
 
     async def func_float(self, param_float: float):
-        return await self._invoke("funcFloat", [param_float])
+        _param_float = api.from_float(param_float)
+        return await self._invoke("funcFloat", [_param_float])
 
     async def func_float32(self, param_float32: float):
-        return await self._invoke("funcFloat32", [param_float32])
+        _param_float32 = api.from_float32(param_float32)
+        return await self._invoke("funcFloat32", [_param_float32])
 
     async def func_float64(self, param_float: float):
-        return await self._invoke("funcFloat64", [param_float])
+        _param_float = api.from_float64(param_float)
+        return await self._invoke("funcFloat64", [_param_float])
 
     async def func_string(self, param_string: str):
-        return await self._invoke("funcString", [param_string])
+        _param_string = api.from_string(param_string)
+        return await self._invoke("funcString", [_param_string])
 
     def olink_object_name(self):
         return 'tb.simple.SimpleInterface'
@@ -440,28 +448,36 @@ class SimpleArrayInterfaceSink(IObjectSink):
         return self._prop_string
 
     async def func_bool(self, param_bool: list[bool]):
-        return await self._invoke("funcBool", [param_bool])
+        _param_bool = [api.from_bool(bool) for bool in param_bool]
+        return await self._invoke("funcBool", [_param_bool])
 
     async def func_int(self, param_int: list[int]):
-        return await self._invoke("funcInt", [param_int])
+        _param_int = [api.from_int(int) for int in param_int]
+        return await self._invoke("funcInt", [_param_int])
 
     async def func_int32(self, param_int32: list[int]):
-        return await self._invoke("funcInt32", [param_int32])
+        _param_int32 = [api.from_int32(int32) for int32 in param_int32]
+        return await self._invoke("funcInt32", [_param_int32])
 
     async def func_int64(self, param_int64: list[int]):
-        return await self._invoke("funcInt64", [param_int64])
+        _param_int64 = [api.from_int64(int64) for int64 in param_int64]
+        return await self._invoke("funcInt64", [_param_int64])
 
     async def func_float(self, param_float: list[float]):
-        return await self._invoke("funcFloat", [param_float])
+        _param_float = [api.from_float(float) for float in param_float]
+        return await self._invoke("funcFloat", [_param_float])
 
     async def func_float32(self, param_float32: list[float]):
-        return await self._invoke("funcFloat32", [param_float32])
+        _param_float32 = [api.from_float32(float32) for float32 in param_float32]
+        return await self._invoke("funcFloat32", [_param_float32])
 
     async def func_float64(self, param_float: list[float]):
-        return await self._invoke("funcFloat64", [param_float])
+        _param_float = [api.from_float64(float64) for float64 in param_float]
+        return await self._invoke("funcFloat64", [_param_float])
 
     async def func_string(self, param_string: list[str]):
-        return await self._invoke("funcString", [param_string])
+        _param_string = [api.from_string(string) for string in param_string]
+        return await self._invoke("funcString", [_param_string])
 
     def olink_object_name(self):
         return 'tb.simple.SimpleArrayInterface'
@@ -576,7 +592,8 @@ class NoPropertiesInterfaceSink(IObjectSink):
         return await self._invoke("funcVoid", [])
 
     async def func_bool(self, param_bool: bool):
-        return await self._invoke("funcBool", [param_bool])
+        _param_bool = api.from_bool(param_bool)
+        return await self._invoke("funcBool", [_param_bool])
 
     def olink_object_name(self):
         return 'tb.simple.NoPropertiesInterface'
@@ -726,7 +743,8 @@ class NoSignalsInterfaceSink(IObjectSink):
         return await self._invoke("funcVoid", [])
 
     async def func_bool(self, param_bool: bool):
-        return await self._invoke("funcBool", [param_bool])
+        _param_bool = api.from_bool(param_bool)
+        return await self._invoke("funcBool", [_param_bool])
 
     def olink_object_name(self):
         return 'tb.simple.NoSignalsInterface'
