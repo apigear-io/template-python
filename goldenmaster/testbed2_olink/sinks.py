@@ -87,16 +87,26 @@ class ManyParamInterfaceSink(IObjectSink):
         return self._prop4
 
     async def func1(self, param1: int):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_int(param1)
+        return await self._invoke("func1", [_param1])
 
     async def func2(self, param1: int, param2: int):
-        return await self._invoke("func2", [param1, param2])
+        _param1 = api.from_int(param1)
+        _param2 = api.from_int(param2)
+        return await self._invoke("func2", [_param1, _param2])
 
     async def func3(self, param1: int, param2: int, param3: int):
-        return await self._invoke("func3", [param1, param2, param3])
+        _param1 = api.from_int(param1)
+        _param2 = api.from_int(param2)
+        _param3 = api.from_int(param3)
+        return await self._invoke("func3", [_param1, _param2, _param3])
 
     async def func4(self, param1: int, param2: int, param3: int, param4: int):
-        return await self._invoke("func4", [param1, param2, param3, param4])
+        _param1 = api.from_int(param1)
+        _param2 = api.from_int(param2)
+        _param3 = api.from_int(param3)
+        _param4 = api.from_int(param4)
+        return await self._invoke("func4", [_param1, _param2, _param3, _param4])
 
     def olink_object_name(self):
         return 'testbed2.ManyParamInterface'
@@ -189,7 +199,8 @@ class NestedStruct1InterfaceSink(IObjectSink):
         return self._prop1
 
     async def func1(self, param1: api.NestedStruct1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_nested_struct1(param1)
+        return await self._invoke("func1", [_param1])
 
     def olink_object_name(self):
         return 'testbed2.NestedStruct1Interface'
@@ -263,10 +274,13 @@ class NestedStruct2InterfaceSink(IObjectSink):
         return self._prop2
 
     async def func1(self, param1: api.NestedStruct1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_nested_struct1(param1)
+        return await self._invoke("func1", [_param1])
 
     async def func2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
-        return await self._invoke("func2", [param1, param2])
+        _param1 = api.from_nested_struct1(param1)
+        _param2 = api.from_nested_struct2(param2)
+        return await self._invoke("func2", [_param1, _param2])
 
     def olink_object_name(self):
         return 'testbed2.NestedStruct2Interface'
@@ -368,13 +382,19 @@ class NestedStruct3InterfaceSink(IObjectSink):
         return self._prop3
 
     async def func1(self, param1: api.NestedStruct1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_nested_struct1(param1)
+        return await self._invoke("func1", [_param1])
 
     async def func2(self, param1: api.NestedStruct1, param2: api.NestedStruct2):
-        return await self._invoke("func2", [param1, param2])
+        _param1 = api.from_nested_struct1(param1)
+        _param2 = api.from_nested_struct2(param2)
+        return await self._invoke("func2", [_param1, _param2])
 
     async def func3(self, param1: api.NestedStruct1, param2: api.NestedStruct2, param3: api.NestedStruct3):
-        return await self._invoke("func3", [param1, param2, param3])
+        _param1 = api.from_nested_struct1(param1)
+        _param2 = api.from_nested_struct2(param2)
+        _param3 = api.from_nested_struct3(param3)
+        return await self._invoke("func3", [_param1, _param2, _param3])
 
     def olink_object_name(self):
         return 'testbed2.NestedStruct3Interface'

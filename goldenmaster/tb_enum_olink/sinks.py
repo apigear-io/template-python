@@ -87,16 +87,20 @@ class EnumInterfaceSink(IObjectSink):
         return self._prop3
 
     async def func0(self, param0: api.Enum0):
-        return await self._invoke("func0", [param0])
+        _param0 = api.from_enum0(param0)
+        return await self._invoke("func0", [_param0])
 
     async def func1(self, param1: api.Enum1):
-        return await self._invoke("func1", [param1])
+        _param1 = api.from_enum1(param1)
+        return await self._invoke("func1", [_param1])
 
     async def func2(self, param2: api.Enum2):
-        return await self._invoke("func2", [param2])
+        _param2 = api.from_enum2(param2)
+        return await self._invoke("func2", [_param2])
 
     async def func3(self, param3: api.Enum3):
-        return await self._invoke("func3", [param3])
+        _param3 = api.from_enum3(param3)
+        return await self._invoke("func3", [_param3])
 
     def olink_object_name(self):
         return 'tb.enum.EnumInterface'

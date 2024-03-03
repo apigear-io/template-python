@@ -87,16 +87,20 @@ class StructInterfaceSink(IObjectSink):
         return self._prop_string
 
     async def func_bool(self, param_bool: api.StructBool):
-        return await self._invoke("funcBool", [param_bool])
+        _param_bool = api.from_struct_bool(param_bool)
+        return await self._invoke("funcBool", [_param_bool])
 
     async def func_int(self, param_int: api.StructInt):
-        return await self._invoke("funcInt", [param_int])
+        _param_int = api.from_struct_int(param_int)
+        return await self._invoke("funcInt", [_param_int])
 
     async def func_float(self, param_float: api.StructFloat):
-        return await self._invoke("funcFloat", [param_float])
+        _param_float = api.from_struct_float(param_float)
+        return await self._invoke("funcFloat", [_param_float])
 
     async def func_string(self, param_string: api.StructString):
-        return await self._invoke("funcString", [param_string])
+        _param_string = api.from_struct_string(param_string)
+        return await self._invoke("funcString", [_param_string])
 
     def olink_object_name(self):
         return 'testbed1.StructInterface'
@@ -234,16 +238,20 @@ class StructArrayInterfaceSink(IObjectSink):
         return self._prop_string
 
     async def func_bool(self, param_bool: list[api.StructBool]):
-        return await self._invoke("funcBool", [param_bool])
+        _param_bool = [api.from_struct_bool(struct_bool) for struct_bool in param_bool]
+        return await self._invoke("funcBool", [_param_bool])
 
     async def func_int(self, param_int: list[api.StructInt]):
-        return await self._invoke("funcInt", [param_int])
+        _param_int = [api.from_struct_int(struct_int) for struct_int in param_int]
+        return await self._invoke("funcInt", [_param_int])
 
     async def func_float(self, param_float: list[api.StructFloat]):
-        return await self._invoke("funcFloat", [param_float])
+        _param_float = [api.from_struct_float(struct_float) for struct_float in param_float]
+        return await self._invoke("funcFloat", [_param_float])
 
     async def func_string(self, param_string: list[api.StructString]):
-        return await self._invoke("funcString", [param_string])
+        _param_string = [api.from_struct_string(struct_string) for struct_string in param_string]
+        return await self._invoke("funcString", [_param_string])
 
     def olink_object_name(self):
         return 'testbed1.StructArrayInterface'

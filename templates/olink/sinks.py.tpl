@@ -61,7 +61,18 @@ class {{Camel .Name}}Sink(IObjectSink):
     {{- range .Operations }}
 
     async def {{snake .Name}}({{pyParams "api." .Params}}):
-        return await self._invoke("{{.Name}}", [{{pyVars .Params}}])
+        {{- range $idx, $_ := .Params }}
+        {{- if .IsArray }}
+        _{{snake .Name}} = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
+        {{- else }}
+        _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
+        {{- end }}
+        {{- end }}
+        return await self._invoke("{{.Name}}", [
+            {{- range $idx, $_ := .Params -}}{{- if $idx}}, {{ end -}}
+            _{{snake .Name}}
+            {{- end -}}
+        ])
     {{- end }}
 
     def olink_object_name(self):
