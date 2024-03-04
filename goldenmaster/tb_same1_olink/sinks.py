@@ -14,12 +14,15 @@ class SameStruct1InterfaceSink(IObjectSink):
         self.on_sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.same1.SameStruct1Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.same1.SameStruct1Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.same1.SameStruct1Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -46,7 +49,8 @@ class SameStruct1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_struct1(props[k]))
+                v =  api.as_struct1(props[k])
+                self._set_prop1(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -75,12 +79,15 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.on_sig2 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.same1.SameStruct2Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.same1.SameStruct2Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.same1.SameStruct2Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -126,9 +133,11 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_struct2(props[k]))
+                v =  api.as_struct2(props[k])
+                self._set_prop1(v)
             elif k == "prop2":
-                self._set_prop2(api.as_struct2(props[k]))
+                v =  api.as_struct2(props[k])
+                self._set_prop2(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -163,12 +172,15 @@ class SameEnum1InterfaceSink(IObjectSink):
         self.on_sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.same1.SameEnum1Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.same1.SameEnum1Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.same1.SameEnum1Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -195,7 +207,8 @@ class SameEnum1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_enum1(props[k]))
+                v =  api.as_enum1(props[k])
+                self._set_prop1(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -224,12 +237,15 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.on_sig2 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.same1.SameEnum2Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.same1.SameEnum2Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.same1.SameEnum2Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -275,9 +291,11 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_enum1(props[k]))
+                v =  api.as_enum1(props[k])
+                self._set_prop1(v)
             elif k == "prop2":
-                self._set_prop2(api.as_enum2(props[k]))
+                v =  api.as_enum2(props[k])
+                self._set_prop2(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

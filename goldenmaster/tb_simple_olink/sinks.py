@@ -38,12 +38,15 @@ class SimpleInterfaceSink(IObjectSink):
         self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.simple.SimpleInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.simple.SimpleInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.simple.SimpleInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -161,7 +164,7 @@ class SimpleInterfaceSink(IObjectSink):
         return self._prop_read_only_string
 
     async def func_void(self):
-        return await self._invoke("funcVoid", [])
+        return await self._invoke("funcVoid", [], no_wait=True)
 
     async def func_bool(self, param_bool: bool):
         _param_bool = api.from_bool(param_bool)
@@ -202,23 +205,32 @@ class SimpleInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(api.as_bool(props[k]))
+                v =  api.as_bool(props[k])
+                self._set_prop_bool(v)
             elif k == "propInt":
-                self._set_prop_int(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop_int(v)
             elif k == "propInt32":
-                self._set_prop_int32(api.as_int32(props[k]))
+                v =  api.as_int32(props[k])
+                self._set_prop_int32(v)
             elif k == "propInt64":
-                self._set_prop_int64(api.as_int64(props[k]))
+                v =  api.as_int64(props[k])
+                self._set_prop_int64(v)
             elif k == "propFloat":
-                self._set_prop_float(api.as_float(props[k]))
+                v =  api.as_float(props[k])
+                self._set_prop_float(v)
             elif k == "propFloat32":
-                self._set_prop_float32(api.as_float32(props[k]))
+                v =  api.as_float32(props[k])
+                self._set_prop_float32(v)
             elif k == "propFloat64":
-                self._set_prop_float64(api.as_float64(props[k]))
+                v =  api.as_float64(props[k])
+                self._set_prop_float64(v)
             elif k == "propString":
-                self._set_prop_string(api.as_string(props[k]))
+                v =  api.as_string(props[k])
+                self._set_prop_string(v)
             elif k == "propReadOnlyString":
-                self._set_prop_read_only_string(api.as_string(props[k]))
+                v =  api.as_string(props[k])
+                self._set_prop_read_only_string(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -328,17 +340,20 @@ class SimpleArrayInterfaceSink(IObjectSink):
         self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.simple.SimpleArrayInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.simple.SimpleArrayInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.simple.SimpleArrayInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
             return
-        self._prop_bool = [api.as_bool(_) for _ in value]
+        self._prop_bool = value
         self.on_prop_bool_changed.fire(self._prop_bool)
 
     def set_prop_bool(self, value):
@@ -352,7 +367,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_int(self, value):
         if self._prop_int == value:
             return
-        self._prop_int = [api.as_int(_) for _ in value]
+        self._prop_int = value
         self.on_prop_int_changed.fire(self._prop_int)
 
     def set_prop_int(self, value):
@@ -366,7 +381,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_int32(self, value):
         if self._prop_int32 == value:
             return
-        self._prop_int32 = [api.as_int32(_) for _ in value]
+        self._prop_int32 = value
         self.on_prop_int32_changed.fire(self._prop_int32)
 
     def set_prop_int32(self, value):
@@ -380,7 +395,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_int64(self, value):
         if self._prop_int64 == value:
             return
-        self._prop_int64 = [api.as_int64(_) for _ in value]
+        self._prop_int64 = value
         self.on_prop_int64_changed.fire(self._prop_int64)
 
     def set_prop_int64(self, value):
@@ -394,7 +409,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_float(self, value):
         if self._prop_float == value:
             return
-        self._prop_float = [api.as_float(_) for _ in value]
+        self._prop_float = value
         self.on_prop_float_changed.fire(self._prop_float)
 
     def set_prop_float(self, value):
@@ -408,7 +423,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_float32(self, value):
         if self._prop_float32 == value:
             return
-        self._prop_float32 = [api.as_float32(_) for _ in value]
+        self._prop_float32 = value
         self.on_prop_float32_changed.fire(self._prop_float32)
 
     def set_prop_float32(self, value):
@@ -422,7 +437,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_float64(self, value):
         if self._prop_float64 == value:
             return
-        self._prop_float64 = [api.as_float64(_) for _ in value]
+        self._prop_float64 = value
         self.on_prop_float64_changed.fire(self._prop_float64)
 
     def set_prop_float64(self, value):
@@ -436,7 +451,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def _set_prop_string(self, value):
         if self._prop_string == value:
             return
-        self._prop_string = [api.as_string(_) for _ in value]
+        self._prop_string = value
         self.on_prop_string_changed.fire(self._prop_string)
 
     def set_prop_string(self, value):
@@ -486,21 +501,29 @@ class SimpleArrayInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(api.as_bool(props[k]))
+                v = [api.as_bool(_) for _ in props[k]]
+                self._set_prop_bool(v)
             elif k == "propInt":
-                self._set_prop_int(api.as_int(props[k]))
+                v = [api.as_int(_) for _ in props[k]]
+                self._set_prop_int(v)
             elif k == "propInt32":
-                self._set_prop_int32(api.as_int32(props[k]))
+                v = [api.as_int32(_) for _ in props[k]]
+                self._set_prop_int32(v)
             elif k == "propInt64":
-                self._set_prop_int64(api.as_int64(props[k]))
+                v = [api.as_int64(_) for _ in props[k]]
+                self._set_prop_int64(v)
             elif k == "propFloat":
-                self._set_prop_float(api.as_float(props[k]))
+                v = [api.as_float(_) for _ in props[k]]
+                self._set_prop_float(v)
             elif k == "propFloat32":
-                self._set_prop_float32(api.as_float32(props[k]))
+                v = [api.as_float32(_) for _ in props[k]]
+                self._set_prop_float32(v)
             elif k == "propFloat64":
-                self._set_prop_float64(api.as_float64(props[k]))
+                v = [api.as_float64(_) for _ in props[k]]
+                self._set_prop_float64(v)
             elif k == "propString":
-                self._set_prop_string(api.as_string(props[k]))
+                v = [api.as_string(_) for _ in props[k]]
+                self._set_prop_string(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -581,15 +604,18 @@ class NoPropertiesInterfaceSink(IObjectSink):
         self.on_sig_bool = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.simple.NoPropertiesInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.simple.NoPropertiesInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.simple.NoPropertiesInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     async def func_void(self):
-        return await self._invoke("funcVoid", [])
+        return await self._invoke("funcVoid", [], no_wait=True)
 
     async def func_bool(self, param_bool: bool):
         _param_bool = api.from_bool(param_bool)
@@ -626,12 +652,15 @@ class NoOperationsInterfaceSink(IObjectSink):
         self.on_sig_bool = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.simple.NoOperationsInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.simple.NoOperationsInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.simple.NoOperationsInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -668,9 +697,11 @@ class NoOperationsInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(api.as_bool(props[k]))
+                v =  api.as_bool(props[k])
+                self._set_prop_bool(v)
             elif k == "propInt":
-                self._set_prop_int(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop_int(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -704,12 +735,15 @@ class NoSignalsInterfaceSink(IObjectSink):
         self.on_prop_int_changed = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.simple.NoSignalsInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.simple.NoSignalsInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.simple.NoSignalsInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -740,7 +774,7 @@ class NoSignalsInterfaceSink(IObjectSink):
         return self._prop_int
 
     async def func_void(self):
-        return await self._invoke("funcVoid", [])
+        return await self._invoke("funcVoid", [], no_wait=True)
 
     async def func_bool(self, param_bool: bool):
         _param_bool = api.from_bool(param_bool)
@@ -753,9 +787,11 @@ class NoSignalsInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(api.as_bool(props[k]))
+                v =  api.as_bool(props[k])
+                self._set_prop_bool(v)
             elif k == "propInt":
-                self._set_prop_int(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop_int(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -777,12 +813,15 @@ class EmptyInterfaceSink(IObjectSink):
         super().__init__()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.simple.EmptyInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.simple.EmptyInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.simple.EmptyInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'tb.simple.EmptyInterface'

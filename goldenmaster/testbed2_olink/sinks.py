@@ -23,12 +23,15 @@ class ManyParamInterfaceSink(IObjectSink):
         self.on_sig4 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"testbed2.ManyParamInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"testbed2.ManyParamInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"testbed2.ManyParamInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -115,13 +118,17 @@ class ManyParamInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop1(v)
             elif k == "prop2":
-                self._set_prop2(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop2(v)
             elif k == "prop3":
-                self._set_prop3(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop3(v)
             elif k == "prop4":
-                self._set_prop4(api.as_int(props[k]))
+                v =  api.as_int(props[k])
+                self._set_prop4(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -177,12 +184,15 @@ class NestedStruct1InterfaceSink(IObjectSink):
         self.on_sig1 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"testbed2.NestedStruct1Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"testbed2.NestedStruct1Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"testbed2.NestedStruct1Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -209,7 +219,8 @@ class NestedStruct1InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_nested_struct1(props[k]))
+                v =  api.as_nested_struct1(props[k])
+                self._set_prop1(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -238,12 +249,15 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self.on_sig2 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"testbed2.NestedStruct2Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"testbed2.NestedStruct2Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"testbed2.NestedStruct2Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -289,9 +303,11 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_nested_struct1(props[k]))
+                v =  api.as_nested_struct1(props[k])
+                self._set_prop1(v)
             elif k == "prop2":
-                self._set_prop2(api.as_nested_struct2(props[k]))
+                v =  api.as_nested_struct2(props[k])
+                self._set_prop2(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -332,12 +348,15 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self.on_sig3 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"testbed2.NestedStruct3Interface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"testbed2.NestedStruct3Interface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"testbed2.NestedStruct3Interface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop1(self, value):
         if self._prop1 == value:
@@ -403,11 +422,14 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop1":
-                self._set_prop1(api.as_nested_struct1(props[k]))
+                v =  api.as_nested_struct1(props[k])
+                self._set_prop1(v)
             elif k == "prop2":
-                self._set_prop2(api.as_nested_struct2(props[k]))
+                v =  api.as_nested_struct2(props[k])
+                self._set_prop2(v)
             elif k == "prop3":
-                self._set_prop3(api.as_nested_struct3(props[k]))
+                v =  api.as_nested_struct3(props[k])
+                self._set_prop3(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
