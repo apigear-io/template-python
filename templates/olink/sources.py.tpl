@@ -33,7 +33,7 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- if not .IsReadOnly }}
             {{- if .IsArray }}
-            v = [api.as_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in value]
+            v = [api.as_{{snake .Type}}(_) for _ in value]
             {{- else }}
             v = api.as_{{snake .Type}}(value)
             {{- end }}
@@ -54,7 +54,11 @@ class {{$class}}Source(IObjectSource):
         if path == "{{.Name}}":
     {{- end }}
         {{- range $idx, $_ := .Params }}
+            {{- if .IsArray }}
+            {{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$idx}}]]
+            {{- else }}
             {{snake .Name}} = api.as_{{snake .Type}}(args[{{$idx}}])
+            {{- end }}
         {{- end }}
             reply = self.impl.{{snake .Name}}({{pyVars .Params}})
         {{- if .Return.IsVoid }}
@@ -73,7 +77,7 @@ class {{$class}}Source(IObjectSource):
         {{- range .Properties }}
         v = self.impl.get_{{snake .Name}}()
         {{- if .IsArray }}
-        props["{{.Name }}"] = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in v]
+        props["{{.Name }}"] = [api.from_{{snake .Type}}(_) for _ in v]
         {{- else }}
         props["{{.Name }}"] = api.from_{{snake .Type}}(v)
         {{- end }}
@@ -85,7 +89,7 @@ class {{$class}}Source(IObjectSource):
     def notify_{{snake .Name}}({{pyParams "api." .Params}}):
         {{- range $idx, $_ := .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
+        _{{snake .Name}} = [api.from_{{snake .Type}}(_) for _ in {{snake .Name}}]
         {{- else }}
         _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
         {{- end }}
@@ -101,7 +105,7 @@ class {{$class}}Source(IObjectSource):
 
     def notify_{{snake .Name}}_changed(self, value):
         {{- if .IsArray }}
-        v = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in value]
+        v = [api.from_{{snake .Type}}(_) for _ in value]
         {{- else }}
         v = api.from_{{snake .Type}}(value)
         {{- end }}

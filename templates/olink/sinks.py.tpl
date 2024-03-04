@@ -23,12 +23,15 @@ class {{Camel .Name}}Sink(IObjectSink):
 {{- end }}
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"{{$id}}/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"{{$id}}/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"{{$id}}/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     {{- range .Properties }}
     {{- if not .IsReadOnly }}
@@ -36,11 +39,7 @@ class {{Camel .Name}}Sink(IObjectSink):
     def _set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:
             return
-        {{- if .IsArray }}
-        self._{{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in value]
-        {{- else }}
         self._{{snake .Name}} = value
-        {{- end }}
         self.on_{{snake .Name}}_changed.fire(self._{{snake .Name}})
 
     def set_{{snake .Name}}(self, value):
@@ -72,7 +71,7 @@ class {{Camel .Name}}Sink(IObjectSink):
             {{- range $idx, $_ := .Params -}}{{- if $idx}}, {{ end -}}
             _{{snake .Name}}
             {{- end -}}
-        ])
+        ]{{ if .Return.IsVoid }}, no_wait=True {{- end -}})
     {{- end }}
 
     def olink_object_name(self):
@@ -88,7 +87,12 @@ class {{Camel .Name}}Sink(IObjectSink):
             {{- else }}
             if k == "{{.Name}}":
             {{- end }}
-                self._set_{{snake .Name}}(api.as_{{snake .Type}}(props[k]))
+                {{- if .IsArray }}
+                v = [api.as_{{snake .Type}}(_) for _ in props[k]]
+                {{- else }}
+                v =  api.as_{{snake .Type}}(props[k])
+                {{- end }}
+                self._set_{{snake .Name}}(v)
         {{- end }}
         {{- end }}
 

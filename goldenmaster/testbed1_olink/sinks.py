@@ -23,12 +23,15 @@ class StructInterfaceSink(IObjectSink):
         self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"testbed1.StructInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"testbed1.StructInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"testbed1.StructInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -109,13 +112,17 @@ class StructInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(api.as_struct_bool(props[k]))
+                v =  api.as_struct_bool(props[k])
+                self._set_prop_bool(v)
             elif k == "propInt":
-                self._set_prop_int(api.as_struct_int(props[k]))
+                v =  api.as_struct_int(props[k])
+                self._set_prop_int(v)
             elif k == "propFloat":
-                self._set_prop_float(api.as_struct_float(props[k]))
+                v =  api.as_struct_float(props[k])
+                self._set_prop_float(v)
             elif k == "propString":
-                self._set_prop_string(api.as_struct_string(props[k]))
+                v =  api.as_struct_string(props[k])
+                self._set_prop_string(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -174,17 +181,20 @@ class StructArrayInterfaceSink(IObjectSink):
         self.on_sig_string = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"testbed1.StructArrayInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"testbed1.StructArrayInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"testbed1.StructArrayInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
             return
-        self._prop_bool = [api.as_struct_bool(_) for _ in value]
+        self._prop_bool = value
         self.on_prop_bool_changed.fire(self._prop_bool)
 
     def set_prop_bool(self, value):
@@ -198,7 +208,7 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_int(self, value):
         if self._prop_int == value:
             return
-        self._prop_int = [api.as_struct_int(_) for _ in value]
+        self._prop_int = value
         self.on_prop_int_changed.fire(self._prop_int)
 
     def set_prop_int(self, value):
@@ -212,7 +222,7 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_float(self, value):
         if self._prop_float == value:
             return
-        self._prop_float = [api.as_struct_float(_) for _ in value]
+        self._prop_float = value
         self.on_prop_float_changed.fire(self._prop_float)
 
     def set_prop_float(self, value):
@@ -226,7 +236,7 @@ class StructArrayInterfaceSink(IObjectSink):
     def _set_prop_string(self, value):
         if self._prop_string == value:
             return
-        self._prop_string = [api.as_struct_string(_) for _ in value]
+        self._prop_string = value
         self.on_prop_string_changed.fire(self._prop_string)
 
     def set_prop_string(self, value):
@@ -260,13 +270,17 @@ class StructArrayInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "propBool":
-                self._set_prop_bool(api.as_struct_bool(props[k]))
+                v = [api.as_struct_bool(_) for _ in props[k]]
+                self._set_prop_bool(v)
             elif k == "propInt":
-                self._set_prop_int(api.as_struct_int(props[k]))
+                v = [api.as_struct_int(_) for _ in props[k]]
+                self._set_prop_int(v)
             elif k == "propFloat":
-                self._set_prop_float(api.as_struct_float(props[k]))
+                v = [api.as_struct_float(_) for _ in props[k]]
+                self._set_prop_float(v)
             elif k == "propString":
-                self._set_prop_string(api.as_struct_string(props[k]))
+                v = [api.as_struct_string(_) for _ in props[k]]
+                self._set_prop_string(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

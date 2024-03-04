@@ -23,12 +23,15 @@ class EnumInterfaceSink(IObjectSink):
         self.on_sig3 = EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args):
-        future = asyncio.get_running_loop().create_future()
-        def func(args):
-            return future.set_result(args.value)
-        self.client.invoke_remote(f"tb.enum.EnumInterface/{name}", args, func)
-        return await asyncio.wait_for(future, 500)
+    async def _invoke(self, name, args, no_wait=False):
+        if no_wait:
+            self.client.invoke_remote(f"tb.enum.EnumInterface/{name}", args, func=None)
+        else:
+            future = asyncio.get_running_loop().create_future()
+            def func(args):
+                return future.set_result(args.value)
+            self.client.invoke_remote(f"tb.enum.EnumInterface/{name}", args, func)
+            return await asyncio.wait_for(future, 500)
 
     def _set_prop0(self, value):
         if self._prop0 == value:
@@ -109,13 +112,17 @@ class EnumInterfaceSink(IObjectSink):
         self.client = ClientNode.register_sink(self)
         for k in props:
             if k == "prop0":
-                self._set_prop0(api.as_enum0(props[k]))
+                v =  api.as_enum0(props[k])
+                self._set_prop0(v)
             elif k == "prop1":
-                self._set_prop1(api.as_enum1(props[k]))
+                v =  api.as_enum1(props[k])
+                self._set_prop1(v)
             elif k == "prop2":
-                self._set_prop2(api.as_enum2(props[k]))
+                v =  api.as_enum2(props[k])
+                self._set_prop2(v)
             elif k == "prop3":
-                self._set_prop3(api.as_enum3(props[k]))
+                v =  api.as_enum3(props[k])
+                self._set_prop3(v)
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
