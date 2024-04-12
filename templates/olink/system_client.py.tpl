@@ -19,6 +19,7 @@ class Client:
         self.node.on_log(self._olink_log_writer)
         self.node.on_write(self._write)
         self.conn = None
+        self.close_connection_request = asyncio.Event()
 
     def _olink_log_writer(self, level, msg):
         if level[0] == 1:
@@ -50,14 +51,19 @@ class Client:
             except websockets.ConnectionClosed:
                 break
 
+    async def _disconnect(self):
+        await self.close_connection_request.wait()
+
     async def connect(self, addr):
         async with websockets.connect(addr) as conn:
             self.conn = conn
+            self.close_connection_request.clear()
             reader = asyncio.create_task(self._reader())
             writer = asyncio.create_task(self._writer())
+            finish = asyncio.create_task(self._disconnect())
             try:
                 _, pending = await asyncio.wait(
-                    [reader, writer], return_when=asyncio.FIRST_COMPLETED
+                    [reader, writer, finish], return_when=asyncio.FIRST_COMPLETED
                 )
                 # cancel pending tasks
                 self.send_queue.put_nowait(None)
@@ -66,6 +72,8 @@ class Client:
             except asyncio.CancelledError:
                 pass
             
+    def disconnect(self):
+        self.close_connection_request.set()
 
 # create a client node
 node = ClientNode()
