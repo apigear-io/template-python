@@ -21,6 +21,7 @@ class StructInterfaceSink(IObjectSink):
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -123,6 +124,7 @@ class StructInterfaceSink(IObjectSink):
             elif k == "propString":
                 v =  api.as_struct_string(props[k])
                 self._set_prop_string(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -179,6 +181,7 @@ class StructArrayInterfaceSink(IObjectSink):
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -281,6 +284,7 @@ class StructArrayInterfaceSink(IObjectSink):
             elif k == "propString":
                 v = [api.as_struct_string(_) for _ in props[k]]
                 self._set_prop_string(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

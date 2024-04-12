@@ -21,6 +21,7 @@ class ManyParamInterfaceSink(IObjectSink):
         self.on_sig2 = EventHook()
         self.on_sig3 = EventHook()
         self.on_sig4 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -129,6 +130,7 @@ class ManyParamInterfaceSink(IObjectSink):
             elif k == "prop4":
                 v =  api.as_int(props[k])
                 self._set_prop4(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -182,6 +184,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
         self._prop1 = api.NestedStruct1()
         self.on_prop1_changed = EventHook()
         self.on_sig1 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -221,6 +224,7 @@ class NestedStruct1InterfaceSink(IObjectSink):
             if k == "prop1":
                 v =  api.as_nested_struct1(props[k])
                 self._set_prop1(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -247,6 +251,7 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self.on_prop2_changed = EventHook()
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -308,6 +313,7 @@ class NestedStruct2InterfaceSink(IObjectSink):
             elif k == "prop2":
                 v =  api.as_nested_struct2(props[k])
                 self._set_prop2(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -346,6 +352,7 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
         self.on_sig3 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -430,6 +437,7 @@ class NestedStruct3InterfaceSink(IObjectSink):
             elif k == "prop3":
                 v =  api.as_nested_struct3(props[k])
                 self._set_prop3(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

@@ -36,6 +36,7 @@ class SimpleInterfaceSink(IObjectSink):
         self.on_sig_float32 = EventHook()
         self.on_sig_float64 = EventHook()
         self.on_sig_string = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -231,6 +232,7 @@ class SimpleInterfaceSink(IObjectSink):
             elif k == "propReadOnlyString":
                 v =  api.as_string(props[k])
                 self._set_prop_read_only_string(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -338,6 +340,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
         self.on_sig_float32 = EventHook()
         self.on_sig_float64 = EventHook()
         self.on_sig_string = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -524,6 +527,7 @@ class SimpleArrayInterfaceSink(IObjectSink):
             elif k == "propString":
                 v = [api.as_string(_) for _ in props[k]]
                 self._set_prop_string(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -602,6 +606,7 @@ class NoPropertiesInterfaceSink(IObjectSink):
         super().__init__()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -626,6 +631,7 @@ class NoPropertiesInterfaceSink(IObjectSink):
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
         self.client = ClientNode.register_sink(self)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         logging.error("unknown property: %s", name)
@@ -650,6 +656,7 @@ class NoOperationsInterfaceSink(IObjectSink):
         self.on_prop_int_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -702,6 +709,7 @@ class NoOperationsInterfaceSink(IObjectSink):
             elif k == "propInt":
                 v =  api.as_int(props[k])
                 self._set_prop_int(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -733,6 +741,7 @@ class NoSignalsInterfaceSink(IObjectSink):
         self.on_prop_bool_changed = EventHook()
         self._prop_int = 0
         self.on_prop_int_changed = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -792,6 +801,7 @@ class NoSignalsInterfaceSink(IObjectSink):
             elif k == "propInt":
                 v =  api.as_int(props[k])
                 self._set_prop_int(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -811,6 +821,7 @@ class NoSignalsInterfaceSink(IObjectSink):
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -828,6 +839,7 @@ class EmptyInterfaceSink(IObjectSink):
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
         self.client = ClientNode.register_sink(self)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         logging.error("unknown property: %s", name)

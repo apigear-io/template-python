@@ -21,6 +21,7 @@ class EnumInterfaceSink(IObjectSink):
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
         self.on_sig3 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -123,6 +124,7 @@ class EnumInterfaceSink(IObjectSink):
             elif k == "prop3":
                 v =  api.as_enum3(props[k])
                 self._set_prop3(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
