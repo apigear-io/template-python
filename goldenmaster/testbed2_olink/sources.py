@@ -1,6 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from testbed2_api import api
+from testbed2_api.shared import EventHook
 from typing import Any
 import logging
 class ManyParamInterfaceSource(IObjectSource):
@@ -15,6 +16,8 @@ class ManyParamInterfaceSource(IObjectSource):
         impl.on_sig2 += self.notify_sig2
         impl.on_sig3 += self.notify_sig3
         impl.on_sig4 += self.notify_sig4
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -65,6 +68,11 @@ class ManyParamInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -121,6 +129,8 @@ class NestedStruct1InterfaceSource(IObjectSource):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -144,6 +154,11 @@ class NestedStruct1InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -166,6 +181,8 @@ class NestedStruct2InterfaceSource(IObjectSource):
         impl.on_prop2_changed += self.notify_prop2_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -197,6 +214,11 @@ class NestedStruct2InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -232,6 +254,8 @@ class NestedStruct3InterfaceSource(IObjectSource):
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         impl.on_sig3 += self.notify_sig3
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -272,6 +296,11 @@ class NestedStruct3InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}

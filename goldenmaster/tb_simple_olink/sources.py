@@ -1,6 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from tb_simple_api import api
+from tb_simple_api.shared import EventHook
 from typing import Any
 import logging
 class SimpleInterfaceSource(IObjectSource):
@@ -25,6 +26,8 @@ class SimpleInterfaceSource(IObjectSource):
         impl.on_sig_float32 += self.notify_sig_float32
         impl.on_sig_float64 += self.notify_sig_float64
         impl.on_sig_string += self.notify_sig_string
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -102,6 +105,11 @@ class SimpleInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -215,6 +223,8 @@ class SimpleArrayInterfaceSource(IObjectSource):
         impl.on_sig_float32 += self.notify_sig_float32
         impl.on_sig_float64 += self.notify_sig_float64
         impl.on_sig_string += self.notify_sig_string
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -287,6 +297,11 @@ class SimpleArrayInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -377,6 +392,8 @@ class NoPropertiesInterfaceSource(IObjectSource):
         self.impl = impl
         impl.on_sig_void += self.notify_sig_void
         impl.on_sig_bool += self.notify_sig_bool
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -400,6 +417,11 @@ class NoPropertiesInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -419,6 +441,8 @@ class NoOperationsInterfaceSource(IObjectSource):
         impl.on_prop_int_changed += self.notify_prop_int_changed
         impl.on_sig_void += self.notify_sig_void
         impl.on_sig_bool += self.notify_sig_bool
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -441,6 +465,11 @@ class NoOperationsInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -470,6 +499,8 @@ class NoSignalsInterfaceSource(IObjectSource):
         self.impl = impl
         impl.on_prop_bool_changed += self.notify_prop_bool_changed
         impl.on_prop_int_changed += self.notify_prop_int_changed
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -499,6 +530,11 @@ class NoSignalsInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -519,6 +555,8 @@ class EmptyInterfaceSource(IObjectSource):
     impl: api.IEmptyInterface
     def __init__(self, impl: api.IEmptyInterface):
         self.impl = impl
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -535,6 +573,11 @@ class EmptyInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}

@@ -1,6 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from tb_same1_api import api
+from tb_same1_api.shared import EventHook
 from typing import Any
 import logging
 class SameStruct1InterfaceSource(IObjectSource):
@@ -9,6 +10,8 @@ class SameStruct1InterfaceSource(IObjectSource):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -32,6 +35,11 @@ class SameStruct1InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -54,6 +62,8 @@ class SameStruct2InterfaceSource(IObjectSource):
         impl.on_prop2_changed += self.notify_prop2_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -85,6 +95,11 @@ class SameStruct2InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -116,6 +131,8 @@ class SameEnum1InterfaceSource(IObjectSource):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -139,6 +156,11 @@ class SameEnum1InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -161,6 +183,8 @@ class SameEnum2InterfaceSource(IObjectSource):
         impl.on_prop2_changed += self.notify_prop2_changed
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -192,6 +216,11 @@ class SameEnum2InterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}

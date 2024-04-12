@@ -1,6 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from testbed1_api import api
+from testbed1_api.shared import EventHook
 from typing import Any
 import logging
 class StructInterfaceSource(IObjectSource):
@@ -15,6 +16,8 @@ class StructInterfaceSource(IObjectSource):
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_float += self.notify_sig_float
         impl.on_sig_string += self.notify_sig_string
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -59,6 +62,11 @@ class StructInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
@@ -115,6 +123,8 @@ class StructArrayInterfaceSource(IObjectSource):
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_float += self.notify_sig_float
         impl.on_sig_string += self.notify_sig_string
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -159,6 +169,11 @@ class StructArrayInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
