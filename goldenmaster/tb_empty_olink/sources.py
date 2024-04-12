@@ -1,12 +1,15 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from tb_empty_api import api
+from tb_empty_api.shared import EventHook
 from typing import Any
 import logging
 class EmptyInterfaceSource(IObjectSource):
     impl: api.IEmptyInterface
     def __init__(self, impl: api.IEmptyInterface):
         self.impl = impl
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -23,6 +26,11 @@ class EmptyInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}

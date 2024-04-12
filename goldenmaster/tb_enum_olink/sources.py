@@ -1,6 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from tb_enum_api import api
+from tb_enum_api.shared import EventHook
 from typing import Any
 import logging
 class EnumInterfaceSource(IObjectSource):
@@ -15,6 +16,8 @@ class EnumInterfaceSource(IObjectSource):
         impl.on_sig1 += self.notify_sig1
         impl.on_sig2 += self.notify_sig2
         impl.on_sig3 += self.notify_sig3
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -59,6 +62,11 @@ class EnumInterfaceSource(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}

@@ -1,6 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from {{snake .Module.Name}}_api import api
+from {{snake .Module.Name}}_api.shared import EventHook
 from typing import Any
 import logging
 
@@ -18,6 +19,8 @@ class {{$class}}Source(IObjectSource):
 {{- range $idx, $s := .Signals }}
         impl.on_{{snake .Name}} += self.notify_{{snake .Name}}
 {{- end }}
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
 
     def olink_object_name(self):
@@ -75,6 +78,11 @@ class {{$class}}Source(IObjectSource):
 
     def olink_linked(self, name: str, node: "RemoteNode"):
         logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
 
     def olink_collect_properties(self) -> object:
         props = {}
