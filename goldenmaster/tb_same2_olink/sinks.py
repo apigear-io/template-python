@@ -12,6 +12,7 @@ class SameStruct1InterfaceSink(IObjectSink):
         self._prop1 = api.Struct1()
         self.on_prop1_changed = EventHook()
         self.on_sig1 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -51,6 +52,7 @@ class SameStruct1InterfaceSink(IObjectSink):
             if k == "prop1":
                 v =  api.as_struct1(props[k])
                 self._set_prop1(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -77,6 +79,7 @@ class SameStruct2InterfaceSink(IObjectSink):
         self.on_prop2_changed = EventHook()
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -138,6 +141,7 @@ class SameStruct2InterfaceSink(IObjectSink):
             elif k == "prop2":
                 v =  api.as_struct2(props[k])
                 self._set_prop2(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -170,6 +174,7 @@ class SameEnum1InterfaceSink(IObjectSink):
         self._prop1 = api.Enum1.VALUE1
         self.on_prop1_changed = EventHook()
         self.on_sig1 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -209,6 +214,7 @@ class SameEnum1InterfaceSink(IObjectSink):
             if k == "prop1":
                 v =  api.as_enum1(props[k])
                 self._set_prop1(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)
@@ -235,6 +241,7 @@ class SameEnum2InterfaceSink(IObjectSink):
         self.on_prop2_changed = EventHook()
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -296,6 +303,7 @@ class SameEnum2InterfaceSink(IObjectSink):
             elif k == "prop2":
                 v =  api.as_enum2(props[k])
                 self._set_prop2(v)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         path = Name.path_from_name(name)

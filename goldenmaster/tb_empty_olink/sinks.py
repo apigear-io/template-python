@@ -9,6 +9,7 @@ import logging
 class EmptyInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -26,6 +27,7 @@ class EmptyInterfaceSink(IObjectSink):
 
     def olink_on_init(self, name: str, props: object, node: "ClientNode"):
         self.client = ClientNode.register_sink(self)
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         logging.error("unknown property: %s", name)

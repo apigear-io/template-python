@@ -21,6 +21,7 @@ class {{Camel .Name}}Sink(IObjectSink):
 {{- range .Signals }}
         self.on_{{snake .Name}} = EventHook()
 {{- end }}
+        self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
     async def _invoke(self, name, args, no_wait=False):
@@ -95,6 +96,7 @@ class {{Camel .Name}}Sink(IObjectSink):
                 self._set_{{snake .Name}}(v)
         {{- end }}
         {{- end }}
+        self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
         {{- if len .Properties }}
