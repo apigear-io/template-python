@@ -51,7 +51,7 @@ class StructArrayInterfaceFuncBoolRequest(BaseModel):
     param_bool: list[api.StructBool] = Field(default=[], alias="paramBool") 
 
 class StructArrayInterfaceFuncBoolResponse(BaseModel):
-    result: api.StructBool
+    result: list[api.StructBool]
     state: StructArrayInterfaceState
 
 # method StructArrayInterface.funcInt
@@ -59,7 +59,7 @@ class StructArrayInterfaceFuncIntRequest(BaseModel):
     param_int: list[api.StructInt] = Field(default=[], alias="paramInt") 
 
 class StructArrayInterfaceFuncIntResponse(BaseModel):
-    result: api.StructBool
+    result: list[api.StructInt]
     state: StructArrayInterfaceState
 
 # method StructArrayInterface.funcFloat
@@ -67,7 +67,7 @@ class StructArrayInterfaceFuncFloatRequest(BaseModel):
     param_float: list[api.StructFloat] = Field(default=[], alias="paramFloat") 
 
 class StructArrayInterfaceFuncFloatResponse(BaseModel):
-    result: api.StructBool
+    result: list[api.StructFloat]
     state: StructArrayInterfaceState
 
 # method StructArrayInterface.funcString
@@ -75,7 +75,7 @@ class StructArrayInterfaceFuncStringRequest(BaseModel):
     param_string: list[api.StructString] = Field(default=[], alias="paramString") 
 
 class StructArrayInterfaceFuncStringResponse(BaseModel):
-    result: api.StructBool
+    result: list[api.StructString]
     state: StructArrayInterfaceState
 
 
