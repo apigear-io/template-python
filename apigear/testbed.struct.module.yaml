@@ -55,25 +55,25 @@ interfaces:
           - { name: paramBool, type: StructBool, array: true }
         return:
           type: StructBool
-          array: false #TODO: should be true
+          array: true
       - name: funcInt
         params:
           - { name: paramInt, type: StructInt, array: true }
         return:
-          type: StructBool #TODO: should be StructInt
-          array: false #TODO: should be true
+          type: StructInt
+          array: true
       - name: funcFloat
         params:
           - { name: paramFloat, type: StructFloat, array: true }
         return:
-          type: StructBool #TODO: should be StructFloat
-          array: false #TODO: should be true
+          type: StructFloat
+          array: true
       - name: funcString
         params:
           - { name: paramString, type: StructString, array: true }
         return:
-          type: StructBool #TODO: should be StructString
-          array: false #TODO: should be true
+          type: StructString
+          array: true
     signals:
       - name: sigBool
         params:

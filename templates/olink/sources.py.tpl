@@ -64,7 +64,11 @@ class {{$class}}Source(IObjectSource):
         {{- if .Return.IsVoid }}
             return None
         {{- else }}
+            {{- if .Return.IsArray }}
+            return [api.from_{{snake .Return.Type}}(_) for _ in reply]
+            {{- else }}
             return api.from_{{snake .Return.Type}}(reply)
+            {{- end }}
         {{- end }}
 {{- end }}      
         logging.error("unknown operation: %s", name)

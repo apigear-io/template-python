@@ -254,35 +254,35 @@ class SimpleArrayInterfaceSource(IObjectSource):
         if path == "funcBool":
             param_bool = [api.as_bool(_) for _ in args[0]]
             reply = self.impl.func_bool(param_bool)
-            return api.from_bool(reply)
+            return [api.from_bool(_) for _ in reply]
         elif path == "funcInt":
             param_int = [api.as_int(_) for _ in args[0]]
             reply = self.impl.func_int(param_int)
-            return api.from_int(reply)
+            return [api.from_int(_) for _ in reply]
         elif path == "funcInt32":
             param_int32 = [api.as_int32(_) for _ in args[0]]
             reply = self.impl.func_int32(param_int32)
-            return api.from_int32(reply)
+            return [api.from_int32(_) for _ in reply]
         elif path == "funcInt64":
             param_int64 = [api.as_int64(_) for _ in args[0]]
             reply = self.impl.func_int64(param_int64)
-            return api.from_int64(reply)
+            return [api.from_int64(_) for _ in reply]
         elif path == "funcFloat":
             param_float = [api.as_float(_) for _ in args[0]]
             reply = self.impl.func_float(param_float)
-            return api.from_float(reply)
+            return [api.from_float(_) for _ in reply]
         elif path == "funcFloat32":
             param_float32 = [api.as_float32(_) for _ in args[0]]
             reply = self.impl.func_float32(param_float32)
-            return api.from_float32(reply)
+            return [api.from_float32(_) for _ in reply]
         elif path == "funcFloat64":
             param_float = [api.as_float64(_) for _ in args[0]]
             reply = self.impl.func_float64(param_float)
-            return api.from_float64(reply)
+            return [api.from_float64(_) for _ in reply]
         elif path == "funcString":
             param_string = [api.as_string(_) for _ in args[0]]
             reply = self.impl.func_string(param_string)
-            return api.from_string(reply)      
+            return [api.from_string(_) for _ in reply]      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):

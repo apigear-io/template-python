@@ -66,17 +66,17 @@ class StructArrayInterface(api.IStructArrayInterface):
     def _push_prop_string(self, value):
         self.on_prop_string_changed.fire(value)
 
-    def func_bool(self, param_bool: list[api.StructBool]) -> api.StructBool:
-        return api.StructBool()
+    def func_bool(self, param_bool: list[api.StructBool]) -> list[api.StructBool]:
+        return []
 
-    def func_int(self, param_int: list[api.StructInt]) -> api.StructBool:
-        return api.StructBool()
+    def func_int(self, param_int: list[api.StructInt]) -> list[api.StructInt]:
+        return []
 
-    def func_float(self, param_float: list[api.StructFloat]) -> api.StructBool:
-        return api.StructBool()
+    def func_float(self, param_float: list[api.StructFloat]) -> list[api.StructFloat]:
+        return []
 
-    def func_string(self, param_string: list[api.StructString]) -> api.StructBool:
-        return api.StructBool()
+    def func_string(self, param_string: list[api.StructString]) -> list[api.StructString]:
+        return []
 
     def _sig_bool(self, param_bool: list[api.StructBool]):
         self.on_sig_bool.fire(param_bool)

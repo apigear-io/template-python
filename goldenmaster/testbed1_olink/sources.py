@@ -142,19 +142,19 @@ class StructArrayInterfaceSource(IObjectSource):
         if path == "funcBool":
             param_bool = [api.as_struct_bool(_) for _ in args[0]]
             reply = self.impl.func_bool(param_bool)
-            return api.from_struct_bool(reply)
+            return [api.from_struct_bool(_) for _ in reply]
         elif path == "funcInt":
             param_int = [api.as_struct_int(_) for _ in args[0]]
             reply = self.impl.func_int(param_int)
-            return api.from_struct_bool(reply)
+            return [api.from_struct_int(_) for _ in reply]
         elif path == "funcFloat":
             param_float = [api.as_struct_float(_) for _ in args[0]]
             reply = self.impl.func_float(param_float)
-            return api.from_struct_bool(reply)
+            return [api.from_struct_float(_) for _ in reply]
         elif path == "funcString":
             param_string = [api.as_struct_string(_) for _ in args[0]]
             reply = self.impl.func_string(param_string)
-            return api.from_struct_bool(reply)      
+            return [api.from_struct_string(_) for _ in reply]      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
