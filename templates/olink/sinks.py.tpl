@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 from olink.core import Name
 from olink.client import IObjectSink, ClientNode
-from {{snake .Module.Name}}_api.shared import EventHook
+from utils.eventhook import EventHook
 from {{snake .Module.Name}}_api import api
 import logging
 
