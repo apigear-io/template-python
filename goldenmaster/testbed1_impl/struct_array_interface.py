@@ -1,5 +1,5 @@
 from testbed1_api import api
-from testbed1_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class StructArrayInterface(api.IStructArrayInterface):

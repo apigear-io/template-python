@@ -1,5 +1,5 @@
 from tb_simple_api import api
-from tb_simple_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class NoOperationsInterface(api.INoOperationsInterface):

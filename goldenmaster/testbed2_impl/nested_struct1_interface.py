@@ -1,5 +1,5 @@
 from testbed2_api import api
-from testbed2_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class NestedStruct1Interface(api.INestedStruct1Interface):

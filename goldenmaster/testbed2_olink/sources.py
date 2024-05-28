@@ -1,7 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from testbed2_api import api
-from testbed2_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Any
 import logging
 class ManyParamInterfaceSource(IObjectSource):
