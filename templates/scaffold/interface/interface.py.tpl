@@ -1,5 +1,5 @@
 from {{ snake .Module.Name}}_api import api
-from {{snake .Module.Name}}_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 {{- $class := Camel .Interface.Name }}
 

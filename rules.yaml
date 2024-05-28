@@ -3,6 +3,14 @@ engines:
 features:
   - name: api
     scopes:
+      - match: system
+        documents:
+          - source: "utils/eventhook.py"
+            target: "utils/eventhook.py"
+            raw: true
+          - source: "utils/__init__.py"
+            target: "utils/__init__.py"       
+            raw: true
       - match: module
         prefix: "{{snake .Module.Name}}_api/"
         documents:
@@ -10,10 +18,6 @@ features:
             target: "__init__.py"
           - source: "api/api.py.tpl"
             target: "api.py"
-          - source: "api/shared.py"
-            target: "shared.py"
-            raw: true
-
   - name: scaffold
     scopes:
       - match: system
