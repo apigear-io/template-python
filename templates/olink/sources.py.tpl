@@ -1,7 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from {{snake .Module.Name}}_api import api
-from {{snake .Module.Name}}_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Any
 import logging
 
