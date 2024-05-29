@@ -2,29 +2,10 @@ import asyncio
 from typing import Any
 import logging
 from asyncio.queues import Queue
-from starlette.applications import Starlette
 from starlette.endpoints import WebSocketEndpoint, Scope, Receive, Send
-from starlette.routing import WebSocketRoute
 from starlette.websockets import WebSocket
 
 from olink.remote import RemoteNode
-
-{{- range .System.Modules }}
-{{- $import_olink := printf "%s_olink" (snake .Name)}}
-{{- $import_impl := printf "%s_impl" (snake .Name)}}
-
-import {{$import_olink}}
-import {{$import_impl}}
-
-{{- end }}
-{{ range .System.Modules }}
-{{- $import_olink := printf "%s_olink" (snake .Name)}}
-{{- $import_impl := printf "%s_impl" (snake .Name)}}
-
-{{- range .Interfaces }}
-{{$import_olink}}.{{Camel .Name}}Source({{$import_impl}}.{{Camel .Name}}())
-{{- end }}
-{{ end }}
 
 # set default log level to INFO and above
 logging.basicConfig()
@@ -76,10 +57,3 @@ class RemoteEndpoint(WebSocketEndpoint):
         self.node.on_write(None)
         await self.queue.join()
         
-
-routes = [
-    WebSocketRoute("/ws", RemoteEndpoint)
-]
-
-
-app = Starlette(routes=routes)
