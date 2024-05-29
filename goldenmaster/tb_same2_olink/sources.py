@@ -1,7 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from tb_same2_api import api
-from tb_same2_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Any
 import logging
 class SameStruct1InterfaceSource(IObjectSource):
