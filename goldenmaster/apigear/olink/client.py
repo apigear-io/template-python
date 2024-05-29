@@ -4,10 +4,6 @@ from olink.client import ClientNode
 import websockets
 import logging
 
-{{ range .System.Modules }}
-import {{snake .Name}}_olink
-{{- end }}
-
 # set default log level to INFO and above
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
@@ -74,28 +70,3 @@ class Client:
             
     def disconnect(self):
         self.close_connection_request.set()
-
-# create a client node
-node = ClientNode()
-
-# create our client ws adapter
-client = Client(node)
-{{ range .System.Modules }}
-{{ $module := . }}
-{{ range .Interfaces }}
-
-# create and register sink for {{$module.Name}}.{{.Name}}
-sink = {{snake $module.Name}}_olink.{{.Name}}Sink()
-node.link_remote(sink.olink_object_name())
-{{- end }}
-{{- end }}
-
-
-ADDR = 'ws://localhost:8000/ws'
-
-async def main():
-    await client.connect(ADDR)
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(main())

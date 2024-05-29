@@ -7,18 +7,18 @@ Implement the services, see the files in the `*_impl` folders.
 Run the server with uvicorn
 
 ```py
-uvicorn olink_server:app
+uvicorn server:app
 ```
 
 If server is not run on the local device or on a different port, specify `0.0.0.0` as source address and the preferred port
 
 ```py
-uvicorn olink_server:app --host 0.0.0.0 --port 8080
+uvicorn server:app --host 0.0.0.0 --port 8080
 ```
 
 ## Client
 
-use the `olinkclient.py` implementation as a starting point.
+use the `client.py` implementation as a starting point.
 
 ```py
 # create a node
