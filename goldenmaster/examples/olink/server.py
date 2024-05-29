@@ -1,13 +1,17 @@
 import asyncio
-from typing import Any
 import logging
-from asyncio.queues import Queue
+import os
+import sys
+
+#add context - paths to modules
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 from starlette.applications import Starlette
-from starlette.endpoints import WebSocketEndpoint, Scope, Receive, Send
 from starlette.routing import WebSocketRoute
-from starlette.websockets import WebSocket
 
 from olink.remote import RemoteNode
+
+import apigear.olink
 
 import testbed2_olink
 import testbed2_impl
@@ -64,55 +68,8 @@ tb_empty_olink.EmptyInterfaceSource(tb_empty_impl.EmptyInterface())
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-class RemoteEndpoint(WebSocketEndpoint):
-    def __init__(self, scope: Scope, receive: Receive, send: Send):
-        super().__init__(scope, receive, send)
-        self.encoding = "text"
-        self.node = RemoteNode()
-        self.node.on_log(self._olink_log_writer)
-        self.queue = Queue()
-
-    def _olink_log_writer(self, level, msg):
-        if level[0] == 1:
-            logging.debug(msg)
-        elif level[0] == 2:
-            logging.info(msg)
-        elif level[0] == 3:
-            logging.warning(msg)
-        else:
-            logging.error(msg)
-
-    async def _sender(self, ws):
-        logging.info("start sender")
-        while True:
-            msg = await self.queue.get()
-            logging.debug("server send %s", msg)
-            await ws.send_text(msg)
-            self.queue.task_done()
-
-    async def on_connect(self, ws: WebSocket):
-        logging.info("server: %s:%d connected", ws.client.host, ws.client.port)
-        asyncio.create_task(self._sender(ws))
-
-        def writer(msg: str):
-            logging.debug('queue %s', msg)
-            self.queue.put_nowait(msg)
-        self.node.on_write(writer)
-        await super().on_connect(ws)
-
-    async def on_receive(self, ws: WebSocket, data: Any):
-        logging.debug("server recv %s", data)
-        self.node.handle_message(data)
-
-    async def on_disconnect(self, ws: WebSocket, close_code: int):
-        await super().on_disconnect(ws, close_code)
-        logging.info("server: %s:%d disconnected", ws.client.host, ws.client.port)
-        self.node.on_write(None)
-        await self.queue.join()
-        
-
 routes = [
-    WebSocketRoute("/ws", RemoteEndpoint)
+    WebSocketRoute("/ws", apigear.olink.RemoteEndpoint)
 ]
 
 
