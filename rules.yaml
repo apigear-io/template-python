@@ -72,14 +72,26 @@ features:
     scopes:
       - match: system
         documents:
-          - source: "olink/OLINK_README.md"
-            target: "OLINK_README.md"
+          - source: "apigear/__init__.py"
+            target: "apigear/__init__.py"
             raw: true
-          - source: "olink/system_server.py.tpl"
-            target: "olink_server.py"
+          - source: "apigear/olink/__init__.py"
+            target: "apigear/olink/__init__.py"
+            raw: true
+          - source: "apigear/olink/client.py"
+            target: "apigear/olink/client.py"
+            raw: true
+          - source: "apigear/olink//remoteendpoint.py"
+            target: "apigear/olink/remoteendpoint.py"
+            raw: true
+          - source: "examples/olink/OLINK_README.md"
+            target: "examples/olink/OLINK_README.md"
+            raw: true
+          - source: "examples/olink/client.py.tpl"
+            target: "examples/olink/client.py"
             preserve: true
-          - source: "olink/system_client.py.tpl"
-            target: "olink_client.py"
+          - source: "examples/olink/server.py.tpl"
+            target: "examples/olink/server.py"
             preserve: true
       - match: module
         prefix: "{{snake .Module.Name}}_olink/"
