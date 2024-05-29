@@ -1,5 +1,5 @@
 from tb_simple_api import api
-from tb_simple_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class SimpleArrayInterface(api.ISimpleArrayInterface):
@@ -7,19 +7,19 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         super().__init__()
         self._prop_bool: list[bool] = []
         self._prop_int: list[int] = []
-        self._prop_int32: list[int] = []
-        self._prop_int64: list[int] = []
+        self._prop_int32: list[int32] = []
+        self._prop_int64: list[int64] = []
         self._prop_float: list[float] = []
-        self._prop_float32: list[float] = []
-        self._prop_float64: list[float] = []
+        self._prop_float32: list[float32] = []
+        self._prop_float64: list[float64] = []
         self._prop_string: list[str] = []
         self.on_prop_bool_changed: list[bool] = EventHook()
         self.on_prop_int_changed: list[int] = EventHook()
-        self.on_prop_int32_changed: list[int] = EventHook()
-        self.on_prop_int64_changed: list[int] = EventHook()
+        self.on_prop_int32_changed: list[int32] = EventHook()
+        self.on_prop_int64_changed: list[int64] = EventHook()
         self.on_prop_float_changed: list[float] = EventHook()
-        self.on_prop_float32_changed: list[float] = EventHook()
-        self.on_prop_float64_changed: list[float] = EventHook()
+        self.on_prop_float32_changed: list[float32] = EventHook()
+        self.on_prop_float64_changed: list[float64] = EventHook()
         self.on_prop_string_changed: list[str] = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
@@ -132,19 +132,19 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
     def func_int(self, param_int: list[int]) -> list[int]:
         return []
 
-    def func_int32(self, param_int32: list[int]) -> list[int]:
+    def func_int32(self, param_int32: list[int32]) -> list[int32]:
         return []
 
-    def func_int64(self, param_int64: list[int]) -> list[int]:
+    def func_int64(self, param_int64: list[int64]) -> list[int64]:
         return []
 
     def func_float(self, param_float: list[float]) -> list[float]:
         return []
 
-    def func_float32(self, param_float32: list[float]) -> list[float]:
+    def func_float32(self, param_float32: list[float32]) -> list[float32]:
         return []
 
-    def func_float64(self, param_float: list[float]) -> list[float]:
+    def func_float64(self, param_float: list[float64]) -> list[float64]:
         return []
 
     def func_string(self, param_string: list[str]) -> list[str]:
@@ -156,19 +156,19 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
     def _sig_int(self, param_int: list[int]):
         self.on_sig_int.fire(param_int)
 
-    def _sig_int32(self, param_int32: list[int]):
+    def _sig_int32(self, param_int32: list[int32]):
         self.on_sig_int32.fire(param_int32)
 
-    def _sig_int64(self, param_int64: list[int]):
+    def _sig_int64(self, param_int64: list[int64]):
         self.on_sig_int64.fire(param_int64)
 
     def _sig_float(self, param_float: list[float]):
         self.on_sig_float.fire(param_float)
 
-    def _sig_float32(self, param_float32: list[float]):
+    def _sig_float32(self, param_float32: list[float32]):
         self.on_sig_float32.fire(param_float32)
 
-    def _sig_float64(self, param_float64: list[float]):
+    def _sig_float64(self, param_float64: list[float64]):
         self.on_sig_float64.fire(param_float64)
 
     def _sig_string(self, param_string: list[str]):

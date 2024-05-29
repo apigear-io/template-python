@@ -1,5 +1,5 @@
 from tb_simple_api import api
-from tb_simple_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class SimpleInterface(api.ISimpleInterface):
@@ -7,20 +7,20 @@ class SimpleInterface(api.ISimpleInterface):
         super().__init__()
         self._prop_bool: bool = False
         self._prop_int: int = 0
-        self._prop_int32: int = 0
-        self._prop_int64: int = 0
+        self._prop_int32: int32 = 0
+        self._prop_int64: int64 = 0
         self._prop_float: float = 0.0
-        self._prop_float32: float = 0.0
-        self._prop_float64: float = 0.0
+        self._prop_float32: float32 = 0.0
+        self._prop_float64: float64 = 0.0
         self._prop_string: str = ""
         self._prop_read_only_string: str = ""
         self.on_prop_bool_changed: bool = EventHook()
         self.on_prop_int_changed: int = EventHook()
-        self.on_prop_int32_changed: int = EventHook()
-        self.on_prop_int64_changed: int = EventHook()
+        self.on_prop_int32_changed: int32 = EventHook()
+        self.on_prop_int64_changed: int64 = EventHook()
         self.on_prop_float_changed: float = EventHook()
-        self.on_prop_float32_changed: float = EventHook()
-        self.on_prop_float64_changed: float = EventHook()
+        self.on_prop_float32_changed: float32 = EventHook()
+        self.on_prop_float64_changed: float64 = EventHook()
         self.on_prop_string_changed: str = EventHook()
         self.on_prop_read_only_string_changed: str = EventHook()
         self.on_sig_void = EventHook()
@@ -144,19 +144,19 @@ class SimpleInterface(api.ISimpleInterface):
     def func_int(self, param_int: int) -> int:
         return 0
 
-    def func_int32(self, param_int32: int) -> int:
+    def func_int32(self, param_int32: int32) -> int32:
         return 0
 
-    def func_int64(self, param_int64: int) -> int:
+    def func_int64(self, param_int64: int64) -> int64:
         return 0
 
     def func_float(self, param_float: float) -> float:
         return 0.0
 
-    def func_float32(self, param_float32: float) -> float:
+    def func_float32(self, param_float32: float32) -> float32:
         return 0.0
 
-    def func_float64(self, param_float: float) -> float:
+    def func_float64(self, param_float: float64) -> float64:
         return 0.0
 
     def func_string(self, param_string: str) -> str:
@@ -171,19 +171,19 @@ class SimpleInterface(api.ISimpleInterface):
     def _sig_int(self, param_int: int):
         self.on_sig_int.fire(param_int)
 
-    def _sig_int32(self, param_int32: int):
+    def _sig_int32(self, param_int32: int32):
         self.on_sig_int32.fire(param_int32)
 
-    def _sig_int64(self, param_int64: int):
+    def _sig_int64(self, param_int64: int64):
         self.on_sig_int64.fire(param_int64)
 
     def _sig_float(self, param_float: float):
         self.on_sig_float.fire(param_float)
 
-    def _sig_float32(self, param_float32: float):
+    def _sig_float32(self, param_float32: float32):
         self.on_sig_float32.fire(param_float32)
 
-    def _sig_float64(self, param_float64: float):
+    def _sig_float64(self, param_float64: float64):
         self.on_sig_float64.fire(param_float64)
 
     def _sig_string(self, param_string: str):

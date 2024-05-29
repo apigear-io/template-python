@@ -1,5 +1,5 @@
 from tb_enum_api import api
-from tb_enum_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class EnumInterface(api.IEnumInterface):

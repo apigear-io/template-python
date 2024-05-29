@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 from olink.core import Name
 from olink.client import IObjectSink, ClientNode
-from tb_simple_api.shared import EventHook
+from utils.eventhook import EventHook
 from tb_simple_api import api
 import logging
 
@@ -175,11 +175,11 @@ class SimpleInterfaceSink(IObjectSink):
         _param_int = api.from_int(param_int)
         return await self._invoke("funcInt", [_param_int])
 
-    async def func_int32(self, param_int32: int):
+    async def func_int32(self, param_int32: int32):
         _param_int32 = api.from_int32(param_int32)
         return await self._invoke("funcInt32", [_param_int32])
 
-    async def func_int64(self, param_int64: int):
+    async def func_int64(self, param_int64: int64):
         _param_int64 = api.from_int64(param_int64)
         return await self._invoke("funcInt64", [_param_int64])
 
@@ -187,11 +187,11 @@ class SimpleInterfaceSink(IObjectSink):
         _param_float = api.from_float(param_float)
         return await self._invoke("funcFloat", [_param_float])
 
-    async def func_float32(self, param_float32: float):
+    async def func_float32(self, param_float32: float32):
         _param_float32 = api.from_float32(param_float32)
         return await self._invoke("funcFloat32", [_param_float32])
 
-    async def func_float64(self, param_float: float):
+    async def func_float64(self, param_float: float64):
         _param_float = api.from_float64(param_float)
         return await self._invoke("funcFloat64", [_param_float])
 
@@ -473,11 +473,11 @@ class SimpleArrayInterfaceSink(IObjectSink):
         _param_int = [api.from_int(int) for int in param_int]
         return await self._invoke("funcInt", [_param_int])
 
-    async def func_int32(self, param_int32: list[int]):
+    async def func_int32(self, param_int32: list[int32]):
         _param_int32 = [api.from_int32(int32) for int32 in param_int32]
         return await self._invoke("funcInt32", [_param_int32])
 
-    async def func_int64(self, param_int64: list[int]):
+    async def func_int64(self, param_int64: list[int64]):
         _param_int64 = [api.from_int64(int64) for int64 in param_int64]
         return await self._invoke("funcInt64", [_param_int64])
 
@@ -485,11 +485,11 @@ class SimpleArrayInterfaceSink(IObjectSink):
         _param_float = [api.from_float(float) for float in param_float]
         return await self._invoke("funcFloat", [_param_float])
 
-    async def func_float32(self, param_float32: list[float]):
+    async def func_float32(self, param_float32: list[float32]):
         _param_float32 = [api.from_float32(float32) for float32 in param_float32]
         return await self._invoke("funcFloat32", [_param_float32])
 
-    async def func_float64(self, param_float: list[float]):
+    async def func_float64(self, param_float: list[float64]):
         _param_float = [api.from_float64(float64) for float64 in param_float]
         return await self._invoke("funcFloat64", [_param_float])
 

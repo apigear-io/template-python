@@ -1,5 +1,5 @@
 from tb_same2_api import api
-from tb_same2_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Iterable
 
 class SameStruct1Interface(api.ISameStruct1Interface):

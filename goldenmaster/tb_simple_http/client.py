@@ -127,7 +127,7 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_string = resp.state.prop_string
         self._prop_read_only_string = resp.state.prop_read_only_string
 
-    def func_int32(self, param_int32: int):
+    def func_int32(self, param_int32: int32):
         req = shared.SimpleInterfaceFuncInt32Request(
             param_int32=param_int32
         )
@@ -146,7 +146,7 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_string = resp.state.prop_string
         self._prop_read_only_string = resp.state.prop_read_only_string
 
-    def func_int64(self, param_int64: int):
+    def func_int64(self, param_int64: int64):
         req = shared.SimpleInterfaceFuncInt64Request(
             param_int64=param_int64
         )
@@ -184,7 +184,7 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_string = resp.state.prop_string
         self._prop_read_only_string = resp.state.prop_read_only_string
 
-    def func_float32(self, param_float32: float):
+    def func_float32(self, param_float32: float32):
         req = shared.SimpleInterfaceFuncFloat32Request(
             param_float32=param_float32
         )
@@ -203,7 +203,7 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_string = resp.state.prop_string
         self._prop_read_only_string = resp.state.prop_read_only_string
 
-    def func_float64(self, param_float: float):
+    def func_float64(self, param_float: float64):
         req = shared.SimpleInterfaceFuncFloat64Request(
             param_float=param_float
         )
@@ -338,7 +338,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
 
-    def func_int32(self, param_int32: list[int]):
+    def func_int32(self, param_int32: list[int32]):
         req = shared.SimpleArrayInterfaceFuncInt32Request(
             param_int32=param_int32
         )
@@ -356,7 +356,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
 
-    def func_int64(self, param_int64: list[int]):
+    def func_int64(self, param_int64: list[int64]):
         req = shared.SimpleArrayInterfaceFuncInt64Request(
             param_int64=param_int64
         )
@@ -392,7 +392,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
 
-    def func_float32(self, param_float32: list[float]):
+    def func_float32(self, param_float32: list[float32]):
         req = shared.SimpleArrayInterfaceFuncFloat32Request(
             param_float32=param_float32
         )
@@ -410,7 +410,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
 
-    def func_float64(self, param_float: list[float]):
+    def func_float64(self, param_float: list[float64]):
         req = shared.SimpleArrayInterfaceFuncFloat64Request(
             param_float=param_float
         )

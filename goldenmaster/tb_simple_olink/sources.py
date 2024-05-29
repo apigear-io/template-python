@@ -1,7 +1,7 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 from tb_simple_api import api
-from tb_simple_api.shared import EventHook
+from utils.eventhook import EventHook
 from typing import Any
 import logging
 class SimpleInterfaceSource(IObjectSource):
@@ -144,11 +144,11 @@ class SimpleInterfaceSource(IObjectSource):
         _param_int = api.from_int(param_int)
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigInt", [_param_int])
 
-    def notify_sig_int32(self, param_int32: int):
+    def notify_sig_int32(self, param_int32: int32):
         _param_int32 = api.from_int32(param_int32)
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigInt32", [_param_int32])
 
-    def notify_sig_int64(self, param_int64: int):
+    def notify_sig_int64(self, param_int64: int64):
         _param_int64 = api.from_int64(param_int64)
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigInt64", [_param_int64])
 
@@ -156,11 +156,11 @@ class SimpleInterfaceSource(IObjectSource):
         _param_float = api.from_float(param_float)
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigFloat", [_param_float])
 
-    def notify_sig_float32(self, param_float32: float):
+    def notify_sig_float32(self, param_float32: float32):
         _param_float32 = api.from_float32(param_float32)
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigFloat32", [_param_float32])
 
-    def notify_sig_float64(self, param_float64: float):
+    def notify_sig_float64(self, param_float64: float64):
         _param_float64 = api.from_float64(param_float64)
         return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigFloat64", [_param_float64])
 
@@ -331,11 +331,11 @@ class SimpleArrayInterfaceSource(IObjectSource):
         _param_int = [api.from_int(_) for _ in param_int]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt", [_param_int])
 
-    def notify_sig_int32(self, param_int32: list[int]):
+    def notify_sig_int32(self, param_int32: list[int32]):
         _param_int32 = [api.from_int32(_) for _ in param_int32]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt32", [_param_int32])
 
-    def notify_sig_int64(self, param_int64: list[int]):
+    def notify_sig_int64(self, param_int64: list[int64]):
         _param_int64 = [api.from_int64(_) for _ in param_int64]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt64", [_param_int64])
 
@@ -343,11 +343,11 @@ class SimpleArrayInterfaceSource(IObjectSource):
         _param_float = [api.from_float(_) for _ in param_float]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat", [_param_float])
 
-    def notify_sig_float32(self, param_float32: list[float]):
+    def notify_sig_float32(self, param_float32: list[float32]):
         _param_float32 = [api.from_float32(_) for _ in param_float32]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat32", [_param_float32])
 
-    def notify_sig_float64(self, param_float64: list[float]):
+    def notify_sig_float64(self, param_float64: list[float64]):
         _param_float64 = [api.from_float64(_) for _ in param_float64]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat64", [_param_float64])
 

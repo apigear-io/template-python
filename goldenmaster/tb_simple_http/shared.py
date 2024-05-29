@@ -5,11 +5,11 @@ from tb.simple_api import api
 class SimpleInterfaceState(BaseModel):
     prop_bool: bool = Field(default=False, alias="propBool")
     prop_int: int = Field(default=0, alias="propInt")
-    prop_int32: int = Field(default=0, alias="propInt32")
-    prop_int64: int = Field(default=0, alias="propInt64")
+    prop_int32: int32 = Field(default=0, alias="propInt32")
+    prop_int64: int64 = Field(default=0, alias="propInt64")
     prop_float: float = Field(default=0.0, alias="propFloat")
-    prop_float32: float = Field(default=0.0, alias="propFloat32")
-    prop_float64: float = Field(default=0.0, alias="propFloat64")
+    prop_float32: float32 = Field(default=0.0, alias="propFloat32")
+    prop_float64: float64 = Field(default=0.0, alias="propFloat64")
     prop_string: str = Field(default="", alias="propString")
     prop_read_only_string: str = Field(default="", alias="propReadOnlyString")
 
@@ -39,18 +39,18 @@ class SimpleInterfaceFuncIntResponse(BaseModel):
 
 # method SimpleInterface.funcInt32
 class SimpleInterfaceFuncInt32Request(BaseModel):
-    param_int32: int = Field(default=0, alias="paramInt32") 
+    param_int32: int32 = Field(default=0, alias="paramInt32") 
 
 class SimpleInterfaceFuncInt32Response(BaseModel):
-    result: int
+    result: int32
     state: SimpleInterfaceState
 
 # method SimpleInterface.funcInt64
 class SimpleInterfaceFuncInt64Request(BaseModel):
-    param_int64: int = Field(default=0, alias="paramInt64") 
+    param_int64: int64 = Field(default=0, alias="paramInt64") 
 
 class SimpleInterfaceFuncInt64Response(BaseModel):
-    result: int
+    result: int64
     state: SimpleInterfaceState
 
 # method SimpleInterface.funcFloat
@@ -63,18 +63,18 @@ class SimpleInterfaceFuncFloatResponse(BaseModel):
 
 # method SimpleInterface.funcFloat32
 class SimpleInterfaceFuncFloat32Request(BaseModel):
-    param_float32: float = Field(default=0.0, alias="paramFloat32") 
+    param_float32: float32 = Field(default=0.0, alias="paramFloat32") 
 
 class SimpleInterfaceFuncFloat32Response(BaseModel):
-    result: float
+    result: float32
     state: SimpleInterfaceState
 
 # method SimpleInterface.funcFloat64
 class SimpleInterfaceFuncFloat64Request(BaseModel):
-    param_float: float = Field(default=0.0, alias="paramFloat") 
+    param_float: float64 = Field(default=0.0, alias="paramFloat") 
 
 class SimpleInterfaceFuncFloat64Response(BaseModel):
-    result: float
+    result: float64
     state: SimpleInterfaceState
 
 # method SimpleInterface.funcString
@@ -88,11 +88,11 @@ class SimpleInterfaceFuncStringResponse(BaseModel):
 class SimpleArrayInterfaceState(BaseModel):
     prop_bool: list[bool] = Field(default=[], alias="propBool")
     prop_int: list[int] = Field(default=[], alias="propInt")
-    prop_int32: list[int] = Field(default=[], alias="propInt32")
-    prop_int64: list[int] = Field(default=[], alias="propInt64")
+    prop_int32: list[int32] = Field(default=[], alias="propInt32")
+    prop_int64: list[int64] = Field(default=[], alias="propInt64")
     prop_float: list[float] = Field(default=[], alias="propFloat")
-    prop_float32: list[float] = Field(default=[], alias="propFloat32")
-    prop_float64: list[float] = Field(default=[], alias="propFloat64")
+    prop_float32: list[float32] = Field(default=[], alias="propFloat32")
+    prop_float64: list[float64] = Field(default=[], alias="propFloat64")
     prop_string: list[str] = Field(default=[], alias="propString")
 
 # method SimpleArrayInterface.funcBool
@@ -113,18 +113,18 @@ class SimpleArrayInterfaceFuncIntResponse(BaseModel):
 
 # method SimpleArrayInterface.funcInt32
 class SimpleArrayInterfaceFuncInt32Request(BaseModel):
-    param_int32: list[int] = Field(default=[], alias="paramInt32") 
+    param_int32: list[int32] = Field(default=[], alias="paramInt32") 
 
 class SimpleArrayInterfaceFuncInt32Response(BaseModel):
-    result: list[int]
+    result: list[int32]
     state: SimpleArrayInterfaceState
 
 # method SimpleArrayInterface.funcInt64
 class SimpleArrayInterfaceFuncInt64Request(BaseModel):
-    param_int64: list[int] = Field(default=[], alias="paramInt64") 
+    param_int64: list[int64] = Field(default=[], alias="paramInt64") 
 
 class SimpleArrayInterfaceFuncInt64Response(BaseModel):
-    result: list[int]
+    result: list[int64]
     state: SimpleArrayInterfaceState
 
 # method SimpleArrayInterface.funcFloat
@@ -137,18 +137,18 @@ class SimpleArrayInterfaceFuncFloatResponse(BaseModel):
 
 # method SimpleArrayInterface.funcFloat32
 class SimpleArrayInterfaceFuncFloat32Request(BaseModel):
-    param_float32: list[float] = Field(default=[], alias="paramFloat32") 
+    param_float32: list[float32] = Field(default=[], alias="paramFloat32") 
 
 class SimpleArrayInterfaceFuncFloat32Response(BaseModel):
-    result: list[float]
+    result: list[float32]
     state: SimpleArrayInterfaceState
 
 # method SimpleArrayInterface.funcFloat64
 class SimpleArrayInterfaceFuncFloat64Request(BaseModel):
-    param_float: list[float] = Field(default=[], alias="paramFloat") 
+    param_float: list[float64] = Field(default=[], alias="paramFloat") 
 
 class SimpleArrayInterfaceFuncFloat64Response(BaseModel):
-    result: list[float]
+    result: list[float64]
     state: SimpleArrayInterfaceState
 
 # method SimpleArrayInterface.funcString

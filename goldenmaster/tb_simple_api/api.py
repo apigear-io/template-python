@@ -76,19 +76,19 @@ class ISimpleInterface:
     def func_int(self, param_int: int):
         raise NotImplementedError("Method tb.simple/simple_interface:func_int is not implemented.")
 
-    def func_int32(self, param_int32: int):
+    def func_int32(self, param_int32: int32):
         raise NotImplementedError("Method tb.simple/simple_interface:func_int32 is not implemented.")
 
-    def func_int64(self, param_int64: int):
+    def func_int64(self, param_int64: int64):
         raise NotImplementedError("Method tb.simple/simple_interface:func_int64 is not implemented.")
 
     def func_float(self, param_float: float):
         raise NotImplementedError("Method tb.simple/simple_interface:func_float is not implemented.")
 
-    def func_float32(self, param_float32: float):
+    def func_float32(self, param_float32: float32):
         raise NotImplementedError("Method tb.simple/simple_interface:func_float32 is not implemented.")
 
-    def func_float64(self, param_float: float):
+    def func_float64(self, param_float: float64):
         raise NotImplementedError("Method tb.simple/simple_interface:func_float64 is not implemented.")
 
     def func_string(self, param_string: str):
@@ -152,19 +152,19 @@ class ISimpleArrayInterface:
     def func_int(self, param_int: list[int]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_int is not implemented.")
 
-    def func_int32(self, param_int32: list[int]):
+    def func_int32(self, param_int32: list[int32]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_int32 is not implemented.")
 
-    def func_int64(self, param_int64: list[int]):
+    def func_int64(self, param_int64: list[int64]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_int64 is not implemented.")
 
     def func_float(self, param_float: list[float]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_float is not implemented.")
 
-    def func_float32(self, param_float32: list[float]):
+    def func_float32(self, param_float32: list[float32]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_float32 is not implemented.")
 
-    def func_float64(self, param_float: list[float]):
+    def func_float64(self, param_float: list[float64]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_float64 is not implemented.")
 
     def func_string(self, param_string: list[str]):
