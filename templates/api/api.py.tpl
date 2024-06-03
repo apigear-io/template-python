@@ -1,5 +1,8 @@
 from pydantic import ConfigDict, BaseModel, Field
 from enum import IntEnum
+{{- range .Module.Imports }}
+import {{.Name}}.api 
+{{- end }}
 
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
