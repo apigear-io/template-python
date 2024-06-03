@@ -1,6 +1,7 @@
 from pydantic import ConfigDict, BaseModel, Field
 from enum import IntEnum
 
+
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
     model_config = ConfigDict(populate_by_name=True)

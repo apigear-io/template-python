@@ -13,8 +13,16 @@ import logging
             {{- if .IsPrimitive }}
             {{- $module_prefix = "utils.base_types" }}
             {{- end}}
+            {{- if (ne .Import "") }}
+            {{- $module_prefix = printf "%s.api" (snake .Import ) }}
+            {{- end}}
             {{- $module_prefix -}}
 {{- end}}
+
+{{- range .Module.Imports }}
+import {{.Name}}.api 
+{{- end }}
+
 
 {{- $m := .Module }}
 {{- range .Module.Interfaces }}

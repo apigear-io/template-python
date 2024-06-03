@@ -7,13 +7,21 @@ from utils.eventhook import EventHook
 from typing import Any
 import logging
 
+
 {{- define "get_converter_module"}}
             {{- $module_prefix:= printf "%s.api" (snake .Module.Name ) }}
             {{- if .IsPrimitive }}
             {{- $module_prefix = "utils.base_types" }}
             {{- end}}
+            {{- if (ne .Import "") }}
+            {{- $module_prefix = printf "%s.api" (snake .Import ) }}
+            {{- end}}
             {{- $module_prefix -}}
 {{- end}}
+
+{{- range .Module.Imports }}
+import {{.Name}}.api 
+{{- end }}
 
 {{- range .Module.Interfaces }}
 {{- $ns := printf "%s.%s" $.Module.Name .Name -}}
