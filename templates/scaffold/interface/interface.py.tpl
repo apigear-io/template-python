@@ -2,6 +2,10 @@ from {{ snake .Module.Name}}.api import api
 from utils.eventhook import EventHook
 from typing import Iterable
 
+{{- range .Module.Imports }}
+import {{.Name}}.api 
+{{- end }}
+
 {{- $class := Camel .Interface.Name }}
 
 class {{$class}}(api.I{{$class}}):
