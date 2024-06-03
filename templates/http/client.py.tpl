@@ -4,6 +4,10 @@ import os
 from {{snake .Module.Name}}.api import api
 from . import shared
 
+{{- range .Module.Imports }}
+import {{.Name}}.api 
+{{- end }}
+
 {{ $module := .Module }}
 {{- range .Module.Interfaces }}
 {{ $i := . }}
