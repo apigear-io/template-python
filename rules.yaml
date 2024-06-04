@@ -15,12 +15,14 @@ features:
             target: "utils/__init__.py"       
             raw: true
       - match: module
-        prefix: "{{snake .Module.Name}}_api/"
+        prefix: "{{snake .Module.Name}}/"
         documents:
-          - source: "api/__init__.py.tpl"
+          - source: "__init__.py.tpl"
             target: "__init__.py"
+          - source: "api/__init__.py.tpl"
+            target: "api/__init__.py"
           - source: "api/api.py.tpl"
-            target: "api.py"
+            target: "api/api.py"
   - name: scaffold
     scopes:
       - match: system
@@ -38,13 +40,13 @@ features:
             preserve: true
             raw: true
       - match: module
-        prefix: "{{snake .Module.Name}}_impl/"
+        prefix: "{{snake .Module.Name}}/impl/"
         documents:
           - source: "scaffold/interface/__init__.py.tpl"
             target: "__init__.py"
             preserve: true
       - match: interface
-        prefix: "{{snake .Module.Name}}_impl/"
+        prefix: "{{snake .Module.Name}}/impl/"
         documents:
           - source: "scaffold/interface/interface.py.tpl"
             target: "{{snake .Interface.Name}}.py"
@@ -59,7 +61,7 @@ features:
           - source: "http/server.py.tpl"
             target: "http/server.py"
       - match: module
-        prefix: "{{snake .Module.Name}}_http/"
+        prefix: "{{snake .Module.Name}}/http/"
         documents:
           - source: "http/__init__.py"
             target: "__init__.py"
@@ -97,7 +99,7 @@ features:
             target: "examples/olink/server.py"
             preserve: true
       - match: module
-        prefix: "{{snake .Module.Name}}_olink/"
+        prefix: "{{snake .Module.Name}}/olink/"
         documents:
           - source: "olink/__init__.py.tpl"
             target: "__init__.py"
@@ -106,7 +108,7 @@ features:
           - source: "olink/sinks.py.tpl"
             target: "sinks.py"
       - match: interface
-        prefix: "{{snake .Module.Name}}_olink/"
+        prefix: "{{snake .Module.Name}}/olink/"
         documents:
           - source: "olink/test.py.tpl"
             target: "test_olink_{{snake .Interface.Name}}.py"

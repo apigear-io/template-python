@@ -1,6 +1,6 @@
 {{- $class := Camel .Interface.Name }}
-from {{snake .Module.Name}}_api import api
-from {{snake .Module.Name}}_impl import {{$class}}
+from {{snake .Module.Name}}.api import api
+from {{snake .Module.Name}}.impl import {{$class}}
 
 class Test{{$class}}:
 {{- range .Interface.Properties }}
