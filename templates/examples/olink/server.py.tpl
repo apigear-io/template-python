@@ -14,16 +14,16 @@ from olink.remote import RemoteNode
 import apigear.olink
 
 {{- range .System.Modules }}
-{{- $import_olink := printf "%s_olink" (snake .Name)}}
-{{- $import_impl := printf "%s_impl" (snake .Name)}}
+{{- $import_olink := printf "%s.olink" (snake .Name)}}
+{{- $import_impl := printf "%s.impl" (snake .Name)}}
 
 import {{$import_olink}}
 import {{$import_impl}}
 
 {{- end }}
 {{ range .System.Modules }}
-{{- $import_olink := printf "%s_olink" (snake .Name)}}
-{{- $import_impl := printf "%s_impl" (snake .Name)}}
+{{- $import_olink := printf "%s.olink" (snake .Name)}}
+{{- $import_impl := printf "%s.impl" (snake .Name)}}
 
 {{- range .Interfaces }}
 {{$import_olink}}.{{Camel .Name}}Source({{$import_impl}}.{{Camel .Name}}())

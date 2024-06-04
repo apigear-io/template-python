@@ -1,7 +1,7 @@
 {{- $class := Camel .Interface.Name }}
-from {{snake .Module.Name}}_api import api
-from {{snake .Module.Name}}_impl import {{$class}}
-from {{snake .Module.Name}}_olink import {{$class}}Source, {{$class}}Sink
+from {{snake .Module.Name}}.api import api
+from {{snake .Module.Name}}.impl import {{$class}}
+from {{snake .Module.Name}}.olink import {{$class}}Source, {{$class}}Sink
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest

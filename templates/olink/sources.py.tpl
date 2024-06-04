@@ -1,14 +1,14 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
 import utils.base_types
-{{- $current_module_api_prefix :=  printf "%s_api." (snake .Module.Name ) }}
-import {{snake .Module.Name }}_api
+{{- $current_module_api_prefix :=  printf "%s.api." (snake .Module.Name ) }}
+import {{snake .Module.Name }}.api
 from utils.eventhook import EventHook
 from typing import Any
 import logging
 
 {{- define "get_converter_module"}}
-            {{- $module_prefix:= printf "%s_api" (snake .Module.Name ) }}
+            {{- $module_prefix:= printf "%s.api" (snake .Module.Name ) }}
             {{- if .IsPrimitive }}
             {{- $module_prefix = "utils.base_types" }}
             {{- end}}
