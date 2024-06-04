@@ -12,7 +12,7 @@ import logging
 import apigear.olink
 
 {{ range .System.Modules }}
-import {{snake .Name}}_olink
+import {{snake .Name}}.olink
 {{- end }}
 
 # set default log level to INFO and above
@@ -30,7 +30,7 @@ client = apigear.olink.Client(node)
 {{ range .Interfaces }}
 
 # create and register sink for {{$module.Name}}.{{.Name}}
-sink = {{snake $module.Name}}_olink.{{.Name}}Sink()
+sink = {{snake $module.Name}}.olink.{{.Name}}Sink()
 node.link_remote(sink.olink_object_name())
 {{- end }}
 {{- end }}
