@@ -1,17 +1,27 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
-from {{snake .Module.Name}}_api import api
+import utils.base_types
+{{- $current_module_api_prefix :=  printf "%s_api." (snake .Module.Name ) }}
+import {{snake .Module.Name }}_api
 from utils.eventhook import EventHook
 from typing import Any
 import logging
+
+{{- define "get_converter_module"}}
+            {{- $module_prefix:= printf "%s_api" (snake .Module.Name ) }}
+            {{- if .IsPrimitive }}
+            {{- $module_prefix = "utils.base_types" }}
+            {{- end}}
+            {{- $module_prefix -}}
+{{- end}}
 
 {{- range .Module.Interfaces }}
 {{- $ns := printf "%s.%s" $.Module.Name .Name -}}
 {{- $class := Camel .Name }}
 {{- $id := printf "%s.%s" $.Module.Name .Name }}
 class {{$class}}Source(IObjectSource):
-    impl: api.I{{$class}}
-    def __init__(self, impl: api.I{{$class}}):
+    impl: {{$current_module_api_prefix}}I{{$class}}
+    def __init__(self, impl: {{$current_module_api_prefix}}I{{$class}}):
         self.impl = impl
 {{- range $idx, $p := .Properties }}
         impl.on_{{snake .Name}}_changed += self.notify_{{snake .Name}}_changed
@@ -36,9 +46,9 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- if not .IsReadOnly }}
             {{- if .IsArray }}
-            v = [api.as_{{snake .Type}}(_) for _ in value]
+            v = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in value]
             {{- else }}
-            v = api.as_{{snake .Type}}(value)
+            v = {{template "get_converter_module" .}}.as_{{snake .Type}}(value)
             {{- end }}
             return self.impl.set_{{snake .Name}}(v)
         {{- else }}
@@ -58,9 +68,9 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- range $idx, $_ := .Params }}
             {{- if .IsArray }}
-            {{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$idx}}]]
+            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in args[{{$idx}}]]
             {{- else }}
-            {{snake .Name}} = api.as_{{snake .Type}}(args[{{$idx}}])
+            {{snake .Name}} = {{template "get_converter_module" .}}.as_{{snake .Type}}(args[{{$idx}}])
             {{- end }}
         {{- end }}
             reply = self.impl.{{snake .Name}}({{pyVars .Params}})
@@ -68,9 +78,9 @@ class {{$class}}Source(IObjectSource):
             return None
         {{- else }}
             {{- if .Return.IsArray }}
-            return [api.from_{{snake .Return.Type}}(_) for _ in reply]
+            return [{{template "get_converter_module" .Return}}.from_{{snake .Return.Type}}(_) for _ in reply]
             {{- else }}
-            return api.from_{{snake .Return.Type}}(reply)
+            return {{template "get_converter_module" .Return}}.from_{{snake .Return.Type}}(reply)
             {{- end }}
         {{- end }}
 {{- end }}      
@@ -89,21 +99,21 @@ class {{$class}}Source(IObjectSource):
         {{- range .Properties }}
         v = self.impl.get_{{snake .Name}}()
         {{- if .IsArray }}
-        props["{{.Name }}"] = [api.from_{{snake .Type}}(_) for _ in v]
+        props["{{.Name }}"] = [{{template "get_converter_module" .}}.from_{{snake .Type}}(_) for _ in v]
         {{- else }}
-        props["{{.Name }}"] = api.from_{{snake .Type}}(v)
+        props["{{.Name }}"] = {{template "get_converter_module" .}}.from_{{snake .Type}}(v)
         {{- end }}
         {{- end }}
         return props
 
 {{- range $idx, $s := .Signals }}
 
-    def notify_{{snake .Name}}({{pyParams "api." .Params}}):
+    def notify_{{snake .Name}}({{pyParams $current_module_api_prefix .Params}}):
         {{- range $idx, $_ := .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [api.from_{{snake .Type}}(_) for _ in {{snake .Name}}]
+        _{{snake .Name}} = [{{template "get_converter_module" .}}.api.from_{{snake .Type}}(_) for _ in {{snake .Name}}]
         {{- else }}
-        _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
+        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{snake .Type}}({{snake .Name}})
         {{- end }}
         {{- end }}
         return RemoteNode.notify_signal("{{$ns}}/{{.Name}}", [
@@ -117,9 +127,9 @@ class {{$class}}Source(IObjectSource):
 
     def notify_{{snake .Name}}_changed(self, value):
         {{- if .IsArray }}
-        v = [api.from_{{snake .Type}}(_) for _ in value]
+        v = [{{template "get_converter_module" .}}.from_{{snake .Type}}(_) for _ in value]
         {{- else }}
-        v = api.from_{{snake .Type}}(value)
+        v = {{template "get_converter_module" .}}.from_{{snake .Type}}(value)
         {{- end }}
         return RemoteNode.notify_property_change("{{$ns}}/{{.Name}}", v)
 {{- end }}
