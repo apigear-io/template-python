@@ -1,12 +1,13 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
-from tb_empty_api import api
+import utils.base_types
+import tb_empty_api
 from utils.eventhook import EventHook
 from typing import Any
 import logging
 class EmptyInterfaceSource(IObjectSource):
-    impl: api.IEmptyInterface
-    def __init__(self, impl: api.IEmptyInterface):
+    impl: tb_empty_api.IEmptyInterface
+    def __init__(self, impl: tb_empty_api.IEmptyInterface):
         self.impl = impl
         self._on_linked = EventHook()
         self._on_unlinked = EventHook()

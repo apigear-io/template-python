@@ -8,6 +8,9 @@ features:
           - source: "utils/eventhook.py"
             target: "utils/eventhook.py"
             raw: true
+          - source: "utils/base_types.py"
+            target: "utils/base_types.py"
+            raw: true
           - source: "utils/__init__.py"
             target: "utils/__init__.py"       
             raw: true

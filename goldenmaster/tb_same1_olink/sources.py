@@ -1,12 +1,13 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
-from tb_same1_api import api
+import utils.base_types
+import tb_same1_api
 from utils.eventhook import EventHook
 from typing import Any
 import logging
 class SameStruct1InterfaceSource(IObjectSource):
-    impl: api.ISameStruct1Interface
-    def __init__(self, impl: api.ISameStruct1Interface):
+    impl: tb_same1_api.ISameStruct1Interface
+    def __init__(self, impl: tb_same1_api.ISameStruct1Interface):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
@@ -20,7 +21,7 @@ class SameStruct1InterfaceSource(IObjectSource):
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
         if path == "prop1":
-            v = api.as_struct1(value)
+            v = tb_same1_api.as_struct1(value)
             return self.impl.set_prop1(v)
         logging.error("unknown property: %s", name)
 
@@ -28,9 +29,9 @@ class SameStruct1InterfaceSource(IObjectSource):
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
         if path == "func1":
-            param1 = api.as_struct1(args[0])
+            param1 = tb_same1_api.as_struct1(args[0])
             reply = self.impl.func1(param1)
-            return api.from_struct1(reply)      
+            return tb_same1_api.from_struct1(reply)      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
@@ -44,19 +45,19 @@ class SameStruct1InterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         v = self.impl.get_prop1()
-        props["prop1"] = api.from_struct1(v)
+        props["prop1"] = tb_same1_api.from_struct1(v)
         return props
 
-    def notify_sig1(self, param1: api.Struct1):
-        _param1 = api.from_struct1(param1)
+    def notify_sig1(self, param1: tb_same1_api.Struct1):
+        _param1 = tb_same1_api.from_struct1(param1)
         return RemoteNode.notify_signal("tb.same1.SameStruct1Interface/sig1", [_param1])
 
     def notify_prop1_changed(self, value):
-        v = api.from_struct1(value)
+        v = tb_same1_api.from_struct1(value)
         return RemoteNode.notify_property_change("tb.same1.SameStruct1Interface/prop1", v)
 class SameStruct2InterfaceSource(IObjectSource):
-    impl: api.ISameStruct2Interface
-    def __init__(self, impl: api.ISameStruct2Interface):
+    impl: tb_same1_api.ISameStruct2Interface
+    def __init__(self, impl: tb_same1_api.ISameStruct2Interface):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_prop2_changed += self.notify_prop2_changed
@@ -72,10 +73,10 @@ class SameStruct2InterfaceSource(IObjectSource):
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
         if path == "prop1":
-            v = api.as_struct2(value)
+            v = tb_same1_api.as_struct2(value)
             return self.impl.set_prop1(v)
         elif path == "prop2":
-            v = api.as_struct2(value)
+            v = tb_same1_api.as_struct2(value)
             return self.impl.set_prop2(v)
         logging.error("unknown property: %s", name)
 
@@ -83,14 +84,14 @@ class SameStruct2InterfaceSource(IObjectSource):
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
         if path == "func1":
-            param1 = api.as_struct1(args[0])
+            param1 = tb_same1_api.as_struct1(args[0])
             reply = self.impl.func1(param1)
-            return api.from_struct1(reply)
+            return tb_same1_api.from_struct1(reply)
         elif path == "func2":
-            param1 = api.as_struct1(args[0])
-            param2 = api.as_struct2(args[1])
+            param1 = tb_same1_api.as_struct1(args[0])
+            param2 = tb_same1_api.as_struct2(args[1])
             reply = self.impl.func2(param1, param2)
-            return api.from_struct1(reply)      
+            return tb_same1_api.from_struct1(reply)      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
@@ -104,30 +105,30 @@ class SameStruct2InterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         v = self.impl.get_prop1()
-        props["prop1"] = api.from_struct2(v)
+        props["prop1"] = tb_same1_api.from_struct2(v)
         v = self.impl.get_prop2()
-        props["prop2"] = api.from_struct2(v)
+        props["prop2"] = tb_same1_api.from_struct2(v)
         return props
 
-    def notify_sig1(self, param1: api.Struct1):
-        _param1 = api.from_struct1(param1)
+    def notify_sig1(self, param1: tb_same1_api.Struct1):
+        _param1 = tb_same1_api.from_struct1(param1)
         return RemoteNode.notify_signal("tb.same1.SameStruct2Interface/sig1", [_param1])
 
-    def notify_sig2(self, param1: api.Struct1, param2: api.Struct2):
-        _param1 = api.from_struct1(param1)
-        _param2 = api.from_struct2(param2)
+    def notify_sig2(self, param1: tb_same1_api.Struct1, param2: tb_same1_api.Struct2):
+        _param1 = tb_same1_api.from_struct1(param1)
+        _param2 = tb_same1_api.from_struct2(param2)
         return RemoteNode.notify_signal("tb.same1.SameStruct2Interface/sig2", [_param1, _param2])
 
     def notify_prop1_changed(self, value):
-        v = api.from_struct2(value)
+        v = tb_same1_api.from_struct2(value)
         return RemoteNode.notify_property_change("tb.same1.SameStruct2Interface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        v = api.from_struct2(value)
+        v = tb_same1_api.from_struct2(value)
         return RemoteNode.notify_property_change("tb.same1.SameStruct2Interface/prop2", v)
 class SameEnum1InterfaceSource(IObjectSource):
-    impl: api.ISameEnum1Interface
-    def __init__(self, impl: api.ISameEnum1Interface):
+    impl: tb_same1_api.ISameEnum1Interface
+    def __init__(self, impl: tb_same1_api.ISameEnum1Interface):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_sig1 += self.notify_sig1
@@ -141,7 +142,7 @@ class SameEnum1InterfaceSource(IObjectSource):
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
         if path == "prop1":
-            v = api.as_enum1(value)
+            v = tb_same1_api.as_enum1(value)
             return self.impl.set_prop1(v)
         logging.error("unknown property: %s", name)
 
@@ -149,9 +150,9 @@ class SameEnum1InterfaceSource(IObjectSource):
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
         if path == "func1":
-            param1 = api.as_enum1(args[0])
+            param1 = tb_same1_api.as_enum1(args[0])
             reply = self.impl.func1(param1)
-            return api.from_enum1(reply)      
+            return tb_same1_api.from_enum1(reply)      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
@@ -165,19 +166,19 @@ class SameEnum1InterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         v = self.impl.get_prop1()
-        props["prop1"] = api.from_enum1(v)
+        props["prop1"] = tb_same1_api.from_enum1(v)
         return props
 
-    def notify_sig1(self, param1: api.Enum1):
-        _param1 = api.from_enum1(param1)
+    def notify_sig1(self, param1: tb_same1_api.Enum1):
+        _param1 = tb_same1_api.from_enum1(param1)
         return RemoteNode.notify_signal("tb.same1.SameEnum1Interface/sig1", [_param1])
 
     def notify_prop1_changed(self, value):
-        v = api.from_enum1(value)
+        v = tb_same1_api.from_enum1(value)
         return RemoteNode.notify_property_change("tb.same1.SameEnum1Interface/prop1", v)
 class SameEnum2InterfaceSource(IObjectSource):
-    impl: api.ISameEnum2Interface
-    def __init__(self, impl: api.ISameEnum2Interface):
+    impl: tb_same1_api.ISameEnum2Interface
+    def __init__(self, impl: tb_same1_api.ISameEnum2Interface):
         self.impl = impl
         impl.on_prop1_changed += self.notify_prop1_changed
         impl.on_prop2_changed += self.notify_prop2_changed
@@ -193,10 +194,10 @@ class SameEnum2InterfaceSource(IObjectSource):
     def olink_set_property(self, name: str, value: Any):
         path = Name.path_from_name(name)
         if path == "prop1":
-            v = api.as_enum1(value)
+            v = tb_same1_api.as_enum1(value)
             return self.impl.set_prop1(v)
         elif path == "prop2":
-            v = api.as_enum2(value)
+            v = tb_same1_api.as_enum2(value)
             return self.impl.set_prop2(v)
         logging.error("unknown property: %s", name)
 
@@ -204,14 +205,14 @@ class SameEnum2InterfaceSource(IObjectSource):
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
         if path == "func1":
-            param1 = api.as_enum1(args[0])
+            param1 = tb_same1_api.as_enum1(args[0])
             reply = self.impl.func1(param1)
-            return api.from_enum1(reply)
+            return tb_same1_api.from_enum1(reply)
         elif path == "func2":
-            param1 = api.as_enum1(args[0])
-            param2 = api.as_enum2(args[1])
+            param1 = tb_same1_api.as_enum1(args[0])
+            param2 = tb_same1_api.as_enum2(args[1])
             reply = self.impl.func2(param1, param2)
-            return api.from_enum1(reply)      
+            return tb_same1_api.from_enum1(reply)      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
@@ -225,24 +226,24 @@ class SameEnum2InterfaceSource(IObjectSource):
     def olink_collect_properties(self) -> object:
         props = {}
         v = self.impl.get_prop1()
-        props["prop1"] = api.from_enum1(v)
+        props["prop1"] = tb_same1_api.from_enum1(v)
         v = self.impl.get_prop2()
-        props["prop2"] = api.from_enum2(v)
+        props["prop2"] = tb_same1_api.from_enum2(v)
         return props
 
-    def notify_sig1(self, param1: api.Enum1):
-        _param1 = api.from_enum1(param1)
+    def notify_sig1(self, param1: tb_same1_api.Enum1):
+        _param1 = tb_same1_api.from_enum1(param1)
         return RemoteNode.notify_signal("tb.same1.SameEnum2Interface/sig1", [_param1])
 
-    def notify_sig2(self, param1: api.Enum1, param2: api.Enum2):
-        _param1 = api.from_enum1(param1)
-        _param2 = api.from_enum2(param2)
+    def notify_sig2(self, param1: tb_same1_api.Enum1, param2: tb_same1_api.Enum2):
+        _param1 = tb_same1_api.from_enum1(param1)
+        _param2 = tb_same1_api.from_enum2(param2)
         return RemoteNode.notify_signal("tb.same1.SameEnum2Interface/sig2", [_param1, _param2])
 
     def notify_prop1_changed(self, value):
-        v = api.from_enum1(value)
+        v = tb_same1_api.from_enum1(value)
         return RemoteNode.notify_property_change("tb.same1.SameEnum2Interface/prop1", v)
 
     def notify_prop2_changed(self, value):
-        v = api.from_enum2(value)
+        v = tb_same1_api.from_enum2(value)
         return RemoteNode.notify_property_change("tb.same1.SameEnum2Interface/prop2", v)
