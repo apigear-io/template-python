@@ -1,7 +1,21 @@
 from pydantic import ConfigDict, BaseModel, Field
 from enum import IntEnum
+{{- $system := .System}}
 {{- range .Module.Imports }}
+{{- $current_import := .}} 
 import {{.Name}}.api 
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+import {{$extern.Import}} 
+    {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+import {{$extern.Import}} 
 {{- end }}
 
 class EnhancedModel(BaseModel):
@@ -85,5 +99,19 @@ def as_{{snake .Name}}(v):
 
 def from_{{snake .Name}}(v):
     return v.model_dump()
+{{- end }}
+
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $func_name:= printf "%s_%s" (snake $extern.Import) (snake $extern.Name )}}
+def as_{{$func_name}}(v):
+    deserialized = {{$extern.Import}}.{{$extern.Name}}()
+    # deserialize your {{$extern.Import}}.{{$extern.Name}} from json string
+    return deserialized
+
+def from_{{$func_name}}(v):
+    serialized = ""
+    #serialize your {{$extern.Import}}.{{$extern.Name}} here to json string
+    return serialized
 {{- end }}
 
