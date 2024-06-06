@@ -5,17 +5,28 @@ from {{snake .Module.Name}}.api import api
 from . import shared
 
 {{- $system := .System}}
+{{- $imports := getEmptyStringList }}
 {{- range .Module.Imports }}
 {{- $current_import := .}} 
-import {{.Name}}.api 
+{{- $import_name := printf "%s.api" .Name }} 
+{{- $imports = (appendList $imports $import_name) }}
 {{- range $system.Modules }}
     {{- if (eq .Name $current_import.Name) }}
     {{- range .Externs }}
     {{- $extern := pyExtern . }}
-import {{$extern.Import}} 
+    {{- $imports = (appendList $imports $extern.Import) }}
     {{- end }}
     {{- end }}
 {{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $imports = (appendList $imports $extern.Import) }}
+{{- end }}
+
+{{- $imports = unique $imports }}
+{{- range $imports }}
+import {{.}}
 {{- end }}
 
 {{ $module := .Module }}
