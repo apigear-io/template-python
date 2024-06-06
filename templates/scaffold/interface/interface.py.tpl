@@ -2,8 +2,18 @@ from {{ snake .Module.Name}}.api import api
 from utils.eventhook import EventHook
 from typing import Iterable
 
+{{- $system := .System}}
 {{- range .Module.Imports }}
+{{- $current_import := .}} 
 import {{.Name}}.api 
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+import {{$extern.Import}} 
+    {{- end }}
+    {{- end }}
+{{- end }}
 {{- end }}
 
 {{- $class := Camel .Interface.Name }}

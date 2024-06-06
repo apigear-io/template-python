@@ -4,8 +4,18 @@ import os
 from {{snake .Module.Name}}.api import api
 from . import shared
 
+{{- $system := .System}}
 {{- range .Module.Imports }}
+{{- $current_import := .}} 
 import {{.Name}}.api 
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+import {{$extern.Import}} 
+    {{- end }}
+    {{- end }}
+{{- end }}
 {{- end }}
 
 {{ $module := .Module }}
