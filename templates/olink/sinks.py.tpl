@@ -18,9 +18,26 @@ import logging
             {{- end}}
             {{- $module_prefix -}}
 {{- end}}
+{{- define "get_serialization_name" }}
+            {{- $name:= snake .Type }}
+            {{- if (eq .KindType "extern") }}
+            {{- $name = snake (pyReturn "" .) }}
+            {{- end}}
+            {{- $name -}}
+{{- end}}
 
+{{- $system := .System}}
 {{- range .Module.Imports }}
+{{- $current_import := .}} 
 import {{.Name}}.api 
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+import {{$extern.Import}} 
+    {{- end }}
+    {{- end }}
+{{- end }}
 {{- end }}
 
 
@@ -65,7 +82,7 @@ class {{Camel .Name}}Sink(IObjectSink):
         if self._{{snake .Name}} == value:
             return
         {{- if .IsArray }}
-        self.client.set_remote_property('{{$id}}/{{.Name}}', [{{ template "get_converter_module" .}}.from_{{snake .Type}}(_) for _ in value])
+        self.client.set_remote_property('{{$id}}/{{.Name}}', [{{ template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in value])
         {{- else }}
         self.client.set_remote_property('{{$id}}/{{.Name}}', value)
         {{- end }}
@@ -81,9 +98,9 @@ class {{Camel .Name}}Sink(IObjectSink):
     async def {{snake .Name}}({{pyParams $current_module_api_prefix .Params}}):
         {{- range $idx, $_ := .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [{{template "get_converter_module" .}}.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
+        _{{snake .Name}} = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
         {{- else }}
-        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{snake .Type}}({{snake .Name}})
+        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Name}})
         {{- end }}
         {{- end }}
         return await self._invoke("{{.Name}}", [
@@ -107,9 +124,9 @@ class {{Camel .Name}}Sink(IObjectSink):
             if k == "{{.Name}}":
             {{- end }}
                 {{- if .IsArray }}
-                v = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in props[k]]
+                v = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in props[k]]
                 {{- else }}
-                v =  {{template "get_converter_module" .}}.as_{{snake .Type}}(props[k])
+                v =  {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(props[k])
                 {{- end }}
                 self._set_{{snake .Name}}(v)
         {{- end }}
@@ -127,9 +144,9 @@ class {{Camel .Name}}Sink(IObjectSink):
         if path == "{{.Name}}":
         {{- end }}
             {{- if .IsArray }}
-            v = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in value]
+            v = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in value]
             {{- else }}
-            v =  {{template "get_converter_module" .}}.as_{{snake .Type}}(value)
+            v =  {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(value)
             {{- end }}
             self._set_{{snake .Name}}(v)
             return
@@ -148,9 +165,9 @@ class {{Camel .Name}}Sink(IObjectSink):
         {{- end }}
             {{- range $index, $_ := .Params }}
             {{- if .IsArray }}
-            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in args[{{$index}}]]
+            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in args[{{$index}}]]
             {{- else }}
-            {{snake .Name}} =  {{template "get_converter_module" .}}.as_{{snake .Type}}(args[{{$index}}])
+            {{snake .Name}} =  {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(args[{{$index}}])
             {{- end }}
             {{- end }}
             self.on_{{snake .Name}}.fire(

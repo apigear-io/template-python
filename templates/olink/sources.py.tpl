@@ -18,9 +18,26 @@ import logging
             {{- end}}
             {{- $module_prefix -}}
 {{- end}}
+{{- define "get_serialization_name" }}
+            {{- $name:= snake .Type }}
+            {{- if (eq .KindType "extern") }}
+            {{- $name = snake (pyReturn "" .) }}
+            {{- end}}
+            {{- $name -}}
+{{- end}}
 
+{{- $system := .System}}
 {{- range .Module.Imports }}
+{{- $current_import := .}} 
 import {{.Name}}.api 
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+import {{$extern.Import}} 
+    {{- end }}
+    {{- end }}
+{{- end }}
 {{- end }}
 
 {{- range .Module.Interfaces }}
@@ -54,9 +71,9 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- if not .IsReadOnly }}
             {{- if .IsArray }}
-            v = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in value]
+            v = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in value]
             {{- else }}
-            v = {{template "get_converter_module" .}}.as_{{snake .Type}}(value)
+            v = {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(value)
             {{- end }}
             return self.impl.set_{{snake .Name}}(v)
         {{- else }}
@@ -76,9 +93,9 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- range $idx, $_ := .Params }}
             {{- if .IsArray }}
-            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{snake .Type}}(_) for _ in args[{{$idx}}]]
+            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in args[{{$idx}}]]
             {{- else }}
-            {{snake .Name}} = {{template "get_converter_module" .}}.as_{{snake .Type}}(args[{{$idx}}])
+            {{snake .Name}} = {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(args[{{$idx}}])
             {{- end }}
         {{- end }}
             reply = self.impl.{{snake .Name}}({{pyVars .Params}})
@@ -86,9 +103,9 @@ class {{$class}}Source(IObjectSource):
             return None
         {{- else }}
             {{- if .Return.IsArray }}
-            return [{{template "get_converter_module" .Return}}.from_{{snake .Return.Type}}(_) for _ in reply]
+            return [{{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(_) for _ in reply]
             {{- else }}
-            return {{template "get_converter_module" .Return}}.from_{{snake .Return.Type}}(reply)
+            return {{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(reply)
             {{- end }}
         {{- end }}
 {{- end }}      
@@ -107,9 +124,9 @@ class {{$class}}Source(IObjectSource):
         {{- range .Properties }}
         v = self.impl.get_{{snake .Name}}()
         {{- if .IsArray }}
-        props["{{.Name }}"] = [{{template "get_converter_module" .}}.from_{{snake .Type}}(_) for _ in v]
+        props["{{.Name }}"] = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in v]
         {{- else }}
-        props["{{.Name }}"] = {{template "get_converter_module" .}}.from_{{snake .Type}}(v)
+        props["{{.Name }}"] = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(v)
         {{- end }}
         {{- end }}
         return props
@@ -119,9 +136,9 @@ class {{$class}}Source(IObjectSource):
     def notify_{{snake .Name}}({{pyParams $current_module_api_prefix .Params}}):
         {{- range $idx, $_ := .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [{{template "get_converter_module" .}}.api.from_{{snake .Type}}(_) for _ in {{snake .Name}}]
+        _{{snake .Name}} = [{{template "get_converter_module" .}}.api.from_{{template "get_serialization_name" .}}(_) for _ in {{snake .Name}}]
         {{- else }}
-        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{snake .Type}}({{snake .Name}})
+        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Name}})
         {{- end }}
         {{- end }}
         return RemoteNode.notify_signal("{{$ns}}/{{.Name}}", [
@@ -135,9 +152,9 @@ class {{$class}}Source(IObjectSource):
 
     def notify_{{snake .Name}}_changed(self, value):
         {{- if .IsArray }}
-        v = [{{template "get_converter_module" .}}.from_{{snake .Type}}(_) for _ in value]
+        v = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in value]
         {{- else }}
-        v = {{template "get_converter_module" .}}.from_{{snake .Type}}(value)
+        v = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(value)
         {{- end }}
         return RemoteNode.notify_property_change("{{$ns}}/{{.Name}}", v)
 {{- end }}
