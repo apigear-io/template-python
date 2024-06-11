@@ -3,7 +3,8 @@ from typing import Any
 from olink.core import Name
 from olink.client import IObjectSink, ClientNode
 from utils.eventhook import EventHook
-from tb_empty_api import api
+import utils.base_types
+import tb_empty_api
 import logging
 
 class EmptyInterfaceSink(IObjectSink):
