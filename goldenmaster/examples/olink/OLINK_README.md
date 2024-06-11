@@ -2,7 +2,7 @@
 
 ## Server
 
-Implement the services, see the files in the `*_impl` folders.
+Implement the services, see the files in the `*.impl` folders.
 
 Run the server with uvicorn
 
