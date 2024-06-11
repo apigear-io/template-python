@@ -19,6 +19,9 @@ import tb_same2.olink
 import tb_simple.olink
 import testbed1.olink
 import tb_names.olink
+import custom_types.olink
+import extern_types.olink
+import counter.olink
 import tb_empty.olink
 
 # set default log level to INFO and above
@@ -133,6 +136,16 @@ node.link_remote(sink.olink_object_name())
 
 # create and register sink for tb.names.Nam_Es
 sink = tb_names.olink.Nam_EsSink()
+node.link_remote(sink.olink_object_name())
+
+
+
+
+
+
+
+# create and register sink for counter.Counter
+sink = counter.olink.CounterSink()
 node.link_remote(sink.olink_object_name())
 
 
