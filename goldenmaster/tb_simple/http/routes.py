@@ -4,21 +4,37 @@ from . import shared
 router = APIRouter()
 
 
+void_interface = shared.VoidInterfaceState()
 simple_interface = shared.SimpleInterfaceState()
 simple_array_interface = shared.SimpleArrayInterfaceState()
 no_properties_interface = shared.NoPropertiesInterfaceState()
 no_operations_interface = shared.NoOperationsInterfaceState()
 no_signals_interface = shared.NoSignalsInterfaceState()
-empty_interface = shared.EmptyInterfaceState()
 
 
 
 @router.post(
-    "/tb_simple/simple_interface/func_void", 
-    response_model=shared.SimpleInterfaceFuncVoidResponse
+    "/tb_simple/void_interface/func_void", 
+    response_model=shared.VoidInterfaceFuncVoidResponse
 )
-async def simple_interface_funcVoid(params: shared.SimpleInterfaceFuncVoidRequest):
-    result = simple_interface.funcVoid()
+async def void_interface_funcVoid(params: shared.VoidInterfaceFuncVoidRequest):
+    result = void_interface.funcVoid()
+    state = shared.VoidInterfaceState(
+    )
+    response = shared.VoidInterfaceFuncVoidResponse(
+        result=result,
+        state=state
+    )
+    return response
+
+
+
+@router.post(
+    "/tb_simple/simple_interface/func_no_return_value", 
+    response_model=shared.SimpleInterfaceFuncNoReturnValueResponse
+)
+async def simple_interface_funcNoReturnValue(params: shared.SimpleInterfaceFuncNoReturnValueRequest):
+    result = simple_interface.funcNoReturnValue(params.param_bool)
     state = shared.SimpleInterfaceState(
         prop_bool = simple_interface.prop_bool,
         prop_int = simple_interface.prop_int,
@@ -28,9 +44,8 @@ async def simple_interface_funcVoid(params: shared.SimpleInterfaceFuncVoidReques
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
-    response = shared.SimpleInterfaceFuncVoidResponse(
+    response = shared.SimpleInterfaceFuncNoReturnValueResponse(
         result=result,
         state=state
     )
@@ -51,7 +66,6 @@ async def simple_interface_funcBool(params: shared.SimpleInterfaceFuncBoolReques
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncBoolResponse(
         result=result,
@@ -74,7 +88,6 @@ async def simple_interface_funcInt(params: shared.SimpleInterfaceFuncIntRequest)
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncIntResponse(
         result=result,
@@ -97,7 +110,6 @@ async def simple_interface_funcInt32(params: shared.SimpleInterfaceFuncInt32Requ
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncInt32Response(
         result=result,
@@ -120,7 +132,6 @@ async def simple_interface_funcInt64(params: shared.SimpleInterfaceFuncInt64Requ
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncInt64Response(
         result=result,
@@ -143,7 +154,6 @@ async def simple_interface_funcFloat(params: shared.SimpleInterfaceFuncFloatRequ
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncFloatResponse(
         result=result,
@@ -166,7 +176,6 @@ async def simple_interface_funcFloat32(params: shared.SimpleInterfaceFuncFloat32
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncFloat32Response(
         result=result,
@@ -189,7 +198,6 @@ async def simple_interface_funcFloat64(params: shared.SimpleInterfaceFuncFloat64
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncFloat64Response(
         result=result,
@@ -212,7 +220,6 @@ async def simple_interface_funcString(params: shared.SimpleInterfaceFuncStringRe
         prop_float32 = simple_interface.prop_float32,
         prop_float64 = simple_interface.prop_float64,
         prop_string = simple_interface.prop_string,
-        prop_read_only_string = simple_interface.prop_read_only_string,
     )
     response = shared.SimpleInterfaceFuncStringResponse(
         result=result,
@@ -463,7 +470,5 @@ async def no_signals_interface_funcBool(params: shared.NoSignalsInterfaceFuncBoo
         state=state
     )
     return response
-
-
 
 

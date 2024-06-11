@@ -6,6 +6,20 @@ from . import shared
 
 
 
+class VoidInterface(api.IVoidInterface):
+    def __init__(self, url='http://localhost:8000'):
+        super().__init__()
+        self._url = url
+
+    def func_void(self):
+        req = shared.VoidInterfaceFuncVoidRequest(
+        )
+        data = requests.post(
+            f'{self.url}/tb_simple/void_interface/func_void',
+            req.json()
+        )
+        resp = shared.VoidInterfaceFuncVoidResponse(**data.json())
+
 class SimpleInterface(api.ISimpleInterface):
     def __init__(self, url='http://localhost:8000'):
         super().__init__()
@@ -17,8 +31,7 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float = 0.0        
         self._prop_float32 = 0.0        
         self._prop_float64 = 0.0        
-        self._prop_string = ""        
-        self._prop_read_only_string = ""
+        self._prop_string = ""
     
     def get_prop_bool(self):
         return self._prop_bool
@@ -67,18 +80,16 @@ class SimpleInterface(api.ISimpleInterface):
 
     def set_prop_string(self, value):
         self._prop_string = value
-    
-    def get_prop_read_only_string(self):
-        return self._prop_read_only_string
 
-    def func_void(self):
-        req = shared.SimpleInterfaceFuncVoidRequest(
+    def func_no_return_value(self, param_bool: bool):
+        req = shared.SimpleInterfaceFuncNoReturnValueRequest(
+            param_bool=param_bool
         )
         data = requests.post(
-            f'{self.url}/tb_simple/simple_interface/func_void',
+            f'{self.url}/tb_simple/simple_interface/func_no_return_value',
             req.json()
         )
-        resp = shared.SimpleInterfaceFuncVoidResponse(**data.json())
+        resp = shared.SimpleInterfaceFuncNoReturnValueResponse(**data.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
         self._prop_int32 = resp.state.prop_int32
@@ -87,7 +98,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_bool(self, param_bool: bool):
         req = shared.SimpleInterfaceFuncBoolRequest(
@@ -106,7 +116,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_int(self, param_int: int):
         req = shared.SimpleInterfaceFuncIntRequest(
@@ -125,7 +134,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_int32(self, param_int32: int):
         req = shared.SimpleInterfaceFuncInt32Request(
@@ -144,7 +152,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_int64(self, param_int64: int):
         req = shared.SimpleInterfaceFuncInt64Request(
@@ -163,7 +170,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_float(self, param_float: float):
         req = shared.SimpleInterfaceFuncFloatRequest(
@@ -182,7 +188,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_float32(self, param_float32: float):
         req = shared.SimpleInterfaceFuncFloat32Request(
@@ -201,7 +206,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_float64(self, param_float: float):
         req = shared.SimpleInterfaceFuncFloat64Request(
@@ -220,7 +224,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
     def func_string(self, param_string: str):
         req = shared.SimpleInterfaceFuncStringRequest(
@@ -239,7 +242,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32 = resp.state.prop_float32
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
-        self._prop_read_only_string = resp.state.prop_read_only_string
 
 class SimpleArrayInterface(api.ISimpleArrayInterface):
     def __init__(self, url='http://localhost:8000'):
@@ -530,8 +532,3 @@ class NoSignalsInterface(api.INoSignalsInterface):
         resp = shared.NoSignalsInterfaceFuncBoolResponse(**data.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
-
-class EmptyInterface(api.IEmptyInterface):
-    def __init__(self, url='http://localhost:8000'):
-        super().__init__()
-        self._url = url
