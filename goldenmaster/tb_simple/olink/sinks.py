@@ -7,6 +7,38 @@ import utils.base_types
 import tb_simple.api
 import logging
 
+class VoidInterfaceSink(IObjectSink):
+    def __init__(self):
+        super().__init__()
+        self.on_sig_void = EventHook()
+        self._on_is_ready= EventHook()
+        self.client = ClientNode.register_sink(self)
+
+    async def func_void(self):
+        args = []
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(None)
+        self.client.invoke_remote(f"tb.simple.VoidInterface/funcVoid", args, func)
+        return await asyncio.wait_for(future, 500)
+
+    def olink_object_name(self):
+        return 'tb.simple.VoidInterface'
+
+    def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        self.client = ClientNode.register_sink(self)
+        self._on_is_ready.fire()
+
+    def olink_on_property_changed(self, name: str, value: Any) -> None:
+        logging.error("unknown property: %s", name)
+
+    def olink_on_signal(self, name: str, args: list[Any]):
+        path = Name.path_from_name(name)
+        if path == "sigVoid":
+            self.on_sig_void.fire()
+            return
+        logging.error("unknown signal: %s", name)
+
 class SimpleInterfaceSink(IObjectSink):
     def __init__(self):
         super().__init__()
@@ -26,9 +58,6 @@ class SimpleInterfaceSink(IObjectSink):
         self.on_prop_float64_changed = EventHook()
         self._prop_string = ""
         self.on_prop_string_changed = EventHook()
-        self._prop_read_only_string = ""
-        self.on_prop_read_only_string_changed = EventHook()
-        self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_int32 = EventHook()
@@ -152,15 +181,13 @@ class SimpleInterfaceSink(IObjectSink):
     def get_prop_string(self):
         return self._prop_string
 
-    def get_prop_read_only_string(self):
-        return self._prop_read_only_string
-
-    async def func_void(self):
-        args = []
+    async def func_no_return_value(self, param_bool: bool):
+        _param_bool = utils.base_types.from_bool(param_bool)
+        args = [_param_bool]
         future = asyncio.get_running_loop().create_future()
         def func(result):
             return future.set_result(None)
-        self.client.invoke_remote(f"tb.simple.SimpleInterface/funcVoid", args, func)
+        self.client.invoke_remote(f"tb.simple.SimpleInterface/funcNoReturnValue", args, func)
         return await asyncio.wait_for(future, 500)
 
     async def func_bool(self, param_bool: bool):
@@ -265,9 +292,6 @@ class SimpleInterfaceSink(IObjectSink):
             elif k == "propString":
                 v =  utils.base_types.as_string(props[k])
                 self._set_prop_string(v)
-            elif k == "propReadOnlyString":
-                v =  utils.base_types.as_string(props[k])
-                self._set_prop_read_only_string(v)
         self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
@@ -304,18 +328,11 @@ class SimpleInterfaceSink(IObjectSink):
             v =  utils.base_types.as_string(value)
             self._set_prop_string(v)
             return
-        elif path == "propReadOnlyString":
-            v =  utils.base_types.as_string(value)
-            self._set_prop_read_only_string(v)
-            return
         logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
         path = Name.path_from_name(name)
-        if path == "sigVoid":
-            self.on_sig_void.fire()
-            return
-        elif path == "sigBool":
+        if path == "sigBool":
             param_bool =  utils.base_types.as_bool(args[0])
             self.on_sig_bool.fire(param_bool)
             return
@@ -368,6 +385,8 @@ class SimpleArrayInterfaceSink(IObjectSink):
         self.on_prop_float64_changed = EventHook()
         self._prop_string = []
         self.on_prop_string_changed = EventHook()
+        self._prop_read_only_string = ""
+        self.on_prop_read_only_string_changed = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_int32 = EventHook()
@@ -491,6 +510,9 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def get_prop_string(self):
         return self._prop_string
 
+    def get_prop_read_only_string(self):
+        return self._prop_read_only_string
+
     async def func_bool(self, param_bool: list[bool]):
         _param_bool = [utils.base_types.from_bool(bool) for bool in param_bool]
         args = [_param_bool]
@@ -601,6 +623,9 @@ class SimpleArrayInterfaceSink(IObjectSink):
             elif k == "propString":
                 v = [utils.base_types.as_string(_) for _ in props[k]]
                 self._set_prop_string(v)
+            elif k == "propReadOnlyString":
+                v =  utils.base_types.as_string(props[k])
+                self._set_prop_read_only_string(v)
         self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
@@ -637,6 +662,10 @@ class SimpleArrayInterfaceSink(IObjectSink):
             v = [utils.base_types.as_string(_) for _ in value]
             self._set_prop_string(v)
             return
+        elif path == "propReadOnlyString":
+            v =  utils.base_types.as_string(value)
+            self._set_prop_read_only_string(v)
+            return
         logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):
@@ -662,8 +691,8 @@ class SimpleArrayInterfaceSink(IObjectSink):
             self.on_sig_float.fire(param_float)
             return
         elif path == "sigFloat32":
-            param_float32 = [utils.base_types.as_float32(_) for _ in args[0]]
-            self.on_sig_float32.fire(param_float32)
+            param_floa32 = [utils.base_types.as_float32(_) for _ in args[0]]
+            self.on_sig_float32.fire(param_floa32)
             return
         elif path == "sigFloat64":
             param_float64 = [utils.base_types.as_float64(_) for _ in args[0]]
@@ -877,25 +906,6 @@ class NoSignalsInterfaceSink(IObjectSink):
             v =  utils.base_types.as_int(value)
             self._set_prop_int(v)
             return
-        logging.error("unknown property: %s", name)
-
-    def olink_on_signal(self, name: str, args: list[Any]):
-        logging.error("unknown signal: %s", name)
-
-class EmptyInterfaceSink(IObjectSink):
-    def __init__(self):
-        super().__init__()
-        self._on_is_ready= EventHook()
-        self.client = ClientNode.register_sink(self)
-
-    def olink_object_name(self):
-        return 'tb.simple.EmptyInterface'
-
-    def olink_on_init(self, name: str, props: object, node: "ClientNode"):
-        self.client = ClientNode.register_sink(self)
-        self._on_is_ready.fire()
-
-    def olink_on_property_changed(self, name: str, value: Any) -> None:
         logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):

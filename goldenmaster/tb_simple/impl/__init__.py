@@ -1,7 +1,7 @@
 
+from .void_interface import VoidInterface as VoidInterface
 from .simple_interface import SimpleInterface as SimpleInterface
 from .simple_array_interface import SimpleArrayInterface as SimpleArrayInterface
 from .no_properties_interface import NoPropertiesInterface as NoPropertiesInterface
 from .no_operations_interface import NoOperationsInterface as NoOperationsInterface
 from .no_signals_interface import NoSignalsInterface as NoSignalsInterface
-from .empty_interface import EmptyInterface as EmptyInterface

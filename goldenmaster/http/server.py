@@ -7,6 +7,7 @@ import tb_same1.http
 import tb_same2.http  
 import tb_simple.http  
 import testbed1.http  
+import tb_names.http  
 import tb_empty.http
 
 app = FastAPI()
@@ -40,6 +41,11 @@ app.include_router(
 app.include_router(
     router=testbed1.http.routes.router,
     prefix="/testbed1",
+)
+
+app.include_router(
+    router=tb_names.http.routes.router,
+    prefix="/tb.names",
 )
 
 app.include_router(

@@ -13,6 +13,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self._prop_float32: list[float] = []
         self._prop_float64: list[float] = []
         self._prop_string: list[str] = []
+        self._prop_read_only_string: str = ""
         self.on_prop_bool_changed: list[bool] = EventHook()
         self.on_prop_int_changed: list[int] = EventHook()
         self.on_prop_int32_changed: list[int] = EventHook()
@@ -21,6 +22,7 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
         self.on_prop_float32_changed: list[float] = EventHook()
         self.on_prop_float64_changed: list[float] = EventHook()
         self.on_prop_string_changed: list[str] = EventHook()
+        self.on_prop_read_only_string_changed: str = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_int32 = EventHook()
@@ -125,6 +127,12 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
 
     def _push_prop_string(self, value):
         self.on_prop_string_changed.fire(value)
+    
+    def get_prop_read_only_string(self):
+        return self._prop_read_only_string        
+
+    def _push_prop_read_only_string(self, value):
+        self.on_prop_read_only_string_changed.fire(value)
 
     def func_bool(self, param_bool: list[bool]) -> list[bool]:
         return []
@@ -165,8 +173,8 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
     def _sig_float(self, param_float: list[float]):
         self.on_sig_float.fire(param_float)
 
-    def _sig_float32(self, param_float32: list[float]):
-        self.on_sig_float32.fire(param_float32)
+    def _sig_float32(self, param_floa32: list[float]):
+        self.on_sig_float32.fire(param_floa32)
 
     def _sig_float64(self, param_float64: list[float]):
         self.on_sig_float64.fire(param_float64)

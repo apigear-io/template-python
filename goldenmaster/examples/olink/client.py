@@ -18,6 +18,7 @@ import tb_same1.olink
 import tb_same2.olink
 import tb_simple.olink
 import testbed1.olink
+import tb_names.olink
 import tb_empty.olink
 
 # set default log level to INFO and above
@@ -94,6 +95,10 @@ node.link_remote(sink.olink_object_name())
 
 
 
+# create and register sink for tb.simple.VoidInterface
+sink = tb_simple.olink.VoidInterfaceSink()
+node.link_remote(sink.olink_object_name())
+
 # create and register sink for tb.simple.SimpleInterface
 sink = tb_simple.olink.SimpleInterfaceSink()
 node.link_remote(sink.olink_object_name())
@@ -114,10 +119,6 @@ node.link_remote(sink.olink_object_name())
 sink = tb_simple.olink.NoSignalsInterfaceSink()
 node.link_remote(sink.olink_object_name())
 
-# create and register sink for tb.simple.EmptyInterface
-sink = tb_simple.olink.EmptyInterfaceSink()
-node.link_remote(sink.olink_object_name())
-
 
 
 # create and register sink for testbed1.StructInterface
@@ -126,6 +127,12 @@ node.link_remote(sink.olink_object_name())
 
 # create and register sink for testbed1.StructArrayInterface
 sink = testbed1.olink.StructArrayInterfaceSink()
+node.link_remote(sink.olink_object_name())
+
+
+
+# create and register sink for tb.names.Nam_Es
+sink = tb_names.olink.Nam_EsSink()
 node.link_remote(sink.olink_object_name())
 
 

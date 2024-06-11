@@ -102,15 +102,10 @@ class TestOLinkSimpleInterface:
         assert impl.get_prop_string() == ""
         assert sink.get_prop_string() == ""
 
-    def test_prop_read_only_string(self, olink_objects):
-        impl, sink = olink_objects
-        assert impl.get_prop_read_only_string() == ""
-        assert sink.get_prop_read_only_string() == ""
-
     @pytest.mark.asyncio
-    async def test_func_void(self, olink_objects):
+    async def test_func_no_return_value(self, olink_objects):
         impl, sink = olink_objects
-        await sink.func_void()
+        await sink.func_no_return_value(param_bool=False)
 
     @pytest.mark.asyncio
     async def test_func_bool(self, olink_objects):
@@ -151,13 +146,6 @@ class TestOLinkSimpleInterface:
     async def test_func_string(self, olink_objects):
         impl, sink = olink_objects
         await sink.func_string(param_string="")
-
-    def test_sig_void(self, olink_objects):
-        impl, sink = olink_objects
-        self.called = False
-        sink.on_sig_void += lambda *args: setattr(self, 'called', True)
-        impl._sig_void()
-        assert self.called == True
 
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects
