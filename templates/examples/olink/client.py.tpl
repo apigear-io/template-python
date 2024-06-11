@@ -30,7 +30,7 @@ client = apigear.olink.Client(node)
 {{ range .Interfaces }}
 
 # create and register sink for {{$module.Name}}.{{.Name}}
-sink = {{snake $module.Name}}.olink.{{.Name}}Sink()
+sink = {{snake $module.Name}}.olink.{{Camel .Name}}Sink()
 node.link_remote(sink.olink_object_name())
 {{- end }}
 {{- end }}
