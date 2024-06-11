@@ -34,6 +34,15 @@ import testbed1.impl
 import tb_names.olink
 import tb_names.impl
 
+import custom_types.olink
+import custom_types.impl
+
+import extern_types.olink
+import extern_types.impl
+
+import counter.olink
+import counter.impl
+
 import tb_empty.olink
 import tb_empty.impl
 
@@ -65,6 +74,10 @@ testbed1.olink.StructInterfaceSource(testbed1.impl.StructInterface())
 testbed1.olink.StructArrayInterfaceSource(testbed1.impl.StructArrayInterface())
 
 tb_names.olink.NamEsSource(tb_names.impl.NamEs())
+
+
+
+counter.olink.CounterSource(counter.impl.Counter())
 
 tb_empty.olink.EmptyInterfaceSource(tb_empty.impl.EmptyInterface())
 
