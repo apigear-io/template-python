@@ -13,7 +13,6 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float32: float = 0.0
         self._prop_float64: float = 0.0
         self._prop_string: str = ""
-        self._prop_read_only_string: str = ""
         self.on_prop_bool_changed: bool = EventHook()
         self.on_prop_int_changed: int = EventHook()
         self.on_prop_int32_changed: int = EventHook()
@@ -22,8 +21,6 @@ class SimpleInterface(api.ISimpleInterface):
         self.on_prop_float32_changed: float = EventHook()
         self.on_prop_float64_changed: float = EventHook()
         self.on_prop_string_changed: str = EventHook()
-        self.on_prop_read_only_string_changed: str = EventHook()
-        self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_int32 = EventHook()
@@ -128,14 +125,8 @@ class SimpleInterface(api.ISimpleInterface):
 
     def _push_prop_string(self, value):
         self.on_prop_string_changed.fire(value)
-    
-    def get_prop_read_only_string(self):
-        return self._prop_read_only_string        
 
-    def _push_prop_read_only_string(self, value):
-        self.on_prop_read_only_string_changed.fire(value)
-
-    def func_void(self) -> None:
+    def func_no_return_value(self, param_bool: bool) -> None:
         return None
 
     def func_bool(self, param_bool: bool) -> bool:
@@ -161,9 +152,6 @@ class SimpleInterface(api.ISimpleInterface):
 
     def func_string(self, param_string: str) -> str:
         return ""
-
-    def _sig_void(self):
-        self.on_sig_void.fire()
 
     def _sig_bool(self, param_bool: bool):
         self.on_sig_bool.fire(param_bool)

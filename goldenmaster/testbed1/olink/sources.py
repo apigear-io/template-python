@@ -50,7 +50,7 @@ class StructInterfaceSource(IObjectSource):
         elif path == "funcInt":
             param_int = testbed1.api.as_struct_int(args[0])
             reply = self.impl.func_int(param_int)
-            return testbed1.api.from_struct_bool(reply)
+            return testbed1.api.from_struct_int(reply)
         elif path == "funcFloat":
             param_float = testbed1.api.as_struct_float(args[0])
             reply = self.impl.func_float(param_float)

@@ -12,6 +12,13 @@ class EnhancedModel(BaseModel):
     def __init__(self, **kw):
         super().__init__(**kw)
 
+class IVoidInterface:
+    def __init__(self):
+        pass
+
+    def func_void(self):
+        raise NotImplementedError("Method tb.simple/void_interface:func_void is not implemented.")
+
 class ISimpleInterface:
     def __init__(self):
         pass
@@ -64,11 +71,8 @@ class ISimpleInterface:
     def set_prop_string(self, value):
         raise NotImplementedError("Method tb.simple/simple_interface:set_prop_string is not implemented.")
 
-    def get_prop_read_only_string(self):
-        raise NotImplementedError("Method tb.simple/simple_interface:get_prop_read_only_string is not implemented.")
-
-    def func_void(self):
-        raise NotImplementedError("Method tb.simple/simple_interface:func_void is not implemented.")
+    def func_no_return_value(self, param_bool: bool):
+        raise NotImplementedError("Method tb.simple/simple_interface:func_no_return_value is not implemented.")
 
     def func_bool(self, param_bool: bool):
         raise NotImplementedError("Method tb.simple/simple_interface:func_bool is not implemented.")
@@ -146,6 +150,9 @@ class ISimpleArrayInterface:
     def set_prop_string(self, value):
         raise NotImplementedError("Method tb.simple/simple_array_interface:set_prop_string is not implemented.")
 
+    def get_prop_read_only_string(self):
+        raise NotImplementedError("Method tb.simple/simple_array_interface:get_prop_read_only_string is not implemented.")
+
     def func_bool(self, param_bool: list[bool]):
         raise NotImplementedError("Method tb.simple/simple_array_interface:func_bool is not implemented.")
 
@@ -217,8 +224,4 @@ class INoSignalsInterface:
 
     def func_bool(self, param_bool: bool):
         raise NotImplementedError("Method tb.simple/no_signals_interface:func_bool is not implemented.")
-
-class IEmptyInterface:
-    def __init__(self):
-        pass
 

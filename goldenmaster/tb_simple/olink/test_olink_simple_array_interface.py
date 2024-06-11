@@ -102,6 +102,11 @@ class TestOLinkSimpleArrayInterface:
         assert impl.get_prop_string() == []
         assert sink.get_prop_string() == []
 
+    def test_prop_read_only_string(self, olink_objects):
+        impl, sink = olink_objects
+        assert impl.get_prop_read_only_string() == ""
+        assert sink.get_prop_read_only_string() == ""
+
     @pytest.mark.asyncio
     async def test_func_bool(self, olink_objects):
         impl, sink = olink_objects
