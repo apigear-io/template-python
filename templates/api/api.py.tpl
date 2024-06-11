@@ -111,7 +111,12 @@ def from_{{snake .Name}}(v):
 {{- $extern := pyExtern . }}
 {{- $func_name:= printf "%s_%s" (snake $extern.Import) (snake $extern.Name )}}
 def as_{{$func_name}}(v):
+    {{ $default_val := $extern.Default }}
+    {{- if (eq $default_val "") }}
     deserialized = {{$extern.Import}}.{{$extern.Name}}()
+    {{- else -}}
+    deserialized = {{ $default_val }}
+    {{- end}}
     # deserialize your {{$extern.Import}}.{{$extern.Name}} from json string
     return deserialized
 
