@@ -13,55 +13,55 @@ from olink.remote import RemoteNode
 
 import apigear.olink
 
-import testbed2_olink
-import testbed2_impl
+import testbed2.olink
+import testbed2.impl
 
-import tb_enum_olink
-import tb_enum_impl
+import tb_enum.olink
+import tb_enum.impl
 
-import tb_same1_olink
-import tb_same1_impl
+import tb_same1.olink
+import tb_same1.impl
 
-import tb_same2_olink
-import tb_same2_impl
+import tb_same2.olink
+import tb_same2.impl
 
-import tb_simple_olink
-import tb_simple_impl
+import tb_simple.olink
+import tb_simple.impl
 
-import testbed1_olink
-import testbed1_impl
+import testbed1.olink
+import testbed1.impl
 
-import tb_empty_olink
-import tb_empty_impl
+import tb_empty.olink
+import tb_empty.impl
 
-testbed2_olink.ManyParamInterfaceSource(testbed2_impl.ManyParamInterface())
-testbed2_olink.NestedStruct1InterfaceSource(testbed2_impl.NestedStruct1Interface())
-testbed2_olink.NestedStruct2InterfaceSource(testbed2_impl.NestedStruct2Interface())
-testbed2_olink.NestedStruct3InterfaceSource(testbed2_impl.NestedStruct3Interface())
+testbed2.olink.ManyParamInterfaceSource(testbed2.impl.ManyParamInterface())
+testbed2.olink.NestedStruct1InterfaceSource(testbed2.impl.NestedStruct1Interface())
+testbed2.olink.NestedStruct2InterfaceSource(testbed2.impl.NestedStruct2Interface())
+testbed2.olink.NestedStruct3InterfaceSource(testbed2.impl.NestedStruct3Interface())
 
-tb_enum_olink.EnumInterfaceSource(tb_enum_impl.EnumInterface())
+tb_enum.olink.EnumInterfaceSource(tb_enum.impl.EnumInterface())
 
-tb_same1_olink.SameStruct1InterfaceSource(tb_same1_impl.SameStruct1Interface())
-tb_same1_olink.SameStruct2InterfaceSource(tb_same1_impl.SameStruct2Interface())
-tb_same1_olink.SameEnum1InterfaceSource(tb_same1_impl.SameEnum1Interface())
-tb_same1_olink.SameEnum2InterfaceSource(tb_same1_impl.SameEnum2Interface())
+tb_same1.olink.SameStruct1InterfaceSource(tb_same1.impl.SameStruct1Interface())
+tb_same1.olink.SameStruct2InterfaceSource(tb_same1.impl.SameStruct2Interface())
+tb_same1.olink.SameEnum1InterfaceSource(tb_same1.impl.SameEnum1Interface())
+tb_same1.olink.SameEnum2InterfaceSource(tb_same1.impl.SameEnum2Interface())
 
-tb_same2_olink.SameStruct1InterfaceSource(tb_same2_impl.SameStruct1Interface())
-tb_same2_olink.SameStruct2InterfaceSource(tb_same2_impl.SameStruct2Interface())
-tb_same2_olink.SameEnum1InterfaceSource(tb_same2_impl.SameEnum1Interface())
-tb_same2_olink.SameEnum2InterfaceSource(tb_same2_impl.SameEnum2Interface())
+tb_same2.olink.SameStruct1InterfaceSource(tb_same2.impl.SameStruct1Interface())
+tb_same2.olink.SameStruct2InterfaceSource(tb_same2.impl.SameStruct2Interface())
+tb_same2.olink.SameEnum1InterfaceSource(tb_same2.impl.SameEnum1Interface())
+tb_same2.olink.SameEnum2InterfaceSource(tb_same2.impl.SameEnum2Interface())
 
-tb_simple_olink.SimpleInterfaceSource(tb_simple_impl.SimpleInterface())
-tb_simple_olink.SimpleArrayInterfaceSource(tb_simple_impl.SimpleArrayInterface())
-tb_simple_olink.NoPropertiesInterfaceSource(tb_simple_impl.NoPropertiesInterface())
-tb_simple_olink.NoOperationsInterfaceSource(tb_simple_impl.NoOperationsInterface())
-tb_simple_olink.NoSignalsInterfaceSource(tb_simple_impl.NoSignalsInterface())
-tb_simple_olink.EmptyInterfaceSource(tb_simple_impl.EmptyInterface())
+tb_simple.olink.SimpleInterfaceSource(tb_simple.impl.SimpleInterface())
+tb_simple.olink.SimpleArrayInterfaceSource(tb_simple.impl.SimpleArrayInterface())
+tb_simple.olink.NoPropertiesInterfaceSource(tb_simple.impl.NoPropertiesInterface())
+tb_simple.olink.NoOperationsInterfaceSource(tb_simple.impl.NoOperationsInterface())
+tb_simple.olink.NoSignalsInterfaceSource(tb_simple.impl.NoSignalsInterface())
+tb_simple.olink.EmptyInterfaceSource(tb_simple.impl.EmptyInterface())
 
-testbed1_olink.StructInterfaceSource(testbed1_impl.StructInterface())
-testbed1_olink.StructArrayInterfaceSource(testbed1_impl.StructArrayInterface())
+testbed1.olink.StructInterfaceSource(testbed1.impl.StructInterface())
+testbed1.olink.StructArrayInterfaceSource(testbed1.impl.StructArrayInterface())
 
-tb_empty_olink.EmptyInterfaceSource(tb_empty_impl.EmptyInterface())
+tb_empty.olink.EmptyInterfaceSource(tb_empty.impl.EmptyInterface())
 
 
 # set default log level to INFO and above
