@@ -76,13 +76,9 @@ class TestSimpleInterface:
         assert self.called == False
         assert o.get_prop_string() == ""
 
-    def test_prop_read_only_string(self):
+    def test_func_no_return_value(self):
         o = SimpleInterface()
-        assert o.get_prop_read_only_string() == ""
-
-    def test_func_void(self):
-        o = SimpleInterface()
-        o.func_void()
+        o.func_no_return_value(param_bool=False)
 
     def test_func_bool(self):
         o = SimpleInterface()
@@ -115,13 +111,6 @@ class TestSimpleInterface:
     def test_func_string(self):
         o = SimpleInterface()
         o.func_string(param_string="")
-
-    def test_sig_void(self):
-        o = SimpleInterface()
-        self.called = False
-        o.on_sig_void += lambda *args: setattr(self, 'called', True)
-        o._sig_void()
-        assert self.called == True
 
     def test_sig_bool(self):
         o = SimpleInterface()

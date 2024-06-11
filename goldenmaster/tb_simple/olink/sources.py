@@ -5,6 +5,44 @@ import tb_simple.api
 from utils.eventhook import EventHook
 from typing import Any
 import logging
+class VoidInterfaceSource(IObjectSource):
+    impl: tb_simple.api.IVoidInterface
+    def __init__(self, impl: tb_simple.api.IVoidInterface):
+        self.impl = impl
+        impl.on_sig_void += self.notify_sig_void
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
+        RemoteNode.register_source(self)
+
+    def olink_object_name(self):
+        return "tb.simple.VoidInterface"
+
+    def olink_set_property(self, name: str, value: Any):
+        path = Name.path_from_name(name)
+        logging.error("unknown property: %s", name)
+
+
+    def olink_invoke(self, name: str, args: list[Any]) -> Any:
+        path = Name.path_from_name(name)
+        if path == "funcVoid":
+            reply = self.impl.func_void()
+            return utils.base_types.from_int(0)      
+        logging.error("unknown operation: %s", name)
+
+    def olink_linked(self, name: str, node: "RemoteNode"):
+        logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
+
+    def olink_collect_properties(self) -> object:
+        props = {}
+        return props
+
+    def notify_sig_void(self):
+        return RemoteNode.notify_signal("tb.simple.VoidInterface/sigVoid", [])
 class SimpleInterfaceSource(IObjectSource):
     impl: tb_simple.api.ISimpleInterface
     def __init__(self, impl: tb_simple.api.ISimpleInterface):
@@ -17,8 +55,6 @@ class SimpleInterfaceSource(IObjectSource):
         impl.on_prop_float32_changed += self.notify_prop_float32_changed
         impl.on_prop_float64_changed += self.notify_prop_float64_changed
         impl.on_prop_string_changed += self.notify_prop_string_changed
-        impl.on_prop_read_only_string_changed += self.notify_prop_read_only_string_changed
-        impl.on_sig_void += self.notify_sig_void
         impl.on_sig_bool += self.notify_sig_bool
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_int32 += self.notify_sig_int32
@@ -60,15 +96,14 @@ class SimpleInterfaceSource(IObjectSource):
         elif path == "propString":
             v = utils.base_types.as_string(value)
             return self.impl.set_prop_string(v)
-        elif path == "propReadOnlyString":
-            pass
         logging.error("unknown property: %s", name)
 
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        if path == "funcVoid":
-            reply = self.impl.func_void()
+        if path == "funcNoReturnValue":
+            param_bool = utils.base_types.as_bool(args[0])
+            reply = self.impl.func_no_return_value(param_bool)
             return utils.base_types.from_int(0)
         elif path == "funcBool":
             param_bool = utils.base_types.as_bool(args[0])
@@ -130,12 +165,7 @@ class SimpleInterfaceSource(IObjectSource):
         props["propFloat64"] = utils.base_types.from_float64(v)
         v = self.impl.get_prop_string()
         props["propString"] = utils.base_types.from_string(v)
-        v = self.impl.get_prop_read_only_string()
-        props["propReadOnlyString"] = utils.base_types.from_string(v)
         return props
-
-    def notify_sig_void(self):
-        return RemoteNode.notify_signal("tb.simple.SimpleInterface/sigVoid", [])
 
     def notify_sig_bool(self, param_bool: bool):
         _param_bool = utils.base_types.from_bool(param_bool)
@@ -200,10 +230,6 @@ class SimpleInterfaceSource(IObjectSource):
     def notify_prop_string_changed(self, value):
         v = utils.base_types.from_string(value)
         return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propString", v)
-
-    def notify_prop_read_only_string_changed(self, value):
-        v = utils.base_types.from_string(value)
-        return RemoteNode.notify_property_change("tb.simple.SimpleInterface/propReadOnlyString", v)
 class SimpleArrayInterfaceSource(IObjectSource):
     impl: tb_simple.api.ISimpleArrayInterface
     def __init__(self, impl: tb_simple.api.ISimpleArrayInterface):
@@ -216,6 +242,7 @@ class SimpleArrayInterfaceSource(IObjectSource):
         impl.on_prop_float32_changed += self.notify_prop_float32_changed
         impl.on_prop_float64_changed += self.notify_prop_float64_changed
         impl.on_prop_string_changed += self.notify_prop_string_changed
+        impl.on_prop_read_only_string_changed += self.notify_prop_read_only_string_changed
         impl.on_sig_bool += self.notify_sig_bool
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_int32 += self.notify_sig_int32
@@ -257,6 +284,8 @@ class SimpleArrayInterfaceSource(IObjectSource):
         elif path == "propString":
             v = [utils.base_types.as_string(_) for _ in value]
             return self.impl.set_prop_string(v)
+        elif path == "propReadOnlyString":
+            pass
         logging.error("unknown property: %s", name)
 
 
@@ -322,6 +351,8 @@ class SimpleArrayInterfaceSource(IObjectSource):
         props["propFloat64"] = [utils.base_types.from_float64(_) for _ in v]
         v = self.impl.get_prop_string()
         props["propString"] = [utils.base_types.from_string(_) for _ in v]
+        v = self.impl.get_prop_read_only_string()
+        props["propReadOnlyString"] = utils.base_types.from_string(v)
         return props
 
     def notify_sig_bool(self, param_bool: list[bool]):
@@ -344,9 +375,9 @@ class SimpleArrayInterfaceSource(IObjectSource):
         _param_float = [utils.base_types.api.from_float(_) for _ in param_float]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat", [_param_float])
 
-    def notify_sig_float32(self, param_float32: list[float]):
-        _param_float32 = [utils.base_types.api.from_float32(_) for _ in param_float32]
-        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat32", [_param_float32])
+    def notify_sig_float32(self, param_floa32: list[float]):
+        _param_floa32 = [utils.base_types.api.from_float32(_) for _ in param_floa32]
+        return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat32", [_param_floa32])
 
     def notify_sig_float64(self, param_float64: list[float]):
         _param_float64 = [utils.base_types.api.from_float64(_) for _ in param_float64]
@@ -387,6 +418,10 @@ class SimpleArrayInterfaceSource(IObjectSource):
     def notify_prop_string_changed(self, value):
         v = [utils.base_types.from_string(_) for _ in value]
         return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propString", v)
+
+    def notify_prop_read_only_string_changed(self, value):
+        v = utils.base_types.from_string(value)
+        return RemoteNode.notify_property_change("tb.simple.SimpleArrayInterface/propReadOnlyString", v)
 class NoPropertiesInterfaceSource(IObjectSource):
     impl: tb_simple.api.INoPropertiesInterface
     def __init__(self, impl: tb_simple.api.INoPropertiesInterface):
@@ -552,34 +587,3 @@ class NoSignalsInterfaceSource(IObjectSource):
     def notify_prop_int_changed(self, value):
         v = utils.base_types.from_int(value)
         return RemoteNode.notify_property_change("tb.simple.NoSignalsInterface/propInt", v)
-class EmptyInterfaceSource(IObjectSource):
-    impl: tb_simple.api.IEmptyInterface
-    def __init__(self, impl: tb_simple.api.IEmptyInterface):
-        self.impl = impl
-        self._on_linked = EventHook()
-        self._on_unlinked = EventHook()
-        RemoteNode.register_source(self)
-
-    def olink_object_name(self):
-        return "tb.simple.EmptyInterface"
-
-    def olink_set_property(self, name: str, value: Any):
-        path = Name.path_from_name(name)
-        logging.error("unknown property: %s", name)
-
-
-    def olink_invoke(self, name: str, args: list[Any]) -> Any:
-        path = Name.path_from_name(name)      
-        logging.error("unknown operation: %s", name)
-
-    def olink_linked(self, name: str, node: "RemoteNode"):
-        logging.info("linked: %s", name)
-        self._on_linked.fire(name)
-
-    def olink_unlinked(self, name: str, node: "RemoteNode"):
-        logging.info("unlinked: %s", name)
-        self._on_unlinked.fire(name)
-
-    def olink_collect_properties(self) -> object:
-        props = {}
-        return props

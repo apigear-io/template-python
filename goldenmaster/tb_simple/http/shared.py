@@ -2,6 +2,17 @@ from pydantic import BaseModel, Field
 from typing import Iterable
 from tb.simple.api import api
 
+class VoidInterfaceState(BaseModel):
+    pass
+
+# method VoidInterface.funcVoid
+class VoidInterfaceFuncVoidRequest(BaseModel):
+    pass 
+
+class VoidInterfaceFuncVoidResponse(BaseModel):
+    result: None
+    state: VoidInterfaceState
+
 class SimpleInterfaceState(BaseModel):
     prop_bool: bool = Field(default=False, alias="propBool")
     prop_int: int = Field(default=0, alias="propInt")
@@ -11,13 +22,12 @@ class SimpleInterfaceState(BaseModel):
     prop_float32: float = Field(default=0.0, alias="propFloat32")
     prop_float64: float = Field(default=0.0, alias="propFloat64")
     prop_string: str = Field(default="", alias="propString")
-    prop_read_only_string: str = Field(default="", alias="propReadOnlyString")
 
-# method SimpleInterface.funcVoid
-class SimpleInterfaceFuncVoidRequest(BaseModel):
-    pass 
+# method SimpleInterface.funcNoReturnValue
+class SimpleInterfaceFuncNoReturnValueRequest(BaseModel):
+    param_bool: bool = Field(default=False, alias="paramBool") 
 
-class SimpleInterfaceFuncVoidResponse(BaseModel):
+class SimpleInterfaceFuncNoReturnValueResponse(BaseModel):
     result: None
     state: SimpleInterfaceState
 
@@ -94,6 +104,7 @@ class SimpleArrayInterfaceState(BaseModel):
     prop_float32: list[float] = Field(default=[], alias="propFloat32")
     prop_float64: list[float] = Field(default=[], alias="propFloat64")
     prop_string: list[str] = Field(default=[], alias="propString")
+    prop_read_only_string: str = Field(default="", alias="propReadOnlyString")
 
 # method SimpleArrayInterface.funcBool
 class SimpleArrayInterfaceFuncBoolRequest(BaseModel):
@@ -201,9 +212,6 @@ class NoSignalsInterfaceFuncBoolRequest(BaseModel):
 class NoSignalsInterfaceFuncBoolResponse(BaseModel):
     result: bool
     state: NoSignalsInterfaceState
-
-class EmptyInterfaceState(BaseModel):
-    pass
 
 
 

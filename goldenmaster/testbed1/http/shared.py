@@ -21,7 +21,7 @@ class StructInterfaceFuncIntRequest(BaseModel):
     param_int: api.StructInt = Field(default=api.StructInt(), alias="paramInt") 
 
 class StructInterfaceFuncIntResponse(BaseModel):
-    result: api.StructBool
+    result: api.StructInt
     state: StructInterfaceState
 
 # method StructInterface.funcFloat
