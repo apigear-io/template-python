@@ -165,8 +165,8 @@ class SimpleArrayInterface(api.ISimpleArrayInterface):
     def _sig_float(self, param_float: list[float]):
         self.on_sig_float.fire(param_float)
 
-    def _sig_float32(self, param_float32: list[float]):
-        self.on_sig_float32.fire(param_float32)
+    def _sig_float32(self, param_floa32: list[float]):
+        self.on_sig_float32.fire(param_floa32)
 
     def _sig_float64(self, param_float64: list[float]):
         self.on_sig_float64.fire(param_float64)

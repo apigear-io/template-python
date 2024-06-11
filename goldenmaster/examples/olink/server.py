@@ -31,6 +31,9 @@ import tb_simple.impl
 import testbed1.olink
 import testbed1.impl
 
+import tb_names.olink
+import tb_names.impl
+
 import tb_empty.olink
 import tb_empty.impl
 
@@ -51,15 +54,17 @@ tb_same2.olink.SameStruct2InterfaceSource(tb_same2.impl.SameStruct2Interface())
 tb_same2.olink.SameEnum1InterfaceSource(tb_same2.impl.SameEnum1Interface())
 tb_same2.olink.SameEnum2InterfaceSource(tb_same2.impl.SameEnum2Interface())
 
+tb_simple.olink.VoidInterfaceSource(tb_simple.impl.VoidInterface())
 tb_simple.olink.SimpleInterfaceSource(tb_simple.impl.SimpleInterface())
 tb_simple.olink.SimpleArrayInterfaceSource(tb_simple.impl.SimpleArrayInterface())
 tb_simple.olink.NoPropertiesInterfaceSource(tb_simple.impl.NoPropertiesInterface())
 tb_simple.olink.NoOperationsInterfaceSource(tb_simple.impl.NoOperationsInterface())
 tb_simple.olink.NoSignalsInterfaceSource(tb_simple.impl.NoSignalsInterface())
-tb_simple.olink.EmptyInterfaceSource(tb_simple.impl.EmptyInterface())
 
 testbed1.olink.StructInterfaceSource(testbed1.impl.StructInterface())
 testbed1.olink.StructArrayInterfaceSource(testbed1.impl.StructArrayInterface())
+
+tb_names.olink.NamEsSource(tb_names.impl.NamEs())
 
 tb_empty.olink.EmptyInterfaceSource(tb_empty.impl.EmptyInterface())
 
