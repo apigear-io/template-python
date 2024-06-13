@@ -2,9 +2,55 @@ import asyncio
 from typing import Any
 from olink.core import Name
 from olink.client import IObjectSink, ClientNode
-from {{snake .Module.Name}}_api.shared import EventHook
-from {{snake .Module.Name}}_api import api
+from utils.eventhook import EventHook
+import utils.base_types
+{{- $current_module_api_prefix :=  printf "%s.api." (snake .Module.Name ) }}
+import {{snake .Module.Name }}.api
 import logging
+
+{{- define "get_converter_module"}}
+            {{- $module_prefix:= printf "%s.api" (snake .Module.Name ) }}
+            {{- if .IsPrimitive }}
+            {{- $module_prefix = "utils.base_types" }}
+            {{- end}}
+            {{- if (ne .Import "") }}
+            {{- $module_prefix = printf "%s.api" (snake .Import ) }}
+            {{- end}}
+            {{- $module_prefix -}}
+{{- end}}
+{{- define "get_serialization_name" }}
+            {{- $name:= snake .Type }}
+            {{- if (eq .KindType "extern") }}
+            {{- $name = snake (pyReturn "" .) }}
+            {{- end}}
+            {{- $name -}}
+{{- end}}
+
+{{- $system := .System}}
+{{- $imports := getEmptyStringList }}
+{{- range .Module.Imports }}
+{{- $current_import := .}} 
+{{- $import_name := printf "%s.api" .Name }} 
+{{- $imports = (appendList $imports $import_name) }}
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+    {{- $imports = (appendList $imports $extern.Import) }}
+    {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $imports = (appendList $imports $extern.Import) }}
+{{- end }}
+
+{{- $imports = unique $imports }}
+{{- range $imports }}
+import {{.}}
+{{- end }}
+
 
 {{- $m := .Module }}
 {{- range .Module.Interfaces }}
@@ -15,7 +61,7 @@ class {{Camel .Name}}Sink(IObjectSink):
     def __init__(self):
         super().__init__()
 {{- range .Properties }}
-        self._{{snake .Name}} = {{pyDefault "api." .}}
+        self._{{snake .Name}} = {{pyDefault $current_module_api_prefix .}}
         self.on_{{snake .Name}}_changed = EventHook()
 {{- end }}
 {{- range .Signals }}
@@ -47,7 +93,7 @@ class {{Camel .Name}}Sink(IObjectSink):
         if self._{{snake .Name}} == value:
             return
         {{- if .IsArray }}
-        self.client.set_remote_property('{{$id}}/{{.Name}}', [api.from_{{snake .Type}}(_) for _ in value])
+        self.client.set_remote_property('{{$id}}/{{.Name}}', [{{ template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in value])
         {{- else }}
         self.client.set_remote_property('{{$id}}/{{.Name}}', value)
         {{- end }}
@@ -60,12 +106,12 @@ class {{Camel .Name}}Sink(IObjectSink):
 
     {{- range .Operations }}
 
-    async def {{snake .Name}}({{pyParams "api." .Params}}):
+    async def {{snake .Name}}({{pyParams $current_module_api_prefix .Params}}):
         {{- range $idx, $_ := .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [api.from_{{snake .Type}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
+        _{{snake .Name}} = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Type}}) for {{snake .Type}} in {{snake .Name}}]
         {{- else }}
-        _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
+        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Name}})
         {{- end }}
         {{- end }}
         return await self._invoke("{{.Name}}", [
@@ -89,9 +135,9 @@ class {{Camel .Name}}Sink(IObjectSink):
             if k == "{{.Name}}":
             {{- end }}
                 {{- if .IsArray }}
-                v = [api.as_{{snake .Type}}(_) for _ in props[k]]
+                v = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in props[k]]
                 {{- else }}
-                v =  api.as_{{snake .Type}}(props[k])
+                v =  {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(props[k])
                 {{- end }}
                 self._set_{{snake .Name}}(v)
         {{- end }}
@@ -109,9 +155,9 @@ class {{Camel .Name}}Sink(IObjectSink):
         if path == "{{.Name}}":
         {{- end }}
             {{- if .IsArray }}
-            v = [api.as_{{snake .Type}}(_) for _ in value]
+            v = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in value]
             {{- else }}
-            v =  api.as_{{snake .Type}}(value)
+            v =  {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(value)
             {{- end }}
             self._set_{{snake .Name}}(v)
             return
@@ -130,9 +176,9 @@ class {{Camel .Name}}Sink(IObjectSink):
         {{- end }}
             {{- range $index, $_ := .Params }}
             {{- if .IsArray }}
-            {{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$index}}]]
+            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in args[{{$index}}]]
             {{- else }}
-            {{snake .Name}} =  api.as_{{snake .Type}}(args[{{$index}}])
+            {{snake .Name}} =  {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(args[{{$index}}])
             {{- end }}
             {{- end }}
             self.on_{{snake .Name}}.fire(

@@ -20,5 +20,5 @@ pip install --upgrade -r requirements.txt
 
 ## OLink Client and Server
 
-For more details, please see [OLINK_README.md](OLINK_README.md).
+For more details, please see [OLINK_README.md](examples/olink/OLINK_README.md).
 

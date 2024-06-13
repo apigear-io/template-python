@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Iterable
-from {{dot .Module.Name}}_api import api
+from {{dot .Module.Name}}.api import api
 
 {{- range .Module.Interfaces }}
 {{ $iface := . }}

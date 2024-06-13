@@ -1,5 +1,28 @@
 from pydantic import ConfigDict, BaseModel, Field
 from enum import IntEnum
+{{$system := .System}}
+{{- $imports := getEmptyStringList }}
+{{- range .Module.Imports }}
+{{- $current_import := .}} 
+{{- $import_name := printf "%s.api" .Name }} 
+{{- $imports = (appendList $imports $import_name) }}
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+    {{- $imports = (appendList $imports $extern.Import) }}
+    {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $imports = (appendList $imports $extern.Import) }}
+{{- end }}
+{{- $imports = unique $imports }}
+{{- range $imports }}
+import {{.}}
+{{- end }}
 
 class EnhancedModel(BaseModel):
     """This model is used to enforce the json encoding by alias"""
@@ -66,55 +89,6 @@ class I{{Camel .Name}}:
     {{- end }}
 {{- end }}
 
-
-def as_int(v):
-    return int(v)
-
-def from_int(v):
-    return v
-
-def as_int32(v):
-    return as_int(v)
-
-def from_int32(v):
-    return from_int(v)
-
-def as_int64(v):
-    return as_int(v)
-
-def from_int64(v):
-    return from_int(v)
-
-def as_string(v):
-    return str(v)
-
-def from_string(v):
-    return v
-
-def as_bool(v):
-    return str(v).lower() in ['true', '1', 't', 'y', 'yes']
-
-def from_bool(v):
-    return v
-
-def as_float(v):
-    return float(v)
-
-def from_float(v):
-    return v
-
-def as_float32(v):
-    return as_float(v)
-
-def from_float32(v):
-    return from_float(v)
-
-def as_float64(v):
-    return as_float(v)
-
-def from_float64(v):
-    return from_float(v)
-
 {{- range .Module.Enums }}
 
 def as_{{snake .Name}}(v):
@@ -131,5 +105,24 @@ def as_{{snake .Name}}(v):
 
 def from_{{snake .Name}}(v):
     return v.model_dump()
+{{- end }}
+
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $func_name:= printf "%s_%s" (snake $extern.Import) (snake $extern.Name )}}
+def as_{{$func_name}}(v):
+    {{ $default_val := $extern.Default }}
+    {{- if (eq $default_val "") }}
+    deserialized = {{$extern.Import}}.{{$extern.Name}}()
+    {{- else -}}
+    deserialized = {{ $default_val }}
+    {{- end}}
+    # deserialize your {{$extern.Import}}.{{$extern.Name}} from json string
+    return deserialized
+
+def from_{{$func_name}}(v):
+    serialized = ""
+    #serialize your {{$extern.Import}}.{{$extern.Name}} here to json string
+    return serialized
 {{- end }}
 
