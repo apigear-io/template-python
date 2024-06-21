@@ -40,11 +40,11 @@ class NamEsSource(IObjectSource):
         if path == "SOME_FUNCTION":
             some_param = utils.base_types.as_bool(args[0])
             reply = self.impl.some_function(some_param)
-            return None
+            return utils.base_types.from_int(0)
         elif path == "Some_Function2":
             some_param = utils.base_types.as_bool(args[0])
             reply = self.impl.some_function2(some_param)
-            return None      
+            return utils.base_types.from_int(0)      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):

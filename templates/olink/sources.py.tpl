@@ -111,7 +111,7 @@ class {{$class}}Source(IObjectSource):
         {{- end }}
             reply = self.impl.{{snake .Name}}({{pyVars .Params}})
         {{- if .Return.IsVoid }}
-            return None
+            return utils.base_types.from_int(0)   
         {{- else }}
             {{- if .Return.IsArray }}
             return [{{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(_) for _ in reply]

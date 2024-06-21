@@ -21,16 +21,6 @@ class NamEsSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"tb.names.Nam_Es/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"tb.names.Nam_Es/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_switch(self, value):
         if self._switch == value:
             return
@@ -40,7 +30,7 @@ class NamEsSink(IObjectSink):
     def set_switch(self, value):
         if self._switch == value:
             return
-        self.client.set_remote_property('tb.names.Nam_Es/Switch', value)
+        self.client.set_remote_property('tb.names.Nam_Es/Switch', utils.base_types.from_bool(value))
 
     def get_switch(self):
         return self._switch
@@ -54,7 +44,7 @@ class NamEsSink(IObjectSink):
     def set_some_property(self, value):
         if self._some_property == value:
             return
-        self.client.set_remote_property('tb.names.Nam_Es/SOME_PROPERTY', value)
+        self.client.set_remote_property('tb.names.Nam_Es/SOME_PROPERTY', utils.base_types.from_int(value))
 
     def get_some_property(self):
         return self._some_property
@@ -68,18 +58,28 @@ class NamEsSink(IObjectSink):
     def set_some_poperty2(self, value):
         if self._some_poperty2 == value:
             return
-        self.client.set_remote_property('tb.names.Nam_Es/Some_Poperty2', value)
+        self.client.set_remote_property('tb.names.Nam_Es/Some_Poperty2', utils.base_types.from_int(value))
 
     def get_some_poperty2(self):
         return self._some_poperty2
 
     async def some_function(self, some_param: bool):
         _some_param = utils.base_types.from_bool(some_param)
-        return await self._invoke("SOME_FUNCTION", [_some_param], no_wait=True)
+        args = [_some_param]
+        future = asyncio.get_running_loop().create_future()
+        def func(args):
+            return future.set_result(None)
+        self.client.invoke_remote(f"tb.names.Nam_Es/SOME_FUNCTION", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def some_function2(self, some_param: bool):
         _some_param = utils.base_types.from_bool(some_param)
-        return await self._invoke("Some_Function2", [_some_param], no_wait=True)
+        args = [_some_param]
+        future = asyncio.get_running_loop().create_future()
+        def func(args):
+            return future.set_result(None)
+        self.client.invoke_remote(f"tb.names.Nam_Es/Some_Function2", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'tb.names.Nam_Es'

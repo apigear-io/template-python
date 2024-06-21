@@ -20,16 +20,6 @@ class CounterSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"counter.Counter/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"counter.Counter/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_vector(self, value):
         if self._vector == value:
             return
@@ -39,7 +29,7 @@ class CounterSink(IObjectSink):
     def set_vector(self, value):
         if self._vector == value:
             return
-        self.client.set_remote_property('counter.Counter/vector', value)
+        self.client.set_remote_property('counter.Counter/vector', custom_types.api.from_vector3_d(value))
 
     def get_vector(self):
         return self._vector
@@ -53,18 +43,28 @@ class CounterSink(IObjectSink):
     def set_extern_vector(self, value):
         if self._extern_vector == value:
             return
-        self.client.set_remote_property('counter.Counter/extern_vector', value)
+        self.client.set_remote_property('counter.Counter/extern_vector', extern_types.api.from_vector3d_vector_vector(value))
 
     def get_extern_vector(self):
         return self._extern_vector
 
     async def increment(self, vec: vector3d.vector.Vector):
         _vec = extern_types.api.from_vector3d_vector_vector(vec)
-        return await self._invoke("increment", [_vec])
+        args = [_vec]
+        future = asyncio.get_running_loop().create_future()
+        def func(args):
+            return future.set_result(extern_types.api.as_vector3d_vector_vector(args.value))
+        self.client.invoke_remote(f"counter.Counter/increment", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def decrement(self, vec: custom_types.api.Vector3D):
         _vec = custom_types.api.from_vector3_d(vec)
-        return await self._invoke("decrement", [_vec])
+        args = [_vec]
+        future = asyncio.get_running_loop().create_future()
+        def func(args):
+            return future.set_result(custom_types.api.as_vector3_d(args.value))
+        self.client.invoke_remote(f"counter.Counter/decrement", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'counter.Counter'
