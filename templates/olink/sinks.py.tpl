@@ -70,16 +70,6 @@ class {{Camel .Name}}Sink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"{{$id}}/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"{{$id}}/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     {{- range .Properties }}
     {{- if not .IsReadOnly }}
 
@@ -95,7 +85,7 @@ class {{Camel .Name}}Sink(IObjectSink):
         {{- if .IsArray }}
         self.client.set_remote_property('{{$id}}/{{.Name}}', [{{ template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in value])
         {{- else }}
-        self.client.set_remote_property('{{$id}}/{{.Name}}', value)
+        self.client.set_remote_property('{{$id}}/{{.Name}}', {{ template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(value))
         {{- end }}
     {{- end }}
 
@@ -114,11 +104,25 @@ class {{Camel .Name}}Sink(IObjectSink):
         _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Name}})
         {{- end }}
         {{- end }}
-        return await self._invoke("{{.Name}}", [
+        args = [
             {{- range $idx, $_ := .Params -}}{{- if $idx}}, {{ end -}}
             _{{snake .Name}}
-            {{- end -}}
-        ]{{ if .Return.IsVoid }}, no_wait=True {{- end -}})
+            {{- end -}}]
+        future = asyncio.get_running_loop().create_future()
+        {{- if .Return.IsVoid }}
+        def func(result):
+            return future.set_result(None)
+        {{- else}}
+        def func(result):
+            {{- if .Return.IsArray }}
+            array_res = result.value
+            return future.set_result([{{ template "get_converter_module" .Return}}.as_{{template "get_serialization_name" .Return}}(_) for _ in array_res])
+            {{- else }}
+            return future.set_result({{ template "get_converter_module" .Return}}.as_{{template "get_serialization_name" .Return}}(result.value))
+            {{- end }}
+        {{- end}}
+        self.client.invoke_remote(f"{{$id}}/{{.Name}}", args, func)
+        return await asyncio.wait_for(future, 500)
     {{- end }}
 
     def olink_object_name(self):

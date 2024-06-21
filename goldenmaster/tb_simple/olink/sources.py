@@ -69,7 +69,7 @@ class SimpleInterfaceSource(IObjectSource):
         path = Name.path_from_name(name)
         if path == "funcVoid":
             reply = self.impl.func_void()
-            return None
+            return utils.base_types.from_int(0)
         elif path == "funcBool":
             param_bool = utils.base_types.as_bool(args[0])
             reply = self.impl.func_bool(param_bool)
@@ -409,7 +409,7 @@ class NoPropertiesInterfaceSource(IObjectSource):
         path = Name.path_from_name(name)
         if path == "funcVoid":
             reply = self.impl.func_void()
-            return None
+            return utils.base_types.from_int(0)
         elif path == "funcBool":
             param_bool = utils.base_types.as_bool(args[0])
             reply = self.impl.func_bool(param_bool)
@@ -522,7 +522,7 @@ class NoSignalsInterfaceSource(IObjectSource):
         path = Name.path_from_name(name)
         if path == "funcVoid":
             reply = self.impl.func_void()
-            return None
+            return utils.base_types.from_int(0)
         elif path == "funcBool":
             param_bool = utils.base_types.as_bool(args[0])
             reply = self.impl.func_bool(param_bool)

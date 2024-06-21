@@ -25,16 +25,6 @@ class StructInterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"testbed1.StructInterface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"testbed1.StructInterface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
             return
@@ -44,7 +34,7 @@ class StructInterfaceSink(IObjectSink):
     def set_prop_bool(self, value):
         if self._prop_bool == value:
             return
-        self.client.set_remote_property('testbed1.StructInterface/propBool', value)
+        self.client.set_remote_property('testbed1.StructInterface/propBool', testbed1.api.from_struct_bool(value))
 
     def get_prop_bool(self):
         return self._prop_bool
@@ -58,7 +48,7 @@ class StructInterfaceSink(IObjectSink):
     def set_prop_int(self, value):
         if self._prop_int == value:
             return
-        self.client.set_remote_property('testbed1.StructInterface/propInt', value)
+        self.client.set_remote_property('testbed1.StructInterface/propInt', testbed1.api.from_struct_int(value))
 
     def get_prop_int(self):
         return self._prop_int
@@ -72,7 +62,7 @@ class StructInterfaceSink(IObjectSink):
     def set_prop_float(self, value):
         if self._prop_float == value:
             return
-        self.client.set_remote_property('testbed1.StructInterface/propFloat', value)
+        self.client.set_remote_property('testbed1.StructInterface/propFloat', testbed1.api.from_struct_float(value))
 
     def get_prop_float(self):
         return self._prop_float
@@ -86,26 +76,46 @@ class StructInterfaceSink(IObjectSink):
     def set_prop_string(self, value):
         if self._prop_string == value:
             return
-        self.client.set_remote_property('testbed1.StructInterface/propString', value)
+        self.client.set_remote_property('testbed1.StructInterface/propString', testbed1.api.from_struct_string(value))
 
     def get_prop_string(self):
         return self._prop_string
 
     async def func_bool(self, param_bool: testbed1.api.StructBool):
         _param_bool = testbed1.api.from_struct_bool(param_bool)
-        return await self._invoke("funcBool", [_param_bool])
+        args = [_param_bool]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed1.api.as_struct_bool(result.value))
+        self.client.invoke_remote(f"testbed1.StructInterface/funcBool", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func_int(self, param_int: testbed1.api.StructInt):
         _param_int = testbed1.api.from_struct_int(param_int)
-        return await self._invoke("funcInt", [_param_int])
+        args = [_param_int]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed1.api.as_struct_bool(result.value))
+        self.client.invoke_remote(f"testbed1.StructInterface/funcInt", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func_float(self, param_float: testbed1.api.StructFloat):
         _param_float = testbed1.api.from_struct_float(param_float)
-        return await self._invoke("funcFloat", [_param_float])
+        args = [_param_float]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed1.api.as_struct_float(result.value))
+        self.client.invoke_remote(f"testbed1.StructInterface/funcFloat", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func_string(self, param_string: testbed1.api.StructString):
         _param_string = testbed1.api.from_struct_string(param_string)
-        return await self._invoke("funcString", [_param_string])
+        args = [_param_string]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed1.api.as_struct_string(result.value))
+        self.client.invoke_remote(f"testbed1.StructInterface/funcString", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'testbed1.StructInterface'
@@ -185,16 +195,6 @@ class StructArrayInterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"testbed1.StructArrayInterface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"testbed1.StructArrayInterface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop_bool(self, value):
         if self._prop_bool == value:
             return
@@ -253,19 +253,43 @@ class StructArrayInterfaceSink(IObjectSink):
 
     async def func_bool(self, param_bool: list[testbed1.api.StructBool]):
         _param_bool = [testbed1.api.from_struct_bool(struct_bool) for struct_bool in param_bool]
-        return await self._invoke("funcBool", [_param_bool])
+        args = [_param_bool]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            array_res = result.value
+            return future.set_result([testbed1.api.as_struct_bool(_) for _ in array_res])
+        self.client.invoke_remote(f"testbed1.StructArrayInterface/funcBool", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func_int(self, param_int: list[testbed1.api.StructInt]):
         _param_int = [testbed1.api.from_struct_int(struct_int) for struct_int in param_int]
-        return await self._invoke("funcInt", [_param_int])
+        args = [_param_int]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            array_res = result.value
+            return future.set_result([testbed1.api.as_struct_int(_) for _ in array_res])
+        self.client.invoke_remote(f"testbed1.StructArrayInterface/funcInt", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func_float(self, param_float: list[testbed1.api.StructFloat]):
         _param_float = [testbed1.api.from_struct_float(struct_float) for struct_float in param_float]
-        return await self._invoke("funcFloat", [_param_float])
+        args = [_param_float]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            array_res = result.value
+            return future.set_result([testbed1.api.as_struct_float(_) for _ in array_res])
+        self.client.invoke_remote(f"testbed1.StructArrayInterface/funcFloat", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func_string(self, param_string: list[testbed1.api.StructString]):
         _param_string = [testbed1.api.from_struct_string(struct_string) for struct_string in param_string]
-        return await self._invoke("funcString", [_param_string])
+        args = [_param_string]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            array_res = result.value
+            return future.set_result([testbed1.api.as_struct_string(_) for _ in array_res])
+        self.client.invoke_remote(f"testbed1.StructArrayInterface/funcString", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'testbed1.StructArrayInterface'
