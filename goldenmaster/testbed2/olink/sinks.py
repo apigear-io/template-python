@@ -25,16 +25,6 @@ class ManyParamInterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"testbed2.ManyParamInterface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"testbed2.ManyParamInterface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -44,7 +34,7 @@ class ManyParamInterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('testbed2.ManyParamInterface/prop1', value)
+        self.client.set_remote_property('testbed2.ManyParamInterface/prop1', utils.base_types.from_int(value))
 
     def get_prop1(self):
         return self._prop1
@@ -58,7 +48,7 @@ class ManyParamInterfaceSink(IObjectSink):
     def set_prop2(self, value):
         if self._prop2 == value:
             return
-        self.client.set_remote_property('testbed2.ManyParamInterface/prop2', value)
+        self.client.set_remote_property('testbed2.ManyParamInterface/prop2', utils.base_types.from_int(value))
 
     def get_prop2(self):
         return self._prop2
@@ -72,7 +62,7 @@ class ManyParamInterfaceSink(IObjectSink):
     def set_prop3(self, value):
         if self._prop3 == value:
             return
-        self.client.set_remote_property('testbed2.ManyParamInterface/prop3', value)
+        self.client.set_remote_property('testbed2.ManyParamInterface/prop3', utils.base_types.from_int(value))
 
     def get_prop3(self):
         return self._prop3
@@ -86,32 +76,52 @@ class ManyParamInterfaceSink(IObjectSink):
     def set_prop4(self, value):
         if self._prop4 == value:
             return
-        self.client.set_remote_property('testbed2.ManyParamInterface/prop4', value)
+        self.client.set_remote_property('testbed2.ManyParamInterface/prop4', utils.base_types.from_int(value))
 
     def get_prop4(self):
         return self._prop4
 
     async def func1(self, param1: int):
         _param1 = utils.base_types.from_int(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(utils.base_types.as_int(result.value))
+        self.client.invoke_remote(f"testbed2.ManyParamInterface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func2(self, param1: int, param2: int):
         _param1 = utils.base_types.from_int(param1)
         _param2 = utils.base_types.from_int(param2)
-        return await self._invoke("func2", [_param1, _param2])
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(utils.base_types.as_int(result.value))
+        self.client.invoke_remote(f"testbed2.ManyParamInterface/func2", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func3(self, param1: int, param2: int, param3: int):
         _param1 = utils.base_types.from_int(param1)
         _param2 = utils.base_types.from_int(param2)
         _param3 = utils.base_types.from_int(param3)
-        return await self._invoke("func3", [_param1, _param2, _param3])
+        args = [_param1, _param2, _param3]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(utils.base_types.as_int(result.value))
+        self.client.invoke_remote(f"testbed2.ManyParamInterface/func3", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func4(self, param1: int, param2: int, param3: int, param4: int):
         _param1 = utils.base_types.from_int(param1)
         _param2 = utils.base_types.from_int(param2)
         _param3 = utils.base_types.from_int(param3)
         _param4 = utils.base_types.from_int(param4)
-        return await self._invoke("func4", [_param1, _param2, _param3, _param4])
+        args = [_param1, _param2, _param3, _param4]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(utils.base_types.as_int(result.value))
+        self.client.invoke_remote(f"testbed2.ManyParamInterface/func4", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'testbed2.ManyParamInterface'
@@ -188,16 +198,6 @@ class NestedStruct1InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"testbed2.NestedStruct1Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"testbed2.NestedStruct1Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -207,14 +207,19 @@ class NestedStruct1InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('testbed2.NestedStruct1Interface/prop1', value)
+        self.client.set_remote_property('testbed2.NestedStruct1Interface/prop1', testbed2.api.from_nested_struct1(value))
 
     def get_prop1(self):
         return self._prop1
 
     async def func1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct1Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'testbed2.NestedStruct1Interface'
@@ -255,16 +260,6 @@ class NestedStruct2InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"testbed2.NestedStruct2Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"testbed2.NestedStruct2Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -274,7 +269,7 @@ class NestedStruct2InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('testbed2.NestedStruct2Interface/prop1', value)
+        self.client.set_remote_property('testbed2.NestedStruct2Interface/prop1', testbed2.api.from_nested_struct1(value))
 
     def get_prop1(self):
         return self._prop1
@@ -288,19 +283,29 @@ class NestedStruct2InterfaceSink(IObjectSink):
     def set_prop2(self, value):
         if self._prop2 == value:
             return
-        self.client.set_remote_property('testbed2.NestedStruct2Interface/prop2', value)
+        self.client.set_remote_property('testbed2.NestedStruct2Interface/prop2', testbed2.api.from_nested_struct2(value))
 
     def get_prop2(self):
         return self._prop2
 
     async def func1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct2Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func2(self, param1: testbed2.api.NestedStruct1, param2: testbed2.api.NestedStruct2):
         _param1 = testbed2.api.from_nested_struct1(param1)
         _param2 = testbed2.api.from_nested_struct2(param2)
-        return await self._invoke("func2", [_param1, _param2])
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct2Interface/func2", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'testbed2.NestedStruct2Interface'
@@ -356,16 +361,6 @@ class NestedStruct3InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"testbed2.NestedStruct3Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"testbed2.NestedStruct3Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -375,7 +370,7 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('testbed2.NestedStruct3Interface/prop1', value)
+        self.client.set_remote_property('testbed2.NestedStruct3Interface/prop1', testbed2.api.from_nested_struct1(value))
 
     def get_prop1(self):
         return self._prop1
@@ -389,7 +384,7 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def set_prop2(self, value):
         if self._prop2 == value:
             return
-        self.client.set_remote_property('testbed2.NestedStruct3Interface/prop2', value)
+        self.client.set_remote_property('testbed2.NestedStruct3Interface/prop2', testbed2.api.from_nested_struct2(value))
 
     def get_prop2(self):
         return self._prop2
@@ -403,25 +398,40 @@ class NestedStruct3InterfaceSink(IObjectSink):
     def set_prop3(self, value):
         if self._prop3 == value:
             return
-        self.client.set_remote_property('testbed2.NestedStruct3Interface/prop3', value)
+        self.client.set_remote_property('testbed2.NestedStruct3Interface/prop3', testbed2.api.from_nested_struct3(value))
 
     def get_prop3(self):
         return self._prop3
 
     async def func1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct3Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func2(self, param1: testbed2.api.NestedStruct1, param2: testbed2.api.NestedStruct2):
         _param1 = testbed2.api.from_nested_struct1(param1)
         _param2 = testbed2.api.from_nested_struct2(param2)
-        return await self._invoke("func2", [_param1, _param2])
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct3Interface/func2", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func3(self, param1: testbed2.api.NestedStruct1, param2: testbed2.api.NestedStruct2, param3: testbed2.api.NestedStruct3):
         _param1 = testbed2.api.from_nested_struct1(param1)
         _param2 = testbed2.api.from_nested_struct2(param2)
         _param3 = testbed2.api.from_nested_struct3(param3)
-        return await self._invoke("func3", [_param1, _param2, _param3])
+        args = [_param1, _param2, _param3]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct3Interface/func3", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'testbed2.NestedStruct3Interface'

@@ -16,16 +16,6 @@ class SameStruct1InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"tb.same2.SameStruct1Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"tb.same2.SameStruct1Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -35,14 +25,19 @@ class SameStruct1InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('tb.same2.SameStruct1Interface/prop1', value)
+        self.client.set_remote_property('tb.same2.SameStruct1Interface/prop1', tb_same2.api.from_struct1(value))
 
     def get_prop1(self):
         return self._prop1
 
     async def func1(self, param1: tb_same2.api.Struct1):
         _param1 = tb_same2.api.from_struct1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(tb_same2.api.as_struct1(result.value))
+        self.client.invoke_remote(f"tb.same2.SameStruct1Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'tb.same2.SameStruct1Interface'
@@ -83,16 +78,6 @@ class SameStruct2InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"tb.same2.SameStruct2Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"tb.same2.SameStruct2Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -102,7 +87,7 @@ class SameStruct2InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('tb.same2.SameStruct2Interface/prop1', value)
+        self.client.set_remote_property('tb.same2.SameStruct2Interface/prop1', tb_same2.api.from_struct2(value))
 
     def get_prop1(self):
         return self._prop1
@@ -116,19 +101,29 @@ class SameStruct2InterfaceSink(IObjectSink):
     def set_prop2(self, value):
         if self._prop2 == value:
             return
-        self.client.set_remote_property('tb.same2.SameStruct2Interface/prop2', value)
+        self.client.set_remote_property('tb.same2.SameStruct2Interface/prop2', tb_same2.api.from_struct2(value))
 
     def get_prop2(self):
         return self._prop2
 
     async def func1(self, param1: tb_same2.api.Struct1):
         _param1 = tb_same2.api.from_struct1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(tb_same2.api.as_struct1(result.value))
+        self.client.invoke_remote(f"tb.same2.SameStruct2Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func2(self, param1: tb_same2.api.Struct1, param2: tb_same2.api.Struct2):
         _param1 = tb_same2.api.from_struct1(param1)
         _param2 = tb_same2.api.from_struct2(param2)
-        return await self._invoke("func2", [_param1, _param2])
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(tb_same2.api.as_struct1(result.value))
+        self.client.invoke_remote(f"tb.same2.SameStruct2Interface/func2", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'tb.same2.SameStruct2Interface'
@@ -178,16 +173,6 @@ class SameEnum1InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"tb.same2.SameEnum1Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"tb.same2.SameEnum1Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -197,14 +182,19 @@ class SameEnum1InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('tb.same2.SameEnum1Interface/prop1', value)
+        self.client.set_remote_property('tb.same2.SameEnum1Interface/prop1', tb_same2.api.from_enum1(value))
 
     def get_prop1(self):
         return self._prop1
 
     async def func1(self, param1: tb_same2.api.Enum1):
         _param1 = tb_same2.api.from_enum1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(tb_same2.api.as_enum1(result.value))
+        self.client.invoke_remote(f"tb.same2.SameEnum1Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'tb.same2.SameEnum1Interface'
@@ -245,16 +235,6 @@ class SameEnum2InterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"tb.same2.SameEnum2Interface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"tb.same2.SameEnum2Interface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def _set_prop1(self, value):
         if self._prop1 == value:
             return
@@ -264,7 +244,7 @@ class SameEnum2InterfaceSink(IObjectSink):
     def set_prop1(self, value):
         if self._prop1 == value:
             return
-        self.client.set_remote_property('tb.same2.SameEnum2Interface/prop1', value)
+        self.client.set_remote_property('tb.same2.SameEnum2Interface/prop1', tb_same2.api.from_enum1(value))
 
     def get_prop1(self):
         return self._prop1
@@ -278,19 +258,29 @@ class SameEnum2InterfaceSink(IObjectSink):
     def set_prop2(self, value):
         if self._prop2 == value:
             return
-        self.client.set_remote_property('tb.same2.SameEnum2Interface/prop2', value)
+        self.client.set_remote_property('tb.same2.SameEnum2Interface/prop2', tb_same2.api.from_enum2(value))
 
     def get_prop2(self):
         return self._prop2
 
     async def func1(self, param1: tb_same2.api.Enum1):
         _param1 = tb_same2.api.from_enum1(param1)
-        return await self._invoke("func1", [_param1])
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(tb_same2.api.as_enum1(result.value))
+        self.client.invoke_remote(f"tb.same2.SameEnum2Interface/func1", args, func)
+        return await asyncio.wait_for(future, 500)
 
     async def func2(self, param1: tb_same2.api.Enum1, param2: tb_same2.api.Enum2):
         _param1 = tb_same2.api.from_enum1(param1)
         _param2 = tb_same2.api.from_enum2(param2)
-        return await self._invoke("func2", [_param1, _param2])
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(tb_same2.api.as_enum1(result.value))
+        self.client.invoke_remote(f"tb.same2.SameEnum2Interface/func2", args, func)
+        return await asyncio.wait_for(future, 500)
 
     def olink_object_name(self):
         return 'tb.same2.SameEnum2Interface'

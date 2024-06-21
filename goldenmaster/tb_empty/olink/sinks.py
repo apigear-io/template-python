@@ -13,16 +13,6 @@ class EmptyInterfaceSink(IObjectSink):
         self._on_is_ready= EventHook()
         self.client = ClientNode.register_sink(self)
 
-    async def _invoke(self, name, args, no_wait=False):
-        if no_wait:
-            self.client.invoke_remote(f"tb.empty.EmptyInterface/{name}", args, func=None)
-        else:
-            future = asyncio.get_running_loop().create_future()
-            def func(args):
-                return future.set_result(args.value)
-            self.client.invoke_remote(f"tb.empty.EmptyInterface/{name}", args, func)
-            return await asyncio.wait_for(future, 500)
-
     def olink_object_name(self):
         return 'tb.empty.EmptyInterface'
 
