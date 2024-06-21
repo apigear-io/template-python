@@ -1,17 +1,63 @@
 from olink.core import Name
 from olink.remote import IObjectSource, RemoteNode
-from {{snake .Module.Name}}_api import api
-from {{snake .Module.Name}}_api.shared import EventHook
+import utils.base_types
+{{- $current_module_api_prefix :=  printf "%s.api." (snake .Module.Name ) }}
+import {{snake .Module.Name }}.api
+from utils.eventhook import EventHook
 from typing import Any
 import logging
+
+
+{{- define "get_converter_module"}}
+            {{- $module_prefix:= printf "%s.api" (snake .Module.Name ) }}
+            {{- if .IsPrimitive }}
+            {{- $module_prefix = "utils.base_types" }}
+            {{- end}}
+            {{- if (ne .Import "") }}
+            {{- $module_prefix = printf "%s.api" (snake .Import ) }}
+            {{- end}}
+            {{- $module_prefix -}}
+{{- end}}
+{{- define "get_serialization_name" }}
+            {{- $name:= snake .Type }}
+            {{- if (eq .KindType "extern") }}
+            {{- $name = snake (pyReturn "" .) }}
+            {{- end}}
+            {{- $name -}}
+{{- end}}
+
+{{- $system := .System}}
+{{- $imports := getEmptyStringList }}
+{{- range .Module.Imports }}
+{{- $current_import := .}} 
+{{- $import_name := printf "%s.api" .Name }} 
+{{- $imports = (appendList $imports $import_name) }}
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+    {{- $imports = (appendList $imports $extern.Import) }}
+    {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $imports = (appendList $imports $extern.Import) }}
+{{- end }}
+
+{{- $imports = unique $imports }}
+{{- range $imports }}
+import {{.}}
+{{- end }}
 
 {{- range .Module.Interfaces }}
 {{- $ns := printf "%s.%s" $.Module.Name .Name -}}
 {{- $class := Camel .Name }}
 {{- $id := printf "%s.%s" $.Module.Name .Name }}
 class {{$class}}Source(IObjectSource):
-    impl: api.I{{$class}}
-    def __init__(self, impl: api.I{{$class}}):
+    impl: {{$current_module_api_prefix}}I{{$class}}
+    def __init__(self, impl: {{$current_module_api_prefix}}I{{$class}}):
         self.impl = impl
 {{- range $idx, $p := .Properties }}
         impl.on_{{snake .Name}}_changed += self.notify_{{snake .Name}}_changed
@@ -36,9 +82,9 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- if not .IsReadOnly }}
             {{- if .IsArray }}
-            v = [api.as_{{snake .Type}}(_) for _ in value]
+            v = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in value]
             {{- else }}
-            v = api.as_{{snake .Type}}(value)
+            v = {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(value)
             {{- end }}
             return self.impl.set_{{snake .Name}}(v)
         {{- else }}
@@ -58,19 +104,19 @@ class {{$class}}Source(IObjectSource):
     {{- end }}
         {{- range $idx, $_ := .Params }}
             {{- if .IsArray }}
-            {{snake .Name}} = [api.as_{{snake .Type}}(_) for _ in args[{{$idx}}]]
+            {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in args[{{$idx}}]]
             {{- else }}
-            {{snake .Name}} = api.as_{{snake .Type}}(args[{{$idx}}])
+            {{snake .Name}} = {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(args[{{$idx}}])
             {{- end }}
         {{- end }}
             reply = self.impl.{{snake .Name}}({{pyVars .Params}})
         {{- if .Return.IsVoid }}
-            return None
+            return utils.base_types.from_int(0)   
         {{- else }}
             {{- if .Return.IsArray }}
-            return [api.from_{{snake .Return.Type}}(_) for _ in reply]
+            return [{{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(_) for _ in reply]
             {{- else }}
-            return api.from_{{snake .Return.Type}}(reply)
+            return {{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(reply)
             {{- end }}
         {{- end }}
 {{- end }}      
@@ -89,21 +135,21 @@ class {{$class}}Source(IObjectSource):
         {{- range .Properties }}
         v = self.impl.get_{{snake .Name}}()
         {{- if .IsArray }}
-        props["{{.Name }}"] = [api.from_{{snake .Type}}(_) for _ in v]
+        props["{{.Name }}"] = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in v]
         {{- else }}
-        props["{{.Name }}"] = api.from_{{snake .Type}}(v)
+        props["{{.Name }}"] = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(v)
         {{- end }}
         {{- end }}
         return props
 
 {{- range $idx, $s := .Signals }}
 
-    def notify_{{snake .Name}}({{pyParams "api." .Params}}):
+    def notify_{{snake .Name}}({{pyParams $current_module_api_prefix .Params}}):
         {{- range $idx, $_ := .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [api.from_{{snake .Type}}(_) for _ in {{snake .Name}}]
+        _{{snake .Name}} = [{{template "get_converter_module" .}}.api.from_{{template "get_serialization_name" .}}(_) for _ in {{snake .Name}}]
         {{- else }}
-        _{{snake .Name}} = api.from_{{snake .Type}}({{snake .Name}})
+        _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Name}})
         {{- end }}
         {{- end }}
         return RemoteNode.notify_signal("{{$ns}}/{{.Name}}", [
@@ -117,9 +163,9 @@ class {{$class}}Source(IObjectSource):
 
     def notify_{{snake .Name}}_changed(self, value):
         {{- if .IsArray }}
-        v = [api.from_{{snake .Type}}(_) for _ in value]
+        v = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in value]
         {{- else }}
-        v = api.from_{{snake .Type}}(value)
+        v = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(value)
         {{- end }}
         return RemoteNode.notify_property_change("{{$ns}}/{{.Name}}", v)
 {{- end }}

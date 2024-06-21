@@ -1,6 +1,32 @@
-from {{ snake .Module.Name}}_api import api
-from {{snake .Module.Name}}_api.shared import EventHook
+from {{ snake .Module.Name}}.api import api
+from utils.eventhook import EventHook
 from typing import Iterable
+
+{{- $system := .System}}
+{{- $imports := getEmptyStringList }}
+{{- range .Module.Imports }}
+{{- $current_import := .}} 
+{{- $import_name := printf "%s.api" .Name }} 
+{{- $imports = (appendList $imports $import_name) }}
+{{- range $system.Modules }}
+    {{- if (eq .Name $current_import.Name) }}
+    {{- range .Externs }}
+    {{- $extern := pyExtern . }}
+    {{- $imports = (appendList $imports $extern.Import) }}
+    {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+{{- $extern := pyExtern . }}
+{{- $imports = (appendList $imports $extern.Import) }}
+{{- end }}
+
+{{- $imports = unique $imports }}
+{{- range $imports }}
+import {{.}}
+{{- end }}
+
 {{- $class := Camel .Interface.Name }}
 
 class {{$class}}(api.I{{$class}}):
