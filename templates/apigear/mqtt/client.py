@@ -6,6 +6,10 @@ import paho.mqtt.enums
 from asyncio.queues import Queue
 from utils.eventhook import EventHook
 import asyncio
+import logging
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
 
 class Client:
     def __init__(self):
@@ -17,6 +21,7 @@ class Client:
         self._on_message = EventHook()
         self._on_connected = EventHook()
         self._on_subscribed = EventHook()
+        self.on_log(self._mqtt_log_writer)
 
     async def disconnect(self):
         #not necessary here, should be enough to have disconnect
@@ -49,3 +54,23 @@ class Client:
     def message_handling(self, client, userdata, msg):
         print(f"{msg.topic}: {msg.payload.decode()}")
         self._on_message.fire()
+        
+    def _mqtt_log_writer(self, level, msg):
+       if level == paho.mqtt.enums.LogLevel.MQTT_LOG_DEBUG:
+           logging.debug(msg)
+       elif level == paho.mqtt.enums.LogLevel.MQTT_LOG_INFO:
+           logging.info(msg)
+       elif level == paho.mqtt.enums.LogLevel.MQTT_LOG_NOTICE:
+           logging.info(msg)
+       elif level == paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING:
+           logging.warning(msg)
+       else:
+           logging.error(msg)
+
+    def on_log(self, logging_func):
+        self.logging_func = logging_func
+        self.client.on_log = self._on_log
+
+    def _on_log(self, client, userdata, paho_log_level, messages):
+        if self.logging_func != None:
+            self.logging_func(paho_log_level, messages)
