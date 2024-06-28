@@ -18,12 +18,17 @@ class Client:
         self.client.on_connect = self.on_connect
         self.client.on_subscribe = self.on_subscribed
         self.client.on_message = self.message_handling
-        self._on_message = EventHook()
         self._on_connected = EventHook()
         self._on_subscribed = EventHook()
+        self.topics = {}
         self.on_log(self._mqtt_log_writer)
+        
+    def __del__(self):
+        for topic in self.topics:
+            self.client.unsubscribe(topic)
+        self.disconnect()
 
-    async def disconnect(self):
+    def disconnect(self):
         #not necessary here, should be enough to have disconnect
         self.client.loop_stop()
         self.client.disconnect()
@@ -47,13 +52,28 @@ class Client:
         #TODO subscribe all waiting to subscribe
         self._on_connected.fire()
             
-    def subscribe(self, topic, qos):
-        # TODO add callbacks, store
-        self.client.subscribe(topic, qos)
+    def subscribe(self, topic, callback):
+        self.topics
+        if topic not in self.topics:
+            self.topics[topic] = callback
+            self.client.subscribe(topic, 2)
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic already added, no callback added")
+        
+    def unsubscribe(self, topic):
+        if topic in self.topics:
+            del self.topics[topic]
+            self.client.unsubscribe(topic)
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic not there, not removed")
 
     def message_handling(self, client, userdata, msg):
-        print(f"{msg.topic}: {msg.payload.decode()}")
-        self._on_message.fire()
+        callback = self.topics.get(msg.topic)
+        if callback != None:
+            callback(msg.payload.decode())    
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"not handled: {msg.topic}: {msg.payload.decode()}")
+        
         
     def _mqtt_log_writer(self, level, msg):
        if level == paho.mqtt.enums.LogLevel.MQTT_LOG_DEBUG:
