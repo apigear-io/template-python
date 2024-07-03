@@ -1,0 +1,86 @@
+import apigear.mqtt
+import utils.base_types
+import tb_enum.api
+from utils.eventhook import EventHook
+from typing import Any
+import logging
+class EnumInterfaceServiceAdapter():
+    def __init__(self, impl: tb_enum.api.IEnumInterface, service: apigear.mqtt.Service):
+        self.service = service
+        self.impl = impl
+        self.impl.on_prop0_changed += self.notify_prop0_changed
+        self.impl.on_prop1_changed += self.notify_prop1_changed
+        self.impl.on_prop2_changed += self.notify_prop2_changed
+        self.impl.on_prop3_changed += self.notify_prop3_changed
+        self.impl.on_sig0 += self.notify_sig0
+        self.impl.on_sig1 += self.notify_sig1
+        self.impl.on_sig2 += self.notify_sig2
+        self.impl.on_sig3 += self.notify_sig3
+        self.service.on_connected += self.subscribeForTopics
+
+    def subscribeForTopics(self):
+        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop0", self.__set_prop0)
+        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop1", self.__set_prop1)
+        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop2", self.__set_prop2)
+        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop3", self.__set_prop3)
+        #TODO SUBSCRIBE FOR INVOKE TOPIC
+
+    def __del__(self):
+        self.service.on_connected -= self.subscribeForTopics
+        self.service.unsubscribe("tb.enum/EnumInterface/set/prop0")
+        self.service.unsubscribe("tb.enum/EnumInterface/set/prop1")
+        self.service.unsubscribe("tb.enum/EnumInterface/set/prop2")
+        self.service.unsubscribe("tb.enum/EnumInterface/set/prop3")
+        #TODO UNSUBSCRIBE INVOKE TOPIC
+
+    def notify_sig0(self, param0: tb_enum.api.Enum0):
+        _param0 = tb_enum.api.from_enum0(param0)
+        args = [_param0]
+        self.service.notify_signal("tb.enum/EnumInterface/sig/sig0", args)
+
+    def notify_sig1(self, param1: tb_enum.api.Enum1):
+        _param1 = tb_enum.api.from_enum1(param1)
+        args = [_param1]
+        self.service.notify_signal("tb.enum/EnumInterface/sig/sig1", args)
+
+    def notify_sig2(self, param2: tb_enum.api.Enum2):
+        _param2 = tb_enum.api.from_enum2(param2)
+        args = [_param2]
+        self.service.notify_signal("tb.enum/EnumInterface/sig/sig2", args)
+
+    def notify_sig3(self, param3: tb_enum.api.Enum3):
+        _param3 = tb_enum.api.from_enum3(param3)
+        args = [_param3]
+        self.service.notify_signal("tb.enum/EnumInterface/sig/sig3", args)
+
+    def notify_prop0_changed(self, value):
+        v = tb_enum.api.from_enum0(value)
+        self.service.notify_property_change("tb.enum/EnumInterface/prop/prop0", v)
+
+    def notify_prop1_changed(self, value):
+        v = tb_enum.api.from_enum1(value)
+        self.service.notify_property_change("tb.enum/EnumInterface/prop/prop1", v)
+
+    def notify_prop2_changed(self, value):
+        v = tb_enum.api.from_enum2(value)
+        self.service.notify_property_change("tb.enum/EnumInterface/prop/prop2", v)
+
+    def notify_prop3_changed(self, value):
+        v = tb_enum.api.from_enum3(value)
+        self.service.notify_property_change("tb.enum/EnumInterface/prop/prop3", v)
+
+    def __set_prop0(self, value: Any):
+            v = tb_enum.api.as_enum0(value)
+            self.impl.set_prop0(v)
+
+    def __set_prop1(self, value: Any):
+            v = tb_enum.api.as_enum1(value)
+            self.impl.set_prop1(v)
+
+    def __set_prop2(self, value: Any):
+            v = tb_enum.api.as_enum2(value)
+            self.impl.set_prop2(v)
+
+    def __set_prop3(self, value: Any):
+            v = tb_enum.api.as_enum3(value)
+            self.impl.set_prop3(v)
