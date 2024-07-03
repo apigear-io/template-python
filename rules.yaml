@@ -138,3 +138,5 @@ features:
         documents:
           - source: "mqtt/sinks.py.tpl"
             target: "sinks.py"
+          - source: "mqtt/sources.py.tpl"
+            target: "sources.py"
