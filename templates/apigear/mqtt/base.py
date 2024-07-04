@@ -45,12 +45,13 @@ class BaseClient:
         keepalive = 60
         self.client.connect_async(addr, port, keepalive, bind_address, clean_start, properties)
 
-    def subscribe(self, topic, callback):
+    def _subscribe(self, topic, callback, callback_wrapper = None):
         if topic not in self.topics:
-            self.topics[topic] = callback
+            self.topics[topic] = (callback, callback_wrapper)
             self.client.subscribe(topic, self.qos)
         else:
             print("topic already added, no callback added")
+            
         
     def unsubscribe(self, topic):
         if topic in self.topics:
@@ -71,11 +72,16 @@ class BaseClient:
         self.on_connected.fire()
             
     def __message_handling(self, client, userdata, msg):
-        callback = self.topics.get(msg.topic)
-        if callback != None:
-            callback(msg.payload.decode())    
+        callback, callback_wrapper = self.topics.get(msg.topic)
+        if callback_wrapper != None:
+            callback_wrapper(msg, callback)
+        elif callback != None:
+            callback(msg)    
         else:
             print(f"not handled: {msg.topic}: {msg.payload.decode()}")
+            
+    def pass_only_payload(msg, callback):
+        callback(msg.payload.decode())
 
     def __on_subscribed(self, client, userdata, mid, reason_code_list, properties):
         self.on_subscribed.fire()        

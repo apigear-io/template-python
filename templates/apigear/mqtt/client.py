@@ -6,6 +6,9 @@ class Client(BaseClient):
         super().__init__(id)
         
 
+    def subscribe(self, topic, callback):
+        self._subscribe(topic, callback, self.pass_only_payload)
+
     def set_remote_property(self, topic, payload_value):
         self.client.publish(topic, payload_value, self.qos, retain = False)
         
