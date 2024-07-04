@@ -7,6 +7,7 @@ from asyncio.queues import Queue
 from utils.eventhook import EventHook
 import asyncio
 import logging
+from typing import Callable, Any 
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
@@ -45,9 +46,9 @@ class BaseClient:
         keepalive = 60
         self.client.connect_async(addr, port, keepalive, bind_address, clean_start, properties)
 
-    def subscribe(self, topic, callback):
+    def _subscribe(self, topic, callback, callback_wrapper = None):
         if topic not in self.topics:
-            self.topics[topic] = callback
+            self.topics[topic] = (callback, callback_wrapper)
             self.client.subscribe(topic, self.qos)
         else:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic already added, no callback added")
@@ -71,7 +72,15 @@ class BaseClient:
         self.on_connected.fire()
             
     def __message_handling(self, client, userdata, msg):
-        callback = self.topics.get(msg.topic)
+        callback, callback_wrapper = self.topics.get(msg.topic)
+        if callback_wrapper != None:
+            callback_wrapper(msg, callback)
+        elif callback != None:
+            callback(msg)    
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"not handled: {msg.topic}: {msg.payload.decode()}")
+            
+    def pass_only_payload(self, msg, callback: Callable[[Any], None]):
         if callback != None:
             callback(msg.payload.decode())    
         else:
