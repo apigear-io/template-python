@@ -13,17 +13,20 @@ class SameStruct1InterfaceClientAdapter():
         self.on_prop1_changed = EventHook()
         self.on_sig1 = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("tb.same2/SameStruct1Interface/prop/prop1", self.__set_prop1)
         self.client.subscribe_for_signal("tb.same2/SameStruct1Interface/sig/sig1",  self.__on_sig1_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func1, self.__on_func1_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
         self.client.unsubscribe("tb.same2/SameStruct1Interface/prop/prop1")
         self.client.unsubscribe("tb.same2/SameStruct1Interface/sig/sig1")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -33,6 +36,18 @@ class SameStruct1InterfaceClientAdapter():
 
     def get_prop1(self):
         return self._prop1
+
+    async def func1(self, param1: tb_same2.api.Struct1):
+        _param1 = tb_same2.api.from_struct1(param1)
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_same2.api.as_struct1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func1, self.method_topics.resp_topic_func1, args)
+        self.pending_calls.func1[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -48,6 +63,19 @@ class SameStruct1InterfaceClientAdapter():
         self.on_sig1.fire(param1)
         return
 
+    def __on_func1_resp(self, value, callId):
+       callback = self.pending_calls.func1.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func1= "tb.same2/SameStruct1Interface/rpc/func1"
+            self.resp_topic_func1= self.topic_func1 + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func1 = {}
+
 class SameStruct2InterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
@@ -58,13 +86,17 @@ class SameStruct2InterfaceClientAdapter():
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("tb.same2/SameStruct2Interface/prop/prop1", self.__set_prop1)
         self.client.subscribe_for_property("tb.same2/SameStruct2Interface/prop/prop2", self.__set_prop2)
         self.client.subscribe_for_signal("tb.same2/SameStruct2Interface/sig/sig1",  self.__on_sig1_signal)
         self.client.subscribe_for_signal("tb.same2/SameStruct2Interface/sig/sig2",  self.__on_sig2_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func1, self.__on_func1_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func2, self.__on_func2_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
@@ -72,7 +104,8 @@ class SameStruct2InterfaceClientAdapter():
         self.client.unsubscribe("tb.same2/SameStruct2Interface/prop/prop2")
         self.client.unsubscribe("tb.same2/SameStruct2Interface/sig/sig1")
         self.client.unsubscribe("tb.same2/SameStruct2Interface/sig/sig2")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func1)
+        self.client.unsubscribe(self.method_topics.resp_topic_func2)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -91,6 +124,31 @@ class SameStruct2InterfaceClientAdapter():
 
     def get_prop2(self):
         return self._prop2
+
+    async def func1(self, param1: tb_same2.api.Struct1):
+        _param1 = tb_same2.api.from_struct1(param1)
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_same2.api.as_struct1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func1, self.method_topics.resp_topic_func1, args)
+        self.pending_calls.func1[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func2(self, param1: tb_same2.api.Struct1, param2: tb_same2.api.Struct2):
+        _param1 = tb_same2.api.from_struct1(param1)
+        _param2 = tb_same2.api.from_struct2(param2)
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_same2.api.as_struct1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func2, self.method_topics.resp_topic_func2, args)
+        self.pending_calls.func2[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -119,6 +177,27 @@ class SameStruct2InterfaceClientAdapter():
         self.on_sig2.fire(param1, param2)
         return
 
+    def __on_func1_resp(self, value, callId):
+       callback = self.pending_calls.func1.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func2_resp(self, value, callId):
+       callback = self.pending_calls.func2.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func1= "tb.same2/SameStruct2Interface/rpc/func1"
+            self.resp_topic_func1= self.topic_func1 + "/" + str(client_id) + "/result"
+            self.topic_func2= "tb.same2/SameStruct2Interface/rpc/func2"
+            self.resp_topic_func2= self.topic_func2 + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func1 = {}
+            self.func2 = {}
+
 class SameEnum1InterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
@@ -126,17 +205,20 @@ class SameEnum1InterfaceClientAdapter():
         self.on_prop1_changed = EventHook()
         self.on_sig1 = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("tb.same2/SameEnum1Interface/prop/prop1", self.__set_prop1)
         self.client.subscribe_for_signal("tb.same2/SameEnum1Interface/sig/sig1",  self.__on_sig1_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func1, self.__on_func1_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
         self.client.unsubscribe("tb.same2/SameEnum1Interface/prop/prop1")
         self.client.unsubscribe("tb.same2/SameEnum1Interface/sig/sig1")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func1)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -146,6 +228,18 @@ class SameEnum1InterfaceClientAdapter():
 
     def get_prop1(self):
         return self._prop1
+
+    async def func1(self, param1: tb_same2.api.Enum1):
+        _param1 = tb_same2.api.from_enum1(param1)
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_same2.api.as_enum1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func1, self.method_topics.resp_topic_func1, args)
+        self.pending_calls.func1[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -161,6 +255,19 @@ class SameEnum1InterfaceClientAdapter():
         self.on_sig1.fire(param1)
         return
 
+    def __on_func1_resp(self, value, callId):
+       callback = self.pending_calls.func1.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func1= "tb.same2/SameEnum1Interface/rpc/func1"
+            self.resp_topic_func1= self.topic_func1 + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func1 = {}
+
 class SameEnum2InterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
@@ -171,13 +278,17 @@ class SameEnum2InterfaceClientAdapter():
         self.on_sig1 = EventHook()
         self.on_sig2 = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("tb.same2/SameEnum2Interface/prop/prop1", self.__set_prop1)
         self.client.subscribe_for_property("tb.same2/SameEnum2Interface/prop/prop2", self.__set_prop2)
         self.client.subscribe_for_signal("tb.same2/SameEnum2Interface/sig/sig1",  self.__on_sig1_signal)
         self.client.subscribe_for_signal("tb.same2/SameEnum2Interface/sig/sig2",  self.__on_sig2_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func1, self.__on_func1_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func2, self.__on_func2_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
@@ -185,7 +296,8 @@ class SameEnum2InterfaceClientAdapter():
         self.client.unsubscribe("tb.same2/SameEnum2Interface/prop/prop2")
         self.client.unsubscribe("tb.same2/SameEnum2Interface/sig/sig1")
         self.client.unsubscribe("tb.same2/SameEnum2Interface/sig/sig2")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func1)
+        self.client.unsubscribe(self.method_topics.resp_topic_func2)
 
     def set_prop1(self, value):
         if self._prop1 == value:
@@ -204,6 +316,31 @@ class SameEnum2InterfaceClientAdapter():
 
     def get_prop2(self):
         return self._prop2
+
+    async def func1(self, param1: tb_same2.api.Enum1):
+        _param1 = tb_same2.api.from_enum1(param1)
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_same2.api.as_enum1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func1, self.method_topics.resp_topic_func1, args)
+        self.pending_calls.func1[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func2(self, param1: tb_same2.api.Enum1, param2: tb_same2.api.Enum2):
+        _param1 = tb_same2.api.from_enum1(param1)
+        _param2 = tb_same2.api.from_enum2(param2)
+        args = [_param1, _param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_same2.api.as_enum1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func2, self.method_topics.resp_topic_func2, args)
+        self.pending_calls.func2[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -231,3 +368,24 @@ class SameEnum2InterfaceClientAdapter():
         param2 =  tb_same2.api.as_enum2(args[1])
         self.on_sig2.fire(param1, param2)
         return
+
+    def __on_func1_resp(self, value, callId):
+       callback = self.pending_calls.func1.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func2_resp(self, value, callId):
+       callback = self.pending_calls.func2.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func1= "tb.same2/SameEnum2Interface/rpc/func1"
+            self.resp_topic_func1= self.topic_func1 + "/" + str(client_id) + "/result"
+            self.topic_func2= "tb.same2/SameEnum2Interface/rpc/func2"
+            self.resp_topic_func2= self.topic_func2 + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func1 = {}
+            self.func2 = {}

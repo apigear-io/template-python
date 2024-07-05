@@ -22,6 +22,9 @@ class StructInterfaceClientAdapter():
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("testbed1/StructInterface/prop/propBool", self.__set_prop_bool)
@@ -32,7 +35,10 @@ class StructInterfaceClientAdapter():
         self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigInt",  self.__on_sig_int_signal)
         self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigFloat",  self.__on_sig_float_signal)
         self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigString",  self.__on_sig_string_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
@@ -44,7 +50,10 @@ class StructInterfaceClientAdapter():
         self.client.unsubscribe("testbed1/StructInterface/sig/sigInt")
         self.client.unsubscribe("testbed1/StructInterface/sig/sigFloat")
         self.client.unsubscribe("testbed1/StructInterface/sig/sigString")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func_bool)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_int)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_float)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_string)
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -81,6 +90,54 @@ class StructInterfaceClientAdapter():
 
     def get_prop_string(self):
         return self._prop_string
+
+    async def func_bool(self, param_bool: testbed1.api.StructBool):
+        _param_bool = testbed1.api.from_struct_bool(param_bool)
+        args = [_param_bool]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_bool(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_bool, self.method_topics.resp_topic_func_bool, args)
+        self.pending_calls.func_bool[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_int(self, param_int: testbed1.api.StructInt):
+        _param_int = testbed1.api.from_struct_int(param_int)
+        args = [_param_int]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_int(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_int, self.method_topics.resp_topic_func_int, args)
+        self.pending_calls.func_int[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_float(self, param_float: testbed1.api.StructFloat):
+        _param_float = testbed1.api.from_struct_float(param_float)
+        args = [_param_float]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_float(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_float, self.method_topics.resp_topic_func_float, args)
+        self.pending_calls.func_float[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_string(self, param_string: testbed1.api.StructString):
+        _param_string = testbed1.api.from_struct_string(param_string)
+        args = [_param_string]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_string(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_string, self.method_topics.resp_topic_func_string, args)
+        self.pending_calls.func_string[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -132,6 +189,43 @@ class StructInterfaceClientAdapter():
         self.on_sig_string.fire(param_string)
         return
 
+    def __on_func_bool_resp(self, value, callId):
+       callback = self.pending_calls.func_bool.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func_int_resp(self, value, callId):
+       callback = self.pending_calls.func_int.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func_float_resp(self, value, callId):
+       callback = self.pending_calls.func_float.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func_string_resp(self, value, callId):
+       callback = self.pending_calls.func_string.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func_bool= "testbed1/StructInterface/rpc/funcBool"
+            self.resp_topic_func_bool= self.topic_func_bool + "/" + str(client_id) + "/result"
+            self.topic_func_int= "testbed1/StructInterface/rpc/funcInt"
+            self.resp_topic_func_int= self.topic_func_int + "/" + str(client_id) + "/result"
+            self.topic_func_float= "testbed1/StructInterface/rpc/funcFloat"
+            self.resp_topic_func_float= self.topic_func_float + "/" + str(client_id) + "/result"
+            self.topic_func_string= "testbed1/StructInterface/rpc/funcString"
+            self.resp_topic_func_string= self.topic_func_string + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func_bool = {}
+            self.func_int = {}
+            self.func_float = {}
+            self.func_string = {}
+
 class StructArrayInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
@@ -148,6 +242,9 @@ class StructArrayInterfaceClientAdapter():
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propBool", self.__set_prop_bool)
@@ -158,7 +255,10 @@ class StructArrayInterfaceClientAdapter():
         self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigInt",  self.__on_sig_int_signal)
         self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigFloat",  self.__on_sig_float_signal)
         self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigString",  self.__on_sig_string_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
@@ -170,7 +270,10 @@ class StructArrayInterfaceClientAdapter():
         self.client.unsubscribe("testbed1/StructArrayInterface/sig/sigInt")
         self.client.unsubscribe("testbed1/StructArrayInterface/sig/sigFloat")
         self.client.unsubscribe("testbed1/StructArrayInterface/sig/sigString")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func_bool)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_int)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_float)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_string)
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -207,6 +310,54 @@ class StructArrayInterfaceClientAdapter():
 
     def get_prop_string(self):
         return self._prop_string
+
+    async def func_bool(self, param_bool: list[testbed1.api.StructBool]):
+        _param_bool = [testbed1.api.from_struct_bool(struct_bool) for struct_bool in param_bool]
+        args = [_param_bool]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_bool(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_bool, self.method_topics.resp_topic_func_bool, args)
+        self.pending_calls.func_bool[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_int(self, param_int: list[testbed1.api.StructInt]):
+        _param_int = [testbed1.api.from_struct_int(struct_int) for struct_int in param_int]
+        args = [_param_int]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_int(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_int, self.method_topics.resp_topic_func_int, args)
+        self.pending_calls.func_int[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_float(self, param_float: list[testbed1.api.StructFloat]):
+        _param_float = [testbed1.api.from_struct_float(struct_float) for struct_float in param_float]
+        args = [_param_float]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_float(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_float, self.method_topics.resp_topic_func_float, args)
+        self.pending_calls.func_float[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_string(self, param_string: list[testbed1.api.StructString]):
+        _param_string = [testbed1.api.from_struct_string(struct_string) for struct_string in param_string]
+        args = [_param_string]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(testbed1.api.as_struct_string(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_string, self.method_topics.resp_topic_func_string, args)
+        self.pending_calls.func_string[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -257,3 +408,40 @@ class StructArrayInterfaceClientAdapter():
         param_string = [testbed1.api.as_struct_string(_) for _ in args[0]]
         self.on_sig_string.fire(param_string)
         return
+
+    def __on_func_bool_resp(self, value, callId):
+       callback = self.pending_calls.func_bool.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func_int_resp(self, value, callId):
+       callback = self.pending_calls.func_int.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func_float_resp(self, value, callId):
+       callback = self.pending_calls.func_float.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func_string_resp(self, value, callId):
+       callback = self.pending_calls.func_string.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func_bool= "testbed1/StructArrayInterface/rpc/funcBool"
+            self.resp_topic_func_bool= self.topic_func_bool + "/" + str(client_id) + "/result"
+            self.topic_func_int= "testbed1/StructArrayInterface/rpc/funcInt"
+            self.resp_topic_func_int= self.topic_func_int + "/" + str(client_id) + "/result"
+            self.topic_func_float= "testbed1/StructArrayInterface/rpc/funcFloat"
+            self.resp_topic_func_float= self.topic_func_float + "/" + str(client_id) + "/result"
+            self.topic_func_string= "testbed1/StructArrayInterface/rpc/funcString"
+            self.resp_topic_func_string= self.topic_func_string + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func_bool = {}
+            self.func_int = {}
+            self.func_float = {}
+            self.func_string = {}

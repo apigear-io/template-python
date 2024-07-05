@@ -17,17 +17,22 @@ class CounterClientAdapter():
         self._extern_vector = vector3d.vector.Vector()
         self.on_extern_vector_changed = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("counter/Counter/prop/vector", self.__set_vector)
         self.client.subscribe_for_property("counter/Counter/prop/extern_vector", self.__set_extern_vector)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_increment, self.__on_increment_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_decrement, self.__on_decrement_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
         self.client.unsubscribe("counter/Counter/prop/vector")
         self.client.unsubscribe("counter/Counter/prop/extern_vector")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_increment)
+        self.client.unsubscribe(self.method_topics.resp_topic_decrement)
 
     def set_vector(self, value):
         if self._vector == value:
@@ -47,6 +52,30 @@ class CounterClientAdapter():
     def get_extern_vector(self):
         return self._extern_vector
 
+    async def increment(self, vec: vector3d.vector.Vector):
+        _vec = extern_types.api.from_vector3d_vector_vector(vec)
+        args = [_vec]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(extern_types.api.as_vector3d_vector_vector(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_increment, self.method_topics.resp_topic_increment, args)
+        self.pending_calls.increment[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def decrement(self, vec: custom_types.api.Vector3D):
+        _vec = custom_types.api.from_vector3_d(vec)
+        args = [_vec]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(custom_types.api.as_vector3_d(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_decrement, self.method_topics.resp_topic_decrement, args)
+        self.pending_calls.decrement[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
     # internal functions on message handle
 
     def __set_vector(self, data):
@@ -62,3 +91,24 @@ class CounterClientAdapter():
             return
         self._extern_vector = value
         self.on_extern_vector_changed.fire(self._extern_vector)
+
+    def __on_increment_resp(self, value, callId):
+       callback = self.pending_calls.increment.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_decrement_resp(self, value, callId):
+       callback = self.pending_calls.decrement.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_increment= "counter/Counter/rpc/increment"
+            self.resp_topic_increment= self.topic_increment + "/" + str(client_id) + "/result"
+            self.topic_decrement= "counter/Counter/rpc/decrement"
+            self.resp_topic_decrement= self.topic_decrement + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.increment = {}
+            self.decrement = {}

@@ -22,6 +22,9 @@ class EnumInterfaceClientAdapter():
         self.on_sig2 = EventHook()
         self.on_sig3 = EventHook()
         self.client.on_connected += self.subscribeForTopics
+        self.method_topics = self.MethodTopics(self.client.get_client_id())
+        self.pending_calls = self.PendingCalls()
+        self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
         self.client.subscribe_for_property("tb.enum/EnumInterface/prop/prop0", self.__set_prop0)
@@ -32,7 +35,10 @@ class EnumInterfaceClientAdapter():
         self.client.subscribe_for_signal("tb.enum/EnumInterface/sig/sig1",  self.__on_sig1_signal)
         self.client.subscribe_for_signal("tb.enum/EnumInterface/sig/sig2",  self.__on_sig2_signal)
         self.client.subscribe_for_signal("tb.enum/EnumInterface/sig/sig3",  self.__on_sig3_signal)
-        #TODO SUBSCRIBE FOR INVOKE RESP TOPIC
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func0, self.__on_func0_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func1, self.__on_func1_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func2, self.__on_func2_resp)
+        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func3, self.__on_func3_resp)
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
@@ -44,7 +50,10 @@ class EnumInterfaceClientAdapter():
         self.client.unsubscribe("tb.enum/EnumInterface/sig/sig1")
         self.client.unsubscribe("tb.enum/EnumInterface/sig/sig2")
         self.client.unsubscribe("tb.enum/EnumInterface/sig/sig3")
-        #TODO UNSUBSCRIBE INVOKE RESP TOPIC
+        self.client.unsubscribe(self.method_topics.resp_topic_func0)
+        self.client.unsubscribe(self.method_topics.resp_topic_func1)
+        self.client.unsubscribe(self.method_topics.resp_topic_func2)
+        self.client.unsubscribe(self.method_topics.resp_topic_func3)
 
     def set_prop0(self, value):
         if self._prop0 == value:
@@ -81,6 +90,54 @@ class EnumInterfaceClientAdapter():
 
     def get_prop3(self):
         return self._prop3
+
+    async def func0(self, param0: tb_enum.api.Enum0):
+        _param0 = tb_enum.api.from_enum0(param0)
+        args = [_param0]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_enum.api.as_enum0(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func0, self.method_topics.resp_topic_func0, args)
+        self.pending_calls.func0[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func1(self, param1: tb_enum.api.Enum1):
+        _param1 = tb_enum.api.from_enum1(param1)
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_enum.api.as_enum1(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func1, self.method_topics.resp_topic_func1, args)
+        self.pending_calls.func1[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func2(self, param2: tb_enum.api.Enum2):
+        _param2 = tb_enum.api.from_enum2(param2)
+        args = [_param2]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_enum.api.as_enum2(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func2, self.method_topics.resp_topic_func2, args)
+        self.pending_calls.func2[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func3(self, param3: tb_enum.api.Enum3):
+        _param3 = tb_enum.api.from_enum3(param3)
+        args = [_param3]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(tb_enum.api.as_enum3(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func3, self.method_topics.resp_topic_func3, args)
+        self.pending_calls.func3[call_id] = func
+        return await asyncio.wait_for(future, 500)
 
     # internal functions on message handle
 
@@ -131,3 +188,40 @@ class EnumInterfaceClientAdapter():
         param3 =  tb_enum.api.as_enum3(args[0])
         self.on_sig3.fire(param3)
         return
+
+    def __on_func0_resp(self, value, callId):
+       callback = self.pending_calls.func0.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func1_resp(self, value, callId):
+       callback = self.pending_calls.func1.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func2_resp(self, value, callId):
+       callback = self.pending_calls.func2.pop(callId)
+       if callback != None:
+           callback(value)
+
+    def __on_func3_resp(self, value, callId):
+       callback = self.pending_calls.func3.pop(callId)
+       if callback != None:
+           callback(value)
+    class MethodTopics:
+        def __init__(self, client_id):
+            self.topic_func0= "tb.enum/EnumInterface/rpc/func0"
+            self.resp_topic_func0= self.topic_func0 + "/" + str(client_id) + "/result"
+            self.topic_func1= "tb.enum/EnumInterface/rpc/func1"
+            self.resp_topic_func1= self.topic_func1 + "/" + str(client_id) + "/result"
+            self.topic_func2= "tb.enum/EnumInterface/rpc/func2"
+            self.resp_topic_func2= self.topic_func2 + "/" + str(client_id) + "/result"
+            self.topic_func3= "tb.enum/EnumInterface/rpc/func3"
+            self.resp_topic_func3= self.topic_func3 + "/" + str(client_id) + "/result"
+
+    class PendingCalls:
+        def __init__(self):
+            self.func0 = {}
+            self.func1 = {}
+            self.func2 = {}
+            self.func3 = {}
