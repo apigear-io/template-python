@@ -7,6 +7,7 @@ from asyncio.queues import Queue
 from utils.eventhook import EventHook
 import asyncio
 import logging
+from typing import Callable, Any
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
@@ -80,7 +81,7 @@ class BaseClient:
         else:
             print(f"not handled: {msg.topic}: {msg.payload.decode()}")
             
-    def pass_only_payload(msg, callback):
+    def pass_only_payload(self, msg, callback: Callable[[Any], None]):
         callback(msg.payload.decode())
 
     def __on_subscribed(self, client, userdata, mid, reason_code_list, properties):

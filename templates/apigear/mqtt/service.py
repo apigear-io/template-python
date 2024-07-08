@@ -1,12 +1,13 @@
 from .base import BaseClient
 import paho.mqtt.properties
 import paho.mqtt.client
+from typing import Callable, Any
 
 class Service(BaseClient):
     def __init__(self, id):
         super().__init__(id)
         
-    def subscribe(self, topic, callback):
+    def subscribe_for_property(self, topic, callback: Callable[[Any], None]):
         self._subscribe(topic, callback, self.pass_only_payload)
     
     def invoke_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback ):
@@ -16,7 +17,7 @@ class Service(BaseClient):
         properties.CorrelationData = msg.properties.CorrelationData
         self.notify_invoke_response(msg.properties.ResponseTopic, result, properties)
               
-    def subscribe_for_invoke_req(self, topic, callback):
+    def subscribe_for_invoke_req(self, topic, callback: Callable[[list[Any]], None]):
         self._subscribe(topic, callback, self.invoke_handler_wrapper)
         
     def notify_invoke_response(self, responseTopic, payload, propsWithCorrelationData):

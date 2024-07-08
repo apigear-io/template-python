@@ -1,6 +1,7 @@
 from .base import BaseClient
 import paho.mqtt.properties
 import multiprocessing
+from typing import Callable, Any
 
 class Client(BaseClient):
     def __init__(self, id):
@@ -8,15 +9,18 @@ class Client(BaseClient):
         self.id_generator = self.IdGenerator()
         
 
-    def subscribe(self, topic, callback): #add callback type
+    def subscribe_for_property(self, topic, callback: Callable[[Any], None]):
         self._subscribe(topic, callback, self.pass_only_payload)
-        
-    def invoke_resp_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback ):
+      
+    def subscribe_for_signal(self, topic, callback: Callable[[list[Any]], None]):
+        self._subscribe(topic, callback, self.pass_only_payload)
+
+    def invoke_resp_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback):
         payload = msg.payload.decode()
         correlationData = int.from_bytes(msg.properties.CorrelationData,"big")
         callback(payload, correlationData)
               
-    def subscribe_for_invoke_resp(self, topic, callback): #add callback type
+    def subscribe_for_invoke_resp(self, topic, callback: Callable[[Any, int],None]):
         self._subscribe(topic, callback, self.invoke_resp_handler_wrapper)
 
     def set_remote_property(self, topic, payload_value):

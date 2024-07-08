@@ -50,7 +50,7 @@ class {{$class}}ServiceAdapter():
 
     def subscribeForTopics(self):
         {{- range .Properties }}
-        self.service.subscribe("{{$.Module.Name}}/{{$interfaceName}}/set/{{.Name}}", self.__set_{{snake .Name}})
+        self.service.subscribe_for_property("{{$.Module.Name}}/{{$interfaceName}}/set/{{.Name}}", self.__set_{{snake .Name}})
         {{- end }}
         {{- range  .Operations }}
         self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}})

@@ -54,10 +54,10 @@ class {{Camel .Name}}ClientAdapter():
 
     def subscribeForTopics(self):
         {{- range .Properties }}
-        self.client.subscribe("{{$.Module.Name}}/{{$interfaceName}}/prop/{{.Name}}", self.__set_{{snake .Name}})
+        self.client.subscribe_for_property("{{$.Module.Name}}/{{$interfaceName}}/prop/{{.Name}}", self.__set_{{snake .Name}})
         {{- end }}
         {{- range .Signals }}
-        self.client.subscribe("{{$.Module.Name}}/{{$interfaceName}}/sig/{{.Name}}",  self.__on_{{snake .Name}}_signal)
+        self.client.subscribe_for_signal("{{$.Module.Name}}/{{$interfaceName}}/sig/{{.Name}}",  self.__on_{{snake .Name}}_signal)
         {{- end }}
         {{- range .Operations }}
         self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_{{snake .Name}}, self.__on_{{snake .Name}}_resp)
