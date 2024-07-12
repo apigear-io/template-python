@@ -51,7 +51,7 @@ class BaseClient:
             self.topics[topic] = (callback, callback_wrapper)
             self.client.subscribe(topic, self.qos)
         else:
-            print("topic already added, no callback added")
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic already added, no callback added")
             
         
     def unsubscribe(self, topic):
@@ -59,7 +59,7 @@ class BaseClient:
             del self.topics[topic]
             self.client.unsubscribe(topic)
         else:
-            print("topic not there, not removed")
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic not there, not removed")
        
     def publish(self, topic, payload, qos):
         self.client.publish(topic, payload, qos)
@@ -79,7 +79,7 @@ class BaseClient:
         elif callback != None:
             callback(msg)    
         else:
-            print(f"not handled: {msg.topic}: {msg.payload.decode()}")
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"not handled: {msg.topic}: {msg.payload.decode()}")
             
     def pass_only_payload(self, msg, callback: Callable[[Any], None]):
         callback(msg.payload.decode())
