@@ -18,7 +18,11 @@ class Client(BaseClient):
     def invoke_resp_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback):
         payload = msg.payload.decode()
         correlationData = int.from_bytes(msg.properties.CorrelationData,"big")
-        callback(payload, correlationData)
+        if callback != None:
+            callback(payload, correlationData)
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode()}")
+        
               
     def subscribe_for_invoke_resp(self, topic, callback: Callable[[Any, int],None]):
         self._subscribe(topic, callback, self.invoke_resp_handler_wrapper)

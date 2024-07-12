@@ -82,7 +82,10 @@ class BaseClient:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"not handled: {msg.topic}: {msg.payload.decode()}")
             
     def pass_only_payload(self, msg, callback: Callable[[Any], None]):
-        callback(msg.payload.decode())
+        if callback != None:
+            callback(msg.payload.decode())
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode()}")
 
     def __on_subscribed(self, client, userdata, mid, reason_code_list, properties):
         self.on_subscribed.fire()        

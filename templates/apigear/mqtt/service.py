@@ -12,7 +12,11 @@ class Service(BaseClient):
     
     def invoke_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback ):
         payload = msg.payload.decode()
-        result = callback(payload)
+        if callback != None:
+            result = callback(payload)
+        else:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode()}")
+            
         properties = paho.mqtt.properties.Properties(paho.mqtt.properties.PacketTypes.PUBLISH)
         properties.CorrelationData = msg.properties.CorrelationData
         self.notify_invoke_response(msg.properties.ResponseTopic, result, properties)
