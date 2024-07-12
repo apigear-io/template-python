@@ -110,13 +110,14 @@ class {{Camel .Name}}ClientAdapter():
             _{{snake .Name}}
             {{- end -}}]
         future = asyncio.get_running_loop().create_future()
-        {{- if .Return.IsVoid }}
         def func(result):
-            return self.loop.call_soon_threadsafe(future.set_result(None))
-        {{- else}}
-        def func(result):
-            return self.loop.call_soon_threadsafe(future.set_result({{template "get_converter_module" .Return}}.as_{{template "get_serialization_name" .Return}}(result)))
-        {{- end}}
+            def set_future_callback():
+            {{- if .Return.IsVoid }}
+                future.set_result(None)
+            {{- else}}
+                future.set_result({{template "get_converter_module" .Return}}.as_{{template "get_serialization_name" .Return}}(result))
+            {{- end}}
+            return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_{{snake .Name}}, self.method_topics.resp_topic_{{snake .Name}}, args)
         self.pending_calls.{{snake .Name}}[call_id] = func
         return await asyncio.wait_for(future, 500)
