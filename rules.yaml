@@ -27,10 +27,9 @@ features:
     scopes:
       - match: system
         documents:
-          - source: scaffold/requirements.txt
+          - source: scaffold/requirements.txt.tpl
             target: requirements.txt
             preserve: true
-            raw: true
           - source: scaffold/Makefile
             target: Makefile
             preserve: true
