@@ -22,6 +22,7 @@ class BaseClient:
         self.on_subscribed = EventHook()
         self.topics = {}
         self.on_log(self._mqtt_log_writer)
+        self.qos = 2
         
     def __del__(self):
         for topic in self.topics:
@@ -47,7 +48,7 @@ class BaseClient:
     def subscribe(self, topic, callback):
         if topic not in self.topics:
             self.topics[topic] = callback
-            self.client.subscribe(topic, 2)
+            self.client.subscribe(topic, self.qos)
         else:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic already added, no callback added")
         
