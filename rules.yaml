@@ -136,6 +136,8 @@ features:
       - match: module
         prefix: "{{snake .Module.Name}}/mqtt/"
         documents:
+          - source: "mqtt/__init__.py.tpl"
+            target: "__init__.py"
           - source: "mqtt/sinks.py.tpl"
             target: "sinks.py"
           - source: "mqtt/sources.py.tpl"
