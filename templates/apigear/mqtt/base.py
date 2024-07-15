@@ -12,9 +12,9 @@ logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
 class BaseClient:
-    def __init__(self):
+    def __init__(self, id):
         self.send_queue = Queue()
-        self.client = paho.mqtt.client.Client(protocol=paho.mqtt.client.MQTTv5)
+        self.client = paho.mqtt.client.Client(protocol=paho.mqtt.client.MQTTv5, client_id = id)
         self.client.on_connect = self.__on_connect
         self.client.on_subscribe = self.__on_subscribed
         self.client.on_message = self.__message_handling
@@ -95,3 +95,6 @@ class BaseClient:
     def __on_log(self, client, userdata, paho_log_level, messages):
         if self.logging_func != None:
             self.logging_func(paho_log_level, messages)
+    
+    def get_client_id(self):
+        return self.client._client_id
