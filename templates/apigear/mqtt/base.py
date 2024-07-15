@@ -11,7 +11,7 @@ import logging
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-class Client:
+class BaseClient:
     def __init__(self):
         self.send_queue = Queue()
         self.client = paho.mqtt.client.Client(protocol=paho.mqtt.client.MQTTv5)
