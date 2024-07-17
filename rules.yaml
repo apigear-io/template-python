@@ -133,11 +133,15 @@ features:
             target: "apigear/mqtt/base.py"
             raw: true
       - match: module
-        prefix: "{{snake .Module.Name}}/mqtt/"
         documents:
           - source: "mqtt/__init__.py.tpl"
-            target: "__init__.py"
+            target: "{{snake .Module.Name}}/mqtt/__init__.py"
           - source: "mqtt/sinks.py.tpl"
-            target: "sinks.py"
+            target: "{{snake .Module.Name}}/mqtt/sinks.py"
           - source: "mqtt/sources.py.tpl"
-            target: "sources.py"
+            target: "{{snake .Module.Name}}/mqtt/sources.py"
+          - source: "examples/mqtt/client.py.tpl"
+            target: "examples/mqtt/client.py"
+          - source: "examples/mqtt/server.py.tpl"
+            target: "examples/mqtt/server.py"
+
