@@ -4,7 +4,7 @@ from enum import IntEnum
 {{- $imports := getEmptyStringList }}
 {{- range .Module.Imports }}
 {{- $current_import := .}} 
-{{- $import_name := printf "%s.api" .Name }} 
+{{- $import_name := printf "%s.api" (snake .Name) }} 
 {{- $imports = (appendList $imports $import_name) }}
 {{- range $system.Modules }}
     {{- if (eq .Name $current_import.Name) }}
