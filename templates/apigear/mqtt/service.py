@@ -11,11 +11,11 @@ class Service(BaseClient):
         self._subscribe(topic, callback, self.pass_only_payload)
     
     def invoke_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback ):
-        payload = msg.payload.decode()
+        payload = self.from_payload(msg.payload.decode('utf-8'))
         if callback != None:
             result = callback(payload)
         else:
-            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode()}")
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {payload}")
             
         properties = paho.mqtt.properties.Properties(paho.mqtt.properties.PacketTypes.PUBLISH)
         properties.CorrelationData = msg.properties.CorrelationData
@@ -25,11 +25,11 @@ class Service(BaseClient):
         self._subscribe(topic, callback, self.invoke_handler_wrapper)
         
     def notify_invoke_response(self, responseTopic, payload, propsWithCorrelationData):
-        self.client.publish(responseTopic, payload, self.qos, retain = False, properties = propsWithCorrelationData)
+        self.client.publish(responseTopic, self.to_payload(payload), self.qos, retain = False, properties = propsWithCorrelationData)
  
     def notify_signal(self,topic, payload_args):
-        self.client.publish(topic, payload_args, self.qos, retain = False)
+        self.client.publish(topic, self.to_payload(payload_args), self.qos, retain = False)
     
     def notify_property_change(self,topic, payload_value):
-        self.client.publish(topic, payload_value, self.qos, retain = True)
+        self.client.publish(topic, self.to_payload(payload_value), self.qos, retain = True)
     
