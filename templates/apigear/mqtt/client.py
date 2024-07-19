@@ -16,26 +16,26 @@ class Client(BaseClient):
         self._subscribe(topic, callback, self.pass_only_payload)
 
     def invoke_resp_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback):
-        payload = msg.payload.decode()
+        payload = self.from_payload(msg.payload.decode("utf-8"))
         correlationData = int.from_bytes(msg.properties.CorrelationData,"big")
         if callback != None:
             callback(payload, correlationData)
         else:
-            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode()}")
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {payload}")
         
               
     def subscribe_for_invoke_resp(self, topic, callback: Callable[[Any, int],None]):
         self._subscribe(topic, callback, self.invoke_resp_handler_wrapper)
 
     def set_remote_property(self, topic, payload_value):
-        self.client.publish(topic, payload_value, self.qos, retain = False)
+        self.client.publish(topic, self.to_payload(payload_value), self.qos, retain = False)
    
     def invoke_remote(self, topic, responseTopic, payload):    
         responseId = self.id_generator.get_unique_id()
         props = paho.mqtt.properties.Properties(paho.mqtt.properties.PacketTypes.PUBLISH)
         props.ResponseTopic = responseTopic
         props.CorrelationData = bytes([responseId])
-        self.client.publish(topic, payload, self.qos, retain = False, properties = props)
+        self.client.publish(topic, self.to_payload(payload), self.qos, retain = False, properties = props)
         return responseId
     
     class IdGenerator:
