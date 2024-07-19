@@ -7,7 +7,8 @@ from asyncio.queues import Queue
 from utils.eventhook import EventHook
 import asyncio
 import logging
-from typing import Callable, Any 
+import json
+from typing import Callable, Any
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
@@ -60,9 +61,6 @@ class BaseClient:
         else:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic not there, not removed")
        
-    def publish(self, topic, payload, qos):
-        self.client.publish(topic, payload, qos)
-
     def on_log(self, logging_func):
         self.logging_func = logging_func
         self.client.on_log = self.__on_log
@@ -82,9 +80,9 @@ class BaseClient:
             
     def pass_only_payload(self, msg, callback: Callable[[Any], None]):
         if callback != None:
-            callback(msg.payload.decode())    
+            callback(self.from_payload(msg.payload))
         else:
-            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"not handled: {msg.topic}: {msg.payload.decode()}")
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode('utf-8')}")
 
     def __on_subscribed(self, client, userdata, mid, reason_code_list, properties):
         self.on_subscribed.fire()        
@@ -107,3 +105,9 @@ class BaseClient:
     
     def get_client_id(self):
         return self.client._client_id
+    
+    def to_payload(self, arguments) -> str:
+        return bytes(json.dumps(arguments), 'utf-8')
+    
+    def from_payload(self, payload: str) -> list[Any]:
+        return json.loads(payload.decode('utf-8'))
