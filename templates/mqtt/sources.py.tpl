@@ -52,14 +52,18 @@ class {{$class}}ServiceAdapter():
         {{- range .Properties }}
         self.service.subscribe("{{$.Module.Name}}/{{$interfaceName}}/set/{{.Name}}", self.__set_{{snake .Name}})
         {{- end }}
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        {{- range  .Operations }}
+        self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}})
+        {{- end}}
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         {{- range .Properties }}
         self.service.unsubscribe("{{$.Module.Name}}/{{$interfaceName}}/set/{{.Name}}")
         {{- end }}
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        {{- range .Operations }}
+        self.service.unsubscribe("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{.Name}}")
+        {{- end}}
 
 {{- range .Signals }}
 
@@ -103,6 +107,28 @@ class {{$class}}ServiceAdapter():
         {{- else }}
             pass
         {{- end }}
+{{- end }}
+
+{{- range .Operations }}
+
+    def __invoke_{{snake .Name}}(self, args: list[Any]) -> Any:
+    {{- range $idx, $_ := .Params }}
+        {{- if .IsArray }}
+        {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in args[{{$idx}}]]
+        {{- else }}
+        {{snake .Name}} = {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(args[{{$idx}}])
+        {{- end }}
+    {{- end }}
+        reply = self.impl.{{snake .Name}}({{pyVars .Params}})
+    {{- if .Return.IsVoid }}
+        return utils.base_types.from_int(0)   
+    {{- else }}
+        {{- if .Return.IsArray }}
+        return [{{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(_) for _ in reply]
+        {{- else }}
+        return {{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(reply)
+        {{- end }}
+    {{- end }}
 {{- end }}
 
 {{- end }}
