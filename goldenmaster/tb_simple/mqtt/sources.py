@@ -12,15 +12,19 @@ class VoidInterfaceServiceAdapter():
         self.service.on_connected += self.subscribeForTopics
 
     def subscribeForTopics(self):
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.simple/VoidInterface/rpc/funcVoid", self.__invoke_func_void)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.simple/VoidInterface/rpc/funcVoid")
 
     def notify_sig_void(self):
         args = []
         self.service.notify_signal("tb.simple/VoidInterface/sig/sigVoid", args)
+
+    def __invoke_func_void(self, args: list[Any]) -> Any:
+        reply = self.impl.func_void()
+        return utils.base_types.from_int(0)
 class SimpleInterfaceServiceAdapter():
     def __init__(self, impl: tb_simple.api.ISimpleInterface, service: apigear.mqtt.Service):
         self.service = service
@@ -52,7 +56,15 @@ class SimpleInterfaceServiceAdapter():
         self.service.subscribe_for_property("tb.simple/SimpleInterface/set/propFloat32", self.__set_prop_float32)
         self.service.subscribe_for_property("tb.simple/SimpleInterface/set/propFloat64", self.__set_prop_float64)
         self.service.subscribe_for_property("tb.simple/SimpleInterface/set/propString", self.__set_prop_string)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcNoReturnValue", self.__invoke_func_no_return_value)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcBool", self.__invoke_func_bool)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcInt", self.__invoke_func_int)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcInt32", self.__invoke_func_int32)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcInt64", self.__invoke_func_int64)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcFloat", self.__invoke_func_float)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcFloat32", self.__invoke_func_float32)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcFloat64", self.__invoke_func_float64)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcString", self.__invoke_func_string)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -64,7 +76,15 @@ class SimpleInterfaceServiceAdapter():
         self.service.unsubscribe("tb.simple/SimpleInterface/set/propFloat32")
         self.service.unsubscribe("tb.simple/SimpleInterface/set/propFloat64")
         self.service.unsubscribe("tb.simple/SimpleInterface/set/propString")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcNoReturnValue")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcBool")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcInt")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcInt32")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcInt64")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcFloat")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcFloat32")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcFloat64")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcString")
 
     def notify_sig_bool(self, param_bool: bool):
         _param_bool = utils.base_types.from_bool(param_bool)
@@ -169,6 +189,51 @@ class SimpleInterfaceServiceAdapter():
     def __set_prop_string(self, value: Any):
             v = utils.base_types.as_string(value)
             self.impl.set_prop_string(v)
+
+    def __invoke_func_no_return_value(self, args: list[Any]) -> Any:
+        param_bool = utils.base_types.as_bool(args[0])
+        reply = self.impl.func_no_return_value(param_bool)
+        return utils.base_types.from_int(0)
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = utils.base_types.as_bool(args[0])
+        reply = self.impl.func_bool(param_bool)
+        return utils.base_types.from_bool(reply)
+
+    def __invoke_func_int(self, args: list[Any]) -> Any:
+        param_int = utils.base_types.as_int(args[0])
+        reply = self.impl.func_int(param_int)
+        return utils.base_types.from_int(reply)
+
+    def __invoke_func_int32(self, args: list[Any]) -> Any:
+        param_int32 = utils.base_types.as_int32(args[0])
+        reply = self.impl.func_int32(param_int32)
+        return utils.base_types.from_int32(reply)
+
+    def __invoke_func_int64(self, args: list[Any]) -> Any:
+        param_int64 = utils.base_types.as_int64(args[0])
+        reply = self.impl.func_int64(param_int64)
+        return utils.base_types.from_int64(reply)
+
+    def __invoke_func_float(self, args: list[Any]) -> Any:
+        param_float = utils.base_types.as_float(args[0])
+        reply = self.impl.func_float(param_float)
+        return utils.base_types.from_float(reply)
+
+    def __invoke_func_float32(self, args: list[Any]) -> Any:
+        param_float32 = utils.base_types.as_float32(args[0])
+        reply = self.impl.func_float32(param_float32)
+        return utils.base_types.from_float32(reply)
+
+    def __invoke_func_float64(self, args: list[Any]) -> Any:
+        param_float = utils.base_types.as_float64(args[0])
+        reply = self.impl.func_float64(param_float)
+        return utils.base_types.from_float64(reply)
+
+    def __invoke_func_string(self, args: list[Any]) -> Any:
+        param_string = utils.base_types.as_string(args[0])
+        reply = self.impl.func_string(param_string)
+        return utils.base_types.from_string(reply)
 class SimpleArrayInterfaceServiceAdapter():
     def __init__(self, impl: tb_simple.api.ISimpleArrayInterface, service: apigear.mqtt.Service):
         self.service = service
@@ -202,7 +267,14 @@ class SimpleArrayInterfaceServiceAdapter():
         self.service.subscribe_for_property("tb.simple/SimpleArrayInterface/set/propFloat64", self.__set_prop_float64)
         self.service.subscribe_for_property("tb.simple/SimpleArrayInterface/set/propString", self.__set_prop_string)
         self.service.subscribe_for_property("tb.simple/SimpleArrayInterface/set/propReadOnlyString", self.__set_prop_read_only_string)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcBool", self.__invoke_func_bool)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcInt", self.__invoke_func_int)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcInt32", self.__invoke_func_int32)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcInt64", self.__invoke_func_int64)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcFloat", self.__invoke_func_float)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcFloat32", self.__invoke_func_float32)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcFloat64", self.__invoke_func_float64)
+        self.service.subscribe_for_invoke_req("tb.simple/SimpleArrayInterface/rpc/funcString", self.__invoke_func_string)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -215,7 +287,14 @@ class SimpleArrayInterfaceServiceAdapter():
         self.service.unsubscribe("tb.simple/SimpleArrayInterface/set/propFloat64")
         self.service.unsubscribe("tb.simple/SimpleArrayInterface/set/propString")
         self.service.unsubscribe("tb.simple/SimpleArrayInterface/set/propReadOnlyString")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcBool")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcInt")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcInt32")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcInt64")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcFloat")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcFloat32")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcFloat64")
+        self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcString")
 
     def notify_sig_bool(self, param_bool: list[bool]):
         _param_bool = [utils.base_types.api.from_bool(_) for _ in param_bool]
@@ -327,6 +406,46 @@ class SimpleArrayInterfaceServiceAdapter():
 
     def __set_prop_read_only_string(self, value: Any):
             pass
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = [utils.base_types.as_bool(_) for _ in args[0]]
+        reply = self.impl.func_bool(param_bool)
+        return [utils.base_types.from_bool(_) for _ in reply]
+
+    def __invoke_func_int(self, args: list[Any]) -> Any:
+        param_int = [utils.base_types.as_int(_) for _ in args[0]]
+        reply = self.impl.func_int(param_int)
+        return [utils.base_types.from_int(_) for _ in reply]
+
+    def __invoke_func_int32(self, args: list[Any]) -> Any:
+        param_int32 = [utils.base_types.as_int32(_) for _ in args[0]]
+        reply = self.impl.func_int32(param_int32)
+        return [utils.base_types.from_int32(_) for _ in reply]
+
+    def __invoke_func_int64(self, args: list[Any]) -> Any:
+        param_int64 = [utils.base_types.as_int64(_) for _ in args[0]]
+        reply = self.impl.func_int64(param_int64)
+        return [utils.base_types.from_int64(_) for _ in reply]
+
+    def __invoke_func_float(self, args: list[Any]) -> Any:
+        param_float = [utils.base_types.as_float(_) for _ in args[0]]
+        reply = self.impl.func_float(param_float)
+        return [utils.base_types.from_float(_) for _ in reply]
+
+    def __invoke_func_float32(self, args: list[Any]) -> Any:
+        param_float32 = [utils.base_types.as_float32(_) for _ in args[0]]
+        reply = self.impl.func_float32(param_float32)
+        return [utils.base_types.from_float32(_) for _ in reply]
+
+    def __invoke_func_float64(self, args: list[Any]) -> Any:
+        param_float = [utils.base_types.as_float64(_) for _ in args[0]]
+        reply = self.impl.func_float64(param_float)
+        return [utils.base_types.from_float64(_) for _ in reply]
+
+    def __invoke_func_string(self, args: list[Any]) -> Any:
+        param_string = [utils.base_types.as_string(_) for _ in args[0]]
+        reply = self.impl.func_string(param_string)
+        return [utils.base_types.from_string(_) for _ in reply]
 class NoPropertiesInterfaceServiceAdapter():
     def __init__(self, impl: tb_simple.api.INoPropertiesInterface, service: apigear.mqtt.Service):
         self.service = service
@@ -336,11 +455,13 @@ class NoPropertiesInterfaceServiceAdapter():
         self.service.on_connected += self.subscribeForTopics
 
     def subscribeForTopics(self):
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.simple/NoPropertiesInterface/rpc/funcVoid", self.__invoke_func_void)
+        self.service.subscribe_for_invoke_req("tb.simple/NoPropertiesInterface/rpc/funcBool", self.__invoke_func_bool)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.simple/NoPropertiesInterface/rpc/funcVoid")
+        self.service.unsubscribe("tb.simple/NoPropertiesInterface/rpc/funcBool")
 
     def notify_sig_void(self):
         args = []
@@ -350,6 +471,15 @@ class NoPropertiesInterfaceServiceAdapter():
         _param_bool = utils.base_types.from_bool(param_bool)
         args = [_param_bool]
         self.service.notify_signal("tb.simple/NoPropertiesInterface/sig/sigBool", args)
+
+    def __invoke_func_void(self, args: list[Any]) -> Any:
+        reply = self.impl.func_void()
+        return utils.base_types.from_int(0)
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = utils.base_types.as_bool(args[0])
+        reply = self.impl.func_bool(param_bool)
+        return utils.base_types.from_bool(reply)
 class NoOperationsInterfaceServiceAdapter():
     def __init__(self, impl: tb_simple.api.INoOperationsInterface, service: apigear.mqtt.Service):
         self.service = service
@@ -363,13 +493,11 @@ class NoOperationsInterfaceServiceAdapter():
     def subscribeForTopics(self):
         self.service.subscribe_for_property("tb.simple/NoOperationsInterface/set/propBool", self.__set_prop_bool)
         self.service.subscribe_for_property("tb.simple/NoOperationsInterface/set/propInt", self.__set_prop_int)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.simple/NoOperationsInterface/set/propBool")
         self.service.unsubscribe("tb.simple/NoOperationsInterface/set/propInt")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
 
     def notify_sig_void(self):
         args = []
@@ -406,13 +534,15 @@ class NoSignalsInterfaceServiceAdapter():
     def subscribeForTopics(self):
         self.service.subscribe_for_property("tb.simple/NoSignalsInterface/set/propBool", self.__set_prop_bool)
         self.service.subscribe_for_property("tb.simple/NoSignalsInterface/set/propInt", self.__set_prop_int)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.simple/NoSignalsInterface/rpc/funcVoid", self.__invoke_func_void)
+        self.service.subscribe_for_invoke_req("tb.simple/NoSignalsInterface/rpc/funcBool", self.__invoke_func_bool)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.simple/NoSignalsInterface/set/propBool")
         self.service.unsubscribe("tb.simple/NoSignalsInterface/set/propInt")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.simple/NoSignalsInterface/rpc/funcVoid")
+        self.service.unsubscribe("tb.simple/NoSignalsInterface/rpc/funcBool")
 
     def notify_prop_bool_changed(self, value):
         v = utils.base_types.from_bool(value)
@@ -429,3 +559,12 @@ class NoSignalsInterfaceServiceAdapter():
     def __set_prop_int(self, value: Any):
             v = utils.base_types.as_int(value)
             self.impl.set_prop_int(v)
+
+    def __invoke_func_void(self, args: list[Any]) -> Any:
+        reply = self.impl.func_void()
+        return utils.base_types.from_int(0)
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = utils.base_types.as_bool(args[0])
+        reply = self.impl.func_bool(param_bool)
+        return utils.base_types.from_bool(reply)

@@ -23,7 +23,10 @@ class EnumInterfaceServiceAdapter():
         self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop1", self.__set_prop1)
         self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop2", self.__set_prop2)
         self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop3", self.__set_prop3)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func0", self.__invoke_func0)
+        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func1", self.__invoke_func1)
+        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func2", self.__invoke_func2)
+        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func3", self.__invoke_func3)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -31,7 +34,10 @@ class EnumInterfaceServiceAdapter():
         self.service.unsubscribe("tb.enum/EnumInterface/set/prop1")
         self.service.unsubscribe("tb.enum/EnumInterface/set/prop2")
         self.service.unsubscribe("tb.enum/EnumInterface/set/prop3")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.enum/EnumInterface/rpc/func0")
+        self.service.unsubscribe("tb.enum/EnumInterface/rpc/func1")
+        self.service.unsubscribe("tb.enum/EnumInterface/rpc/func2")
+        self.service.unsubscribe("tb.enum/EnumInterface/rpc/func3")
 
     def notify_sig0(self, param0: tb_enum.api.Enum0):
         _param0 = tb_enum.api.from_enum0(param0)
@@ -84,3 +90,23 @@ class EnumInterfaceServiceAdapter():
     def __set_prop3(self, value: Any):
             v = tb_enum.api.as_enum3(value)
             self.impl.set_prop3(v)
+
+    def __invoke_func0(self, args: list[Any]) -> Any:
+        param0 = tb_enum.api.as_enum0(args[0])
+        reply = self.impl.func0(param0)
+        return tb_enum.api.from_enum0(reply)
+
+    def __invoke_func1(self, args: list[Any]) -> Any:
+        param1 = tb_enum.api.as_enum1(args[0])
+        reply = self.impl.func1(param1)
+        return tb_enum.api.from_enum1(reply)
+
+    def __invoke_func2(self, args: list[Any]) -> Any:
+        param2 = tb_enum.api.as_enum2(args[0])
+        reply = self.impl.func2(param2)
+        return tb_enum.api.from_enum2(reply)
+
+    def __invoke_func3(self, args: list[Any]) -> Any:
+        param3 = tb_enum.api.as_enum3(args[0])
+        reply = self.impl.func3(param3)
+        return tb_enum.api.from_enum3(reply)

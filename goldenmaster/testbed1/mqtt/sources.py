@@ -23,7 +23,10 @@ class StructInterfaceServiceAdapter():
         self.service.subscribe_for_property("testbed1/StructInterface/set/propInt", self.__set_prop_int)
         self.service.subscribe_for_property("testbed1/StructInterface/set/propFloat", self.__set_prop_float)
         self.service.subscribe_for_property("testbed1/StructInterface/set/propString", self.__set_prop_string)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcBool", self.__invoke_func_bool)
+        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcInt", self.__invoke_func_int)
+        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcFloat", self.__invoke_func_float)
+        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcString", self.__invoke_func_string)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -31,7 +34,10 @@ class StructInterfaceServiceAdapter():
         self.service.unsubscribe("testbed1/StructInterface/set/propInt")
         self.service.unsubscribe("testbed1/StructInterface/set/propFloat")
         self.service.unsubscribe("testbed1/StructInterface/set/propString")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("testbed1/StructInterface/rpc/funcBool")
+        self.service.unsubscribe("testbed1/StructInterface/rpc/funcInt")
+        self.service.unsubscribe("testbed1/StructInterface/rpc/funcFloat")
+        self.service.unsubscribe("testbed1/StructInterface/rpc/funcString")
 
     def notify_sig_bool(self, param_bool: testbed1.api.StructBool):
         _param_bool = testbed1.api.from_struct_bool(param_bool)
@@ -84,6 +90,26 @@ class StructInterfaceServiceAdapter():
     def __set_prop_string(self, value: Any):
             v = testbed1.api.as_struct_string(value)
             self.impl.set_prop_string(v)
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = testbed1.api.as_struct_bool(args[0])
+        reply = self.impl.func_bool(param_bool)
+        return testbed1.api.from_struct_bool(reply)
+
+    def __invoke_func_int(self, args: list[Any]) -> Any:
+        param_int = testbed1.api.as_struct_int(args[0])
+        reply = self.impl.func_int(param_int)
+        return testbed1.api.from_struct_int(reply)
+
+    def __invoke_func_float(self, args: list[Any]) -> Any:
+        param_float = testbed1.api.as_struct_float(args[0])
+        reply = self.impl.func_float(param_float)
+        return testbed1.api.from_struct_float(reply)
+
+    def __invoke_func_string(self, args: list[Any]) -> Any:
+        param_string = testbed1.api.as_struct_string(args[0])
+        reply = self.impl.func_string(param_string)
+        return testbed1.api.from_struct_string(reply)
 class StructArrayInterfaceServiceAdapter():
     def __init__(self, impl: testbed1.api.IStructArrayInterface, service: apigear.mqtt.Service):
         self.service = service
@@ -103,7 +129,10 @@ class StructArrayInterfaceServiceAdapter():
         self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propInt", self.__set_prop_int)
         self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propFloat", self.__set_prop_float)
         self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propString", self.__set_prop_string)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcBool", self.__invoke_func_bool)
+        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcInt", self.__invoke_func_int)
+        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcFloat", self.__invoke_func_float)
+        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcString", self.__invoke_func_string)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -111,7 +140,10 @@ class StructArrayInterfaceServiceAdapter():
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propInt")
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propFloat")
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propString")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcBool")
+        self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcInt")
+        self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcFloat")
+        self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcString")
 
     def notify_sig_bool(self, param_bool: list[testbed1.api.StructBool]):
         _param_bool = [testbed1.api.api.from_struct_bool(_) for _ in param_bool]
@@ -164,3 +196,23 @@ class StructArrayInterfaceServiceAdapter():
     def __set_prop_string(self, value: Any):
             v = [testbed1.api.as_struct_string(_) for _ in value]
             self.impl.set_prop_string(v)
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = [testbed1.api.as_struct_bool(_) for _ in args[0]]
+        reply = self.impl.func_bool(param_bool)
+        return [testbed1.api.from_struct_bool(_) for _ in reply]
+
+    def __invoke_func_int(self, args: list[Any]) -> Any:
+        param_int = [testbed1.api.as_struct_int(_) for _ in args[0]]
+        reply = self.impl.func_int(param_int)
+        return [testbed1.api.from_struct_int(_) for _ in reply]
+
+    def __invoke_func_float(self, args: list[Any]) -> Any:
+        param_float = [testbed1.api.as_struct_float(_) for _ in args[0]]
+        reply = self.impl.func_float(param_float)
+        return [testbed1.api.from_struct_float(_) for _ in reply]
+
+    def __invoke_func_string(self, args: list[Any]) -> Any:
+        param_string = [testbed1.api.as_struct_string(_) for _ in args[0]]
+        reply = self.impl.func_string(param_string)
+        return [testbed1.api.from_struct_string(_) for _ in reply]

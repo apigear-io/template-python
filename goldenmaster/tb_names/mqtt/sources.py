@@ -19,14 +19,16 @@ class NamEsServiceAdapter():
         self.service.subscribe_for_property("tb.names/Nam_Es/set/Switch", self.__set_switch)
         self.service.subscribe_for_property("tb.names/Nam_Es/set/SOME_PROPERTY", self.__set_some_property)
         self.service.subscribe_for_property("tb.names/Nam_Es/set/Some_Poperty2", self.__set_some_poperty2)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("tb.names/Nam_Es/rpc/SOME_FUNCTION", self.__invoke_some_function)
+        self.service.subscribe_for_invoke_req("tb.names/Nam_Es/rpc/Some_Function2", self.__invoke_some_function2)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.names/Nam_Es/set/Switch")
         self.service.unsubscribe("tb.names/Nam_Es/set/SOME_PROPERTY")
         self.service.unsubscribe("tb.names/Nam_Es/set/Some_Poperty2")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("tb.names/Nam_Es/rpc/SOME_FUNCTION")
+        self.service.unsubscribe("tb.names/Nam_Es/rpc/Some_Function2")
 
     def notify_some_signal(self, some_param: bool):
         _some_param = utils.base_types.from_bool(some_param)
@@ -61,3 +63,13 @@ class NamEsServiceAdapter():
     def __set_some_poperty2(self, value: Any):
             v = utils.base_types.as_int(value)
             self.impl.set_some_poperty2(v)
+
+    def __invoke_some_function(self, args: list[Any]) -> Any:
+        some_param = utils.base_types.as_bool(args[0])
+        reply = self.impl.some_function(some_param)
+        return utils.base_types.from_int(0)
+
+    def __invoke_some_function2(self, args: list[Any]) -> Any:
+        some_param = utils.base_types.as_bool(args[0])
+        reply = self.impl.some_function2(some_param)
+        return utils.base_types.from_int(0)

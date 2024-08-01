@@ -46,20 +46,26 @@ class {{$class}}ServiceAdapter():
 {{- range $idx, $s := .Signals }}
         self.impl.on_{{snake .Name}} += self.notify_{{snake .Name}}
 {{- end }}
+{{- if not ((and (eq (len $interface.Operations) 0) (eq (len $interface.Properties) 0) ))}}
         self.service.on_connected += self.subscribeForTopics
 
     def subscribeForTopics(self):
         {{- range .Properties }}
         self.service.subscribe_for_property("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}", self.__set_{{snake .Name}})
         {{- end }}
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        {{- range  .Operations }}
+        self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}})
+        {{- end}}
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         {{- range .Properties }}
         self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}")
         {{- end }}
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        {{- range .Operations }}
+        self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}")
+        {{- end}}
+{{- end}}
 
 {{- range .Signals }}
 
@@ -103,6 +109,28 @@ class {{$class}}ServiceAdapter():
         {{- else }}
             pass
         {{- end }}
+{{- end }}
+
+{{- range .Operations }}
+
+    def __invoke_{{snake .Name}}(self, args: list[Any]) -> Any:
+    {{- range $idx, $_ := .Params }}
+        {{- if .IsArray }}
+        {{snake .Name}} = [{{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(_) for _ in args[{{$idx}}]]
+        {{- else }}
+        {{snake .Name}} = {{template "get_converter_module" .}}.as_{{template "get_serialization_name" .}}(args[{{$idx}}])
+        {{- end }}
+    {{- end }}
+        reply = self.impl.{{snake .Name}}({{pyVars .Params}})
+    {{- if .Return.IsVoid }}
+        return utils.base_types.from_int(0)   
+    {{- else }}
+        {{- if .Return.IsArray }}
+        return [{{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(_) for _ in reply]
+        {{- else }}
+        return {{template "get_converter_module" .Return}}.from_{{template "get_serialization_name" .Return}}(reply)
+        {{- end }}
+    {{- end }}
 {{- end }}
 
 {{- end }}
