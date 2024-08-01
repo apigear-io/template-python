@@ -35,6 +35,7 @@ import {{.}}
 
 {{- $m := .Module }}
 {{- range .Module.Interfaces }}
+{{- $interface := . }}
 {{- $interfaceName := .Name }}
 
 class {{Camel .Name}}ClientAdapter():
@@ -47,9 +48,12 @@ class {{Camel .Name}}ClientAdapter():
     {{- range .Signals }}
         self.on_{{snake .Name}} = EventHook()
     {{- end }}
+{{- if (not (and (and (eq (len $interface.Signals)  0)  (eq (len $interface.Properties) 0) ) (eq (len $interface.Operations) 0)))}}
         self.client.on_connected += self.subscribeForTopics
+        {{- if (ne (len $interface.Operations) 0)  }}  
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
+        {{- end}}
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
@@ -74,6 +78,7 @@ class {{Camel .Name}}ClientAdapter():
         {{- range .Operations }}
         self.client.unsubscribe(self.method_topics.resp_topic_{{snake .Name}})
         {{- end }}
+{{- end}}
 
     {{- range .Properties }}
     {{- if not .IsReadOnly }}
@@ -164,7 +169,7 @@ class {{Camel .Name}}ClientAdapter():
            callback(value)
     {{- end }}
 
-   
+ {{- if (ne (len $interface.Operations) 0)}}  
     class MethodTopics:
         def __init__(self, client_id):
             {{- range .Operations }}
@@ -177,5 +182,6 @@ class {{Camel .Name}}ClientAdapter():
             {{- range .Operations }}
             self.{{snake .Name}} = {}
             {{- end}}
+{{- end}}
 
 {{- end}}

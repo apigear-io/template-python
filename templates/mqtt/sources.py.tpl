@@ -47,6 +47,7 @@ class {{$class}}ServiceAdapter():
 {{- range $idx, $s := .Signals }}
         self.impl.on_{{snake .Name}} += self.notify_{{snake .Name}}
 {{- end }}
+{{- if not ((and (eq (len $interface.Operations)  0)  (eq (len $interface.Properties) 0) ))}}
         self.service.on_connected += self.subscribeForTopics
 
     def subscribeForTopics(self):
@@ -66,6 +67,7 @@ class {{$class}}ServiceAdapter():
         {{- range .Operations }}
         self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}")
         {{- end}}
+{{- end}}
 
 {{- range .Signals }}
 
