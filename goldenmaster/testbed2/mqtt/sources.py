@@ -23,7 +23,10 @@ class ManyParamInterfaceServiceAdapter():
         self.service.subscribe_for_property("testbed2/ManyParamInterface/set/prop2", self.__set_prop2)
         self.service.subscribe_for_property("testbed2/ManyParamInterface/set/prop3", self.__set_prop3)
         self.service.subscribe_for_property("testbed2/ManyParamInterface/set/prop4", self.__set_prop4)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("testbed2/ManyParamInterface/rpc/func1", self.__invoke_func1)
+        self.service.subscribe_for_invoke_req("testbed2/ManyParamInterface/rpc/func2", self.__invoke_func2)
+        self.service.subscribe_for_invoke_req("testbed2/ManyParamInterface/rpc/func3", self.__invoke_func3)
+        self.service.subscribe_for_invoke_req("testbed2/ManyParamInterface/rpc/func4", self.__invoke_func4)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -31,7 +34,10 @@ class ManyParamInterfaceServiceAdapter():
         self.service.unsubscribe("testbed2/ManyParamInterface/set/prop2")
         self.service.unsubscribe("testbed2/ManyParamInterface/set/prop3")
         self.service.unsubscribe("testbed2/ManyParamInterface/set/prop4")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func1")
+        self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func2")
+        self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func3")
+        self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func4")
 
     def notify_sig1(self, param1: int):
         _param1 = utils.base_types.from_int(param1)
@@ -90,6 +96,32 @@ class ManyParamInterfaceServiceAdapter():
     def __set_prop4(self, value: Any):
             v = utils.base_types.as_int(value)
             self.impl.set_prop4(v)
+
+    def __invoke_func1(self, args: list[Any]) -> Any:
+        param1 = utils.base_types.as_int(args[0])
+        reply = self.impl.func1(param1)
+        return utils.base_types.from_int(reply)
+
+    def __invoke_func2(self, args: list[Any]) -> Any:
+        param1 = utils.base_types.as_int(args[0])
+        param2 = utils.base_types.as_int(args[1])
+        reply = self.impl.func2(param1, param2)
+        return utils.base_types.from_int(reply)
+
+    def __invoke_func3(self, args: list[Any]) -> Any:
+        param1 = utils.base_types.as_int(args[0])
+        param2 = utils.base_types.as_int(args[1])
+        param3 = utils.base_types.as_int(args[2])
+        reply = self.impl.func3(param1, param2, param3)
+        return utils.base_types.from_int(reply)
+
+    def __invoke_func4(self, args: list[Any]) -> Any:
+        param1 = utils.base_types.as_int(args[0])
+        param2 = utils.base_types.as_int(args[1])
+        param3 = utils.base_types.as_int(args[2])
+        param4 = utils.base_types.as_int(args[3])
+        reply = self.impl.func4(param1, param2, param3, param4)
+        return utils.base_types.from_int(reply)
 class NestedStruct1InterfaceServiceAdapter():
     def __init__(self, impl: testbed2.api.INestedStruct1Interface, service: apigear.mqtt.Service):
         self.service = service
@@ -100,12 +132,12 @@ class NestedStruct1InterfaceServiceAdapter():
 
     def subscribeForTopics(self):
         self.service.subscribe_for_property("testbed2/NestedStruct1Interface/set/prop1", self.__set_prop1)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("testbed2/NestedStruct1Interface/rpc/func1", self.__invoke_func1)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("testbed2/NestedStruct1Interface/set/prop1")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("testbed2/NestedStruct1Interface/rpc/func1")
 
     def notify_sig1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
@@ -119,6 +151,11 @@ class NestedStruct1InterfaceServiceAdapter():
     def __set_prop1(self, value: Any):
             v = testbed2.api.as_nested_struct1(value)
             self.impl.set_prop1(v)
+
+    def __invoke_func1(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        reply = self.impl.func1(param1)
+        return testbed2.api.from_nested_struct1(reply)
 class NestedStruct2InterfaceServiceAdapter():
     def __init__(self, impl: testbed2.api.INestedStruct2Interface, service: apigear.mqtt.Service):
         self.service = service
@@ -132,13 +169,15 @@ class NestedStruct2InterfaceServiceAdapter():
     def subscribeForTopics(self):
         self.service.subscribe_for_property("testbed2/NestedStruct2Interface/set/prop1", self.__set_prop1)
         self.service.subscribe_for_property("testbed2/NestedStruct2Interface/set/prop2", self.__set_prop2)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("testbed2/NestedStruct2Interface/rpc/func1", self.__invoke_func1)
+        self.service.subscribe_for_invoke_req("testbed2/NestedStruct2Interface/rpc/func2", self.__invoke_func2)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("testbed2/NestedStruct2Interface/set/prop1")
         self.service.unsubscribe("testbed2/NestedStruct2Interface/set/prop2")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("testbed2/NestedStruct2Interface/rpc/func1")
+        self.service.unsubscribe("testbed2/NestedStruct2Interface/rpc/func2")
 
     def notify_sig1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
@@ -166,6 +205,17 @@ class NestedStruct2InterfaceServiceAdapter():
     def __set_prop2(self, value: Any):
             v = testbed2.api.as_nested_struct2(value)
             self.impl.set_prop2(v)
+
+    def __invoke_func1(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        reply = self.impl.func1(param1)
+        return testbed2.api.from_nested_struct1(reply)
+
+    def __invoke_func2(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        param2 = testbed2.api.as_nested_struct2(args[1])
+        reply = self.impl.func2(param1, param2)
+        return testbed2.api.from_nested_struct1(reply)
 class NestedStruct3InterfaceServiceAdapter():
     def __init__(self, impl: testbed2.api.INestedStruct3Interface, service: apigear.mqtt.Service):
         self.service = service
@@ -182,14 +232,18 @@ class NestedStruct3InterfaceServiceAdapter():
         self.service.subscribe_for_property("testbed2/NestedStruct3Interface/set/prop1", self.__set_prop1)
         self.service.subscribe_for_property("testbed2/NestedStruct3Interface/set/prop2", self.__set_prop2)
         self.service.subscribe_for_property("testbed2/NestedStruct3Interface/set/prop3", self.__set_prop3)
-        #TODO SUBSCRIBE FOR INVOKE TOPIC
+        self.service.subscribe_for_invoke_req("testbed2/NestedStruct3Interface/rpc/func1", self.__invoke_func1)
+        self.service.subscribe_for_invoke_req("testbed2/NestedStruct3Interface/rpc/func2", self.__invoke_func2)
+        self.service.subscribe_for_invoke_req("testbed2/NestedStruct3Interface/rpc/func3", self.__invoke_func3)
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("testbed2/NestedStruct3Interface/set/prop1")
         self.service.unsubscribe("testbed2/NestedStruct3Interface/set/prop2")
         self.service.unsubscribe("testbed2/NestedStruct3Interface/set/prop3")
-        #TODO UNSUBSCRIBE INVOKE TOPIC
+        self.service.unsubscribe("testbed2/NestedStruct3Interface/rpc/func1")
+        self.service.unsubscribe("testbed2/NestedStruct3Interface/rpc/func2")
+        self.service.unsubscribe("testbed2/NestedStruct3Interface/rpc/func3")
 
     def notify_sig1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
@@ -232,3 +286,21 @@ class NestedStruct3InterfaceServiceAdapter():
     def __set_prop3(self, value: Any):
             v = testbed2.api.as_nested_struct3(value)
             self.impl.set_prop3(v)
+
+    def __invoke_func1(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        reply = self.impl.func1(param1)
+        return testbed2.api.from_nested_struct1(reply)
+
+    def __invoke_func2(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        param2 = testbed2.api.as_nested_struct2(args[1])
+        reply = self.impl.func2(param1, param2)
+        return testbed2.api.from_nested_struct1(reply)
+
+    def __invoke_func3(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        param2 = testbed2.api.as_nested_struct2(args[1])
+        param3 = testbed2.api.as_nested_struct3(args[2])
+        reply = self.impl.func3(param1, param2, param3)
+        return testbed2.api.from_nested_struct1(reply)
