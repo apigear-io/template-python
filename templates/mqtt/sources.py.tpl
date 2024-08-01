@@ -32,10 +32,11 @@ import {{.}}
 {{- end }}
 
 {{- range .Module.Interfaces }}
-{{- $interfaceName := .Name }}
+{{- $interface := . }}
 {{- $ns := printf "%s.%s" $.Module.Name .Name -}}
 {{- $class := Camel .Name }}
 {{- $id := printf "%s.%s" $.Module.Name .Name }}
+
 class {{$class}}ServiceAdapter():
     def __init__(self, impl: {{$current_module_api_prefix}}I{{$class}}, service: apigear.mqtt.Service):
         self.service = service
@@ -50,19 +51,20 @@ class {{$class}}ServiceAdapter():
 
     def subscribeForTopics(self):
         {{- range .Properties }}
-        self.service.subscribe_for_property("{{$.Module.Name}}/{{$interfaceName}}/set/{{.Name}}", self.__set_{{snake .Name}})
+        self.service.subscribe_for_property("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}", self.__set_{{snake .Name}})
         {{- end }}
         {{- range  .Operations }}
-        self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}})
+        self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}})
         {{- end}}
+
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         {{- range .Properties }}
-        self.service.unsubscribe("{{$.Module.Name}}/{{$interfaceName}}/set/{{.Name}}")
+        self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}")
         {{- end }}
         {{- range .Operations }}
-        self.service.unsubscribe("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{.Name}}")
+        self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}")
         {{- end}}
 
 {{- range .Signals }}
@@ -80,7 +82,7 @@ class {{$class}}ServiceAdapter():
             _{{snake $param.Name}}
             {{- end -}}
         ]
-        self.service.notify_signal("{{$.Module.Name}}/{{$interfaceName}}/sig/{{.Name}}", args)
+        self.service.notify_signal("{{$.Module.Name}}/{{$interface.Name}}/sig/{{.Name}}", args)
 {{- end }}
 
 {{- range .Properties }}
@@ -91,7 +93,7 @@ class {{$class}}ServiceAdapter():
         {{- else }}
         v = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(value)
         {{- end }}
-        self.service.notify_property_change("{{$.Module.Name}}/{{$interfaceName}}/prop/{{.Name}}", v)
+        self.service.notify_property_change("{{$.Module.Name}}/{{$interface.Name}}/prop/{{ .Name }}", v)
 {{- end }}
 
 {{- range .Properties }}
