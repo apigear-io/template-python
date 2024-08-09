@@ -27,10 +27,9 @@ features:
     scopes:
       - match: system
         documents:
-          - source: scaffold/requirements.txt
+          - source: scaffold/requirements.txt.tpl
             target: requirements.txt
             preserve: true
-            raw: true
           - source: scaffold/Makefile
             target: Makefile
             preserve: true
@@ -113,3 +112,36 @@ features:
           - source: "olink/test.py.tpl"
             target: "test_olink_{{snake .Interface.Name}}.py"
             preserve: true
+  - name: mqtt
+    requires: [api, scaffold]
+    scopes:
+      - match: system
+        documents:
+          - source: "apigear/__init__.py"
+            target: "apigear/__init__.py"
+            raw: true
+          - source: "apigear/mqtt/__init__.py"
+            target: "apigear/mqtt/__init__.py"
+            raw: true
+          - source: "apigear/mqtt/client.py"
+            target: "apigear/mqtt/client.py"
+            raw: true
+          - source: "apigear/mqtt//service.py"
+            target: "apigear/mqtt/service.py"
+            raw: true
+          - source: "apigear/mqtt//base.py"
+            target: "apigear/mqtt/base.py"
+            raw: true
+      - match: module
+        documents:
+          - source: "mqtt/__init__.py.tpl"
+            target: "{{snake .Module.Name}}/mqtt/__init__.py"
+          - source: "mqtt/sinks.py.tpl"
+            target: "{{snake .Module.Name}}/mqtt/sinks.py"
+          - source: "mqtt/sources.py.tpl"
+            target: "{{snake .Module.Name}}/mqtt/sources.py"
+          - source: "examples/mqtt/client.py.tpl"
+            target: "examples/mqtt/client.py"
+          - source: "examples/mqtt/server.py.tpl"
+            target: "examples/mqtt/server.py"
+
