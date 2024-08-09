@@ -69,8 +69,8 @@ class StructInterface(api.IStructInterface):
     def func_bool(self, param_bool: api.StructBool) -> api.StructBool:
         return api.StructBool()
 
-    def func_int(self, param_int: api.StructInt) -> api.StructBool:
-        return api.StructBool()
+    def func_int(self, param_int: api.StructInt) -> api.StructInt:
+        return api.StructInt()
 
     def func_float(self, param_float: api.StructFloat) -> api.StructFloat:
         return api.StructFloat()

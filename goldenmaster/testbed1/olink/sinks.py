@@ -95,7 +95,7 @@ class StructInterfaceSink(IObjectSink):
         args = [_param_int]
         future = asyncio.get_running_loop().create_future()
         def func(result):
-            return future.set_result(testbed1.api.as_struct_bool(result.value))
+            return future.set_result(testbed1.api.as_struct_int(result.value))
         self.client.invoke_remote(f"testbed1.StructInterface/funcInt", args, func)
         return await asyncio.wait_for(future, 500)
 

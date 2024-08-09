@@ -76,6 +76,10 @@ class TestSimpleArrayInterface:
         assert self.called == False
         assert o.get_prop_string() == []
 
+    def test_prop_read_only_string(self):
+        o = SimpleArrayInterface()
+        assert o.get_prop_read_only_string() == ""
+
     def test_func_bool(self):
         o = SimpleArrayInterface()
         o.func_bool(param_bool=[])
