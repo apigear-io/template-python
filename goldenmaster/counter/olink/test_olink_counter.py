@@ -5,6 +5,9 @@ from counter.olink import CounterSource, CounterSink
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
+import custom_types.api
+import extern_types.api
+import vector3d.vector
 
 @pytest.fixture()
 def olink_objects():
