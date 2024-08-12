@@ -6,6 +6,31 @@ from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
 
+{{- $system := .System}}
+{{- $imports := getEmptyStringList }}
+{{- range .Module.Imports }}
+    {{- $current_import := .}} 
+    {{- $import_name := printf "%s.api" (snake .Name) }} 
+    {{- $imports = (appendList $imports $import_name) }}
+        {{- range $system.Modules }}
+            {{- if (eq .Name $current_import.Name) }}
+                {{- range .Externs }}
+                    {{- $extern := pyExtern . }}
+                    {{- $imports = (appendList $imports $extern.Import) }}
+                {{- end }}
+            {{- end }}
+    {{- end }}
+{{- end }}
+{{- range .Module.Externs }}
+    {{- $extern := pyExtern . }}
+    {{- $imports = (appendList $imports $extern.Import) }}
+{{- end }}
+
+{{- $imports = unique $imports }}
+{{- range $imports }}
+import {{.}}
+{{- end }}
+
 @pytest.fixture()
 def olink_objects():
     impl = {{$class}}()

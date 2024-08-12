@@ -1,6 +1,9 @@
 
 from counter.api import api
 from counter.impl import Counter
+import custom_types.api
+import extern_types.api
+import vector3d.vector
 
 class TestCounter:
 
