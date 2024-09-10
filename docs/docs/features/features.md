@@ -1,6 +1,5 @@
 import CodeBlock from '@theme/CodeBlock';
 import helloWorldModuleComponent from '!!raw-loader!./data/helloworld.module.yaml';
-import Figure from '../figure'
 
 # Features
 
