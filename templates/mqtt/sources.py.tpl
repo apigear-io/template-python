@@ -65,6 +65,12 @@ class {{$class}}ServiceAdapter():
         {{- range .Operations }}
         self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}")
         {{- end}}
+        {{- range $idx, $p := .Properties }}
+        self.impl.on_{{snake .Name}}_changed -= self.notify_{{snake .Name}}_changed
+        {{- end }}
+        {{- range $idx, $s := .Signals }}
+        self.impl.on_{{snake .Name}} -= self.notify_{{snake .Name}}
+        {{- end }}
 {{- end}}
 
 {{- range .Signals }}

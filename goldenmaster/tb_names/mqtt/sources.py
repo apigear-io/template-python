@@ -29,6 +29,11 @@ class NamEsServiceAdapter():
         self.service.unsubscribe("tb.names/Nam_Es/set/Some_Poperty2")
         self.service.unsubscribe("tb.names/Nam_Es/rpc/SOME_FUNCTION")
         self.service.unsubscribe("tb.names/Nam_Es/rpc/Some_Function2")
+        self.impl.on_switch_changed -= self.notify_switch_changed
+        self.impl.on_some_property_changed -= self.notify_some_property_changed
+        self.impl.on_some_poperty2_changed -= self.notify_some_poperty2_changed
+        self.impl.on_some_signal -= self.notify_some_signal
+        self.impl.on_some_signal2 -= self.notify_some_signal2
 
     def notify_some_signal(self, some_param: bool):
         _some_param = utils.base_types.from_bool(some_param)
