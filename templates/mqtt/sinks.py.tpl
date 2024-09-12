@@ -1,6 +1,8 @@
 import asyncio
 from typing import Any
 import apigear.mqtt
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 from utils.eventhook import EventHook
 import utils.base_types
 {{- $current_module_api_prefix :=  printf "%s.api." (snake .Module.Name ) }}
@@ -41,6 +43,7 @@ import {{.}}
 class {{Camel .Name}}ClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
     {{- range .Properties }}
         self._{{snake .Name}} = {{pyDefault $current_module_api_prefix .}}
         self.on_{{snake .Name}}_changed = EventHook()
@@ -49,6 +52,8 @@ class {{Camel .Name}}ClientAdapter():
         self.on_{{snake .Name}} = EventHook()
     {{- end }}
     {{- if (not (and (and (eq (len $interface.Signals) 0) (eq (len $interface.Properties) 0) ) (eq (len $interface.Operations) 0)))}}
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         {{- if (ne (len $interface.Operations) 0) }}
         self.method_topics = self.MethodTopics(self.client.get_client_id())
@@ -58,17 +63,18 @@ class {{Camel .Name}}ClientAdapter():
 
     def subscribeForTopics(self):
         {{- range .Properties }}
-        self.client.subscribe_for_property("{{$.Module.Name}}/{{$interfaceName}}/prop/{{.Name}}", self.__set_{{snake .Name}})
+        self.subscription_ids.append(self.client.subscribe_for_property("{{$.Module.Name}}/{{$interfaceName}}/prop/{{.Name}}", self.__set_{{snake .Name}}))
         {{- end }}
         {{- range .Signals }}
-        self.client.subscribe_for_signal("{{$.Module.Name}}/{{$interfaceName}}/sig/{{.Name}}",  self.__on_{{snake .Name}}_signal)
+        self.subscription_ids.append(self.client.subscribe_for_signal("{{$.Module.Name}}/{{$interfaceName}}/sig/{{.Name}}",  self.__on_{{snake .Name}}_signal))
         {{- end }}
         {{- range .Operations }}
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_{{snake .Name}}, self.__on_{{snake .Name}}_resp)
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_{{snake .Name}}, self.__on_{{snake .Name}}_resp))
         {{- end }}
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         {{- range .Properties }}
         self.client.unsubscribe("{{$.Module.Name}}/{{$interfaceName}}/prop/{{.Name}}")
         {{- end }}
@@ -78,6 +84,20 @@ class {{Camel .Name}}ClientAdapter():
         {{- range .Operations }}
         self.client.unsubscribe(self.method_topics.resp_topic_{{snake .Name}})
         {{- end }}
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
+    {{- else}}
+        self.on_ready.self.fire()
     {{- end}}
 
     {{- range .Properties }}

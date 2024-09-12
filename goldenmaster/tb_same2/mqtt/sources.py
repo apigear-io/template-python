@@ -1,5 +1,7 @@
 import apigear.mqtt
 import utils.base_types
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 import tb_same2.api
 from utils.eventhook import EventHook
 from typing import Any
@@ -8,20 +10,36 @@ class SameStruct1InterfaceServiceAdapter():
     def __init__(self, impl: tb_same2.api.ISameStruct1Interface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop1_changed += self.notify_prop1_changed
         self.impl.on_sig1 += self.notify_sig1
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("tb.same2/SameStruct1Interface/set/prop1", self.__set_prop1)
-        self.service.subscribe_for_invoke_req("tb.same2/SameStruct1Interface/rpc/func1", self.__invoke_func1)
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.same2/SameStruct1Interface/set/prop1", self.__set_prop1))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.same2/SameStruct1Interface/rpc/func1", self.__invoke_func1))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("tb.same2/SameStruct1Interface/set/prop1")
         self.service.unsubscribe("tb.same2/SameStruct1Interface/rpc/func1")
         self.impl.on_prop1_changed -= self.notify_prop1_changed
         self.impl.on_sig1 -= self.notify_sig1
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig1(self, param1: tb_same2.api.Struct1):
         _param1 = tb_same2.api.from_struct1(param1)
@@ -44,20 +62,24 @@ class SameStruct2InterfaceServiceAdapter():
     def __init__(self, impl: tb_same2.api.ISameStruct2Interface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop1_changed += self.notify_prop1_changed
         self.impl.on_prop2_changed += self.notify_prop2_changed
         self.impl.on_sig1 += self.notify_sig1
         self.impl.on_sig2 += self.notify_sig2
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("tb.same2/SameStruct2Interface/set/prop1", self.__set_prop1)
-        self.service.subscribe_for_property("tb.same2/SameStruct2Interface/set/prop2", self.__set_prop2)
-        self.service.subscribe_for_invoke_req("tb.same2/SameStruct2Interface/rpc/func1", self.__invoke_func1)
-        self.service.subscribe_for_invoke_req("tb.same2/SameStruct2Interface/rpc/func2", self.__invoke_func2)
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.same2/SameStruct2Interface/set/prop1", self.__set_prop1))
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.same2/SameStruct2Interface/set/prop2", self.__set_prop2))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.same2/SameStruct2Interface/rpc/func1", self.__invoke_func1))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.same2/SameStruct2Interface/rpc/func2", self.__invoke_func2))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("tb.same2/SameStruct2Interface/set/prop1")
         self.service.unsubscribe("tb.same2/SameStruct2Interface/set/prop2")
         self.service.unsubscribe("tb.same2/SameStruct2Interface/rpc/func1")
@@ -66,6 +88,18 @@ class SameStruct2InterfaceServiceAdapter():
         self.impl.on_prop2_changed -= self.notify_prop2_changed
         self.impl.on_sig1 -= self.notify_sig1
         self.impl.on_sig2 -= self.notify_sig2
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig1(self, param1: tb_same2.api.Struct1):
         _param1 = tb_same2.api.from_struct1(param1)
@@ -108,20 +142,36 @@ class SameEnum1InterfaceServiceAdapter():
     def __init__(self, impl: tb_same2.api.ISameEnum1Interface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop1_changed += self.notify_prop1_changed
         self.impl.on_sig1 += self.notify_sig1
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("tb.same2/SameEnum1Interface/set/prop1", self.__set_prop1)
-        self.service.subscribe_for_invoke_req("tb.same2/SameEnum1Interface/rpc/func1", self.__invoke_func1)
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.same2/SameEnum1Interface/set/prop1", self.__set_prop1))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.same2/SameEnum1Interface/rpc/func1", self.__invoke_func1))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("tb.same2/SameEnum1Interface/set/prop1")
         self.service.unsubscribe("tb.same2/SameEnum1Interface/rpc/func1")
         self.impl.on_prop1_changed -= self.notify_prop1_changed
         self.impl.on_sig1 -= self.notify_sig1
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig1(self, param1: tb_same2.api.Enum1):
         _param1 = tb_same2.api.from_enum1(param1)
@@ -144,20 +194,24 @@ class SameEnum2InterfaceServiceAdapter():
     def __init__(self, impl: tb_same2.api.ISameEnum2Interface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop1_changed += self.notify_prop1_changed
         self.impl.on_prop2_changed += self.notify_prop2_changed
         self.impl.on_sig1 += self.notify_sig1
         self.impl.on_sig2 += self.notify_sig2
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("tb.same2/SameEnum2Interface/set/prop1", self.__set_prop1)
-        self.service.subscribe_for_property("tb.same2/SameEnum2Interface/set/prop2", self.__set_prop2)
-        self.service.subscribe_for_invoke_req("tb.same2/SameEnum2Interface/rpc/func1", self.__invoke_func1)
-        self.service.subscribe_for_invoke_req("tb.same2/SameEnum2Interface/rpc/func2", self.__invoke_func2)
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.same2/SameEnum2Interface/set/prop1", self.__set_prop1))
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.same2/SameEnum2Interface/set/prop2", self.__set_prop2))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.same2/SameEnum2Interface/rpc/func1", self.__invoke_func1))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.same2/SameEnum2Interface/rpc/func2", self.__invoke_func2))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("tb.same2/SameEnum2Interface/set/prop1")
         self.service.unsubscribe("tb.same2/SameEnum2Interface/set/prop2")
         self.service.unsubscribe("tb.same2/SameEnum2Interface/rpc/func1")
@@ -166,6 +220,18 @@ class SameEnum2InterfaceServiceAdapter():
         self.impl.on_prop2_changed -= self.notify_prop2_changed
         self.impl.on_sig1 -= self.notify_sig1
         self.impl.on_sig2 -= self.notify_sig2
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig1(self, param1: tb_same2.api.Enum1):
         _param1 = tb_same2.api.from_enum1(param1)
