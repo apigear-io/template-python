@@ -8,11 +8,11 @@ class Client(BaseClient):
         super().__init__(id)
         self.id_generator = self.IdGenerator()
         
-    def subscribe_for_property(self, topic, callback: Callable[[Any], None]):
-        self._subscribe(topic, callback, self.pass_only_payload)
+    def subscribe_for_property(self, topic, callback: Callable[[Any], None]) -> int:
+        return self._subscribe(topic, callback, self.pass_only_payload)
 
-    def subscribe_for_signal(self, topic, callback: Callable[[list[Any]], None]):
-        self._subscribe(topic, callback, self.pass_only_payload)
+    def subscribe_for_signal(self, topic, callback: Callable[[list[Any]], None]) -> int:
+        return self._subscribe(topic, callback, self.pass_only_payload)
         
     def invoke_resp_handler_wrapper(self,msg : paho.mqtt.client.MQTTMessage, callback ):
         payload = self.from_payload(msg.payload)
@@ -22,8 +22,8 @@ class Client(BaseClient):
         else:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode()}")
               
-    def subscribe_for_invoke_resp(self, topic, callback: Callable[[Any, int],None]):
-        self._subscribe(topic, callback, self.invoke_resp_handler_wrapper)
+    def subscribe_for_invoke_resp(self, topic, callback: Callable[[Any, int],None]) -> int:
+        return self._subscribe(topic, callback, self.invoke_resp_handler_wrapper)
 
     def set_remote_property(self, topic, payload_value):
         self.client.publish(topic, self.to_payload(payload_value), self.qos, retain = False)
