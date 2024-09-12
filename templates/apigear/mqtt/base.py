@@ -47,12 +47,16 @@ class BaseClient:
         keepalive = 60
         self.client.connect_async(addr, port, keepalive, bind_address, clean_start, properties)
 
-    def _subscribe(self, topic, callback, callback_wrapper = None):
+    def _subscribe(self, topic, callback, callback_wrapper = None) -> int:
         if topic not in self.topics:
             self.topics[topic] = (callback, callback_wrapper)
-            self.client.subscribe(topic, self.qos)
+            result, msg_id = self.client.subscribe(topic, self.qos)
+            if result != paho.mqtt.enums.MQTTErrorCode.MQTT_ERR_SUCCESS:
+                self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, f"cannot subscribe: {topic}, error code: {result}")
+            return msg_id
         else:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, "topic already added, no callback added")
+            return None
         
     def unsubscribe(self, topic):
         if topic in self.topics:
@@ -85,7 +89,7 @@ class BaseClient:
             self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_WARNING, f"no callback for: {msg.topic}: {msg.payload.decode('utf-8')}")
 
     def __on_subscribed(self, client, userdata, mid, reason_code_list, properties):
-        self.on_subscribed.fire()        
+        self.on_subscribed.fire(mid, reason_code_list)        
         
     def _mqtt_log_writer(self, level, msg):
        if level == paho.mqtt.enums.LogLevel.MQTT_LOG_DEBUG:
