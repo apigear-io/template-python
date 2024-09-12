@@ -38,6 +38,14 @@ class EnumInterfaceServiceAdapter():
         self.service.unsubscribe("tb.enum/EnumInterface/rpc/func1")
         self.service.unsubscribe("tb.enum/EnumInterface/rpc/func2")
         self.service.unsubscribe("tb.enum/EnumInterface/rpc/func3")
+        self.impl.on_prop0_changed -= self.notify_prop0_changed
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_prop2_changed -= self.notify_prop2_changed
+        self.impl.on_prop3_changed -= self.notify_prop3_changed
+        self.impl.on_sig0 -= self.notify_sig0
+        self.impl.on_sig1 -= self.notify_sig1
+        self.impl.on_sig2 -= self.notify_sig2
+        self.impl.on_sig3 -= self.notify_sig3
 
     def notify_sig0(self, param0: tb_enum.api.Enum0):
         _param0 = tb_enum.api.from_enum0(param0)

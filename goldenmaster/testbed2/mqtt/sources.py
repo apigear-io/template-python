@@ -38,6 +38,14 @@ class ManyParamInterfaceServiceAdapter():
         self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func2")
         self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func3")
         self.service.unsubscribe("testbed2/ManyParamInterface/rpc/func4")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_prop2_changed -= self.notify_prop2_changed
+        self.impl.on_prop3_changed -= self.notify_prop3_changed
+        self.impl.on_prop4_changed -= self.notify_prop4_changed
+        self.impl.on_sig1 -= self.notify_sig1
+        self.impl.on_sig2 -= self.notify_sig2
+        self.impl.on_sig3 -= self.notify_sig3
+        self.impl.on_sig4 -= self.notify_sig4
 
     def notify_sig1(self, param1: int):
         _param1 = utils.base_types.from_int(param1)
@@ -138,6 +146,8 @@ class NestedStruct1InterfaceServiceAdapter():
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("testbed2/NestedStruct1Interface/set/prop1")
         self.service.unsubscribe("testbed2/NestedStruct1Interface/rpc/func1")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_sig1 -= self.notify_sig1
 
     def notify_sig1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
@@ -178,6 +188,10 @@ class NestedStruct2InterfaceServiceAdapter():
         self.service.unsubscribe("testbed2/NestedStruct2Interface/set/prop2")
         self.service.unsubscribe("testbed2/NestedStruct2Interface/rpc/func1")
         self.service.unsubscribe("testbed2/NestedStruct2Interface/rpc/func2")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_prop2_changed -= self.notify_prop2_changed
+        self.impl.on_sig1 -= self.notify_sig1
+        self.impl.on_sig2 -= self.notify_sig2
 
     def notify_sig1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
@@ -244,6 +258,12 @@ class NestedStruct3InterfaceServiceAdapter():
         self.service.unsubscribe("testbed2/NestedStruct3Interface/rpc/func1")
         self.service.unsubscribe("testbed2/NestedStruct3Interface/rpc/func2")
         self.service.unsubscribe("testbed2/NestedStruct3Interface/rpc/func3")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_prop2_changed -= self.notify_prop2_changed
+        self.impl.on_prop3_changed -= self.notify_prop3_changed
+        self.impl.on_sig1 -= self.notify_sig1
+        self.impl.on_sig2 -= self.notify_sig2
+        self.impl.on_sig3 -= self.notify_sig3
 
     def notify_sig1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)

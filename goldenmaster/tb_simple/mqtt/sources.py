@@ -17,6 +17,7 @@ class VoidInterfaceServiceAdapter():
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.simple/VoidInterface/rpc/funcVoid")
+        self.impl.on_sig_void -= self.notify_sig_void
 
     def notify_sig_void(self):
         args = []
@@ -85,6 +86,22 @@ class SimpleInterfaceServiceAdapter():
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcFloat32")
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcFloat64")
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcString")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
+        self.impl.on_prop_int32_changed -= self.notify_prop_int32_changed
+        self.impl.on_prop_int64_changed -= self.notify_prop_int64_changed
+        self.impl.on_prop_float_changed -= self.notify_prop_float_changed
+        self.impl.on_prop_float32_changed -= self.notify_prop_float32_changed
+        self.impl.on_prop_float64_changed -= self.notify_prop_float64_changed
+        self.impl.on_prop_string_changed -= self.notify_prop_string_changed
+        self.impl.on_sig_bool -= self.notify_sig_bool
+        self.impl.on_sig_int -= self.notify_sig_int
+        self.impl.on_sig_int32 -= self.notify_sig_int32
+        self.impl.on_sig_int64 -= self.notify_sig_int64
+        self.impl.on_sig_float -= self.notify_sig_float
+        self.impl.on_sig_float32 -= self.notify_sig_float32
+        self.impl.on_sig_float64 -= self.notify_sig_float64
+        self.impl.on_sig_string -= self.notify_sig_string
 
     def notify_sig_bool(self, param_bool: bool):
         _param_bool = utils.base_types.from_bool(param_bool)
@@ -295,6 +312,23 @@ class SimpleArrayInterfaceServiceAdapter():
         self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcFloat32")
         self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcFloat64")
         self.service.unsubscribe("tb.simple/SimpleArrayInterface/rpc/funcString")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
+        self.impl.on_prop_int32_changed -= self.notify_prop_int32_changed
+        self.impl.on_prop_int64_changed -= self.notify_prop_int64_changed
+        self.impl.on_prop_float_changed -= self.notify_prop_float_changed
+        self.impl.on_prop_float32_changed -= self.notify_prop_float32_changed
+        self.impl.on_prop_float64_changed -= self.notify_prop_float64_changed
+        self.impl.on_prop_string_changed -= self.notify_prop_string_changed
+        self.impl.on_prop_read_only_string_changed -= self.notify_prop_read_only_string_changed
+        self.impl.on_sig_bool -= self.notify_sig_bool
+        self.impl.on_sig_int -= self.notify_sig_int
+        self.impl.on_sig_int32 -= self.notify_sig_int32
+        self.impl.on_sig_int64 -= self.notify_sig_int64
+        self.impl.on_sig_float -= self.notify_sig_float
+        self.impl.on_sig_float32 -= self.notify_sig_float32
+        self.impl.on_sig_float64 -= self.notify_sig_float64
+        self.impl.on_sig_string -= self.notify_sig_string
 
     def notify_sig_bool(self, param_bool: list[bool]):
         _param_bool = [utils.base_types.api.from_bool(_) for _ in param_bool]
@@ -462,6 +496,8 @@ class NoPropertiesInterfaceServiceAdapter():
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.simple/NoPropertiesInterface/rpc/funcVoid")
         self.service.unsubscribe("tb.simple/NoPropertiesInterface/rpc/funcBool")
+        self.impl.on_sig_void -= self.notify_sig_void
+        self.impl.on_sig_bool -= self.notify_sig_bool
 
     def notify_sig_void(self):
         args = []
@@ -498,6 +534,10 @@ class NoOperationsInterfaceServiceAdapter():
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.simple/NoOperationsInterface/set/propBool")
         self.service.unsubscribe("tb.simple/NoOperationsInterface/set/propInt")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
+        self.impl.on_sig_void -= self.notify_sig_void
+        self.impl.on_sig_bool -= self.notify_sig_bool
 
     def notify_sig_void(self):
         args = []
@@ -543,6 +583,8 @@ class NoSignalsInterfaceServiceAdapter():
         self.service.unsubscribe("tb.simple/NoSignalsInterface/set/propInt")
         self.service.unsubscribe("tb.simple/NoSignalsInterface/rpc/funcVoid")
         self.service.unsubscribe("tb.simple/NoSignalsInterface/rpc/funcBool")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
 
     def notify_prop_bool_changed(self, value):
         v = utils.base_types.from_bool(value)

@@ -27,6 +27,8 @@ class CounterServiceAdapter():
         self.service.unsubscribe("counter/Counter/set/extern_vector")
         self.service.unsubscribe("counter/Counter/rpc/increment")
         self.service.unsubscribe("counter/Counter/rpc/decrement")
+        self.impl.on_vector_changed -= self.notify_vector_changed
+        self.impl.on_extern_vector_changed -= self.notify_extern_vector_changed
 
     def notify_vector_changed(self, value):
         v = custom_types.api.from_vector3_d(value)

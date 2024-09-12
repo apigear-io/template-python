@@ -38,6 +38,14 @@ class StructInterfaceServiceAdapter():
         self.service.unsubscribe("testbed1/StructInterface/rpc/funcInt")
         self.service.unsubscribe("testbed1/StructInterface/rpc/funcFloat")
         self.service.unsubscribe("testbed1/StructInterface/rpc/funcString")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
+        self.impl.on_prop_float_changed -= self.notify_prop_float_changed
+        self.impl.on_prop_string_changed -= self.notify_prop_string_changed
+        self.impl.on_sig_bool -= self.notify_sig_bool
+        self.impl.on_sig_int -= self.notify_sig_int
+        self.impl.on_sig_float -= self.notify_sig_float
+        self.impl.on_sig_string -= self.notify_sig_string
 
     def notify_sig_bool(self, param_bool: testbed1.api.StructBool):
         _param_bool = testbed1.api.from_struct_bool(param_bool)
@@ -144,6 +152,14 @@ class StructArrayInterfaceServiceAdapter():
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcInt")
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcFloat")
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcString")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
+        self.impl.on_prop_float_changed -= self.notify_prop_float_changed
+        self.impl.on_prop_string_changed -= self.notify_prop_string_changed
+        self.impl.on_sig_bool -= self.notify_sig_bool
+        self.impl.on_sig_int -= self.notify_sig_int
+        self.impl.on_sig_float -= self.notify_sig_float
+        self.impl.on_sig_string -= self.notify_sig_string
 
     def notify_sig_bool(self, param_bool: list[testbed1.api.StructBool]):
         _param_bool = [testbed1.api.api.from_struct_bool(_) for _ in param_bool]

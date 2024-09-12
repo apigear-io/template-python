@@ -20,6 +20,8 @@ class SameStruct1InterfaceServiceAdapter():
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.same2/SameStruct1Interface/set/prop1")
         self.service.unsubscribe("tb.same2/SameStruct1Interface/rpc/func1")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_sig1 -= self.notify_sig1
 
     def notify_sig1(self, param1: tb_same2.api.Struct1):
         _param1 = tb_same2.api.from_struct1(param1)
@@ -60,6 +62,10 @@ class SameStruct2InterfaceServiceAdapter():
         self.service.unsubscribe("tb.same2/SameStruct2Interface/set/prop2")
         self.service.unsubscribe("tb.same2/SameStruct2Interface/rpc/func1")
         self.service.unsubscribe("tb.same2/SameStruct2Interface/rpc/func2")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_prop2_changed -= self.notify_prop2_changed
+        self.impl.on_sig1 -= self.notify_sig1
+        self.impl.on_sig2 -= self.notify_sig2
 
     def notify_sig1(self, param1: tb_same2.api.Struct1):
         _param1 = tb_same2.api.from_struct1(param1)
@@ -114,6 +120,8 @@ class SameEnum1InterfaceServiceAdapter():
         self.service.on_connected -= self.subscribeForTopics
         self.service.unsubscribe("tb.same2/SameEnum1Interface/set/prop1")
         self.service.unsubscribe("tb.same2/SameEnum1Interface/rpc/func1")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_sig1 -= self.notify_sig1
 
     def notify_sig1(self, param1: tb_same2.api.Enum1):
         _param1 = tb_same2.api.from_enum1(param1)
@@ -154,6 +162,10 @@ class SameEnum2InterfaceServiceAdapter():
         self.service.unsubscribe("tb.same2/SameEnum2Interface/set/prop2")
         self.service.unsubscribe("tb.same2/SameEnum2Interface/rpc/func1")
         self.service.unsubscribe("tb.same2/SameEnum2Interface/rpc/func2")
+        self.impl.on_prop1_changed -= self.notify_prop1_changed
+        self.impl.on_prop2_changed -= self.notify_prop2_changed
+        self.impl.on_sig1 -= self.notify_sig1
+        self.impl.on_sig2 -= self.notify_sig2
 
     def notify_sig1(self, param1: tb_same2.api.Enum1):
         _param1 = tb_same2.api.from_enum1(param1)
