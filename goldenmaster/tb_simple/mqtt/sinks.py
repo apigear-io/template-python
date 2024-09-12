@@ -1,6 +1,8 @@
 import asyncio
 from typing import Any
 import apigear.mqtt
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 from utils.eventhook import EventHook
 import utils.base_types
 import tb_simple.api
@@ -9,20 +11,36 @@ import logging
 class VoidInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self.on_sig_void = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_signal("tb.simple/VoidInterface/sig/sigVoid",  self.__on_sig_void_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_void, self.__on_func_void_resp)
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/VoidInterface/sig/sigVoid",  self.__on_sig_void_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_void, self.__on_func_void_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.simple/VoidInterface/sig/sigVoid")
         self.client.unsubscribe(self.method_topics.resp_topic_func_void)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     async def func_void(self):
         args = []
@@ -57,6 +75,7 @@ class VoidInterfaceClientAdapter():
 class SimpleInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._prop_bool = False
         self.on_prop_bool_changed = EventHook()
         self._prop_int = 0
@@ -81,40 +100,43 @@ class SimpleInterfaceClientAdapter():
         self.on_sig_float32 = EventHook()
         self.on_sig_float64 = EventHook()
         self.on_sig_string = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propBool", self.__set_prop_bool)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propInt", self.__set_prop_int)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propInt32", self.__set_prop_int32)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propInt64", self.__set_prop_int64)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propFloat", self.__set_prop_float)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propFloat32", self.__set_prop_float32)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propFloat64", self.__set_prop_float64)
-        self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propString", self.__set_prop_string)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigBool",  self.__on_sig_bool_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigInt",  self.__on_sig_int_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigInt32",  self.__on_sig_int32_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigInt64",  self.__on_sig_int64_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat",  self.__on_sig_float_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat32",  self.__on_sig_float32_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat64",  self.__on_sig_float64_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigString",  self.__on_sig_string_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_no_return_value, self.__on_func_no_return_value_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int32, self.__on_func_int32_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int64, self.__on_func_int64_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float32, self.__on_func_float32_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float64, self.__on_func_float64_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp)
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propInt32", self.__set_prop_int32))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propInt64", self.__set_prop_int64))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propFloat32", self.__set_prop_float32))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propFloat64", self.__set_prop_float64))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleInterface/prop/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigBool",  self.__on_sig_bool_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigInt",  self.__on_sig_int_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigInt32",  self.__on_sig_int32_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigInt64",  self.__on_sig_int64_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat",  self.__on_sig_float_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat32",  self.__on_sig_float32_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat64",  self.__on_sig_float64_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigString",  self.__on_sig_string_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_no_return_value, self.__on_func_no_return_value_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int32, self.__on_func_int32_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int64, self.__on_func_int64_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float32, self.__on_func_float32_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float64, self.__on_func_float64_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.simple/SimpleInterface/prop/propBool")
         self.client.unsubscribe("tb.simple/SimpleInterface/prop/propInt")
         self.client.unsubscribe("tb.simple/SimpleInterface/prop/propInt32")
@@ -140,6 +162,18 @@ class SimpleInterfaceClientAdapter():
         self.client.unsubscribe(self.method_topics.resp_topic_func_float32)
         self.client.unsubscribe(self.method_topics.resp_topic_func_float64)
         self.client.unsubscribe(self.method_topics.resp_topic_func_string)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -499,6 +533,7 @@ class SimpleInterfaceClientAdapter():
 class SimpleArrayInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._prop_bool = []
         self.on_prop_bool_changed = EventHook()
         self._prop_int = []
@@ -525,40 +560,43 @@ class SimpleArrayInterfaceClientAdapter():
         self.on_sig_float32 = EventHook()
         self.on_sig_float64 = EventHook()
         self.on_sig_string = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propBool", self.__set_prop_bool)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propInt", self.__set_prop_int)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propInt32", self.__set_prop_int32)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propInt64", self.__set_prop_int64)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propFloat", self.__set_prop_float)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propFloat32", self.__set_prop_float32)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propFloat64", self.__set_prop_float64)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propString", self.__set_prop_string)
-        self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propReadOnlyString", self.__set_prop_read_only_string)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigBool",  self.__on_sig_bool_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigInt",  self.__on_sig_int_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigInt32",  self.__on_sig_int32_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigInt64",  self.__on_sig_int64_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigFloat",  self.__on_sig_float_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigFloat32",  self.__on_sig_float32_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigFloat64",  self.__on_sig_float64_signal)
-        self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigString",  self.__on_sig_string_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int32, self.__on_func_int32_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int64, self.__on_func_int64_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float32, self.__on_func_float32_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float64, self.__on_func_float64_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp)
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propInt32", self.__set_prop_int32))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propInt64", self.__set_prop_int64))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propFloat32", self.__set_prop_float32))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propFloat64", self.__set_prop_float64))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/SimpleArrayInterface/prop/propReadOnlyString", self.__set_prop_read_only_string))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigBool",  self.__on_sig_bool_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigInt",  self.__on_sig_int_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigInt32",  self.__on_sig_int32_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigInt64",  self.__on_sig_int64_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigFloat",  self.__on_sig_float_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigFloat32",  self.__on_sig_float32_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigFloat64",  self.__on_sig_float64_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleArrayInterface/sig/sigString",  self.__on_sig_string_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int32, self.__on_func_int32_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int64, self.__on_func_int64_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float32, self.__on_func_float32_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float64, self.__on_func_float64_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.simple/SimpleArrayInterface/prop/propBool")
         self.client.unsubscribe("tb.simple/SimpleArrayInterface/prop/propInt")
         self.client.unsubscribe("tb.simple/SimpleArrayInterface/prop/propInt32")
@@ -584,6 +622,18 @@ class SimpleArrayInterfaceClientAdapter():
         self.client.unsubscribe(self.method_topics.resp_topic_func_float32)
         self.client.unsubscribe(self.method_topics.resp_topic_func_float64)
         self.client.unsubscribe(self.method_topics.resp_topic_func_string)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -933,25 +983,41 @@ class SimpleArrayInterfaceClientAdapter():
 class NoPropertiesInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_signal("tb.simple/NoPropertiesInterface/sig/sigVoid",  self.__on_sig_void_signal)
-        self.client.subscribe_for_signal("tb.simple/NoPropertiesInterface/sig/sigBool",  self.__on_sig_bool_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_void, self.__on_func_void_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/NoPropertiesInterface/sig/sigVoid",  self.__on_sig_void_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/NoPropertiesInterface/sig/sigBool",  self.__on_sig_bool_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_void, self.__on_func_void_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.simple/NoPropertiesInterface/sig/sigVoid")
         self.client.unsubscribe("tb.simple/NoPropertiesInterface/sig/sigBool")
         self.client.unsubscribe(self.method_topics.resp_topic_func_void)
         self.client.unsubscribe(self.method_topics.resp_topic_func_bool)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     async def func_void(self):
         args = []
@@ -1011,27 +1077,43 @@ class NoPropertiesInterfaceClientAdapter():
 class NoOperationsInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._prop_bool = False
         self.on_prop_bool_changed = EventHook()
         self._prop_int = 0
         self.on_prop_int_changed = EventHook()
         self.on_sig_void = EventHook()
         self.on_sig_bool = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("tb.simple/NoOperationsInterface/prop/propBool", self.__set_prop_bool)
-        self.client.subscribe_for_property("tb.simple/NoOperationsInterface/prop/propInt", self.__set_prop_int)
-        self.client.subscribe_for_signal("tb.simple/NoOperationsInterface/sig/sigVoid",  self.__on_sig_void_signal)
-        self.client.subscribe_for_signal("tb.simple/NoOperationsInterface/sig/sigBool",  self.__on_sig_bool_signal)
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/NoOperationsInterface/prop/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/NoOperationsInterface/prop/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/NoOperationsInterface/sig/sigVoid",  self.__on_sig_void_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/NoOperationsInterface/sig/sigBool",  self.__on_sig_bool_signal))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.simple/NoOperationsInterface/prop/propBool")
         self.client.unsubscribe("tb.simple/NoOperationsInterface/prop/propInt")
         self.client.unsubscribe("tb.simple/NoOperationsInterface/sig/sigVoid")
         self.client.unsubscribe("tb.simple/NoOperationsInterface/sig/sigBool")
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -1079,27 +1161,43 @@ class NoOperationsInterfaceClientAdapter():
 class NoSignalsInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._prop_bool = False
         self.on_prop_bool_changed = EventHook()
         self._prop_int = 0
         self.on_prop_int_changed = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("tb.simple/NoSignalsInterface/prop/propBool", self.__set_prop_bool)
-        self.client.subscribe_for_property("tb.simple/NoSignalsInterface/prop/propInt", self.__set_prop_int)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_void, self.__on_func_void_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/NoSignalsInterface/prop/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.simple/NoSignalsInterface/prop/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_void, self.__on_func_void_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.simple/NoSignalsInterface/prop/propBool")
         self.client.unsubscribe("tb.simple/NoSignalsInterface/prop/propInt")
         self.client.unsubscribe(self.method_topics.resp_topic_func_void)
         self.client.unsubscribe(self.method_topics.resp_topic_func_bool)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:

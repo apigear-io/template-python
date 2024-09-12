@@ -1,6 +1,8 @@
 import asyncio
 from typing import Any
 import apigear.mqtt
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 from utils.eventhook import EventHook
 import utils.base_types
 import tb_names.api
@@ -9,6 +11,7 @@ import logging
 class NamEsClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._switch = False
         self.on_switch_changed = EventHook()
         self._some_property = 0
@@ -17,22 +20,25 @@ class NamEsClientAdapter():
         self.on_some_poperty2_changed = EventHook()
         self.on_some_signal = EventHook()
         self.on_some_signal2 = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("tb.names/Nam_Es/prop/Switch", self.__set_switch)
-        self.client.subscribe_for_property("tb.names/Nam_Es/prop/SOME_PROPERTY", self.__set_some_property)
-        self.client.subscribe_for_property("tb.names/Nam_Es/prop/Some_Poperty2", self.__set_some_poperty2)
-        self.client.subscribe_for_signal("tb.names/Nam_Es/sig/SOME_SIGNAL",  self.__on_some_signal_signal)
-        self.client.subscribe_for_signal("tb.names/Nam_Es/sig/Some_Signal2",  self.__on_some_signal2_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_some_function, self.__on_some_function_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_some_function2, self.__on_some_function2_resp)
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/Switch", self.__set_switch))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/SOME_PROPERTY", self.__set_some_property))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/Some_Poperty2", self.__set_some_poperty2))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.names/Nam_Es/sig/SOME_SIGNAL",  self.__on_some_signal_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("tb.names/Nam_Es/sig/Some_Signal2",  self.__on_some_signal2_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_some_function, self.__on_some_function_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_some_function2, self.__on_some_function2_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("tb.names/Nam_Es/prop/Switch")
         self.client.unsubscribe("tb.names/Nam_Es/prop/SOME_PROPERTY")
         self.client.unsubscribe("tb.names/Nam_Es/prop/Some_Poperty2")
@@ -40,6 +46,18 @@ class NamEsClientAdapter():
         self.client.unsubscribe("tb.names/Nam_Es/sig/Some_Signal2")
         self.client.unsubscribe(self.method_topics.resp_topic_some_function)
         self.client.unsubscribe(self.method_topics.resp_topic_some_function2)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_switch(self, value):
         if self._switch == value:

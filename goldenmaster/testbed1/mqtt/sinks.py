@@ -1,6 +1,8 @@
 import asyncio
 from typing import Any
 import apigear.mqtt
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 from utils.eventhook import EventHook
 import utils.base_types
 import testbed1.api
@@ -9,6 +11,7 @@ import logging
 class StructInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._prop_bool = testbed1.api.StructBool()
         self.on_prop_bool_changed = EventHook()
         self._prop_int = testbed1.api.StructInt()
@@ -21,27 +24,30 @@ class StructInterfaceClientAdapter():
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("testbed1/StructInterface/prop/propBool", self.__set_prop_bool)
-        self.client.subscribe_for_property("testbed1/StructInterface/prop/propInt", self.__set_prop_int)
-        self.client.subscribe_for_property("testbed1/StructInterface/prop/propFloat", self.__set_prop_float)
-        self.client.subscribe_for_property("testbed1/StructInterface/prop/propString", self.__set_prop_string)
-        self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigBool",  self.__on_sig_bool_signal)
-        self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigInt",  self.__on_sig_int_signal)
-        self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigFloat",  self.__on_sig_float_signal)
-        self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigString",  self.__on_sig_string_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp)
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructInterface/prop/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructInterface/prop/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructInterface/prop/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructInterface/prop/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigBool",  self.__on_sig_bool_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigInt",  self.__on_sig_int_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigFloat",  self.__on_sig_float_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructInterface/sig/sigString",  self.__on_sig_string_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("testbed1/StructInterface/prop/propBool")
         self.client.unsubscribe("testbed1/StructInterface/prop/propInt")
         self.client.unsubscribe("testbed1/StructInterface/prop/propFloat")
@@ -54,6 +60,18 @@ class StructInterfaceClientAdapter():
         self.client.unsubscribe(self.method_topics.resp_topic_func_int)
         self.client.unsubscribe(self.method_topics.resp_topic_func_float)
         self.client.unsubscribe(self.method_topics.resp_topic_func_string)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -229,6 +247,7 @@ class StructInterfaceClientAdapter():
 class StructArrayInterfaceClientAdapter():
     def __init__(self, client: apigear.mqtt.Client):
         self.client = client
+        self.on_ready = EventHook()
         self._prop_bool = []
         self.on_prop_bool_changed = EventHook()
         self._prop_int = []
@@ -241,27 +260,30 @@ class StructArrayInterfaceClientAdapter():
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
+        self.client.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
         self.client.on_connected += self.subscribeForTopics
         self.method_topics = self.MethodTopics(self.client.get_client_id())
         self.pending_calls = self.PendingCalls()
         self.loop = asyncio.get_event_loop()
 
     def subscribeForTopics(self):
-        self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propBool", self.__set_prop_bool)
-        self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propInt", self.__set_prop_int)
-        self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propFloat", self.__set_prop_float)
-        self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propString", self.__set_prop_string)
-        self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigBool",  self.__on_sig_bool_signal)
-        self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigInt",  self.__on_sig_int_signal)
-        self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigFloat",  self.__on_sig_float_signal)
-        self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigString",  self.__on_sig_string_signal)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp)
-        self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp)
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.client.subscribe_for_property("testbed1/StructArrayInterface/prop/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigBool",  self.__on_sig_bool_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigInt",  self.__on_sig_int_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigFloat",  self.__on_sig_float_signal))
+        self.subscription_ids.append(self.client.subscribe_for_signal("testbed1/StructArrayInterface/sig/sigString",  self.__on_sig_string_signal))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_float, self.__on_func_float_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_string, self.__on_func_string_resp))
 
     def __del__(self):
         self.client.on_connected -= self.subscribeForTopics
+        self.client.on_subscribed -= self.__handle_subscribed
         self.client.unsubscribe("testbed1/StructArrayInterface/prop/propBool")
         self.client.unsubscribe("testbed1/StructArrayInterface/prop/propInt")
         self.client.unsubscribe("testbed1/StructArrayInterface/prop/propFloat")
@@ -274,6 +296,18 @@ class StructArrayInterfaceClientAdapter():
         self.client.unsubscribe(self.method_topics.resp_topic_func_int)
         self.client.unsubscribe(self.method_topics.resp_topic_func_float)
         self.client.unsubscribe(self.method_topics.resp_topic_func_string)
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:

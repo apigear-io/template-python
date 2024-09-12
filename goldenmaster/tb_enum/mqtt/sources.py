@@ -1,5 +1,7 @@
 import apigear.mqtt
 import utils.base_types
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 import tb_enum.api
 from utils.eventhook import EventHook
 from typing import Any
@@ -8,6 +10,7 @@ class EnumInterfaceServiceAdapter():
     def __init__(self, impl: tb_enum.api.IEnumInterface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop0_changed += self.notify_prop0_changed
         self.impl.on_prop1_changed += self.notify_prop1_changed
         self.impl.on_prop2_changed += self.notify_prop2_changed
@@ -17,19 +20,22 @@ class EnumInterfaceServiceAdapter():
         self.impl.on_sig2 += self.notify_sig2
         self.impl.on_sig3 += self.notify_sig3
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop0", self.__set_prop0)
-        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop1", self.__set_prop1)
-        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop2", self.__set_prop2)
-        self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop3", self.__set_prop3)
-        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func0", self.__invoke_func0)
-        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func1", self.__invoke_func1)
-        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func2", self.__invoke_func2)
-        self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func3", self.__invoke_func3)
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop0", self.__set_prop0))
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop1", self.__set_prop1))
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop2", self.__set_prop2))
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.enum/EnumInterface/set/prop3", self.__set_prop3))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func0", self.__invoke_func0))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func1", self.__invoke_func1))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func2", self.__invoke_func2))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.enum/EnumInterface/rpc/func3", self.__invoke_func3))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("tb.enum/EnumInterface/set/prop0")
         self.service.unsubscribe("tb.enum/EnumInterface/set/prop1")
         self.service.unsubscribe("tb.enum/EnumInterface/set/prop2")
@@ -46,6 +52,18 @@ class EnumInterfaceServiceAdapter():
         self.impl.on_sig1 -= self.notify_sig1
         self.impl.on_sig2 -= self.notify_sig2
         self.impl.on_sig3 -= self.notify_sig3
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig0(self, param0: tb_enum.api.Enum0):
         _param0 = tb_enum.api.from_enum0(param0)

@@ -1,5 +1,7 @@
 import apigear.mqtt
 import utils.base_types
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 {{- $current_module_api_prefix :=  printf "%s.api." (snake .Module.Name ) }}
 import {{snake .Module.Name }}.api
 from utils.eventhook import EventHook
@@ -40,6 +42,7 @@ class {{$class}}ServiceAdapter():
     def __init__(self, impl: {{$current_module_api_prefix}}I{{$class}}, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
 {{- range $idx, $p := .Properties }}
         self.impl.on_{{snake .Name}}_changed += self.notify_{{snake .Name}}_changed
 {{- end }}
@@ -48,17 +51,20 @@ class {{$class}}ServiceAdapter():
 {{- end }}
 {{- if not ((and (eq (len $interface.Operations) 0) (eq (len $interface.Properties) 0) ))}}
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
         {{- range .Properties }}
-        self.service.subscribe_for_property("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}", self.__set_{{snake .Name}})
+        self.subscription_ids.append(self.service.subscribe_for_property("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}", self.__set_{{snake .Name}}))
         {{- end }}
         {{- range  .Operations }}
-        self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}})
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("{{$.Module.Name}}/{{$interface.Name}}/rpc/{{.Name}}", self.__invoke_{{snake .Name}}))
         {{- end}}
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         {{- range .Properties }}
         self.service.unsubscribe("{{$.Module.Name}}/{{$interface.Name}}/set/{{.Name}}")
         {{- end }}
@@ -71,7 +77,21 @@ class {{$class}}ServiceAdapter():
         {{- range $idx, $s := .Signals }}
         self.impl.on_{{snake .Name}} -= self.notify_{{snake .Name}}
         {{- end }}
-{{- end}}
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
+    {{- else}}
+        self.on_ready.self.fire()
+    {{- end}}
 
 {{- range .Signals }}
 

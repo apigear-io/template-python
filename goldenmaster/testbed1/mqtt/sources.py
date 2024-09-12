@@ -1,5 +1,7 @@
 import apigear.mqtt
 import utils.base_types
+import paho.mqtt.enums
+import paho.mqtt.reasoncodes
 import testbed1.api
 from utils.eventhook import EventHook
 from typing import Any
@@ -8,6 +10,7 @@ class StructInterfaceServiceAdapter():
     def __init__(self, impl: testbed1.api.IStructInterface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop_bool_changed += self.notify_prop_bool_changed
         self.impl.on_prop_int_changed += self.notify_prop_int_changed
         self.impl.on_prop_float_changed += self.notify_prop_float_changed
@@ -17,19 +20,22 @@ class StructInterfaceServiceAdapter():
         self.impl.on_sig_float += self.notify_sig_float
         self.impl.on_sig_string += self.notify_sig_string
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("testbed1/StructInterface/set/propBool", self.__set_prop_bool)
-        self.service.subscribe_for_property("testbed1/StructInterface/set/propInt", self.__set_prop_int)
-        self.service.subscribe_for_property("testbed1/StructInterface/set/propFloat", self.__set_prop_float)
-        self.service.subscribe_for_property("testbed1/StructInterface/set/propString", self.__set_prop_string)
-        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcBool", self.__invoke_func_bool)
-        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcInt", self.__invoke_func_int)
-        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcFloat", self.__invoke_func_float)
-        self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcString", self.__invoke_func_string)
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructInterface/set/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructInterface/set/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructInterface/set/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructInterface/set/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcBool", self.__invoke_func_bool))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcInt", self.__invoke_func_int))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcFloat", self.__invoke_func_float))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructInterface/rpc/funcString", self.__invoke_func_string))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("testbed1/StructInterface/set/propBool")
         self.service.unsubscribe("testbed1/StructInterface/set/propInt")
         self.service.unsubscribe("testbed1/StructInterface/set/propFloat")
@@ -46,6 +52,18 @@ class StructInterfaceServiceAdapter():
         self.impl.on_sig_int -= self.notify_sig_int
         self.impl.on_sig_float -= self.notify_sig_float
         self.impl.on_sig_string -= self.notify_sig_string
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig_bool(self, param_bool: testbed1.api.StructBool):
         _param_bool = testbed1.api.from_struct_bool(param_bool)
@@ -122,6 +140,7 @@ class StructArrayInterfaceServiceAdapter():
     def __init__(self, impl: testbed1.api.IStructArrayInterface, service: apigear.mqtt.Service):
         self.service = service
         self.impl = impl
+        self.on_ready = EventHook()
         self.impl.on_prop_bool_changed += self.notify_prop_bool_changed
         self.impl.on_prop_int_changed += self.notify_prop_int_changed
         self.impl.on_prop_float_changed += self.notify_prop_float_changed
@@ -131,19 +150,22 @@ class StructArrayInterfaceServiceAdapter():
         self.impl.on_sig_float += self.notify_sig_float
         self.impl.on_sig_string += self.notify_sig_string
         self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
 
     def subscribeForTopics(self):
-        self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propBool", self.__set_prop_bool)
-        self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propInt", self.__set_prop_int)
-        self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propFloat", self.__set_prop_float)
-        self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propString", self.__set_prop_string)
-        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcBool", self.__invoke_func_bool)
-        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcInt", self.__invoke_func_int)
-        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcFloat", self.__invoke_func_float)
-        self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcString", self.__invoke_func_string)
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcBool", self.__invoke_func_bool))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcInt", self.__invoke_func_int))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcFloat", self.__invoke_func_float))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcString", self.__invoke_func_string))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propBool")
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propInt")
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propFloat")
@@ -160,6 +182,18 @@ class StructArrayInterfaceServiceAdapter():
         self.impl.on_sig_int -= self.notify_sig_int
         self.impl.on_sig_float -= self.notify_sig_float
         self.impl.on_sig_string -= self.notify_sig_string
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
 
     def notify_sig_bool(self, param_bool: list[testbed1.api.StructBool]):
         _param_bool = [testbed1.api.api.from_struct_bool(_) for _ in param_bool]
