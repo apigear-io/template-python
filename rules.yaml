@@ -155,4 +155,10 @@ features:
             target: "examples/mqtt/client.py"
           - source: "examples/mqtt/server.py.tpl"
             target: "examples/mqtt/server.py"
+      - match: interface
+        prefix: "{{snake .Module.Name}}/mqtt/"
+        documents:
+          - source: "mqtt/test.py.tpl"
+            target: "test_mqtt_{{snake .Interface.Name}}.py"
+            preserve: true
 
