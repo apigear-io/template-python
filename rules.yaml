@@ -23,6 +23,17 @@ features:
             target: "api/__init__.py"
           - source: "api/api.py.tpl"
             target: "api/api.py"
+
+  - name: test_helpers
+    scopes:
+      - match: module
+        prefix: "{{snake .Module.Name}}/"
+        documents:
+          - source: "test_helpers/__init__.py"
+            target: "test_helpers/__init__.py"
+            raw: true
+          - source: "test_helpers/test_struct.py.tpl"
+            target: "test_helpers/test_struct.py"
   - name: scaffold
     scopes:
       - match: system
@@ -113,7 +124,7 @@ features:
             target: "test_olink_{{snake .Interface.Name}}.py"
             preserve: true
   - name: mqtt
-    requires: [api, scaffold]
+    requires: [api, scaffold, test_helpers]
     scopes:
       - match: system
         documents:
