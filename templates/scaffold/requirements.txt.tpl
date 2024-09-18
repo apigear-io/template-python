@@ -14,3 +14,4 @@ olink-core @ git+https://github.com/apigear-io/objectlink-core-python.git@v0.3.3
 {{- if $features.mqtt }}
 paho-mqtt
 {{- end}}
+vector3d
