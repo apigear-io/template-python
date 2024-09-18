@@ -196,22 +196,22 @@ class StructArrayInterfaceServiceAdapter():
             self.on_ready.fire()
 
     def notify_sig_bool(self, param_bool: list[testbed1.api.StructBool]):
-        _param_bool = [testbed1.api.api.from_struct_bool(_) for _ in param_bool]
+        _param_bool = [testbed1.api.from_struct_bool(_) for _ in param_bool]
         args = [_param_bool]
         self.service.notify_signal("testbed1/StructArrayInterface/sig/sigBool", args)
 
     def notify_sig_int(self, param_int: list[testbed1.api.StructInt]):
-        _param_int = [testbed1.api.api.from_struct_int(_) for _ in param_int]
+        _param_int = [testbed1.api.from_struct_int(_) for _ in param_int]
         args = [_param_int]
         self.service.notify_signal("testbed1/StructArrayInterface/sig/sigInt", args)
 
     def notify_sig_float(self, param_float: list[testbed1.api.StructFloat]):
-        _param_float = [testbed1.api.api.from_struct_float(_) for _ in param_float]
+        _param_float = [testbed1.api.from_struct_float(_) for _ in param_float]
         args = [_param_float]
         self.service.notify_signal("testbed1/StructArrayInterface/sig/sigFloat", args)
 
     def notify_sig_string(self, param_string: list[testbed1.api.StructString]):
-        _param_string = [testbed1.api.api.from_struct_string(_) for _ in param_string]
+        _param_string = [testbed1.api.from_struct_string(_) for _ in param_string]
         args = [_param_string]
         self.service.notify_signal("testbed1/StructArrayInterface/sig/sigString", args)
 

@@ -98,7 +98,7 @@ class {{$class}}ServiceAdapter():
     def notify_{{snake .Name}}({{pyParams $current_module_api_prefix .Params}}):
         {{- range .Params }}
         {{- if .IsArray }}
-        _{{snake .Name}} = [{{template "get_converter_module" .}}.api.from_{{template "get_serialization_name" .}}(_) for _ in {{snake .Name}}]
+        _{{snake .Name}} = [{{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}(_) for _ in {{snake .Name}}]
         {{- else }}
         _{{snake .Name}} = {{template "get_converter_module" .}}.from_{{template "get_serialization_name" .}}({{snake .Name}})
         {{- end }}
