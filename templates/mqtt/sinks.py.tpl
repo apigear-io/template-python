@@ -139,7 +139,9 @@ class {{Camel .Name}}ClientAdapter():
             def set_future_callback():
             {{- if .Return.IsVoid }}
                 future.set_result(None)
-            {{- else}}
+            {{- else if .Return.IsArray }}
+                future.set_result([{{template "get_converter_module" .Return}}.as_{{template "get_serialization_name" .Return}}(_) for _ in result])
+            {{- else }}
                 future.set_result({{template "get_converter_module" .Return}}.as_{{template "get_serialization_name" .Return}}(result))
             {{- end}}
             return self.loop.call_soon_threadsafe(set_future_callback)
