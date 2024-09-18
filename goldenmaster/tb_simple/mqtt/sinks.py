@@ -716,7 +716,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_bool(result))
+                future.set_result([utils.base_types.as_bool(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_bool, self.method_topics.resp_topic_func_bool, args)
         self.pending_calls.func_bool[call_id] = func
@@ -728,7 +728,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_int(result))
+                future.set_result([utils.base_types.as_int(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_int, self.method_topics.resp_topic_func_int, args)
         self.pending_calls.func_int[call_id] = func
@@ -740,7 +740,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_int32(result))
+                future.set_result([utils.base_types.as_int32(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_int32, self.method_topics.resp_topic_func_int32, args)
         self.pending_calls.func_int32[call_id] = func
@@ -752,7 +752,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_int64(result))
+                future.set_result([utils.base_types.as_int64(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_int64, self.method_topics.resp_topic_func_int64, args)
         self.pending_calls.func_int64[call_id] = func
@@ -764,7 +764,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_float(result))
+                future.set_result([utils.base_types.as_float(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_float, self.method_topics.resp_topic_func_float, args)
         self.pending_calls.func_float[call_id] = func
@@ -776,7 +776,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_float32(result))
+                future.set_result([utils.base_types.as_float32(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_float32, self.method_topics.resp_topic_func_float32, args)
         self.pending_calls.func_float32[call_id] = func
@@ -788,7 +788,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_float64(result))
+                future.set_result([utils.base_types.as_float64(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_float64, self.method_topics.resp_topic_func_float64, args)
         self.pending_calls.func_float64[call_id] = func
@@ -800,7 +800,7 @@ class SimpleArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(utils.base_types.as_string(result))
+                future.set_result([utils.base_types.as_string(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_string, self.method_topics.resp_topic_func_string, args)
         self.pending_calls.func_string[call_id] = func

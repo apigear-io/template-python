@@ -351,7 +351,7 @@ class StructArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(testbed1.api.as_struct_bool(result))
+                future.set_result([testbed1.api.as_struct_bool(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_bool, self.method_topics.resp_topic_func_bool, args)
         self.pending_calls.func_bool[call_id] = func
@@ -363,7 +363,7 @@ class StructArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(testbed1.api.as_struct_int(result))
+                future.set_result([testbed1.api.as_struct_int(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_int, self.method_topics.resp_topic_func_int, args)
         self.pending_calls.func_int[call_id] = func
@@ -375,7 +375,7 @@ class StructArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(testbed1.api.as_struct_float(result))
+                future.set_result([testbed1.api.as_struct_float(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_float, self.method_topics.resp_topic_func_float, args)
         self.pending_calls.func_float[call_id] = func
@@ -387,7 +387,7 @@ class StructArrayInterfaceClientAdapter():
         future = asyncio.get_running_loop().create_future()
         def func(result):
             def set_future_callback():
-                future.set_result(testbed1.api.as_struct_string(result))
+                future.set_result([testbed1.api.as_struct_string(_) for _ in result])
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_string, self.method_topics.resp_topic_func_string, args)
         self.pending_calls.func_string[call_id] = func
