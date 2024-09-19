@@ -34,4 +34,10 @@ jobs:
       - run: task test
       - run: task diff
       - run: task py:install
+      - name: Start Mosquitto
+        uses: namoshek/mosquitto-github-action@v1
+        with:
+          version: '1.6'
+          ports: '1883:1883'
+          container-name: 'mqtt'
       - run: task py:test
