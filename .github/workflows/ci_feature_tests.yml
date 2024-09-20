@@ -1,6 +1,6 @@
-# This workflow will checks that the goldenmaster passes all tests
+# This workflow will ensure that the generated features work independently
 
-name: Test Goldenmaster
+name: Technology Template Features Test
 
 on:
   pull_request:
@@ -15,8 +15,15 @@ env:
 
 jobs:
   run_tests:
+    name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: "Simple", short: "simple", features: "scaffold" }
+          - { name: "OLink", short: "olink", features: "olink" }
+          - { name: "MQTT", short: "mqtt", features: "mqtt" }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -31,11 +38,14 @@ jobs:
       - uses: arduino/setup-task@v1
       - uses: actions/checkout@v4
       - run: task install
-      - run: task py:install_goldenmaster
+      - name: generate ${{ matrix.config.short }} feature set
+        run: apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/test-apis/testbed.simple.module.yaml,apigear/test-apis/testbed.struct.module.yaml     
+      - run: task py:install_generated
       - name: Start Mosquitto
+        if: ${{ matrix.config.short == 'mqtt'}}
         uses: namoshek/mosquitto-github-action@v1
         with:
           version: '1.6'
           ports: '1883:1883'
           container-name: 'mqtt'
-      - run: task py:test_goldenmaster
+      - run: task py:test_generated

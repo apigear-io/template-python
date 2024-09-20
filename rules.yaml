@@ -35,6 +35,7 @@ features:
           - source: "test_helpers/test_struct.py.tpl"
             target: "test_helpers/test_struct.py"
   - name: scaffold
+    requires: [api]
     scopes:
       - match: system
         documents:
