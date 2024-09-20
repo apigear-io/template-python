@@ -31,5 +31,5 @@ jobs:
       - uses: arduino/setup-task@v1
       - uses: actions/checkout@v4
       - run: task install
-      - run: task test
+      - run: task generate_solution
       - run: task diff

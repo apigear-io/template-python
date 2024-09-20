@@ -19,21 +19,33 @@ tasks:
       - cmd: rm -rf test bin tmp
         platforms: [linux, darwin]
         ignore_error: true
-  test:
+  generate_solution:
     cmds:
       - task: clean
       - "{{.BIN}} g s ./apigear/goldenmaster.solution.yaml"
 
-  py:install:
+  py:install_goldenmaster:
     desc: install the dependencies
     dir: goldenmaster
     cmds:
       - pip install -r requirements.txt
       # Install library for extern type used in goldenmaster
       - pip install vector3d
-  py:test:
+  py:install_generated:
+    desc: install the dependencies
+    dir: test
+    cmds:
+      - pip install -r requirements.txt
+      # Install library for extern type used in test
+      - pip install vector3d
+  py:test_goldenmaster:
     desc: runs pytest in goldenmaster dir
     dir: goldenmaster
+    cmds:
+      - pytest
+  py:test_generated:
+    desc: runs pytest in test dir
+    dir: test
     cmds:
       - pytest
   diff:
