@@ -26,14 +26,14 @@ tasks:
 
   py:install:
     desc: install the dependencies
-    dir: test
+    dir: goldenmaster
     cmds:
       - pip install -r requirements.txt
       # Install library for extern type used in goldenmaster
       - pip install vector3d
   py:test:
-    desc: runs pytest in test dir
-    dir: test
+    desc: runs pytest in goldenmaster dir
+    dir: goldenmaster
     cmds:
       - pytest
   diff:
