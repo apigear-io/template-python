@@ -2,9 +2,12 @@
 from tb_same2.api import api
 from tb_same2.impl import SameEnum2Interface
 from tb_same2.olink import SameEnum2InterfaceSource, SameEnum2InterfaceSink
+import tb_same2.test_helpers.test_struct
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
+from typing import Any
+import asyncio
 
 @pytest.fixture()
 def olink_objects():
@@ -24,23 +27,31 @@ class TestOLinkSameEnum2Interface:
 
     def test_prop1(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop1_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop1(api.Enum1.VALUE1)
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop1() == api.Enum1.VALUE1
-        assert sink.get_prop1() == api.Enum1.VALUE1
+        is_prop1_changed = False
+        def funProp(arguments):
+            nonlocal is_prop1_changed
+            is_prop1_changed = True
+        sink.on_prop1_changed += funProp
+        test_value = api.Enum1.VALUE2
+
+        sink.set_prop1(test_value)
+        assert is_prop1_changed == True
+        assert impl.get_prop1() == test_value
+        assert sink.get_prop1() == test_value
 
     def test_prop2(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop2_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop2(api.Enum2.VALUE1)
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop2() == api.Enum2.VALUE1
-        assert sink.get_prop2() == api.Enum2.VALUE1
+        is_prop2_changed = False
+        def funProp(arguments):
+            nonlocal is_prop2_changed
+            is_prop2_changed = True
+        sink.on_prop2_changed += funProp
+        test_value = api.Enum2.VALUE2
+
+        sink.set_prop2(test_value)
+        assert is_prop2_changed == True
+        assert impl.get_prop2() == test_value
+        assert sink.get_prop2() == test_value
 
     @pytest.mark.asyncio
     async def test_func1(self, olink_objects):
@@ -54,14 +65,31 @@ class TestOLinkSameEnum2Interface:
 
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_sig1 += lambda *args: setattr(self, 'called', True)
-        impl._sig1(api.Enum1.VALUE1)
-        assert self.called == True
+        is_sig1_called = False
+
+        def funSignal(param1):
+            assert param1 == api.Enum1.VALUE2
+            nonlocal is_sig1_called
+            is_sig1_called = True
+
+        sink.on_sig1 += funSignal
+
+
+        impl._sig1(api.Enum1.VALUE2)
+        assert is_sig1_called == True
 
     def test_sig2(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_sig2 += lambda *args: setattr(self, 'called', True)
-        impl._sig2(api.Enum1.VALUE1, api.Enum2.VALUE1)
-        assert self.called == True
+        is_sig2_called = False
+
+        def funSignal(param1, param2):
+            assert param1 == api.Enum1.VALUE2
+            assert param2 == api.Enum2.VALUE2
+            nonlocal is_sig2_called
+            is_sig2_called = True
+
+        sink.on_sig2 += funSignal
+
+
+        impl._sig2(api.Enum1.VALUE2, api.Enum2.VALUE2)
+        assert is_sig2_called == True

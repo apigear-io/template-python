@@ -2,9 +2,12 @@
 from tb_same1.api import api
 from tb_same1.impl import SameStruct1Interface
 from tb_same1.olink import SameStruct1InterfaceSource, SameStruct1InterfaceSink
+import tb_same1.test_helpers.test_struct
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
+from typing import Any
+import asyncio
 
 @pytest.fixture()
 def olink_objects():
@@ -24,13 +27,17 @@ class TestOLinkSameStruct1Interface:
 
     def test_prop1(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop1_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop1(api.Struct1())
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop1() == api.Struct1()
-        assert sink.get_prop1() == api.Struct1()
+        is_prop1_changed = False
+        def funProp(arguments):
+            nonlocal is_prop1_changed
+            is_prop1_changed = True
+        sink.on_prop1_changed += funProp
+        test_value = tb_same1.test_helpers.test_struct.fillTestStruct1(api.Struct1())
+
+        sink.set_prop1(test_value)
+        assert is_prop1_changed == True
+        assert impl.get_prop1() == test_value
+        assert sink.get_prop1() == test_value
 
     @pytest.mark.asyncio
     async def test_func1(self, olink_objects):
@@ -39,7 +46,16 @@ class TestOLinkSameStruct1Interface:
 
     def test_sig1(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_sig1 += lambda *args: setattr(self, 'called', True)
-        impl._sig1(api.Struct1())
-        assert self.called == True
+        is_sig1_called = False
+        local_param1_struct = tb_same1.test_helpers.test_struct.fillTestStruct1(api.Struct1())
+
+        def funSignal(param1):
+            assert param1 ==local_param1_struct
+            nonlocal is_sig1_called
+            is_sig1_called = True
+
+        sink.on_sig1 += funSignal
+
+
+        impl._sig1(local_param1_struct)
+        assert is_sig1_called == True

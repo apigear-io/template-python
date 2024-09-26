@@ -2,9 +2,12 @@
 from tb_simple.api import api
 from tb_simple.impl import NoOperationsInterface
 from tb_simple.olink import NoOperationsInterfaceSource, NoOperationsInterfaceSink
+import tb_simple.test_helpers.test_struct
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
+from typing import Any
+import asyncio
 
 @pytest.fixture()
 def olink_objects():
@@ -24,35 +27,57 @@ class TestOLinkNoOperationsInterface:
 
     def test_prop_bool(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop_bool(False)
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop_bool() == False
-        assert sink.get_prop_bool() == False
+        is_prop_bool_changed = False
+        def funProp(arguments):
+            nonlocal is_prop_bool_changed
+            is_prop_bool_changed = True
+        sink.on_prop_bool_changed += funProp
+        test_value = True
+
+        sink.set_prop_bool(test_value)
+        assert is_prop_bool_changed == True
+        assert impl.get_prop_bool() == test_value
+        assert sink.get_prop_bool() == test_value
 
     def test_prop_int(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop_int(0)
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop_int() == 0
-        assert sink.get_prop_int() == 0
-    pass
+        is_prop_int_changed = False
+        def funProp(arguments):
+            nonlocal is_prop_int_changed
+            is_prop_int_changed = True
+        sink.on_prop_int_changed += funProp
+        test_value = 1
+
+        sink.set_prop_int(test_value)
+        assert is_prop_int_changed == True
+        assert impl.get_prop_int() == test_value
+        assert sink.get_prop_int() == test_value
 
     def test_sig_void(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_sig_void += lambda *args: setattr(self, 'called', True)
+        is_sig_void_called = False
+
+        def funSignal():
+            nonlocal is_sig_void_called
+            is_sig_void_called = True
+
+        sink.on_sig_void += funSignal
+
+
         impl._sig_void()
-        assert self.called == True
+        assert is_sig_void_called == True
 
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_sig_bool += lambda *args: setattr(self, 'called', True)
-        impl._sig_bool(False)
-        assert self.called == True
+        is_sig_bool_called = False
+
+        def funSignal(param_bool):
+            assert param_bool == True
+            nonlocal is_sig_bool_called
+            is_sig_bool_called = True
+
+        sink.on_sig_bool += funSignal
+
+
+        impl._sig_bool(True)
+        assert is_sig_bool_called == True
