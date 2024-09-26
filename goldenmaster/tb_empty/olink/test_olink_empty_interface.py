@@ -2,9 +2,12 @@
 from tb_empty.api import api
 from tb_empty.impl import EmptyInterface
 from tb_empty.olink import EmptyInterfaceSource, EmptyInterfaceSink
+import tb_empty.test_helpers.test_struct
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
+from typing import Any
+import asyncio
 
 @pytest.fixture()
 def olink_objects():
@@ -21,6 +24,4 @@ def olink_objects():
     yield impl, sink
 
 class TestOLinkEmptyInterface:
-    pass
-    pass
     pass

@@ -84,7 +84,7 @@ features:
           - source: "http/shared.py.tpl"
             target: "shared.py"
   - name: olink
-    requires: [api, scaffold]
+    requires: [api, scaffold, test_helpers]
     scopes:
       - match: system
         documents:

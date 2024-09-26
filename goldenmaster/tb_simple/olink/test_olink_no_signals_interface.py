@@ -2,9 +2,12 @@
 from tb_simple.api import api
 from tb_simple.impl import NoSignalsInterface
 from tb_simple.olink import NoSignalsInterfaceSource, NoSignalsInterfaceSink
+import tb_simple.test_helpers.test_struct
 from olink.client import ClientNode
 from olink.remote import RemoteNode
 import pytest
+from typing import Any
+import asyncio
 
 @pytest.fixture()
 def olink_objects():
@@ -24,23 +27,31 @@ class TestOLinkNoSignalsInterface:
 
     def test_prop_bool(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop_bool_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop_bool(False)
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop_bool() == False
-        assert sink.get_prop_bool() == False
+        is_prop_bool_changed = False
+        def funProp(arguments):
+            nonlocal is_prop_bool_changed
+            is_prop_bool_changed = True
+        sink.on_prop_bool_changed += funProp
+        test_value = True
+
+        sink.set_prop_bool(test_value)
+        assert is_prop_bool_changed == True
+        assert impl.get_prop_bool() == test_value
+        assert sink.get_prop_bool() == test_value
 
     def test_prop_int(self, olink_objects):
         impl, sink = olink_objects
-        self.called = False
-        sink.on_prop_int_changed += lambda *args: setattr(self, 'called', True)
-        sink.set_prop_int(0)
-        # should not be true since we are not changing the default value
-        assert self.called == False
-        assert impl.get_prop_int() == 0
-        assert sink.get_prop_int() == 0
+        is_prop_int_changed = False
+        def funProp(arguments):
+            nonlocal is_prop_int_changed
+            is_prop_int_changed = True
+        sink.on_prop_int_changed += funProp
+        test_value = 1
+
+        sink.set_prop_int(test_value)
+        assert is_prop_int_changed == True
+        assert impl.get_prop_int() == test_value
+        assert sink.get_prop_int() == test_value
 
     @pytest.mark.asyncio
     async def test_func_void(self, olink_objects):
@@ -51,4 +62,3 @@ class TestOLinkNoSignalsInterface:
     async def test_func_bool(self, olink_objects):
         impl, sink = olink_objects
         await sink.func_bool(param_bool=False)
-    pass
