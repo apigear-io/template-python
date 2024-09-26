@@ -21,19 +21,19 @@ There are several options to get the template. Installation via the *Studio* or 
 
 ### Installation via CLI
 
-When using the *CLI* only the highlighted line is imported. You can always check whether the installation was successful via the `template list` command.
+Use `template` command with `list` to check available templates or with `install` to install necessary one. You can always check whether the installation was successful via the `template cache` command.
 ```bash
 $ apigear template list
-list of templates from registry and cache
+list of templates from registry
 name                       | installed | registry | url
 apigear-io/template-python | false     | true     | https://github.com/apigear-io/template-python.git
 ...
 # highlight-next-line
 $ apigear template install apigear-io/template-python
-$ apigear template list
-list of templates from registry and cache
-name                       | installed | registry | url
-apigear-io/template-python | true      | true     | https://github.com/apigear-io/template-python.git
+$ apigear template cache
+list templates in the local cache
+name                              | url
+apigear-io/template-python@v0.3.0 | https://github.com/apigear-io/template-python.git
 ...
 ```
 
