@@ -356,35 +356,35 @@ class SimpleArrayInterfaceSource(IObjectSource):
         return props
 
     def notify_sig_bool(self, param_bool: list[bool]):
-        _param_bool = [utils.base_types.api.from_bool(_) for _ in param_bool]
+        _param_bool = [utils.base_types.from_bool(_) for _ in param_bool]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigBool", [_param_bool])
 
     def notify_sig_int(self, param_int: list[int]):
-        _param_int = [utils.base_types.api.from_int(_) for _ in param_int]
+        _param_int = [utils.base_types.from_int(_) for _ in param_int]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt", [_param_int])
 
     def notify_sig_int32(self, param_int32: list[int]):
-        _param_int32 = [utils.base_types.api.from_int32(_) for _ in param_int32]
+        _param_int32 = [utils.base_types.from_int32(_) for _ in param_int32]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt32", [_param_int32])
 
     def notify_sig_int64(self, param_int64: list[int]):
-        _param_int64 = [utils.base_types.api.from_int64(_) for _ in param_int64]
+        _param_int64 = [utils.base_types.from_int64(_) for _ in param_int64]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigInt64", [_param_int64])
 
     def notify_sig_float(self, param_float: list[float]):
-        _param_float = [utils.base_types.api.from_float(_) for _ in param_float]
+        _param_float = [utils.base_types.from_float(_) for _ in param_float]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat", [_param_float])
 
     def notify_sig_float32(self, param_floa32: list[float]):
-        _param_floa32 = [utils.base_types.api.from_float32(_) for _ in param_floa32]
+        _param_floa32 = [utils.base_types.from_float32(_) for _ in param_floa32]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat32", [_param_floa32])
 
     def notify_sig_float64(self, param_float64: list[float]):
-        _param_float64 = [utils.base_types.api.from_float64(_) for _ in param_float64]
+        _param_float64 = [utils.base_types.from_float64(_) for _ in param_float64]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigFloat64", [_param_float64])
 
     def notify_sig_string(self, param_string: list[str]):
-        _param_string = [utils.base_types.api.from_string(_) for _ in param_string]
+        _param_string = [utils.base_types.from_string(_) for _ in param_string]
         return RemoteNode.notify_signal("tb.simple.SimpleArrayInterface/sigString", [_param_string])
 
     def notify_prop_bool_changed(self, value):
