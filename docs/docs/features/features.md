@@ -11,7 +11,7 @@ This template generates code for [*Python*](https://www.python.org/) projects. I
 Basic understanding of *Python* is required.
 
 ### Code generation
-Follow the documentation for the [code generation](/docs/start/first_steps) in general and [CLI](/docs/cli/generate) or the [Studio](/docs/studio/intro) tools.
+Follow the documentation for the [code generation](/docs/guide/intro) in general and [CLI](/docs/cli/generate) or the [Studio](/docs/studio/intro) tools.
 Or try first the [quick start guide](../quickstart/index.md) which shows how to prepare api and generate code out of it.
 
 :::tip
