@@ -7,7 +7,7 @@ import QuickStartCommon from "@site/docs/_quickstart_common.md"
 
 The Quick-Start guide explains how to, in few steps, get from an API to a functional *Python* plugin.
 Steps 1 and 3 are universal for other technologies. In the step 2 you will choose a concrete *Python* template.
-For more general information about first steps with ApiGear [First Steps](/docs/guide/intro)
+For more general information about first steps with ApiGear [First Steps](/docs/guide/quick-start)
 
 The quick start enables only basic features: the api(TBD) generation and simple stub(TBD) implementation.
 For all available features check the [overview](features/features.md).
@@ -55,7 +55,7 @@ Check the extended features to see how to use your API over the network.
 :::
 
 :::note
-For the simulation check the olink feature(TBD) which provides middle layer on your code side and the [simulation](/docs/advanced/simulation/intro) explained.
+For the simulation check the olink feature(TBD) which provides middle layer on your code side and the [simulation](/docs/scripting/backends/intro) explained.
 :::
 
 ### Create and run an example
