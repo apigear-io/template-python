@@ -120,10 +120,12 @@ class StructArrayInterfaceSource(IObjectSource):
         impl.on_prop_int_changed += self.notify_prop_int_changed
         impl.on_prop_float_changed += self.notify_prop_float_changed
         impl.on_prop_string_changed += self.notify_prop_string_changed
+        impl.on_prop_enum_changed += self.notify_prop_enum_changed
         impl.on_sig_bool += self.notify_sig_bool
         impl.on_sig_int += self.notify_sig_int
         impl.on_sig_float += self.notify_sig_float
         impl.on_sig_string += self.notify_sig_string
+        impl.on_sig_enum += self.notify_sig_enum
         self._on_linked = EventHook()
         self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
@@ -145,6 +147,9 @@ class StructArrayInterfaceSource(IObjectSource):
         elif path == "propString":
             v = [testbed1.api.as_struct_string(_) for _ in value]
             return self.impl.set_prop_string(v)
+        elif path == "propEnum":
+            v = [testbed1.api.as_enum0(_) for _ in value]
+            return self.impl.set_prop_enum(v)
         logging.error("unknown property: %s", name)
 
 
@@ -165,7 +170,11 @@ class StructArrayInterfaceSource(IObjectSource):
         elif path == "funcString":
             param_string = [testbed1.api.as_struct_string(_) for _ in args[0]]
             reply = self.impl.func_string(param_string)
-            return [testbed1.api.from_struct_string(_) for _ in reply]      
+            return [testbed1.api.from_struct_string(_) for _ in reply]
+        elif path == "funcEnum":
+            param_enum = [testbed1.api.as_enum0(_) for _ in args[0]]
+            reply = self.impl.func_enum(param_enum)
+            return [testbed1.api.from_enum0(_) for _ in reply]      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
@@ -186,6 +195,8 @@ class StructArrayInterfaceSource(IObjectSource):
         props["propFloat"] = [testbed1.api.from_struct_float(_) for _ in v]
         v = self.impl.get_prop_string()
         props["propString"] = [testbed1.api.from_struct_string(_) for _ in v]
+        v = self.impl.get_prop_enum()
+        props["propEnum"] = [testbed1.api.from_enum0(_) for _ in v]
         return props
 
     def notify_sig_bool(self, param_bool: list[testbed1.api.StructBool]):
@@ -204,6 +215,10 @@ class StructArrayInterfaceSource(IObjectSource):
         _param_string = [testbed1.api.from_struct_string(_) for _ in param_string]
         return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigString", [_param_string])
 
+    def notify_sig_enum(self, param_enum: list[testbed1.api.Enum0]):
+        _param_enum = [testbed1.api.from_enum0(_) for _ in param_enum]
+        return RemoteNode.notify_signal("testbed1.StructArrayInterface/sigEnum", [_param_enum])
+
     def notify_prop_bool_changed(self, value):
         v = [testbed1.api.from_struct_bool(_) for _ in value]
         return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propBool", v)
@@ -219,3 +234,128 @@ class StructArrayInterfaceSource(IObjectSource):
     def notify_prop_string_changed(self, value):
         v = [testbed1.api.from_struct_string(_) for _ in value]
         return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propString", v)
+
+    def notify_prop_enum_changed(self, value):
+        v = [testbed1.api.from_enum0(_) for _ in value]
+        return RemoteNode.notify_property_change("testbed1.StructArrayInterface/propEnum", v)
+class StructArray2InterfaceSource(IObjectSource):
+    impl: testbed1.api.IStructArray2Interface
+    def __init__(self, impl: testbed1.api.IStructArray2Interface):
+        self.impl = impl
+        impl.on_prop_bool_changed += self.notify_prop_bool_changed
+        impl.on_prop_int_changed += self.notify_prop_int_changed
+        impl.on_prop_float_changed += self.notify_prop_float_changed
+        impl.on_prop_string_changed += self.notify_prop_string_changed
+        impl.on_prop_enum_changed += self.notify_prop_enum_changed
+        impl.on_sig_bool += self.notify_sig_bool
+        impl.on_sig_int += self.notify_sig_int
+        impl.on_sig_float += self.notify_sig_float
+        impl.on_sig_string += self.notify_sig_string
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
+        RemoteNode.register_source(self)
+
+    def olink_object_name(self):
+        return "testbed1.StructArray2Interface"
+
+    def olink_set_property(self, name: str, value: Any):
+        path = Name.path_from_name(name)
+        if path == "propBool":
+            v = testbed1.api.as_struct_bool_with_array(value)
+            return self.impl.set_prop_bool(v)
+        elif path == "propInt":
+            v = testbed1.api.as_struct_int_with_array(value)
+            return self.impl.set_prop_int(v)
+        elif path == "propFloat":
+            v = testbed1.api.as_struct_float_with_array(value)
+            return self.impl.set_prop_float(v)
+        elif path == "propString":
+            v = testbed1.api.as_struct_string_with_array(value)
+            return self.impl.set_prop_string(v)
+        elif path == "propEnum":
+            v = testbed1.api.as_struct_enum_with_array(value)
+            return self.impl.set_prop_enum(v)
+        logging.error("unknown property: %s", name)
+
+
+    def olink_invoke(self, name: str, args: list[Any]) -> Any:
+        path = Name.path_from_name(name)
+        if path == "funcBool":
+            param_bool = testbed1.api.as_struct_bool_with_array(args[0])
+            reply = self.impl.func_bool(param_bool)
+            return [testbed1.api.from_struct_bool(_) for _ in reply]
+        elif path == "funcInt":
+            param_int = testbed1.api.as_struct_int_with_array(args[0])
+            reply = self.impl.func_int(param_int)
+            return [testbed1.api.from_struct_int(_) for _ in reply]
+        elif path == "funcFloat":
+            param_float = testbed1.api.as_struct_float_with_array(args[0])
+            reply = self.impl.func_float(param_float)
+            return [testbed1.api.from_struct_float(_) for _ in reply]
+        elif path == "funcString":
+            param_string = testbed1.api.as_struct_string_with_array(args[0])
+            reply = self.impl.func_string(param_string)
+            return [testbed1.api.from_struct_string(_) for _ in reply]
+        elif path == "funcEnum":
+            param_enum = testbed1.api.as_struct_enum_with_array(args[0])
+            reply = self.impl.func_enum(param_enum)
+            return [testbed1.api.from_enum0(_) for _ in reply]      
+        logging.error("unknown operation: %s", name)
+
+    def olink_linked(self, name: str, node: "RemoteNode"):
+        logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
+
+    def olink_collect_properties(self) -> object:
+        props = {}
+        v = self.impl.get_prop_bool()
+        props["propBool"] = testbed1.api.from_struct_bool_with_array(v)
+        v = self.impl.get_prop_int()
+        props["propInt"] = testbed1.api.from_struct_int_with_array(v)
+        v = self.impl.get_prop_float()
+        props["propFloat"] = testbed1.api.from_struct_float_with_array(v)
+        v = self.impl.get_prop_string()
+        props["propString"] = testbed1.api.from_struct_string_with_array(v)
+        v = self.impl.get_prop_enum()
+        props["propEnum"] = testbed1.api.from_struct_enum_with_array(v)
+        return props
+
+    def notify_sig_bool(self, param_bool: testbed1.api.StructBoolWithArray):
+        _param_bool = testbed1.api.from_struct_bool_with_array(param_bool)
+        return RemoteNode.notify_signal("testbed1.StructArray2Interface/sigBool", [_param_bool])
+
+    def notify_sig_int(self, param_int: testbed1.api.StructIntWithArray):
+        _param_int = testbed1.api.from_struct_int_with_array(param_int)
+        return RemoteNode.notify_signal("testbed1.StructArray2Interface/sigInt", [_param_int])
+
+    def notify_sig_float(self, param_float: testbed1.api.StructFloatWithArray):
+        _param_float = testbed1.api.from_struct_float_with_array(param_float)
+        return RemoteNode.notify_signal("testbed1.StructArray2Interface/sigFloat", [_param_float])
+
+    def notify_sig_string(self, param_string: testbed1.api.StructStringWithArray):
+        _param_string = testbed1.api.from_struct_string_with_array(param_string)
+        return RemoteNode.notify_signal("testbed1.StructArray2Interface/sigString", [_param_string])
+
+    def notify_prop_bool_changed(self, value):
+        v = testbed1.api.from_struct_bool_with_array(value)
+        return RemoteNode.notify_property_change("testbed1.StructArray2Interface/propBool", v)
+
+    def notify_prop_int_changed(self, value):
+        v = testbed1.api.from_struct_int_with_array(value)
+        return RemoteNode.notify_property_change("testbed1.StructArray2Interface/propInt", v)
+
+    def notify_prop_float_changed(self, value):
+        v = testbed1.api.from_struct_float_with_array(value)
+        return RemoteNode.notify_property_change("testbed1.StructArray2Interface/propFloat", v)
+
+    def notify_prop_string_changed(self, value):
+        v = testbed1.api.from_struct_string_with_array(value)
+        return RemoteNode.notify_property_change("testbed1.StructArray2Interface/propString", v)
+
+    def notify_prop_enum_changed(self, value):
+        v = testbed1.api.from_struct_enum_with_array(value)
+        return RemoteNode.notify_property_change("testbed1.StructArray2Interface/propEnum", v)

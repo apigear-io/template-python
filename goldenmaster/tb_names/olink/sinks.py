@@ -16,6 +16,8 @@ class NamEsSink(IObjectSink):
         self.on_some_property_changed = EventHook()
         self._some_poperty2 = 0
         self.on_some_poperty2_changed = EventHook()
+        self._enum_property = tb_names.api.EnumWithUnderScores.FIRST_VALUE
+        self.on_enum_property_changed = EventHook()
         self.on_some_signal = EventHook()
         self.on_some_signal2 = EventHook()
         self._on_is_ready= EventHook()
@@ -63,6 +65,20 @@ class NamEsSink(IObjectSink):
     def get_some_poperty2(self):
         return self._some_poperty2
 
+    def _set_enum_property(self, value):
+        if self._enum_property == value:
+            return
+        self._enum_property = value
+        self.on_enum_property_changed.fire(self._enum_property)
+
+    def set_enum_property(self, value):
+        if self._enum_property == value:
+            return
+        self.client.set_remote_property('tb.names.Nam_Es/enum_property', tb_names.api.from_enum_with_under_scores(value))
+
+    def get_enum_property(self):
+        return self._enum_property
+
     async def some_function(self, some_param: bool):
         _some_param = utils.base_types.from_bool(some_param)
         args = [_some_param]
@@ -96,6 +112,9 @@ class NamEsSink(IObjectSink):
             elif k == "Some_Poperty2":
                 v =  utils.base_types.as_int(props[k])
                 self._set_some_poperty2(v)
+            elif k == "enum_property":
+                v =  tb_names.api.as_enum_with_under_scores(props[k])
+                self._set_enum_property(v)
         self._on_is_ready.fire()
 
     def olink_on_property_changed(self, name: str, value: Any) -> None:
@@ -111,6 +130,10 @@ class NamEsSink(IObjectSink):
         elif path == "Some_Poperty2":
             v =  utils.base_types.as_int(value)
             self._set_some_poperty2(v)
+            return
+        elif path == "enum_property":
+            v =  tb_names.api.as_enum_with_under_scores(value)
+            self._set_enum_property(v)
             return
         logging.error("unknown property: %s", name)
 

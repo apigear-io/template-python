@@ -122,6 +122,10 @@ node.link_remote(sink.olink_object_name())
 sink = tb_simple.olink.NoSignalsInterfaceSink()
 node.link_remote(sink.olink_object_name())
 
+# create and register sink for tb.simple.EmptyInterface
+sink = tb_simple.olink.EmptyInterfaceSink()
+node.link_remote(sink.olink_object_name())
+
 
 
 # create and register sink for testbed1.StructInterface
@@ -130,6 +134,10 @@ node.link_remote(sink.olink_object_name())
 
 # create and register sink for testbed1.StructArrayInterface
 sink = testbed1.olink.StructArrayInterfaceSink()
+node.link_remote(sink.olink_object_name())
+
+# create and register sink for testbed1.StructArray2Interface
+sink = testbed1.olink.StructArray2InterfaceSink()
 node.link_remote(sink.olink_object_name())
 
 

@@ -143,6 +143,11 @@ class TestOLinkSimpleInterface:
         await sink.func_no_return_value(param_bool=False)
 
     @pytest.mark.asyncio
+    async def test_func_no_params(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_no_params()
+
+    @pytest.mark.asyncio
     async def test_func_bool(self, olink_objects):
         impl, sink = olink_objects
         await sink.func_bool(param_bool=False)

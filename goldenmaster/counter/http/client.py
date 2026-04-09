@@ -14,7 +14,9 @@ class Counter(api.ICounter):
         super().__init__()
         self._url = url        
         self._vector = custom_types.api.Vector3D()        
-        self._extern_vector = vector3d.vector.Vector()
+        self._extern_vector = vector3d.vector.Vector()        
+        self._vector_array = []        
+        self._extern_vector_array = []
     
     def get_vector(self):
         return self._vector
@@ -27,6 +29,18 @@ class Counter(api.ICounter):
 
     def set_extern_vector(self, value):
         self._extern_vector = value
+    
+    def get_vector_array(self):
+        return self._vector_array
+
+    def set_vector_array(self, value):
+        self._vector_array = value
+    
+    def get_extern_vector_array(self):
+        return self._extern_vector_array
+
+    def set_extern_vector_array(self, value):
+        self._extern_vector_array = value
 
     def increment(self, vec: vector3d.vector.Vector):
         req = shared.CounterIncrementRequest(
@@ -39,6 +53,22 @@ class Counter(api.ICounter):
         resp = shared.CounterIncrementResponse(**data.json())
         self._vector = resp.state.vector
         self._extern_vector = resp.state.extern_vector
+        self._vector_array = resp.state.vector_array
+        self._extern_vector_array = resp.state.extern_vector_array
+
+    def increment_array(self, vec: list[vector3d.vector.Vector]):
+        req = shared.CounterIncrementArrayRequest(
+            vec=vec
+        )
+        data = requests.post(
+            f'{self.url}/counter/counter/increment_array',
+            req.json()
+        )
+        resp = shared.CounterIncrementArrayResponse(**data.json())
+        self._vector = resp.state.vector
+        self._extern_vector = resp.state.extern_vector
+        self._vector_array = resp.state.vector_array
+        self._extern_vector_array = resp.state.extern_vector_array
 
     def decrement(self, vec: custom_types.api.Vector3D):
         req = shared.CounterDecrementRequest(
@@ -51,3 +81,19 @@ class Counter(api.ICounter):
         resp = shared.CounterDecrementResponse(**data.json())
         self._vector = resp.state.vector
         self._extern_vector = resp.state.extern_vector
+        self._vector_array = resp.state.vector_array
+        self._extern_vector_array = resp.state.extern_vector_array
+
+    def decrement_array(self, vec: list[custom_types.api.Vector3D]):
+        req = shared.CounterDecrementArrayRequest(
+            vec=vec
+        )
+        data = requests.post(
+            f'{self.url}/counter/counter/decrement_array',
+            req.json()
+        )
+        resp = shared.CounterDecrementArrayResponse(**data.json())
+        self._vector = resp.state.vector
+        self._extern_vector = resp.state.extern_vector
+        self._vector_array = resp.state.vector_array
+        self._extern_vector_array = resp.state.extern_vector_array

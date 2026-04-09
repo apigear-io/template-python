@@ -325,6 +325,15 @@ class TestMqttSimpleInterface:
         await self.teardown_mqtt(client, service)
 
     @pytest.mark.asyncio
+    async def test_func_no_params(self):
+        impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
+
+        result = await sink.func_no_params()
+        assert result == False
+
+        await self.teardown_mqtt(client, service)
+
+    @pytest.mark.asyncio
     async def test_func_bool(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 

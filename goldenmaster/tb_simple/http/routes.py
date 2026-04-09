@@ -10,6 +10,7 @@ simple_array_interface = shared.SimpleArrayInterfaceState()
 no_properties_interface = shared.NoPropertiesInterfaceState()
 no_operations_interface = shared.NoOperationsInterfaceState()
 no_signals_interface = shared.NoSignalsInterfaceState()
+empty_interface = shared.EmptyInterfaceState()
 
 
 
@@ -46,6 +47,28 @@ async def simple_interface_funcNoReturnValue(params: shared.SimpleInterfaceFuncN
         prop_string = simple_interface.prop_string,
     )
     response = shared.SimpleInterfaceFuncNoReturnValueResponse(
+        result=result,
+        state=state
+    )
+    return response
+
+@router.post(
+    "/tb_simple/simple_interface/func_no_params", 
+    response_model=shared.SimpleInterfaceFuncNoParamsResponse
+)
+async def simple_interface_funcNoParams(params: shared.SimpleInterfaceFuncNoParamsRequest):
+    result = simple_interface.funcNoParams()
+    state = shared.SimpleInterfaceState(
+        prop_bool = simple_interface.prop_bool,
+        prop_int = simple_interface.prop_int,
+        prop_int32 = simple_interface.prop_int32,
+        prop_int64 = simple_interface.prop_int64,
+        prop_float = simple_interface.prop_float,
+        prop_float32 = simple_interface.prop_float32,
+        prop_float64 = simple_interface.prop_float64,
+        prop_string = simple_interface.prop_string,
+    )
+    response = shared.SimpleInterfaceFuncNoParamsResponse(
         result=result,
         state=state
     )
@@ -478,5 +501,7 @@ async def no_signals_interface_funcBool(params: shared.NoSignalsInterfaceFuncBoo
         state=state
     )
     return response
+
+
 
 

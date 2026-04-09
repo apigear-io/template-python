@@ -212,6 +212,23 @@ class NestedStruct1InterfaceSink(IObjectSink):
     def get_prop1(self):
         return self._prop1
 
+    async def func_no_return_value(self, param1: testbed2.api.NestedStruct1):
+        _param1 = testbed2.api.from_nested_struct1(param1)
+        args = [_param1]
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(None)
+        self.client.invoke_remote(f"testbed2.NestedStruct1Interface/funcNoReturnValue", args, func)
+        return await asyncio.wait_for(future, 500)
+
+    async def func_no_params(self):
+        args = []
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(testbed2.api.as_nested_struct1(result.value))
+        self.client.invoke_remote(f"testbed2.NestedStruct1Interface/funcNoParams", args, func)
+        return await asyncio.wait_for(future, 500)
+
     async def func1(self, param1: testbed2.api.NestedStruct1):
         _param1 = testbed2.api.from_nested_struct1(param1)
         args = [_param1]

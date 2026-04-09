@@ -31,6 +31,14 @@ class SimpleInterfaceFuncNoReturnValueResponse(BaseModel):
     result: None
     state: SimpleInterfaceState
 
+# method SimpleInterface.funcNoParams
+class SimpleInterfaceFuncNoParamsRequest(BaseModel):
+    pass 
+
+class SimpleInterfaceFuncNoParamsResponse(BaseModel):
+    result: bool
+    state: SimpleInterfaceState
+
 # method SimpleInterface.funcBool
 class SimpleInterfaceFuncBoolRequest(BaseModel):
     param_bool: bool = Field(default=False, alias="paramBool") 
@@ -212,6 +220,9 @@ class NoSignalsInterfaceFuncBoolRequest(BaseModel):
 class NoSignalsInterfaceFuncBoolResponse(BaseModel):
     result: bool
     state: NoSignalsInterfaceState
+
+class EmptyInterfaceState(BaseModel):
+    pass
 
 
 

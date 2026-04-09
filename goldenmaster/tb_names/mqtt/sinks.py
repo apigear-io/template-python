@@ -18,6 +18,8 @@ class NamEsClientAdapter():
         self.on_some_property_changed = EventHook()
         self._some_poperty2 = 0
         self.on_some_poperty2_changed = EventHook()
+        self._enum_property = tb_names.api.EnumWithUnderScores.FIRST_VALUE
+        self.on_enum_property_changed = EventHook()
         self.on_some_signal = EventHook()
         self.on_some_signal2 = EventHook()
         self.client.on_subscribed += self.__handle_subscribed
@@ -31,6 +33,7 @@ class NamEsClientAdapter():
         self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/Switch", self.__set_switch))
         self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/SOME_PROPERTY", self.__set_some_property))
         self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/Some_Poperty2", self.__set_some_poperty2))
+        self.subscription_ids.append(self.client.subscribe_for_property("tb.names/Nam_Es/prop/enum_property", self.__set_enum_property))
         self.subscription_ids.append(self.client.subscribe_for_signal("tb.names/Nam_Es/sig/SOME_SIGNAL",  self.__on_some_signal_signal))
         self.subscription_ids.append(self.client.subscribe_for_signal("tb.names/Nam_Es/sig/Some_Signal2",  self.__on_some_signal2_signal))
         self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_some_function, self.__on_some_function_resp))
@@ -42,6 +45,7 @@ class NamEsClientAdapter():
         self.client.unsubscribe("tb.names/Nam_Es/prop/Switch")
         self.client.unsubscribe("tb.names/Nam_Es/prop/SOME_PROPERTY")
         self.client.unsubscribe("tb.names/Nam_Es/prop/Some_Poperty2")
+        self.client.unsubscribe("tb.names/Nam_Es/prop/enum_property")
         self.client.unsubscribe("tb.names/Nam_Es/sig/SOME_SIGNAL")
         self.client.unsubscribe("tb.names/Nam_Es/sig/Some_Signal2")
         self.client.unsubscribe(self.method_topics.resp_topic_some_function)
@@ -85,6 +89,15 @@ class NamEsClientAdapter():
 
     def get_some_poperty2(self):
         return self._some_poperty2
+
+    def set_enum_property(self, value):
+        if self._enum_property == value:
+            return
+        topic = "tb.names/Nam_Es/set/enum_property"
+        self.client.set_remote_property(topic, tb_names.api.from_enum_with_under_scores(value))
+
+    def get_enum_property(self):
+        return self._enum_property
 
     async def some_function(self, some_param: bool):
         _some_param = utils.base_types.from_bool(some_param)
@@ -132,6 +145,13 @@ class NamEsClientAdapter():
             return
         self._some_poperty2 = value
         self.on_some_poperty2_changed.fire(self._some_poperty2)
+
+    def __set_enum_property(self, data):
+        value =  tb_names.api.as_enum_with_under_scores(data)
+        if self._enum_property == value:
+            return
+        self._enum_property = value
+        self.on_enum_property_changed.fire(self._enum_property)
 
     def __on_some_signal_signal(self, args: list[Any]):
         some_param =  utils.base_types.as_bool(args[0])

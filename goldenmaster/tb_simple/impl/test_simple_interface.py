@@ -80,6 +80,10 @@ class TestSimpleInterface:
         o = SimpleInterface()
         o.func_no_return_value(param_bool=False)
 
+    def test_func_no_params(self):
+        o = SimpleInterface()
+        o.func_no_params()
+
     def test_func_bool(self):
         o = SimpleInterface()
         o.func_bool(param_bool=False)

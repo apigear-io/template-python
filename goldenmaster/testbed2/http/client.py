@@ -113,6 +113,27 @@ class NestedStruct1Interface(api.INestedStruct1Interface):
     def set_prop1(self, value):
         self._prop1 = value
 
+    def func_no_return_value(self, param1: api.NestedStruct1):
+        req = shared.NestedStruct1InterfaceFuncNoReturnValueRequest(
+            param1=param1
+        )
+        data = requests.post(
+            f'{self.url}/testbed2/nested_struct1_interface/func_no_return_value',
+            req.json()
+        )
+        resp = shared.NestedStruct1InterfaceFuncNoReturnValueResponse(**data.json())
+        self._prop1 = resp.state.prop1
+
+    def func_no_params(self):
+        req = shared.NestedStruct1InterfaceFuncNoParamsRequest(
+        )
+        data = requests.post(
+            f'{self.url}/testbed2/nested_struct1_interface/func_no_params',
+            req.json()
+        )
+        resp = shared.NestedStruct1InterfaceFuncNoParamsResponse(**data.json())
+        self._prop1 = resp.state.prop1
+
     def func1(self, param1: api.NestedStruct1):
         req = shared.NestedStruct1InterfaceFunc1Request(
             param1=param1

@@ -11,3 +11,5 @@ from .sources import NoOperationsInterfaceServiceAdapter as NoOperationsInterfac
 from .sinks import NoOperationsInterfaceClientAdapter as NoOperationsInterfaceClientAdapter
 from .sources import NoSignalsInterfaceServiceAdapter as NoSignalsInterfaceServiceAdapter
 from .sinks import NoSignalsInterfaceClientAdapter as NoSignalsInterfaceClientAdapter
+from .sources import EmptyInterfaceServiceAdapter as EmptyInterfaceServiceAdapter
+from .sinks import EmptyInterfaceClientAdapter as EmptyInterfaceClientAdapter

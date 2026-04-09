@@ -11,7 +11,8 @@
 {{- define "get_serialization_name" }}
             {{- $name:= snake .Type }}
             {{- if (eq .KindType "extern") }}
-            {{- $name = snake (pyReturn "" .) }}
+            {{- $extern := pyExtern .GetExtern }}
+            {{- $name = printf "%s_%s" (snake $extern.Import) (snake $extern.Name) }}
             {{- end}}
             {{- $name -}}
 {{- end}}

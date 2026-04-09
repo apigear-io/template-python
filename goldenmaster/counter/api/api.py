@@ -31,9 +31,27 @@ class ICounter:
     def set_extern_vector(self, value):
         raise NotImplementedError("Method counter/counter:set_extern_vector is not implemented.")
 
+    def get_vector_array(self):
+        raise NotImplementedError("Method counter/counter:get_vector_array is not implemented.")
+
+    def set_vector_array(self, value):
+        raise NotImplementedError("Method counter/counter:set_vector_array is not implemented.")
+
+    def get_extern_vector_array(self):
+        raise NotImplementedError("Method counter/counter:get_extern_vector_array is not implemented.")
+
+    def set_extern_vector_array(self, value):
+        raise NotImplementedError("Method counter/counter:set_extern_vector_array is not implemented.")
+
     def increment(self, vec: vector3d.vector.Vector):
         raise NotImplementedError("Method counter/counter:increment is not implemented.")
 
+    def increment_array(self, vec: list[vector3d.vector.Vector]):
+        raise NotImplementedError("Method counter/counter:increment_array is not implemented.")
+
     def decrement(self, vec: custom_types.api.Vector3D):
         raise NotImplementedError("Method counter/counter:decrement is not implemented.")
+
+    def decrement_array(self, vec: list[custom_types.api.Vector3D]):
+        raise NotImplementedError("Method counter/counter:decrement_array is not implemented.")
 

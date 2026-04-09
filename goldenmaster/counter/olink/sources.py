@@ -14,6 +14,9 @@ class CounterSource(IObjectSource):
         self.impl = impl
         impl.on_vector_changed += self.notify_vector_changed
         impl.on_extern_vector_changed += self.notify_extern_vector_changed
+        impl.on_vector_array_changed += self.notify_vector_array_changed
+        impl.on_extern_vector_array_changed += self.notify_extern_vector_array_changed
+        impl.on_value_changed += self.notify_value_changed
         self._on_linked = EventHook()
         self._on_unlinked = EventHook()
         RemoteNode.register_source(self)
@@ -29,6 +32,12 @@ class CounterSource(IObjectSource):
         elif path == "extern_vector":
             v = extern_types.api.as_vector3d_vector_vector(value)
             return self.impl.set_extern_vector(v)
+        elif path == "vectorArray":
+            v = [custom_types.api.as_vector3_d(_) for _ in value]
+            return self.impl.set_vector_array(v)
+        elif path == "extern_vectorArray":
+            v = [extern_types.api.as_vector3d_vector_vector(_) for _ in value]
+            return self.impl.set_extern_vector_array(v)
         logging.error("unknown property: %s", name)
 
 
@@ -38,10 +47,18 @@ class CounterSource(IObjectSource):
             vec = extern_types.api.as_vector3d_vector_vector(args[0])
             reply = self.impl.increment(vec)
             return extern_types.api.from_vector3d_vector_vector(reply)
+        elif path == "incrementArray":
+            vec = [extern_types.api.as_vector3d_vector_vector(_) for _ in args[0]]
+            reply = self.impl.increment_array(vec)
+            return [extern_types.api.from_vector3d_vector_vector(_) for _ in reply]
         elif path == "decrement":
             vec = custom_types.api.as_vector3_d(args[0])
             reply = self.impl.decrement(vec)
-            return custom_types.api.from_vector3_d(reply)      
+            return custom_types.api.from_vector3_d(reply)
+        elif path == "decrementArray":
+            vec = [custom_types.api.as_vector3_d(_) for _ in args[0]]
+            reply = self.impl.decrement_array(vec)
+            return [custom_types.api.from_vector3_d(_) for _ in reply]      
         logging.error("unknown operation: %s", name)
 
     def olink_linked(self, name: str, node: "RemoteNode"):
@@ -58,7 +75,18 @@ class CounterSource(IObjectSource):
         props["vector"] = custom_types.api.from_vector3_d(v)
         v = self.impl.get_extern_vector()
         props["extern_vector"] = extern_types.api.from_vector3d_vector_vector(v)
+        v = self.impl.get_vector_array()
+        props["vectorArray"] = [custom_types.api.from_vector3_d(_) for _ in v]
+        v = self.impl.get_extern_vector_array()
+        props["extern_vectorArray"] = [extern_types.api.from_vector3d_vector_vector(_) for _ in v]
         return props
+
+    def notify_value_changed(self, vector: custom_types.api.Vector3D, extern_vector: vector3d.vector.Vector, vector_array: list[custom_types.api.Vector3D], extern_vector_array: list[vector3d.vector.Vector]):
+        _vector = custom_types.api.from_vector3_d(vector)
+        _extern_vector = extern_types.api.from_vector3d_vector_vector(extern_vector)
+        _vector_array = [custom_types.api.from_vector3_d(_) for _ in vector_array]
+        _extern_vector_array = [extern_types.api.from_vector3d_vector_vector(_) for _ in extern_vector_array]
+        return RemoteNode.notify_signal("counter.Counter/valueChanged", [_vector, _extern_vector, _vector_array, _extern_vector_array])
 
     def notify_vector_changed(self, value):
         v = custom_types.api.from_vector3_d(value)
@@ -67,3 +95,11 @@ class CounterSource(IObjectSource):
     def notify_extern_vector_changed(self, value):
         v = extern_types.api.from_vector3d_vector_vector(value)
         return RemoteNode.notify_property_change("counter.Counter/extern_vector", v)
+
+    def notify_vector_array_changed(self, value):
+        v = [custom_types.api.from_vector3_d(_) for _ in value]
+        return RemoteNode.notify_property_change("counter.Counter/vectorArray", v)
+
+    def notify_extern_vector_array_changed(self, value):
+        v = [extern_types.api.from_vector3d_vector_vector(_) for _ in value]
+        return RemoteNode.notify_property_change("counter.Counter/extern_vectorArray", v)

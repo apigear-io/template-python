@@ -2,24 +2,23 @@ from testbed1.api import api
 from utils.eventhook import EventHook
 from typing import Iterable
 
-class StructArrayInterface(api.IStructArrayInterface):
+class StructArray2Interface(api.IStructArray2Interface):
     def __init__(self):
         super().__init__()
-        self._prop_bool: list[api.StructBool] = []
-        self._prop_int: list[api.StructInt] = []
-        self._prop_float: list[api.StructFloat] = []
-        self._prop_string: list[api.StructString] = []
-        self._prop_enum: list[api.Enum0] = []
-        self.on_prop_bool_changed: list[api.StructBool] = EventHook()
-        self.on_prop_int_changed: list[api.StructInt] = EventHook()
-        self.on_prop_float_changed: list[api.StructFloat] = EventHook()
-        self.on_prop_string_changed: list[api.StructString] = EventHook()
-        self.on_prop_enum_changed: list[api.Enum0] = EventHook()
+        self._prop_bool: api.StructBoolWithArray = api.StructBoolWithArray()
+        self._prop_int: api.StructIntWithArray = api.StructIntWithArray()
+        self._prop_float: api.StructFloatWithArray = api.StructFloatWithArray()
+        self._prop_string: api.StructStringWithArray = api.StructStringWithArray()
+        self._prop_enum: api.StructEnumWithArray = api.StructEnumWithArray()
+        self.on_prop_bool_changed: api.StructBoolWithArray = EventHook()
+        self.on_prop_int_changed: api.StructIntWithArray = EventHook()
+        self.on_prop_float_changed: api.StructFloatWithArray = EventHook()
+        self.on_prop_string_changed: api.StructStringWithArray = EventHook()
+        self.on_prop_enum_changed: api.StructEnumWithArray = EventHook()
         self.on_sig_bool = EventHook()
         self.on_sig_int = EventHook()
         self.on_sig_float = EventHook()
         self.on_sig_string = EventHook()
-        self.on_sig_enum = EventHook()
 
     def set_prop_bool(self, value):
         if self._prop_bool == value:
@@ -81,32 +80,29 @@ class StructArrayInterface(api.IStructArrayInterface):
     def _push_prop_enum(self, value):
         self.on_prop_enum_changed.fire(value)
 
-    def func_bool(self, param_bool: list[api.StructBool]) -> list[api.StructBool]:
+    def func_bool(self, param_bool: api.StructBoolWithArray) -> list[api.StructBool]:
         return []
 
-    def func_int(self, param_int: list[api.StructInt]) -> list[api.StructInt]:
+    def func_int(self, param_int: api.StructIntWithArray) -> list[api.StructInt]:
         return []
 
-    def func_float(self, param_float: list[api.StructFloat]) -> list[api.StructFloat]:
+    def func_float(self, param_float: api.StructFloatWithArray) -> list[api.StructFloat]:
         return []
 
-    def func_string(self, param_string: list[api.StructString]) -> list[api.StructString]:
+    def func_string(self, param_string: api.StructStringWithArray) -> list[api.StructString]:
         return []
 
-    def func_enum(self, param_enum: list[api.Enum0]) -> list[api.Enum0]:
+    def func_enum(self, param_enum: api.StructEnumWithArray) -> list[api.Enum0]:
         return []
 
-    def _sig_bool(self, param_bool: list[api.StructBool]):
+    def _sig_bool(self, param_bool: api.StructBoolWithArray):
         self.on_sig_bool.fire(param_bool)
 
-    def _sig_int(self, param_int: list[api.StructInt]):
+    def _sig_int(self, param_int: api.StructIntWithArray):
         self.on_sig_int.fire(param_int)
 
-    def _sig_float(self, param_float: list[api.StructFloat]):
+    def _sig_float(self, param_float: api.StructFloatWithArray):
         self.on_sig_float.fire(param_float)
 
-    def _sig_string(self, param_string: list[api.StructString]):
+    def _sig_string(self, param_string: api.StructStringWithArray):
         self.on_sig_string.fire(param_string)
-
-    def _sig_enum(self, param_enum: list[api.Enum0]):
-        self.on_sig_enum.fire(param_enum)

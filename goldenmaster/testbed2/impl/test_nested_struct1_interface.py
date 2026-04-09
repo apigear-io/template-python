@@ -13,6 +13,14 @@ class TestNestedStruct1Interface:
         assert self.called == False
         assert o.get_prop1() == api.NestedStruct1()
 
+    def test_func_no_return_value(self):
+        o = NestedStruct1Interface()
+        o.func_no_return_value(param1=api.NestedStruct1())
+
+    def test_func_no_params(self):
+        o = NestedStruct1Interface()
+        o.func_no_params()
+
     def test_func1(self):
         o = NestedStruct1Interface()
         o.func1(param1=api.NestedStruct1())

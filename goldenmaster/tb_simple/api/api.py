@@ -74,6 +74,9 @@ class ISimpleInterface:
     def func_no_return_value(self, param_bool: bool):
         raise NotImplementedError("Method tb.simple/simple_interface:func_no_return_value is not implemented.")
 
+    def func_no_params(self):
+        raise NotImplementedError("Method tb.simple/simple_interface:func_no_params is not implemented.")
+
     def func_bool(self, param_bool: bool):
         raise NotImplementedError("Method tb.simple/simple_interface:func_bool is not implemented.")
 
@@ -224,4 +227,8 @@ class INoSignalsInterface:
 
     def func_bool(self, param_bool: bool):
         raise NotImplementedError("Method tb.simple/no_signals_interface:func_bool is not implemented.")
+
+class IEmptyInterface:
+    def __init__(self):
+        pass
 

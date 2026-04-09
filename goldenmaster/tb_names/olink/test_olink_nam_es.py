@@ -67,6 +67,20 @@ class TestOLinkNamEs:
         assert impl.get_some_poperty2() == test_value
         assert sink.get_some_poperty2() == test_value
 
+    def test_enum_property(self, olink_objects):
+        impl, sink = olink_objects
+        is_enum_property_changed = False
+        def funProp(arguments):
+            nonlocal is_enum_property_changed
+            is_enum_property_changed = True
+        sink.on_enum_property_changed += funProp
+        test_value = api.EnumWithUnderScores.SECOND_VALUE
+
+        sink.set_enum_property(test_value)
+        assert is_enum_property_changed == True
+        assert impl.get_enum_property() == test_value
+        assert sink.get_enum_property() == test_value
+
     @pytest.mark.asyncio
     async def test_some_function(self, olink_objects):
         impl, sink = olink_objects

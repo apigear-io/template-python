@@ -190,6 +190,14 @@ class SimpleInterfaceSink(IObjectSink):
         self.client.invoke_remote(f"tb.simple.SimpleInterface/funcNoReturnValue", args, func)
         return await asyncio.wait_for(future, 500)
 
+    async def func_no_params(self):
+        args = []
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            return future.set_result(utils.base_types.as_bool(result.value))
+        self.client.invoke_remote(f"tb.simple.SimpleInterface/funcNoParams", args, func)
+        return await asyncio.wait_for(future, 500)
+
     async def func_bool(self, param_bool: bool):
         _param_bool = utils.base_types.from_bool(param_bool)
         args = [_param_bool]
@@ -912,6 +920,25 @@ class NoSignalsInterfaceSink(IObjectSink):
             v =  utils.base_types.as_int(value)
             self._set_prop_int(v)
             return
+        logging.error("unknown property: %s", name)
+
+    def olink_on_signal(self, name: str, args: list[Any]):
+        logging.error("unknown signal: %s", name)
+
+class EmptyInterfaceSink(IObjectSink):
+    def __init__(self):
+        super().__init__()
+        self._on_is_ready= EventHook()
+        self.client = ClientNode.register_sink(self)
+
+    def olink_object_name(self):
+        return 'tb.simple.EmptyInterface'
+
+    def olink_on_init(self, name: str, props: object, node: "ClientNode"):
+        self.client = ClientNode.register_sink(self)
+        self._on_is_ready.fire()
+
+    def olink_on_property_changed(self, name: str, value: Any) -> None:
         logging.error("unknown property: %s", name)
 
     def olink_on_signal(self, name: str, args: list[Any]):

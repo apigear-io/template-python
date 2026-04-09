@@ -3,3 +3,5 @@ from .sources import StructInterfaceSource as StructInterfaceSource
 from .sinks import StructInterfaceSink as StructInterfaceSink
 from .sources import StructArrayInterfaceSource as StructArrayInterfaceSource
 from .sinks import StructArrayInterfaceSink as StructArrayInterfaceSink
+from .sources import StructArray2InterfaceSource as StructArray2InterfaceSource
+from .sinks import StructArray2InterfaceSink as StructArray2InterfaceSink

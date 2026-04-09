@@ -92,11 +92,15 @@ async def main():
     serviceAdapter_tb_simple_no_operations_interface = tb_simple.mqtt.NoOperationsInterfaceServiceAdapter(source_tb_simple_no_operations_interface, service)
     source_tb_simple_no_signals_interface = tb_simple.impl.NoSignalsInterface()
     serviceAdapter_tb_simple_no_signals_interface = tb_simple.mqtt.NoSignalsInterfaceServiceAdapter(source_tb_simple_no_signals_interface, service)
+    source_tb_simple_empty_interface = tb_simple.impl.EmptyInterface()
+    serviceAdapter_tb_simple_empty_interface = tb_simple.mqtt.EmptyInterfaceServiceAdapter(source_tb_simple_empty_interface, service)
 
     source_testbed1_struct_interface = testbed1.impl.StructInterface()
     serviceAdapter_testbed1_struct_interface = testbed1.mqtt.StructInterfaceServiceAdapter(source_testbed1_struct_interface, service)
     source_testbed1_struct_array_interface = testbed1.impl.StructArrayInterface()
     serviceAdapter_testbed1_struct_array_interface = testbed1.mqtt.StructArrayInterfaceServiceAdapter(source_testbed1_struct_array_interface, service)
+    source_testbed1_struct_array2_interface = testbed1.impl.StructArray2Interface()
+    serviceAdapter_testbed1_struct_array2_interface = testbed1.mqtt.StructArray2InterfaceServiceAdapter(source_testbed1_struct_array2_interface, service)
 
     source_tb_names_nam_es = tb_names.impl.NamEs()
     serviceAdapter_tb_names_nam_es = tb_names.mqtt.NamEsServiceAdapter(source_tb_names_nam_es, service)

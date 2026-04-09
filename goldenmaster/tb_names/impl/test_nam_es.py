@@ -31,6 +31,15 @@ class TestNamEs:
         assert self.called == False
         assert o.get_some_poperty2() == 0
 
+    def test_enum_property(self):
+        o = NamEs()
+        self.called = False
+        o.on_enum_property_changed += lambda *args: setattr(self, 'called', True)
+        o.set_enum_property(api.EnumWithUnderScores.FIRST_VALUE)
+        # should not be true since we are not changing the default value
+        assert self.called == False
+        assert o.get_enum_property() == api.EnumWithUnderScores.FIRST_VALUE
+
     def test_some_function(self):
         o = NamEs()
         o.some_function(some_param=False)

@@ -14,6 +14,7 @@ class NamEsServiceAdapter():
         self.impl.on_switch_changed += self.notify_switch_changed
         self.impl.on_some_property_changed += self.notify_some_property_changed
         self.impl.on_some_poperty2_changed += self.notify_some_poperty2_changed
+        self.impl.on_enum_property_changed += self.notify_enum_property_changed
         self.impl.on_some_signal += self.notify_some_signal
         self.impl.on_some_signal2 += self.notify_some_signal2
         self.service.on_connected += self.subscribeForTopics
@@ -24,6 +25,7 @@ class NamEsServiceAdapter():
         self.subscription_ids.append(self.service.subscribe_for_property("tb.names/Nam_Es/set/Switch", self.__set_switch))
         self.subscription_ids.append(self.service.subscribe_for_property("tb.names/Nam_Es/set/SOME_PROPERTY", self.__set_some_property))
         self.subscription_ids.append(self.service.subscribe_for_property("tb.names/Nam_Es/set/Some_Poperty2", self.__set_some_poperty2))
+        self.subscription_ids.append(self.service.subscribe_for_property("tb.names/Nam_Es/set/enum_property", self.__set_enum_property))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.names/Nam_Es/rpc/SOME_FUNCTION", self.__invoke_some_function))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.names/Nam_Es/rpc/Some_Function2", self.__invoke_some_function2))
 
@@ -33,11 +35,13 @@ class NamEsServiceAdapter():
         self.service.unsubscribe("tb.names/Nam_Es/set/Switch")
         self.service.unsubscribe("tb.names/Nam_Es/set/SOME_PROPERTY")
         self.service.unsubscribe("tb.names/Nam_Es/set/Some_Poperty2")
+        self.service.unsubscribe("tb.names/Nam_Es/set/enum_property")
         self.service.unsubscribe("tb.names/Nam_Es/rpc/SOME_FUNCTION")
         self.service.unsubscribe("tb.names/Nam_Es/rpc/Some_Function2")
         self.impl.on_switch_changed -= self.notify_switch_changed
         self.impl.on_some_property_changed -= self.notify_some_property_changed
         self.impl.on_some_poperty2_changed -= self.notify_some_poperty2_changed
+        self.impl.on_enum_property_changed -= self.notify_enum_property_changed
         self.impl.on_some_signal -= self.notify_some_signal
         self.impl.on_some_signal2 -= self.notify_some_signal2
 
@@ -75,6 +79,10 @@ class NamEsServiceAdapter():
         v = utils.base_types.from_int(value)
         self.service.notify_property_change("tb.names/Nam_Es/prop/Some_Poperty2", v)
 
+    def notify_enum_property_changed(self, value):
+        v = tb_names.api.from_enum_with_under_scores(value)
+        self.service.notify_property_change("tb.names/Nam_Es/prop/enum_property", v)
+
     def __set_switch(self, value: Any):
             v = utils.base_types.as_bool(value)
             self.impl.set_switch(v)
@@ -86,6 +94,10 @@ class NamEsServiceAdapter():
     def __set_some_poperty2(self, value: Any):
             v = utils.base_types.as_int(value)
             self.impl.set_some_poperty2(v)
+
+    def __set_enum_property(self, value: Any):
+            v = tb_names.api.as_enum_with_under_scores(value)
+            self.impl.set_enum_property(v)
 
     def __invoke_some_function(self, args: list[Any]) -> Any:
         some_param = utils.base_types.as_bool(args[0])

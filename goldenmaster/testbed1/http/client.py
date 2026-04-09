@@ -102,7 +102,8 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._prop_bool = []        
         self._prop_int = []        
         self._prop_float = []        
-        self._prop_string = []
+        self._prop_string = []        
+        self._prop_enum = []
     
     def get_prop_bool(self):
         return self._prop_bool
@@ -127,6 +128,12 @@ class StructArrayInterface(api.IStructArrayInterface):
 
     def set_prop_string(self, value):
         self._prop_string = value
+    
+    def get_prop_enum(self):
+        return self._prop_enum
+
+    def set_prop_enum(self, value):
+        self._prop_enum = value
 
     def func_bool(self, param_bool: list[api.StructBool]):
         req = shared.StructArrayInterfaceFuncBoolRequest(
@@ -141,6 +148,7 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
 
     def func_int(self, param_int: list[api.StructInt]):
         req = shared.StructArrayInterfaceFuncIntRequest(
@@ -155,6 +163,7 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
 
     def func_float(self, param_float: list[api.StructFloat]):
         req = shared.StructArrayInterfaceFuncFloatRequest(
@@ -169,6 +178,7 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
 
     def func_string(self, param_string: list[api.StructString]):
         req = shared.StructArrayInterfaceFuncStringRequest(
@@ -183,3 +193,134 @@ class StructArrayInterface(api.IStructArrayInterface):
         self._prop_int = resp.state.prop_int
         self._prop_float = resp.state.prop_float
         self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
+
+    def func_enum(self, param_enum: list[api.Enum0]):
+        req = shared.StructArrayInterfaceFuncEnumRequest(
+            param_enum=param_enum
+        )
+        data = requests.post(
+            f'{self.url}/testbed1/struct_array_interface/func_enum',
+            req.json()
+        )
+        resp = shared.StructArrayInterfaceFuncEnumResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_float = resp.state.prop_float
+        self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
+
+class StructArray2Interface(api.IStructArray2Interface):
+    def __init__(self, url='http://localhost:8000'):
+        super().__init__()
+        self._url = url        
+        self._prop_bool = api.StructBoolWithArray()        
+        self._prop_int = api.StructIntWithArray()        
+        self._prop_float = api.StructFloatWithArray()        
+        self._prop_string = api.StructStringWithArray()        
+        self._prop_enum = api.StructEnumWithArray()
+    
+    def get_prop_bool(self):
+        return self._prop_bool
+
+    def set_prop_bool(self, value):
+        self._prop_bool = value
+    
+    def get_prop_int(self):
+        return self._prop_int
+
+    def set_prop_int(self, value):
+        self._prop_int = value
+    
+    def get_prop_float(self):
+        return self._prop_float
+
+    def set_prop_float(self, value):
+        self._prop_float = value
+    
+    def get_prop_string(self):
+        return self._prop_string
+
+    def set_prop_string(self, value):
+        self._prop_string = value
+    
+    def get_prop_enum(self):
+        return self._prop_enum
+
+    def set_prop_enum(self, value):
+        self._prop_enum = value
+
+    def func_bool(self, param_bool: api.StructBoolWithArray):
+        req = shared.StructArray2InterfaceFuncBoolRequest(
+            param_bool=param_bool
+        )
+        data = requests.post(
+            f'{self.url}/testbed1/struct_array2_interface/func_bool',
+            req.json()
+        )
+        resp = shared.StructArray2InterfaceFuncBoolResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_float = resp.state.prop_float
+        self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
+
+    def func_int(self, param_int: api.StructIntWithArray):
+        req = shared.StructArray2InterfaceFuncIntRequest(
+            param_int=param_int
+        )
+        data = requests.post(
+            f'{self.url}/testbed1/struct_array2_interface/func_int',
+            req.json()
+        )
+        resp = shared.StructArray2InterfaceFuncIntResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_float = resp.state.prop_float
+        self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
+
+    def func_float(self, param_float: api.StructFloatWithArray):
+        req = shared.StructArray2InterfaceFuncFloatRequest(
+            param_float=param_float
+        )
+        data = requests.post(
+            f'{self.url}/testbed1/struct_array2_interface/func_float',
+            req.json()
+        )
+        resp = shared.StructArray2InterfaceFuncFloatResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_float = resp.state.prop_float
+        self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
+
+    def func_string(self, param_string: api.StructStringWithArray):
+        req = shared.StructArray2InterfaceFuncStringRequest(
+            param_string=param_string
+        )
+        data = requests.post(
+            f'{self.url}/testbed1/struct_array2_interface/func_string',
+            req.json()
+        )
+        resp = shared.StructArray2InterfaceFuncStringResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_float = resp.state.prop_float
+        self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum
+
+    def func_enum(self, param_enum: api.StructEnumWithArray):
+        req = shared.StructArray2InterfaceFuncEnumRequest(
+            param_enum=param_enum
+        )
+        data = requests.post(
+            f'{self.url}/testbed1/struct_array2_interface/func_enum',
+            req.json()
+        )
+        resp = shared.StructArray2InterfaceFuncEnumResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_float = resp.state.prop_float
+        self._prop_string = resp.state.prop_string
+        self._prop_enum = resp.state.prop_enum

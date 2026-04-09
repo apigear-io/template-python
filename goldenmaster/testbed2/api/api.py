@@ -131,6 +131,12 @@ class INestedStruct1Interface:
     def set_prop1(self, value):
         raise NotImplementedError("Method testbed2/nested_struct1_interface:set_prop1 is not implemented.")
 
+    def func_no_return_value(self, param1: NestedStruct1):
+        raise NotImplementedError("Method testbed2/nested_struct1_interface:func_no_return_value is not implemented.")
+
+    def func_no_params(self):
+        raise NotImplementedError("Method testbed2/nested_struct1_interface:func_no_params is not implemented.")
+
     def func1(self, param1: NestedStruct1):
         raise NotImplementedError("Method testbed2/nested_struct1_interface:func1 is not implemented.")
 

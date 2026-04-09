@@ -8,9 +8,11 @@ class NamEs(api.INamEs):
         self._switch: bool = False
         self._some_property: int = 0
         self._some_poperty2: int = 0
+        self._enum_property: api.EnumWithUnderScores = api.EnumWithUnderScores.FIRST_VALUE
         self.on_switch_changed: bool = EventHook()
         self.on_some_property_changed: int = EventHook()
         self.on_some_poperty2_changed: int = EventHook()
+        self.on_enum_property_changed: api.EnumWithUnderScores = EventHook()
         self.on_some_signal = EventHook()
         self.on_some_signal2 = EventHook()
 
@@ -49,6 +51,18 @@ class NamEs(api.INamEs):
 
     def _push_some_poperty2(self, value):
         self.on_some_poperty2_changed.fire(value)
+
+    def set_enum_property(self, value):
+        if self._enum_property == value:
+            return
+        self._enum_property = value
+        self._push_enum_property(self._enum_property)
+    
+    def get_enum_property(self):
+        return self._enum_property        
+
+    def _push_enum_property(self, value):
+        self.on_enum_property_changed.fire(value)
 
     def some_function(self, some_param: bool) -> None:
         return None

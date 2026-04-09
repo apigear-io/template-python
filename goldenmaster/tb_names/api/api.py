@@ -12,6 +12,11 @@ class EnhancedModel(BaseModel):
     def __init__(self, **kw):
         super().__init__(**kw)
 
+class EnumWithUnderScores(IntEnum):
+    FIRST_VALUE = 0
+    SECOND_VALUE = 1
+    THIRD_VALUE = 2
+
 class INamEs:
     def __init__(self):
         pass
@@ -34,9 +39,21 @@ class INamEs:
     def set_some_poperty2(self, value):
         raise NotImplementedError("Method tb.names/nam_es:set_some_poperty2 is not implemented.")
 
+    def get_enum_property(self):
+        raise NotImplementedError("Method tb.names/nam_es:get_enum_property is not implemented.")
+
+    def set_enum_property(self, value):
+        raise NotImplementedError("Method tb.names/nam_es:set_enum_property is not implemented.")
+
     def some_function(self, some_param: bool):
         raise NotImplementedError("Method tb.names/nam_es:some_function is not implemented.")
 
     def some_function2(self, some_param: bool):
         raise NotImplementedError("Method tb.names/nam_es:some_function2 is not implemented.")
+
+def as_enum_with_under_scores(v):
+    return EnumWithUnderScores(int(v))
+
+def from_enum_with_under_scores(v):
+    return v
 

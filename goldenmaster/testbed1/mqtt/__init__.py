@@ -3,3 +3,5 @@ from .sources import StructInterfaceServiceAdapter as StructInterfaceServiceAdap
 from .sinks import StructInterfaceClientAdapter as StructInterfaceClientAdapter
 from .sources import StructArrayInterfaceServiceAdapter as StructArrayInterfaceServiceAdapter
 from .sinks import StructArrayInterfaceClientAdapter as StructArrayInterfaceClientAdapter
+from .sources import StructArray2InterfaceServiceAdapter as StructArray2InterfaceServiceAdapter
+from .sinks import StructArray2InterfaceClientAdapter as StructArray2InterfaceClientAdapter
