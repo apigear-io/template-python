@@ -129,6 +129,9 @@ class SimpleInterface(api.ISimpleInterface):
     def func_no_return_value(self, param_bool: bool) -> None:
         return None
 
+    def func_no_params(self) -> bool:
+        return False
+
     def func_bool(self, param_bool: bool) -> bool:
         return False
 

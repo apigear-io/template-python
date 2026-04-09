@@ -49,6 +49,22 @@ class ManyParamInterfaceFunc4Response(BaseModel):
 class NestedStruct1InterfaceState(BaseModel):
     prop1: api.NestedStruct1 = Field(default=api.NestedStruct1(), alias="prop1")
 
+# method NestedStruct1Interface.funcNoReturnValue
+class NestedStruct1InterfaceFuncNoReturnValueRequest(BaseModel):
+    param1: api.NestedStruct1 = Field(default=api.NestedStruct1(), alias="param1") 
+
+class NestedStruct1InterfaceFuncNoReturnValueResponse(BaseModel):
+    result: None
+    state: NestedStruct1InterfaceState
+
+# method NestedStruct1Interface.funcNoParams
+class NestedStruct1InterfaceFuncNoParamsRequest(BaseModel):
+    pass 
+
+class NestedStruct1InterfaceFuncNoParamsResponse(BaseModel):
+    result: api.NestedStruct1
+    state: NestedStruct1InterfaceState
+
 # method NestedStruct1Interface.func1
 class NestedStruct1InterfaceFunc1Request(BaseModel):
     param1: api.NestedStruct1 = Field(default=api.NestedStruct1(), alias="param1") 

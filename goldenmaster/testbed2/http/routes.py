@@ -86,6 +86,36 @@ async def many_param_interface_func4(params: shared.ManyParamInterfaceFunc4Reque
 
 
 @router.post(
+    "/testbed2/nested_struct1_interface/func_no_return_value", 
+    response_model=shared.NestedStruct1InterfaceFuncNoReturnValueResponse
+)
+async def nested_struct1_interface_funcNoReturnValue(params: shared.NestedStruct1InterfaceFuncNoReturnValueRequest):
+    result = nested_struct1_interface.funcNoReturnValue(params.param1)
+    state = shared.NestedStruct1InterfaceState(
+        prop1 = nested_struct1_interface.prop1,
+    )
+    response = shared.NestedStruct1InterfaceFuncNoReturnValueResponse(
+        result=result,
+        state=state
+    )
+    return response
+
+@router.post(
+    "/testbed2/nested_struct1_interface/func_no_params", 
+    response_model=shared.NestedStruct1InterfaceFuncNoParamsResponse
+)
+async def nested_struct1_interface_funcNoParams(params: shared.NestedStruct1InterfaceFuncNoParamsRequest):
+    result = nested_struct1_interface.funcNoParams()
+    state = shared.NestedStruct1InterfaceState(
+        prop1 = nested_struct1_interface.prop1,
+    )
+    response = shared.NestedStruct1InterfaceFuncNoParamsResponse(
+        result=result,
+        state=state
+    )
+    return response
+
+@router.post(
     "/testbed2/nested_struct1_interface/func1", 
     response_model=shared.NestedStruct1InterfaceFunc1Response
 )

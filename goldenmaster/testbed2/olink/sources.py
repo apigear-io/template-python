@@ -147,7 +147,14 @@ class NestedStruct1InterfaceSource(IObjectSource):
 
     def olink_invoke(self, name: str, args: list[Any]) -> Any:
         path = Name.path_from_name(name)
-        if path == "func1":
+        if path == "funcNoReturnValue":
+            param1 = testbed2.api.as_nested_struct1(args[0])
+            reply = self.impl.func_no_return_value(param1)
+            return utils.base_types.from_int(0)
+        elif path == "funcNoParams":
+            reply = self.impl.func_no_params()
+            return testbed2.api.from_nested_struct1(reply)
+        elif path == "func1":
             param1 = testbed2.api.as_nested_struct1(args[0])
             reply = self.impl.func1(param1)
             return testbed2.api.from_nested_struct1(reply)      

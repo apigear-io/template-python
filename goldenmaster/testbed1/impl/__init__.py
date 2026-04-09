@@ -1,3 +1,4 @@
 
 from .struct_interface import StructInterface as StructInterface
 from .struct_array_interface import StructArrayInterface as StructArrayInterface
+from .struct_array2_interface import StructArray2Interface as StructArray2Interface

@@ -16,6 +16,9 @@ class CounterServiceAdapter():
         self.on_ready = EventHook()
         self.impl.on_vector_changed += self.notify_vector_changed
         self.impl.on_extern_vector_changed += self.notify_extern_vector_changed
+        self.impl.on_vector_array_changed += self.notify_vector_array_changed
+        self.impl.on_extern_vector_array_changed += self.notify_extern_vector_array_changed
+        self.impl.on_value_changed += self.notify_value_changed
         self.service.on_connected += self.subscribeForTopics
         self.service.on_subscribed += self.__handle_subscribed
         self.subscription_ids = []
@@ -23,18 +26,29 @@ class CounterServiceAdapter():
     def subscribeForTopics(self):
         self.subscription_ids.append(self.service.subscribe_for_property("counter/Counter/set/vector", self.__set_vector))
         self.subscription_ids.append(self.service.subscribe_for_property("counter/Counter/set/extern_vector", self.__set_extern_vector))
+        self.subscription_ids.append(self.service.subscribe_for_property("counter/Counter/set/vectorArray", self.__set_vector_array))
+        self.subscription_ids.append(self.service.subscribe_for_property("counter/Counter/set/extern_vectorArray", self.__set_extern_vector_array))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("counter/Counter/rpc/increment", self.__invoke_increment))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("counter/Counter/rpc/incrementArray", self.__invoke_increment_array))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("counter/Counter/rpc/decrement", self.__invoke_decrement))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("counter/Counter/rpc/decrementArray", self.__invoke_decrement_array))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("counter/Counter/set/vector")
         self.service.unsubscribe("counter/Counter/set/extern_vector")
+        self.service.unsubscribe("counter/Counter/set/vectorArray")
+        self.service.unsubscribe("counter/Counter/set/extern_vectorArray")
         self.service.unsubscribe("counter/Counter/rpc/increment")
+        self.service.unsubscribe("counter/Counter/rpc/incrementArray")
         self.service.unsubscribe("counter/Counter/rpc/decrement")
+        self.service.unsubscribe("counter/Counter/rpc/decrementArray")
         self.impl.on_vector_changed -= self.notify_vector_changed
         self.impl.on_extern_vector_changed -= self.notify_extern_vector_changed
+        self.impl.on_vector_array_changed -= self.notify_vector_array_changed
+        self.impl.on_extern_vector_array_changed -= self.notify_extern_vector_array_changed
+        self.impl.on_value_changed -= self.notify_value_changed
 
     def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
         if not (msg_id in self.subscription_ids):
@@ -48,6 +62,14 @@ class CounterServiceAdapter():
         if len(self.subscription_ids) == 0:
             self.on_ready.fire()
 
+    def notify_value_changed(self, vector: custom_types.api.Vector3D, extern_vector: vector3d.vector.Vector, vector_array: list[custom_types.api.Vector3D], extern_vector_array: list[vector3d.vector.Vector]):
+        _vector = custom_types.api.from_vector3_d(vector)
+        _extern_vector = extern_types.api.from_vector3d_vector_vector(extern_vector)
+        _vector_array = [custom_types.api.from_vector3_d(_) for _ in vector_array]
+        _extern_vector_array = [extern_types.api.from_vector3d_vector_vector(_) for _ in extern_vector_array]
+        args = [_vector, _extern_vector, _vector_array, _extern_vector_array]
+        self.service.notify_signal("counter/Counter/sig/valueChanged", args)
+
     def notify_vector_changed(self, value):
         v = custom_types.api.from_vector3_d(value)
         self.service.notify_property_change("counter/Counter/prop/vector", v)
@@ -55,6 +77,14 @@ class CounterServiceAdapter():
     def notify_extern_vector_changed(self, value):
         v = extern_types.api.from_vector3d_vector_vector(value)
         self.service.notify_property_change("counter/Counter/prop/extern_vector", v)
+
+    def notify_vector_array_changed(self, value):
+        v = [custom_types.api.from_vector3_d(_) for _ in value]
+        self.service.notify_property_change("counter/Counter/prop/vectorArray", v)
+
+    def notify_extern_vector_array_changed(self, value):
+        v = [extern_types.api.from_vector3d_vector_vector(_) for _ in value]
+        self.service.notify_property_change("counter/Counter/prop/extern_vectorArray", v)
 
     def __set_vector(self, value: Any):
             v = custom_types.api.as_vector3_d(value)
@@ -64,12 +94,30 @@ class CounterServiceAdapter():
             v = extern_types.api.as_vector3d_vector_vector(value)
             self.impl.set_extern_vector(v)
 
+    def __set_vector_array(self, value: Any):
+            v = [custom_types.api.as_vector3_d(_) for _ in value]
+            self.impl.set_vector_array(v)
+
+    def __set_extern_vector_array(self, value: Any):
+            v = [extern_types.api.as_vector3d_vector_vector(_) for _ in value]
+            self.impl.set_extern_vector_array(v)
+
     def __invoke_increment(self, args: list[Any]) -> Any:
         vec = extern_types.api.as_vector3d_vector_vector(args[0])
         reply = self.impl.increment(vec)
         return extern_types.api.from_vector3d_vector_vector(reply)
 
+    def __invoke_increment_array(self, args: list[Any]) -> Any:
+        vec = [extern_types.api.as_vector3d_vector_vector(_) for _ in args[0]]
+        reply = self.impl.increment_array(vec)
+        return [extern_types.api.from_vector3d_vector_vector(_) for _ in reply]
+
     def __invoke_decrement(self, args: list[Any]) -> Any:
         vec = custom_types.api.as_vector3_d(args[0])
         reply = self.impl.decrement(vec)
         return custom_types.api.from_vector3_d(reply)
+
+    def __invoke_decrement_array(self, args: list[Any]) -> Any:
+        vec = [custom_types.api.as_vector3_d(_) for _ in args[0]]
+        reply = self.impl.decrement_array(vec)
+        return [custom_types.api.from_vector3_d(_) for _ in reply]

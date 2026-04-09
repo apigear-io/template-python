@@ -125,6 +125,7 @@ class SimpleInterfaceClientAdapter():
         self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigFloat64",  self.__on_sig_float64_signal))
         self.subscription_ids.append(self.client.subscribe_for_signal("tb.simple/SimpleInterface/sig/sigString",  self.__on_sig_string_signal))
         self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_no_return_value, self.__on_func_no_return_value_resp))
+        self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_no_params, self.__on_func_no_params_resp))
         self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_bool, self.__on_func_bool_resp))
         self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int, self.__on_func_int_resp))
         self.subscription_ids.append(self.client.subscribe_for_invoke_resp(self.method_topics.resp_topic_func_int32, self.__on_func_int32_resp))
@@ -154,6 +155,7 @@ class SimpleInterfaceClientAdapter():
         self.client.unsubscribe("tb.simple/SimpleInterface/sig/sigFloat64")
         self.client.unsubscribe("tb.simple/SimpleInterface/sig/sigString")
         self.client.unsubscribe(self.method_topics.resp_topic_func_no_return_value)
+        self.client.unsubscribe(self.method_topics.resp_topic_func_no_params)
         self.client.unsubscribe(self.method_topics.resp_topic_func_bool)
         self.client.unsubscribe(self.method_topics.resp_topic_func_int)
         self.client.unsubscribe(self.method_topics.resp_topic_func_int32)
@@ -257,6 +259,17 @@ class SimpleInterfaceClientAdapter():
             return self.loop.call_soon_threadsafe(set_future_callback)
         call_id = self.client.invoke_remote(self.method_topics.topic_func_no_return_value, self.method_topics.resp_topic_func_no_return_value, args)
         self.pending_calls.func_no_return_value[call_id] = func
+        return await asyncio.wait_for(future, 500)
+
+    async def func_no_params(self):
+        args = []
+        future = asyncio.get_running_loop().create_future()
+        def func(result):
+            def set_future_callback():
+                future.set_result(utils.base_types.as_bool(result))
+            return self.loop.call_soon_threadsafe(set_future_callback)
+        call_id = self.client.invoke_remote(self.method_topics.topic_func_no_params, self.method_topics.resp_topic_func_no_params, args)
+        self.pending_calls.func_no_params[call_id] = func
         return await asyncio.wait_for(future, 500)
 
     async def func_bool(self, param_bool: bool):
@@ -458,6 +471,11 @@ class SimpleInterfaceClientAdapter():
        if callback != None:
            callback(value)
 
+    def __on_func_no_params_resp(self, value, callId):
+       callback = self.pending_calls.func_no_params.pop(callId)
+       if callback != None:
+           callback(value)
+
     def __on_func_bool_resp(self, value, callId):
        callback = self.pending_calls.func_bool.pop(callId)
        if callback != None:
@@ -501,6 +519,8 @@ class SimpleInterfaceClientAdapter():
         def __init__(self, client_id):
             self.topic_func_no_return_value= "tb.simple/SimpleInterface/rpc/funcNoReturnValue"
             self.resp_topic_func_no_return_value= self.topic_func_no_return_value + "/" + str(client_id) + "/result"
+            self.topic_func_no_params= "tb.simple/SimpleInterface/rpc/funcNoParams"
+            self.resp_topic_func_no_params= self.topic_func_no_params + "/" + str(client_id) + "/result"
             self.topic_func_bool= "tb.simple/SimpleInterface/rpc/funcBool"
             self.resp_topic_func_bool= self.topic_func_bool + "/" + str(client_id) + "/result"
             self.topic_func_int= "tb.simple/SimpleInterface/rpc/funcInt"
@@ -521,6 +541,7 @@ class SimpleInterfaceClientAdapter():
     class PendingCalls:
         def __init__(self):
             self.func_no_return_value = {}
+            self.func_no_params = {}
             self.func_bool = {}
             self.func_int = {}
             self.func_int32 = {}
@@ -1276,3 +1297,11 @@ class NoSignalsInterfaceClientAdapter():
         def __init__(self):
             self.func_void = {}
             self.func_bool = {}
+
+class EmptyInterfaceClientAdapter():
+    def __init__(self, client: apigear.mqtt.Client):
+        self.client = client
+        self.on_ready = EventHook()
+        self.on_ready.self.fire()
+
+    # internal functions on message handle

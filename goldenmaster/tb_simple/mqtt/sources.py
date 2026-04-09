@@ -79,6 +79,7 @@ class SimpleInterfaceServiceAdapter():
         self.subscription_ids.append(self.service.subscribe_for_property("tb.simple/SimpleInterface/set/propFloat64", self.__set_prop_float64))
         self.subscription_ids.append(self.service.subscribe_for_property("tb.simple/SimpleInterface/set/propString", self.__set_prop_string))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcNoReturnValue", self.__invoke_func_no_return_value))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcNoParams", self.__invoke_func_no_params))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcBool", self.__invoke_func_bool))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcInt", self.__invoke_func_int))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("tb.simple/SimpleInterface/rpc/funcInt32", self.__invoke_func_int32))
@@ -100,6 +101,7 @@ class SimpleInterfaceServiceAdapter():
         self.service.unsubscribe("tb.simple/SimpleInterface/set/propFloat64")
         self.service.unsubscribe("tb.simple/SimpleInterface/set/propString")
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcNoReturnValue")
+        self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcNoParams")
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcBool")
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcInt")
         self.service.unsubscribe("tb.simple/SimpleInterface/rpc/funcInt32")
@@ -245,6 +247,10 @@ class SimpleInterfaceServiceAdapter():
         param_bool = utils.base_types.as_bool(args[0])
         reply = self.impl.func_no_return_value(param_bool)
         return utils.base_types.from_int(0)
+
+    def __invoke_func_no_params(self, args: list[Any]) -> Any:
+        reply = self.impl.func_no_params()
+        return utils.base_types.from_bool(reply)
 
     def __invoke_func_bool(self, args: list[Any]) -> Any:
         param_bool = utils.base_types.as_bool(args[0])
@@ -708,3 +714,9 @@ class NoSignalsInterfaceServiceAdapter():
         param_bool = utils.base_types.as_bool(args[0])
         reply = self.impl.func_bool(param_bool)
         return utils.base_types.from_bool(reply)
+class EmptyInterfaceServiceAdapter():
+    def __init__(self, impl: tb_simple.api.IEmptyInterface, service: apigear.mqtt.Service):
+        self.service = service
+        self.impl = impl
+        self.on_ready = EventHook()
+        self.on_ready.self.fire()

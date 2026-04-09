@@ -104,6 +104,23 @@ class TestMqttNamEs:
         await self.teardown_mqtt(client, service)
 
     @pytest.mark.asyncio
+    async def test_enum_property(self):
+        impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
+        loop = asyncio.get_event_loop()
+        is_enum_property_changed_done = asyncio.Event()
+        def funProp(arguments):
+            set_event_ready(loop, is_enum_property_changed_done )
+        
+        sink.on_enum_property_changed += funProp
+        test_value = tb_names.api.EnumWithUnderScores.SECOND_VALUE
+        
+        sink.set_enum_property(test_value)
+        await is_enum_property_changed_done.wait()
+        assert impl.get_enum_property() == test_value
+        assert sink.get_enum_property() == test_value
+        await self.teardown_mqtt(client, service)
+
+    @pytest.mark.asyncio
     async def test_some_signal(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
         loop = asyncio.get_event_loop()

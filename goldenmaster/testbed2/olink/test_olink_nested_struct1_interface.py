@@ -40,6 +40,16 @@ class TestOLinkNestedStruct1Interface:
         assert sink.get_prop1() == test_value
 
     @pytest.mark.asyncio
+    async def test_func_no_return_value(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_no_return_value(param1=api.NestedStruct1())
+
+    @pytest.mark.asyncio
+    async def test_func_no_params(self, olink_objects):
+        impl, sink = olink_objects
+        await sink.func_no_params()
+
+    @pytest.mark.asyncio
     async def test_func1(self, olink_objects):
         impl, sink = olink_objects
         await sink.func1(param1=api.NestedStruct1())

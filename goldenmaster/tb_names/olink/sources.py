@@ -12,6 +12,7 @@ class NamEsSource(IObjectSource):
         impl.on_switch_changed += self.notify_switch_changed
         impl.on_some_property_changed += self.notify_some_property_changed
         impl.on_some_poperty2_changed += self.notify_some_poperty2_changed
+        impl.on_enum_property_changed += self.notify_enum_property_changed
         impl.on_some_signal += self.notify_some_signal
         impl.on_some_signal2 += self.notify_some_signal2
         self._on_linked = EventHook()
@@ -32,6 +33,9 @@ class NamEsSource(IObjectSource):
         elif path == "Some_Poperty2":
             v = utils.base_types.as_int(value)
             return self.impl.set_some_poperty2(v)
+        elif path == "enum_property":
+            v = tb_names.api.as_enum_with_under_scores(value)
+            return self.impl.set_enum_property(v)
         logging.error("unknown property: %s", name)
 
 
@@ -63,6 +67,8 @@ class NamEsSource(IObjectSource):
         props["SOME_PROPERTY"] = utils.base_types.from_int(v)
         v = self.impl.get_some_poperty2()
         props["Some_Poperty2"] = utils.base_types.from_int(v)
+        v = self.impl.get_enum_property()
+        props["enum_property"] = tb_names.api.from_enum_with_under_scores(v)
         return props
 
     def notify_some_signal(self, some_param: bool):
@@ -84,3 +90,7 @@ class NamEsSource(IObjectSource):
     def notify_some_poperty2_changed(self, value):
         v = utils.base_types.from_int(value)
         return RemoteNode.notify_property_change("tb.names.Nam_Es/Some_Poperty2", v)
+
+    def notify_enum_property_changed(self, value):
+        v = tb_names.api.from_enum_with_under_scores(value)
+        return RemoteNode.notify_property_change("tb.names.Nam_Es/enum_property", v)

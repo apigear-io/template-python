@@ -6,6 +6,7 @@ class NamEsState(BaseModel):
     switch: bool = Field(default=False, alias="Switch")
     some_property: int = Field(default=0, alias="SOME_PROPERTY")
     some_poperty2: int = Field(default=0, alias="Some_Poperty2")
+    enum_property: api.EnumWithUnderScores = Field(default=api.EnumWithUnderScores.FIRST_VALUE, alias="enum_property")
 
 # method Nam_Es.SOME_FUNCTION
 class Nam_EsSomeFunctionRequest(BaseModel):

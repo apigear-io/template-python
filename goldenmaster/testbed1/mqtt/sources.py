@@ -145,10 +145,12 @@ class StructArrayInterfaceServiceAdapter():
         self.impl.on_prop_int_changed += self.notify_prop_int_changed
         self.impl.on_prop_float_changed += self.notify_prop_float_changed
         self.impl.on_prop_string_changed += self.notify_prop_string_changed
+        self.impl.on_prop_enum_changed += self.notify_prop_enum_changed
         self.impl.on_sig_bool += self.notify_sig_bool
         self.impl.on_sig_int += self.notify_sig_int
         self.impl.on_sig_float += self.notify_sig_float
         self.impl.on_sig_string += self.notify_sig_string
+        self.impl.on_sig_enum += self.notify_sig_enum
         self.service.on_connected += self.subscribeForTopics
         self.service.on_subscribed += self.__handle_subscribed
         self.subscription_ids = []
@@ -158,10 +160,12 @@ class StructArrayInterfaceServiceAdapter():
         self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propInt", self.__set_prop_int))
         self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propFloat", self.__set_prop_float))
         self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArrayInterface/set/propEnum", self.__set_prop_enum))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcBool", self.__invoke_func_bool))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcInt", self.__invoke_func_int))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcFloat", self.__invoke_func_float))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcString", self.__invoke_func_string))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArrayInterface/rpc/funcEnum", self.__invoke_func_enum))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
@@ -170,18 +174,22 @@ class StructArrayInterfaceServiceAdapter():
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propInt")
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propFloat")
         self.service.unsubscribe("testbed1/StructArrayInterface/set/propString")
+        self.service.unsubscribe("testbed1/StructArrayInterface/set/propEnum")
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcBool")
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcInt")
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcFloat")
         self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcString")
+        self.service.unsubscribe("testbed1/StructArrayInterface/rpc/funcEnum")
         self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
         self.impl.on_prop_int_changed -= self.notify_prop_int_changed
         self.impl.on_prop_float_changed -= self.notify_prop_float_changed
         self.impl.on_prop_string_changed -= self.notify_prop_string_changed
+        self.impl.on_prop_enum_changed -= self.notify_prop_enum_changed
         self.impl.on_sig_bool -= self.notify_sig_bool
         self.impl.on_sig_int -= self.notify_sig_int
         self.impl.on_sig_float -= self.notify_sig_float
         self.impl.on_sig_string -= self.notify_sig_string
+        self.impl.on_sig_enum -= self.notify_sig_enum
 
     def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
         if not (msg_id in self.subscription_ids):
@@ -215,6 +223,11 @@ class StructArrayInterfaceServiceAdapter():
         args = [_param_string]
         self.service.notify_signal("testbed1/StructArrayInterface/sig/sigString", args)
 
+    def notify_sig_enum(self, param_enum: list[testbed1.api.Enum0]):
+        _param_enum = [testbed1.api.from_enum0(_) for _ in param_enum]
+        args = [_param_enum]
+        self.service.notify_signal("testbed1/StructArrayInterface/sig/sigEnum", args)
+
     def notify_prop_bool_changed(self, value):
         v = [testbed1.api.from_struct_bool(_) for _ in value]
         self.service.notify_property_change("testbed1/StructArrayInterface/prop/propBool", v)
@@ -231,6 +244,10 @@ class StructArrayInterfaceServiceAdapter():
         v = [testbed1.api.from_struct_string(_) for _ in value]
         self.service.notify_property_change("testbed1/StructArrayInterface/prop/propString", v)
 
+    def notify_prop_enum_changed(self, value):
+        v = [testbed1.api.from_enum0(_) for _ in value]
+        self.service.notify_property_change("testbed1/StructArrayInterface/prop/propEnum", v)
+
     def __set_prop_bool(self, value: Any):
             v = [testbed1.api.as_struct_bool(_) for _ in value]
             self.impl.set_prop_bool(v)
@@ -246,6 +263,10 @@ class StructArrayInterfaceServiceAdapter():
     def __set_prop_string(self, value: Any):
             v = [testbed1.api.as_struct_string(_) for _ in value]
             self.impl.set_prop_string(v)
+
+    def __set_prop_enum(self, value: Any):
+            v = [testbed1.api.as_enum0(_) for _ in value]
+            self.impl.set_prop_enum(v)
 
     def __invoke_func_bool(self, args: list[Any]) -> Any:
         param_bool = [testbed1.api.as_struct_bool(_) for _ in args[0]]
@@ -266,3 +287,157 @@ class StructArrayInterfaceServiceAdapter():
         param_string = [testbed1.api.as_struct_string(_) for _ in args[0]]
         reply = self.impl.func_string(param_string)
         return [testbed1.api.from_struct_string(_) for _ in reply]
+
+    def __invoke_func_enum(self, args: list[Any]) -> Any:
+        param_enum = [testbed1.api.as_enum0(_) for _ in args[0]]
+        reply = self.impl.func_enum(param_enum)
+        return [testbed1.api.from_enum0(_) for _ in reply]
+class StructArray2InterfaceServiceAdapter():
+    def __init__(self, impl: testbed1.api.IStructArray2Interface, service: apigear.mqtt.Service):
+        self.service = service
+        self.impl = impl
+        self.on_ready = EventHook()
+        self.impl.on_prop_bool_changed += self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed += self.notify_prop_int_changed
+        self.impl.on_prop_float_changed += self.notify_prop_float_changed
+        self.impl.on_prop_string_changed += self.notify_prop_string_changed
+        self.impl.on_prop_enum_changed += self.notify_prop_enum_changed
+        self.impl.on_sig_bool += self.notify_sig_bool
+        self.impl.on_sig_int += self.notify_sig_int
+        self.impl.on_sig_float += self.notify_sig_float
+        self.impl.on_sig_string += self.notify_sig_string
+        self.service.on_connected += self.subscribeForTopics
+        self.service.on_subscribed += self.__handle_subscribed
+        self.subscription_ids = []
+
+    def subscribeForTopics(self):
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArray2Interface/set/propBool", self.__set_prop_bool))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArray2Interface/set/propInt", self.__set_prop_int))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArray2Interface/set/propFloat", self.__set_prop_float))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArray2Interface/set/propString", self.__set_prop_string))
+        self.subscription_ids.append(self.service.subscribe_for_property("testbed1/StructArray2Interface/set/propEnum", self.__set_prop_enum))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArray2Interface/rpc/funcBool", self.__invoke_func_bool))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArray2Interface/rpc/funcInt", self.__invoke_func_int))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArray2Interface/rpc/funcFloat", self.__invoke_func_float))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArray2Interface/rpc/funcString", self.__invoke_func_string))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed1/StructArray2Interface/rpc/funcEnum", self.__invoke_func_enum))
+
+    def __del__(self):
+        self.service.on_connected -= self.subscribeForTopics
+        self.service.on_subscribed -= self.__handle_subscribed
+        self.service.unsubscribe("testbed1/StructArray2Interface/set/propBool")
+        self.service.unsubscribe("testbed1/StructArray2Interface/set/propInt")
+        self.service.unsubscribe("testbed1/StructArray2Interface/set/propFloat")
+        self.service.unsubscribe("testbed1/StructArray2Interface/set/propString")
+        self.service.unsubscribe("testbed1/StructArray2Interface/set/propEnum")
+        self.service.unsubscribe("testbed1/StructArray2Interface/rpc/funcBool")
+        self.service.unsubscribe("testbed1/StructArray2Interface/rpc/funcInt")
+        self.service.unsubscribe("testbed1/StructArray2Interface/rpc/funcFloat")
+        self.service.unsubscribe("testbed1/StructArray2Interface/rpc/funcString")
+        self.service.unsubscribe("testbed1/StructArray2Interface/rpc/funcEnum")
+        self.impl.on_prop_bool_changed -= self.notify_prop_bool_changed
+        self.impl.on_prop_int_changed -= self.notify_prop_int_changed
+        self.impl.on_prop_float_changed -= self.notify_prop_float_changed
+        self.impl.on_prop_string_changed -= self.notify_prop_string_changed
+        self.impl.on_prop_enum_changed -= self.notify_prop_enum_changed
+        self.impl.on_sig_bool -= self.notify_sig_bool
+        self.impl.on_sig_int -= self.notify_sig_int
+        self.impl.on_sig_float -= self.notify_sig_float
+        self.impl.on_sig_string -= self.notify_sig_string
+
+    def __handle_subscribed(self, msg_id: int, reason_code_list: list[paho.mqtt.reasoncodes.ReasonCode]):
+        if not (msg_id in self.subscription_ids):
+            return
+        # Assuming the topic was subscribed only for a single channel and reason_code_list contains
+        # a single entry
+        if reason_code_list[0].is_failure:
+            self.logging_func(paho.mqtt.enums.LogLevel.MQTT_LOG_ERROR, (f"Broker rejected subscription id {msg_id} reason: {reason_code_list[0]}"))
+            return
+        self.subscription_ids.remove(msg_id)
+        if len(self.subscription_ids) == 0:
+            self.on_ready.fire()
+
+    def notify_sig_bool(self, param_bool: testbed1.api.StructBoolWithArray):
+        _param_bool = testbed1.api.from_struct_bool_with_array(param_bool)
+        args = [_param_bool]
+        self.service.notify_signal("testbed1/StructArray2Interface/sig/sigBool", args)
+
+    def notify_sig_int(self, param_int: testbed1.api.StructIntWithArray):
+        _param_int = testbed1.api.from_struct_int_with_array(param_int)
+        args = [_param_int]
+        self.service.notify_signal("testbed1/StructArray2Interface/sig/sigInt", args)
+
+    def notify_sig_float(self, param_float: testbed1.api.StructFloatWithArray):
+        _param_float = testbed1.api.from_struct_float_with_array(param_float)
+        args = [_param_float]
+        self.service.notify_signal("testbed1/StructArray2Interface/sig/sigFloat", args)
+
+    def notify_sig_string(self, param_string: testbed1.api.StructStringWithArray):
+        _param_string = testbed1.api.from_struct_string_with_array(param_string)
+        args = [_param_string]
+        self.service.notify_signal("testbed1/StructArray2Interface/sig/sigString", args)
+
+    def notify_prop_bool_changed(self, value):
+        v = testbed1.api.from_struct_bool_with_array(value)
+        self.service.notify_property_change("testbed1/StructArray2Interface/prop/propBool", v)
+
+    def notify_prop_int_changed(self, value):
+        v = testbed1.api.from_struct_int_with_array(value)
+        self.service.notify_property_change("testbed1/StructArray2Interface/prop/propInt", v)
+
+    def notify_prop_float_changed(self, value):
+        v = testbed1.api.from_struct_float_with_array(value)
+        self.service.notify_property_change("testbed1/StructArray2Interface/prop/propFloat", v)
+
+    def notify_prop_string_changed(self, value):
+        v = testbed1.api.from_struct_string_with_array(value)
+        self.service.notify_property_change("testbed1/StructArray2Interface/prop/propString", v)
+
+    def notify_prop_enum_changed(self, value):
+        v = testbed1.api.from_struct_enum_with_array(value)
+        self.service.notify_property_change("testbed1/StructArray2Interface/prop/propEnum", v)
+
+    def __set_prop_bool(self, value: Any):
+            v = testbed1.api.as_struct_bool_with_array(value)
+            self.impl.set_prop_bool(v)
+
+    def __set_prop_int(self, value: Any):
+            v = testbed1.api.as_struct_int_with_array(value)
+            self.impl.set_prop_int(v)
+
+    def __set_prop_float(self, value: Any):
+            v = testbed1.api.as_struct_float_with_array(value)
+            self.impl.set_prop_float(v)
+
+    def __set_prop_string(self, value: Any):
+            v = testbed1.api.as_struct_string_with_array(value)
+            self.impl.set_prop_string(v)
+
+    def __set_prop_enum(self, value: Any):
+            v = testbed1.api.as_struct_enum_with_array(value)
+            self.impl.set_prop_enum(v)
+
+    def __invoke_func_bool(self, args: list[Any]) -> Any:
+        param_bool = testbed1.api.as_struct_bool_with_array(args[0])
+        reply = self.impl.func_bool(param_bool)
+        return [testbed1.api.from_struct_bool(_) for _ in reply]
+
+    def __invoke_func_int(self, args: list[Any]) -> Any:
+        param_int = testbed1.api.as_struct_int_with_array(args[0])
+        reply = self.impl.func_int(param_int)
+        return [testbed1.api.from_struct_int(_) for _ in reply]
+
+    def __invoke_func_float(self, args: list[Any]) -> Any:
+        param_float = testbed1.api.as_struct_float_with_array(args[0])
+        reply = self.impl.func_float(param_float)
+        return [testbed1.api.from_struct_float(_) for _ in reply]
+
+    def __invoke_func_string(self, args: list[Any]) -> Any:
+        param_string = testbed1.api.as_struct_string_with_array(args[0])
+        reply = self.impl.func_string(param_string)
+        return [testbed1.api.from_struct_string(_) for _ in reply]
+
+    def __invoke_func_enum(self, args: list[Any]) -> Any:
+        param_enum = testbed1.api.as_struct_enum_with_array(args[0])
+        reply = self.impl.func_enum(param_enum)
+        return [testbed1.api.from_enum0(_) for _ in reply]

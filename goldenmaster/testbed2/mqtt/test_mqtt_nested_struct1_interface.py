@@ -87,6 +87,23 @@ class TestMqttNestedStruct1Interface:
         await self.teardown_mqtt(client, service)
 
     @pytest.mark.asyncio
+    async def test_func_no_return_value(self):
+        impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
+
+        await sink.func_no_return_value(param1=testbed2.api.NestedStruct1())
+
+        await self.teardown_mqtt(client, service)
+
+    @pytest.mark.asyncio
+    async def test_func_no_params(self):
+        impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
+
+        result = await sink.func_no_params()
+        assert result == testbed2.api.NestedStruct1()
+
+        await self.teardown_mqtt(client, service)
+
+    @pytest.mark.asyncio
     async def test_func1(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 

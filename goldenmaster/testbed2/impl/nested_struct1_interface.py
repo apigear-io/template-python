@@ -21,6 +21,12 @@ class NestedStruct1Interface(api.INestedStruct1Interface):
     def _push_prop1(self, value):
         self.on_prop1_changed.fire(value)
 
+    def func_no_return_value(self, param1: api.NestedStruct1) -> None:
+        return None
+
+    def func_no_params(self) -> api.NestedStruct1:
+        return api.NestedStruct1()
+
     def func1(self, param1: api.NestedStruct1) -> api.NestedStruct1:
         return api.NestedStruct1()
 

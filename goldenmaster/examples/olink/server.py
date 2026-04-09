@@ -69,9 +69,11 @@ tb_simple.olink.SimpleArrayInterfaceSource(tb_simple.impl.SimpleArrayInterface()
 tb_simple.olink.NoPropertiesInterfaceSource(tb_simple.impl.NoPropertiesInterface())
 tb_simple.olink.NoOperationsInterfaceSource(tb_simple.impl.NoOperationsInterface())
 tb_simple.olink.NoSignalsInterfaceSource(tb_simple.impl.NoSignalsInterface())
+tb_simple.olink.EmptyInterfaceSource(tb_simple.impl.EmptyInterface())
 
 testbed1.olink.StructInterfaceSource(testbed1.impl.StructInterface())
 testbed1.olink.StructArrayInterfaceSource(testbed1.impl.StructArrayInterface())
+testbed1.olink.StructArray2InterfaceSource(testbed1.impl.StructArray2Interface())
 
 tb_names.olink.NamEsSource(tb_names.impl.NamEs())
 

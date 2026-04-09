@@ -99,6 +99,23 @@ class SimpleInterface(api.ISimpleInterface):
         self._prop_float64 = resp.state.prop_float64
         self._prop_string = resp.state.prop_string
 
+    def func_no_params(self):
+        req = shared.SimpleInterfaceFuncNoParamsRequest(
+        )
+        data = requests.post(
+            f'{self.url}/tb_simple/simple_interface/func_no_params',
+            req.json()
+        )
+        resp = shared.SimpleInterfaceFuncNoParamsResponse(**data.json())
+        self._prop_bool = resp.state.prop_bool
+        self._prop_int = resp.state.prop_int
+        self._prop_int32 = resp.state.prop_int32
+        self._prop_int64 = resp.state.prop_int64
+        self._prop_float = resp.state.prop_float
+        self._prop_float32 = resp.state.prop_float32
+        self._prop_float64 = resp.state.prop_float64
+        self._prop_string = resp.state.prop_string
+
     def func_bool(self, param_bool: bool):
         req = shared.SimpleInterfaceFuncBoolRequest(
             param_bool=param_bool
@@ -544,3 +561,8 @@ class NoSignalsInterface(api.INoSignalsInterface):
         resp = shared.NoSignalsInterfaceFuncBoolResponse(**data.json())
         self._prop_bool = resp.state.prop_bool
         self._prop_int = resp.state.prop_int
+
+class EmptyInterface(api.IEmptyInterface):
+    def __init__(self, url='http://localhost:8000'):
+        super().__init__()
+        self._url = url

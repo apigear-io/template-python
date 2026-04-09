@@ -1,7 +1,7 @@
 
 from testbed1.api import api
-from testbed1.impl import StructArrayInterface
-from testbed1.olink import StructArrayInterfaceSource, StructArrayInterfaceSink
+from testbed1.impl import StructArray2Interface
+from testbed1.olink import StructArray2InterfaceSource, StructArray2InterfaceSink
 import testbed1.test_helpers.test_struct
 from olink.client import ClientNode
 from olink.remote import RemoteNode
@@ -11,19 +11,19 @@ import asyncio
 
 @pytest.fixture()
 def olink_objects():
-    impl = StructArrayInterface()
-    StructArrayInterfaceSource(impl)
+    impl = StructArray2Interface()
+    StructArray2InterfaceSource(impl)
     remote_node = RemoteNode()
     client_node = ClientNode()
 
     remote_node.on_write(client_node.handle_message)
     client_node.on_write(remote_node.handle_message)
 
-    sink = StructArrayInterfaceSink()
+    sink = StructArray2InterfaceSink()
     client_node.link_remote(sink.olink_object_name())
     yield impl, sink
 
-class TestOLinkStructArrayInterface:
+class TestOLinkStructArray2Interface:
 
     def test_prop_bool(self, olink_objects):
         impl, sink = olink_objects
@@ -32,8 +32,7 @@ class TestOLinkStructArrayInterface:
             nonlocal is_prop_bool_changed
             is_prop_bool_changed = True
         sink.on_prop_bool_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructBool(api.StructBool()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructBoolWithArray(api.StructBoolWithArray())
 
         sink.set_prop_bool(test_value)
         assert is_prop_bool_changed == True
@@ -47,8 +46,7 @@ class TestOLinkStructArrayInterface:
             nonlocal is_prop_int_changed
             is_prop_int_changed = True
         sink.on_prop_int_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructInt(api.StructInt()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructIntWithArray(api.StructIntWithArray())
 
         sink.set_prop_int(test_value)
         assert is_prop_int_changed == True
@@ -62,8 +60,7 @@ class TestOLinkStructArrayInterface:
             nonlocal is_prop_float_changed
             is_prop_float_changed = True
         sink.on_prop_float_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructFloat(api.StructFloat()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructFloatWithArray(api.StructFloatWithArray())
 
         sink.set_prop_float(test_value)
         assert is_prop_float_changed == True
@@ -77,8 +74,7 @@ class TestOLinkStructArrayInterface:
             nonlocal is_prop_string_changed
             is_prop_string_changed = True
         sink.on_prop_string_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructString(api.StructString()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructStringWithArray(api.StructStringWithArray())
 
         sink.set_prop_string(test_value)
         assert is_prop_string_changed == True
@@ -92,8 +88,7 @@ class TestOLinkStructArrayInterface:
             nonlocal is_prop_enum_changed
             is_prop_enum_changed = True
         sink.on_prop_enum_changed += funProp
-        test_value = []  
-        test_value.append(api.Enum0.VALUE1)
+        test_value = testbed1.test_helpers.test_struct.fillTestStructEnumWithArray(api.StructEnumWithArray())
 
         sink.set_prop_enum(test_value)
         assert is_prop_enum_changed == True
@@ -103,109 +98,88 @@ class TestOLinkStructArrayInterface:
     @pytest.mark.asyncio
     async def test_func_bool(self, olink_objects):
         impl, sink = olink_objects
-        await sink.func_bool(param_bool=[])
+        await sink.func_bool(param_bool=api.StructBoolWithArray())
 
     @pytest.mark.asyncio
     async def test_func_int(self, olink_objects):
         impl, sink = olink_objects
-        await sink.func_int(param_int=[])
+        await sink.func_int(param_int=api.StructIntWithArray())
 
     @pytest.mark.asyncio
     async def test_func_float(self, olink_objects):
         impl, sink = olink_objects
-        await sink.func_float(param_float=[])
+        await sink.func_float(param_float=api.StructFloatWithArray())
 
     @pytest.mark.asyncio
     async def test_func_string(self, olink_objects):
         impl, sink = olink_objects
-        await sink.func_string(param_string=[])
+        await sink.func_string(param_string=api.StructStringWithArray())
 
     @pytest.mark.asyncio
     async def test_func_enum(self, olink_objects):
         impl, sink = olink_objects
-        await sink.func_enum(param_enum=[])
+        await sink.func_enum(param_enum=api.StructEnumWithArray())
 
     def test_sig_bool(self, olink_objects):
         impl, sink = olink_objects
         is_sig_bool_called = False
-        local_param_bool_array = []
-        local_param_bool_array.append(testbed1.test_helpers.test_struct.fillTestStructBool(api.StructBool()))
+        local_param_bool_struct = testbed1.test_helpers.test_struct.fillTestStructBoolWithArray(api.StructBoolWithArray())
 
         def funSignal(param_bool):
-            assert param_bool == local_param_bool_array
+            assert param_bool ==local_param_bool_struct
             nonlocal is_sig_bool_called
             is_sig_bool_called = True
 
         sink.on_sig_bool += funSignal
 
 
-        impl._sig_bool(local_param_bool_array)
+        impl._sig_bool(local_param_bool_struct)
         assert is_sig_bool_called == True
 
     def test_sig_int(self, olink_objects):
         impl, sink = olink_objects
         is_sig_int_called = False
-        local_param_int_array = []
-        local_param_int_array.append(testbed1.test_helpers.test_struct.fillTestStructInt(api.StructInt()))
+        local_param_int_struct = testbed1.test_helpers.test_struct.fillTestStructIntWithArray(api.StructIntWithArray())
 
         def funSignal(param_int):
-            assert param_int == local_param_int_array
+            assert param_int ==local_param_int_struct
             nonlocal is_sig_int_called
             is_sig_int_called = True
 
         sink.on_sig_int += funSignal
 
 
-        impl._sig_int(local_param_int_array)
+        impl._sig_int(local_param_int_struct)
         assert is_sig_int_called == True
 
     def test_sig_float(self, olink_objects):
         impl, sink = olink_objects
         is_sig_float_called = False
-        local_param_float_array = []
-        local_param_float_array.append(testbed1.test_helpers.test_struct.fillTestStructFloat(api.StructFloat()))
+        local_param_float_struct = testbed1.test_helpers.test_struct.fillTestStructFloatWithArray(api.StructFloatWithArray())
 
         def funSignal(param_float):
-            assert param_float == local_param_float_array
+            assert param_float ==local_param_float_struct
             nonlocal is_sig_float_called
             is_sig_float_called = True
 
         sink.on_sig_float += funSignal
 
 
-        impl._sig_float(local_param_float_array)
+        impl._sig_float(local_param_float_struct)
         assert is_sig_float_called == True
 
     def test_sig_string(self, olink_objects):
         impl, sink = olink_objects
         is_sig_string_called = False
-        local_param_string_array = []
-        local_param_string_array.append(testbed1.test_helpers.test_struct.fillTestStructString(api.StructString()))
+        local_param_string_struct = testbed1.test_helpers.test_struct.fillTestStructStringWithArray(api.StructStringWithArray())
 
         def funSignal(param_string):
-            assert param_string == local_param_string_array
+            assert param_string ==local_param_string_struct
             nonlocal is_sig_string_called
             is_sig_string_called = True
 
         sink.on_sig_string += funSignal
 
 
-        impl._sig_string(local_param_string_array)
+        impl._sig_string(local_param_string_struct)
         assert is_sig_string_called == True
-
-    def test_sig_enum(self, olink_objects):
-        impl, sink = olink_objects
-        is_sig_enum_called = False
-        local_param_enum_array = []
-        local_param_enum_array.append(api.Enum0.VALUE1)
-
-        def funSignal(param_enum):
-            assert param_enum == local_param_enum_array
-            nonlocal is_sig_enum_called
-            is_sig_enum_called = True
-
-        sink.on_sig_enum += funSignal
-
-
-        impl._sig_enum(local_param_enum_array)
-        assert is_sig_enum_called == True

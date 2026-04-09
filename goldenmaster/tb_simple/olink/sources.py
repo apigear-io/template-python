@@ -105,6 +105,9 @@ class SimpleInterfaceSource(IObjectSource):
             param_bool = utils.base_types.as_bool(args[0])
             reply = self.impl.func_no_return_value(param_bool)
             return utils.base_types.from_int(0)
+        elif path == "funcNoParams":
+            reply = self.impl.func_no_params()
+            return utils.base_types.from_bool(reply)
         elif path == "funcBool":
             param_bool = utils.base_types.as_bool(args[0])
             reply = self.impl.func_bool(param_bool)
@@ -587,3 +590,34 @@ class NoSignalsInterfaceSource(IObjectSource):
     def notify_prop_int_changed(self, value):
         v = utils.base_types.from_int(value)
         return RemoteNode.notify_property_change("tb.simple.NoSignalsInterface/propInt", v)
+class EmptyInterfaceSource(IObjectSource):
+    impl: tb_simple.api.IEmptyInterface
+    def __init__(self, impl: tb_simple.api.IEmptyInterface):
+        self.impl = impl
+        self._on_linked = EventHook()
+        self._on_unlinked = EventHook()
+        RemoteNode.register_source(self)
+
+    def olink_object_name(self):
+        return "tb.simple.EmptyInterface"
+
+    def olink_set_property(self, name: str, value: Any):
+        path = Name.path_from_name(name)
+        logging.error("unknown property: %s", name)
+
+
+    def olink_invoke(self, name: str, args: list[Any]) -> Any:
+        path = Name.path_from_name(name)      
+        logging.error("unknown operation: %s", name)
+
+    def olink_linked(self, name: str, node: "RemoteNode"):
+        logging.info("linked: %s", name)
+        self._on_linked.fire(name)
+
+    def olink_unlinked(self, name: str, node: "RemoteNode"):
+        logging.info("unlinked: %s", name)
+        self._on_unlinked.fire(name)
+
+    def olink_collect_properties(self) -> object:
+        props = {}
+        return props

@@ -18,6 +18,7 @@ async def nam_es_someFunction(params: shared.Nam_EsSomeFunctionRequest):
         switch = nam_es.switch,
         some_property = nam_es.some_property,
         some_poperty2 = nam_es.some_poperty2,
+        enum_property = nam_es.enum_property,
     )
     response = shared.Nam_EsSomeFunctionResponse(
         result=result,
@@ -35,6 +36,7 @@ async def nam_es_someFunction2(params: shared.Nam_EsSomeFunction2Request):
         switch = nam_es.switch,
         some_property = nam_es.some_property,
         some_poperty2 = nam_es.some_poperty2,
+        enum_property = nam_es.enum_property,
     )
     response = shared.Nam_EsSomeFunction2Response(
         result=result,

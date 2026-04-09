@@ -12,7 +12,8 @@ class NamEs(api.INamEs):
         self._url = url        
         self._switch = False        
         self._some_property = 0        
-        self._some_poperty2 = 0
+        self._some_poperty2 = 0        
+        self._enum_property = api.EnumWithUnderScores.FIRST_VALUE
     
     def get_switch(self):
         return self._switch
@@ -31,6 +32,12 @@ class NamEs(api.INamEs):
 
     def set_some_poperty2(self, value):
         self._some_poperty2 = value
+    
+    def get_enum_property(self):
+        return self._enum_property
+
+    def set_enum_property(self, value):
+        self._enum_property = value
 
     def some_function(self, some_param: bool):
         req = shared.Nam_EsSomeFunctionRequest(
@@ -44,6 +51,7 @@ class NamEs(api.INamEs):
         self._switch = resp.state.switch
         self._some_property = resp.state.some_property
         self._some_poperty2 = resp.state.some_poperty2
+        self._enum_property = resp.state.enum_property
 
     def some_function2(self, some_param: bool):
         req = shared.Nam_EsSomeFunction2Request(
@@ -57,3 +65,4 @@ class NamEs(api.INamEs):
         self._switch = resp.state.switch
         self._some_property = resp.state.some_property
         self._some_poperty2 = resp.state.some_poperty2
+        self._enum_property = resp.state.enum_property

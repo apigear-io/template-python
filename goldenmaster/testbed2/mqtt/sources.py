@@ -161,12 +161,16 @@ class NestedStruct1InterfaceServiceAdapter():
 
     def subscribeForTopics(self):
         self.subscription_ids.append(self.service.subscribe_for_property("testbed2/NestedStruct1Interface/set/prop1", self.__set_prop1))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed2/NestedStruct1Interface/rpc/funcNoReturnValue", self.__invoke_func_no_return_value))
+        self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed2/NestedStruct1Interface/rpc/funcNoParams", self.__invoke_func_no_params))
         self.subscription_ids.append(self.service.subscribe_for_invoke_req("testbed2/NestedStruct1Interface/rpc/func1", self.__invoke_func1))
 
     def __del__(self):
         self.service.on_connected -= self.subscribeForTopics
         self.service.on_subscribed -= self.__handle_subscribed
         self.service.unsubscribe("testbed2/NestedStruct1Interface/set/prop1")
+        self.service.unsubscribe("testbed2/NestedStruct1Interface/rpc/funcNoReturnValue")
+        self.service.unsubscribe("testbed2/NestedStruct1Interface/rpc/funcNoParams")
         self.service.unsubscribe("testbed2/NestedStruct1Interface/rpc/func1")
         self.impl.on_prop1_changed -= self.notify_prop1_changed
         self.impl.on_sig1 -= self.notify_sig1
@@ -195,6 +199,15 @@ class NestedStruct1InterfaceServiceAdapter():
     def __set_prop1(self, value: Any):
             v = testbed2.api.as_nested_struct1(value)
             self.impl.set_prop1(v)
+
+    def __invoke_func_no_return_value(self, args: list[Any]) -> Any:
+        param1 = testbed2.api.as_nested_struct1(args[0])
+        reply = self.impl.func_no_return_value(param1)
+        return utils.base_types.from_int(0)
+
+    def __invoke_func_no_params(self, args: list[Any]) -> Any:
+        reply = self.impl.func_no_params()
+        return testbed2.api.from_nested_struct1(reply)
 
     def __invoke_func1(self, args: list[Any]) -> Any:
         param1 = testbed2.api.as_nested_struct1(args[0])

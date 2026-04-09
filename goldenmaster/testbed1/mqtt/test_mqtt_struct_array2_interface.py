@@ -12,15 +12,15 @@ def set_event_ready(loop, event):
         event.set()
     loop.call_soon_threadsafe(func)
 
-class TestMqttStructArrayInterface:
+class TestMqttStructArray2Interface:
 
     @pytest.mark.asyncio
     async def setup_mqtt(slef):
-        impl = testbed1.impl.StructArrayInterface()
-        service = apigear.mqtt.Service("uniqueServiceIdTestStructArrayInterface")
-        client = apigear.mqtt.Client("uniqueClientIdTestTestStructArrayInterface")
-        serviceAdapter = testbed1.mqtt.StructArrayInterfaceServiceAdapter(impl, service)
-        sink = testbed1.mqtt.StructArrayInterfaceClientAdapter(client)
+        impl = testbed1.impl.StructArray2Interface()
+        service = apigear.mqtt.Service("uniqueServiceIdTestStructArray2Interface")
+        client = apigear.mqtt.Client("uniqueClientIdTestTestStructArray2Interface")
+        serviceAdapter = testbed1.mqtt.StructArray2InterfaceServiceAdapter(impl, service)
+        sink = testbed1.mqtt.StructArray2InterfaceClientAdapter(client)
      
         await service.connect("localhost", 1883)
         await client.connect("localhost", 1883)
@@ -61,8 +61,7 @@ class TestMqttStructArrayInterface:
             set_event_ready(loop, is_prop_bool_changed_done )
         
         sink.on_prop_bool_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructBool(testbed1.api.StructBool()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructBoolWithArray(testbed1.api.StructBoolWithArray())
         
         sink.set_prop_bool(test_value)
         await is_prop_bool_changed_done.wait()
@@ -79,8 +78,7 @@ class TestMqttStructArrayInterface:
             set_event_ready(loop, is_prop_int_changed_done )
         
         sink.on_prop_int_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructInt(testbed1.api.StructInt()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructIntWithArray(testbed1.api.StructIntWithArray())
         
         sink.set_prop_int(test_value)
         await is_prop_int_changed_done.wait()
@@ -97,8 +95,7 @@ class TestMqttStructArrayInterface:
             set_event_ready(loop, is_prop_float_changed_done )
         
         sink.on_prop_float_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructFloat(testbed1.api.StructFloat()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructFloatWithArray(testbed1.api.StructFloatWithArray())
         
         sink.set_prop_float(test_value)
         await is_prop_float_changed_done.wait()
@@ -115,8 +112,7 @@ class TestMqttStructArrayInterface:
             set_event_ready(loop, is_prop_string_changed_done )
         
         sink.on_prop_string_changed += funProp
-        test_value = []
-        test_value.append(testbed1.test_helpers.test_struct.fillTestStructString(testbed1.api.StructString()))
+        test_value = testbed1.test_helpers.test_struct.fillTestStructStringWithArray(testbed1.api.StructStringWithArray())
         
         sink.set_prop_string(test_value)
         await is_prop_string_changed_done.wait()
@@ -133,8 +129,7 @@ class TestMqttStructArrayInterface:
             set_event_ready(loop, is_prop_enum_changed_done )
         
         sink.on_prop_enum_changed += funProp
-        test_value = []  
-        test_value.append(testbed1.api.Enum0.VALUE1)
+        test_value = testbed1.test_helpers.test_struct.fillTestStructEnumWithArray(testbed1.api.StructEnumWithArray())
         
         sink.set_prop_enum(test_value)
         await is_prop_enum_changed_done.wait()
@@ -147,15 +142,14 @@ class TestMqttStructArrayInterface:
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
         loop = asyncio.get_event_loop()
         is_sig_bool_changed_done = asyncio.Event()
-        local_param_bool_array = []
-        local_param_bool_array.append(testbed1.test_helpers.test_struct.fillTestStructBool(testbed1.api.StructBool()))
+        local_param_bool_struct = testbed1.test_helpers.test_struct.fillTestStructBoolWithArray(testbed1.api.StructBoolWithArray())
 
         def funSignal(param_bool):
-            assert param_bool == local_param_bool_array
+            assert param_bool ==local_param_bool_struct
             set_event_ready(loop, is_sig_bool_changed_done )
         
         sink.on_sig_bool += funSignal
-        impl._sig_bool(local_param_bool_array)
+        impl._sig_bool(local_param_bool_struct)
 
         await is_sig_bool_changed_done.wait()
         await self.teardown_mqtt(client, service)
@@ -165,15 +159,14 @@ class TestMqttStructArrayInterface:
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
         loop = asyncio.get_event_loop()
         is_sig_int_changed_done = asyncio.Event()
-        local_param_int_array = []
-        local_param_int_array.append(testbed1.test_helpers.test_struct.fillTestStructInt(testbed1.api.StructInt()))
+        local_param_int_struct = testbed1.test_helpers.test_struct.fillTestStructIntWithArray(testbed1.api.StructIntWithArray())
 
         def funSignal(param_int):
-            assert param_int == local_param_int_array
+            assert param_int ==local_param_int_struct
             set_event_ready(loop, is_sig_int_changed_done )
         
         sink.on_sig_int += funSignal
-        impl._sig_int(local_param_int_array)
+        impl._sig_int(local_param_int_struct)
 
         await is_sig_int_changed_done.wait()
         await self.teardown_mqtt(client, service)
@@ -183,15 +176,14 @@ class TestMqttStructArrayInterface:
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
         loop = asyncio.get_event_loop()
         is_sig_float_changed_done = asyncio.Event()
-        local_param_float_array = []
-        local_param_float_array.append(testbed1.test_helpers.test_struct.fillTestStructFloat(testbed1.api.StructFloat()))
+        local_param_float_struct = testbed1.test_helpers.test_struct.fillTestStructFloatWithArray(testbed1.api.StructFloatWithArray())
 
         def funSignal(param_float):
-            assert param_float == local_param_float_array
+            assert param_float ==local_param_float_struct
             set_event_ready(loop, is_sig_float_changed_done )
         
         sink.on_sig_float += funSignal
-        impl._sig_float(local_param_float_array)
+        impl._sig_float(local_param_float_struct)
 
         await is_sig_float_changed_done.wait()
         await self.teardown_mqtt(client, service)
@@ -201,42 +193,23 @@ class TestMqttStructArrayInterface:
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
         loop = asyncio.get_event_loop()
         is_sig_string_changed_done = asyncio.Event()
-        local_param_string_array = []
-        local_param_string_array.append(testbed1.test_helpers.test_struct.fillTestStructString(testbed1.api.StructString()))
+        local_param_string_struct = testbed1.test_helpers.test_struct.fillTestStructStringWithArray(testbed1.api.StructStringWithArray())
 
         def funSignal(param_string):
-            assert param_string == local_param_string_array
+            assert param_string ==local_param_string_struct
             set_event_ready(loop, is_sig_string_changed_done )
         
         sink.on_sig_string += funSignal
-        impl._sig_string(local_param_string_array)
+        impl._sig_string(local_param_string_struct)
 
         await is_sig_string_changed_done.wait()
-        await self.teardown_mqtt(client, service)
-
-    @pytest.mark.asyncio
-    async def test_sig_enum(self):
-        impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
-        loop = asyncio.get_event_loop()
-        is_sig_enum_changed_done = asyncio.Event()
-        local_param_enum_array = []
-        local_param_enum_array.append(testbed1.api.Enum0.VALUE1)
-
-        def funSignal(param_enum):
-            assert param_enum == local_param_enum_array
-            set_event_ready(loop, is_sig_enum_changed_done )
-        
-        sink.on_sig_enum += funSignal
-        impl._sig_enum(local_param_enum_array)
-
-        await is_sig_enum_changed_done.wait()
         await self.teardown_mqtt(client, service)
 
     @pytest.mark.asyncio
     async def test_func_bool(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 
-        result = await sink.func_bool(param_bool=[])
+        result = await sink.func_bool(param_bool=testbed1.api.StructBoolWithArray())
         assert result == []
 
         await self.teardown_mqtt(client, service)
@@ -245,7 +218,7 @@ class TestMqttStructArrayInterface:
     async def test_func_int(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 
-        result = await sink.func_int(param_int=[])
+        result = await sink.func_int(param_int=testbed1.api.StructIntWithArray())
         assert result == []
 
         await self.teardown_mqtt(client, service)
@@ -254,7 +227,7 @@ class TestMqttStructArrayInterface:
     async def test_func_float(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 
-        result = await sink.func_float(param_float=[])
+        result = await sink.func_float(param_float=testbed1.api.StructFloatWithArray())
         assert result == []
 
         await self.teardown_mqtt(client, service)
@@ -263,7 +236,7 @@ class TestMqttStructArrayInterface:
     async def test_func_string(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 
-        result = await sink.func_string(param_string=[])
+        result = await sink.func_string(param_string=testbed1.api.StructStringWithArray())
         assert result == []
 
         await self.teardown_mqtt(client, service)
@@ -272,7 +245,7 @@ class TestMqttStructArrayInterface:
     async def test_func_enum(self):
         impl, sink, serviceAdapter, client, service = await self.setup_mqtt()
 
-        result = await sink.func_enum(param_enum=[])
+        result = await sink.func_enum(param_enum=testbed1.api.StructEnumWithArray())
         assert result == []
 
         await self.teardown_mqtt(client, service)
