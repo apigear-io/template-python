@@ -53,13 +53,14 @@ class {{Camel .Name}}Sink(IObjectSink):
         self.client = ClientNode.register_sink(self)
 
     {{- range .Properties }}
-    {{- if not .IsReadOnly }}
 
     def _set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:
             return
         self._{{snake .Name}} = value
         self.on_{{snake .Name}}_changed.fire(self._{{snake .Name}})
+
+    {{- if not .IsReadOnly }}
 
     def set_{{snake .Name}}(self, value):
         if self._{{snake .Name}} == value:

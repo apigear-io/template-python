@@ -9,7 +9,7 @@ fastapi
 starlette
 uvicorn
 websockets
-olink-core @ git+https://github.com/apigear-io/objectlink-core-python.git@v0.3.3
+olink-core @ git+https://github.com/apigear-io/objectlink-core-python.git@v0.4.0
 {{- end}}
 {{- if $features.mqtt }}
 paho-mqtt

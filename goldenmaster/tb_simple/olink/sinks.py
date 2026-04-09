@@ -510,6 +510,12 @@ class SimpleArrayInterfaceSink(IObjectSink):
     def get_prop_string(self):
         return self._prop_string
 
+    def _set_prop_read_only_string(self, value):
+        if self._prop_read_only_string == value:
+            return
+        self._prop_read_only_string = value
+        self.on_prop_read_only_string_changed.fire(self._prop_read_only_string)
+
     def get_prop_read_only_string(self):
         return self._prop_read_only_string
 
