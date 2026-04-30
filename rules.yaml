@@ -151,6 +151,10 @@ features:
           - source: "apigear/mqtt/test_base.py"
             target: "apigear/mqtt/test_base.py"
             raw: true
+          - source: "conftest.py"
+            target: "conftest.py"
+            raw: true
+            preserve: true
       - match: module
         documents:
           - source: "mqtt/__init__.py.tpl"
