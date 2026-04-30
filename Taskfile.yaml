@@ -2,10 +2,13 @@ version: 3
 
 vars:
   BIN: apigear{{exeExt}}
+  # Pinned apigear CLI version this template is certified against.
+  # Bump after a generation+test pass on the new version.
+  APIGEAR_VERSION: v0.50.2
 tasks:
   install:
     cmds:
-      - go install github.com/apigear-io/cli/cmd/apigear@latest
+      - go install github.com/apigear-io/cli/cmd/apigear@{{.APIGEAR_VERSION}}
       - pip install black
       # - rm -rf tmp bin
       # - mkdir tmp bin
@@ -56,10 +59,12 @@ tasks:
     cmds:
       - black .
   ci:
-    desc: runs the ci pipeline
+    desc: runs the local ci pipeline (mirrors what GitHub Actions does)
     cmds:
       - task: install
-      - task: test
+      - task: generate_solution
       - task: diff
-      - task: py:install
-      - task: py:test
+      - task: py:install_goldenmaster
+      - task: py:test_goldenmaster
+      - task: py:install_generated
+      - task: py:test_generated
