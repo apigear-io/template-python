@@ -9,10 +9,24 @@ import mqttMessagesFormat from '/files/mqtt/ApiGearMQTTv0.1.pdf';
 # MQTT
 
 :::caution
-This is an experimental feature. It contains smallest working set of functionalities to adapt the generated interface for using over the network with MQTT protocol.
-It doesn't include the security. The error handling is minimal. It is not production ready.
-Please also check issues on github for this template.
+**Experimental — API may change in 1.x; not recommended for production.**
+
+This feature is the smallest working adapter that maps a generated interface onto the MQTT protocol. The following gaps are known and intentional in the current release:
+
+- **No TLS.** The shared client connects in plain TCP. Bring your own `TLSContext` if you need encryption.
+- **No auth or ACL guidance.** No username/password helper, no broker ACL examples, no credential storage pattern.
+- **Minimal error handling.** Network and protocol errors are mostly logged; there is no retry queue, no dead-letter handling, no caller-visible error type.
+- **No reconnect or backoff strategy documented.** The Paho client's network loop is started, but reconnect/backoff/clean-session behavior is not configured for you.
+- **No QoS strategy guidance.** All publishes and subscribes use a fixed QoS of 2. There is no per-topic tuning and no documentation on when to drop to 1 or 0.
+
+Track maturation and file specific issues in the [template-python issue tracker](https://github.com/apigear-io/template-python/issues).
 :::
+
+:::note
+Open design questions in the protocol layer are flagged inline in `apigear/mqtt/base.py` (look for `TODO` comments around the `clean_start` flag and the on-connect resubscribe path). They are surfaced here rather than hidden so that downstream users can weigh in before the API solidifies.
+:::
+
+To know which files to inspect when filing an issue or reading the code: the protocol-layer client/service implementation lives in `apigear/mqtt/` (shared across all interfaces), and the per-interface client/server adapters live in `{module}/mqtt/sinks.py` and `{module}/mqtt/sources.py`.
 
 This feature purpose is not only to help you introduce MQTT protocol into your project, but also show that an existing protocol can be adapted for sharing your data in your ecosystem. When going through this document you may notice this implementation contains general client/server adapters in 📂hello-world/apigear/mqtt
 and an interface specific part generated from templates for each interface in  📂hello-world/py_hello_world/io_world/mqtt. <br /> <br /> 

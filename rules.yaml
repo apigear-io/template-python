@@ -1,3 +1,7 @@
+# Generated Python projects require Python >= 3.11.
+# (The rules schema currently only accepts a `cli` key under `engines`;
+# track schema support for a `python` engine constraint upstream before
+# adding it here.)
 engines:
   cli: ">= v0.38.0"
 features:
