@@ -8,6 +8,8 @@ commit messages follow [Conventional Commits](https://conventionalcommits.org).
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-30
+
 ### Removed
 
 - **BREAKING — `http` feature.** It was non-functional (server adapter routed
