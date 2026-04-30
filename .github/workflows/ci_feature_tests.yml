@@ -22,7 +22,6 @@ jobs:
       matrix:
         config:
           - { name: "Simple", short: "simple", features: "scaffold" }
-          - { name: "HTTP",   short: "http",   features: "http"     }
           - { name: "OLink",  short: "olink",  features: "olink"    }
           - { name: "MQTT",   short: "mqtt",   features: "mqtt"     }
     steps:

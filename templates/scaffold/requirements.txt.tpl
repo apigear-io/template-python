@@ -2,9 +2,6 @@
 pydantic==2.*
 pytest
 pytest-asyncio
-{{- if $features.http }}
-fastapi
-{{- end}}
 {{- if $features.olink }}
 starlette
 uvicorn

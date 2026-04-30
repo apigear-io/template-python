@@ -1,11 +1,11 @@
 # Python SDK Template for ApiGear
 
-The python SDK template support http and object link client and server, based on the same service.
+The python SDK template generates ObjectLink and MQTT client/server adapters from an ApiGear interface description, plus a runnable Python project skeleton you can extend with real behavior.
 
 ## Usage
 
 ```bash
-apigear generate expert --input apis/counter.idl --output sdk --template apigear-io/template-python --features http,olink
+apigear generate expert --input apis/counter.idl --output sdk --template apigear-io/template-python --features olink
 ```
 
 Or using a solution document
@@ -20,7 +20,6 @@ layers:
     output: sdk
     template: appigear-io/template-python
     features:
-      - http
       - olink
 ```
 
@@ -33,12 +32,13 @@ apigear generate solution demo.solution.yaml
 
 * api: creates python interface files
 * scaffold: create a full python project
-* http: create a http client and http server
+* test_helpers: generates struct builders for tests
 * olink: create ObjectLink client and server
+* mqtt: create MQTT client and service adapters
 
 ## Run ObjectLink Server
 
-Install requirements (pytest, fastapi, websockets, uvicorn)
+Install requirements (pytest, websockets, uvicorn, starlette, olink-core)
 ```bash
 pip install -r requirements.txt
 ```

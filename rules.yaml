@@ -69,24 +69,6 @@ features:
           - source: "scaffold/interface/test.py.tpl"
             target: "test_{{snake .Interface.Name}}.py"
             preserve: true
-  - name: http
-    scopes:
-      - match: system
-        documents:
-          - source: "http/server.py.tpl"
-            target: "http/server.py"
-      - match: module
-        prefix: "{{snake .Module.Name}}/http/"
-        documents:
-          - source: "http/__init__.py"
-            target: "__init__.py"
-            raw: true
-          - source: "http/client.py.tpl"
-            target: "client.py"
-          - source: "http/routes.py.tpl"
-            target: "routes.py"
-          - source: "http/shared.py.tpl"
-            target: "shared.py"
   - name: olink
     requires: [api, scaffold, test_helpers]
     scopes:
