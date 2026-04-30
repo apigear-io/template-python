@@ -18,34 +18,40 @@ class BaseClient:
         self.send_queue = Queue()
         self.client = paho.mqtt.client.Client(protocol=paho.mqtt.client.MQTTv5, client_id = id)
         self.client.on_connect = self.__on_connect
+        self.client.on_disconnect = self.__on_disconnect
         self.client.on_subscribe = self.__on_subscribed
         self.client.on_message = self.__message_handling
         self.on_connected = EventHook()
+        self.on_disconnected = EventHook()
         self.on_subscribed = EventHook()
         self.topics = {}
+        self._disconnect_requested = False
         self.on_log(self._mqtt_log_writer)
         self.qos = 2
-        
+
     def __del__(self):
         for topic in self.topics:
             self.client.unsubscribe(topic)
         self.disconnect()
 
     def disconnect(self):
-        #not necessary here, should be enough to have disconnect
+        self._disconnect_requested = True
         self.client.loop_stop()
         self.client.disconnect()
-     
+
     async def connect(self, addr, port):
+        self._disconnect_requested = False
         self.client.loop_start()
-        bind_address=""
-        #TODO - should it be clean start?
-        # True: all messages, published by other publishers will be retained in broker untill this  subscriber explicitly unsubscribed
-        ## all the messages to publish from this client will be stored anyway and sent on reconnect ( if this is not expected reinitialise needs to be called along with re-subscription)
-        clean_start=False
+        bind_address = ""
+        # clean_start=True: every (re)connect starts a fresh broker session.
+        # __on_connect re-issues SUBSCRIBE for every topic in self.topics,
+        # so subscriptions are restored explicitly rather than relying on
+        # broker session storage. Mirrors the C++ template's behavior.
+        clean_start = True
         properties = paho.mqtt.properties.Properties(paho.mqtt.properties.PacketTypes.CONNECT)
         keepalive = 60
-        self.client.connect_async(addr, port, keepalive, bind_address, clean_start, properties)
+        self.client.connect_async(addr, port, keepalive, bind_address,
+                                  clean_start=clean_start, properties=properties)
 
     def _subscribe(self, topic, callback, callback_wrapper = None) -> int:
         if topic not in self.topics:
@@ -70,8 +76,17 @@ class BaseClient:
         self.client.on_log = self.__on_log
         
     def __on_connect(self, client, userdata, flags, reasonCode, properties=None):
-        #TODO subscribe all waiting to subscribe
+        # Re-issue SUBSCRIBE for every topic we want to be subscribed to.
+        # Required on every (re)connect because clean_start=True wipes the
+        # broker-side session each time.
+        for topic in self.topics:
+            self.client.subscribe(topic, self.qos)
         self.on_connected.fire()
+
+    def __on_disconnect(self, client, userdata, *args):
+        # *args absorbs paho-mqtt v1/v2 callback signature differences.
+        # paho's loop will auto-reconnect unless disconnect() was called.
+        self.on_disconnected.fire()
             
     def __message_handling(self, client, userdata, msg):
         callback, callback_wrapper = self.topics.get(msg.topic)

@@ -148,6 +148,9 @@ features:
           - source: "apigear/mqtt//base.py"
             target: "apigear/mqtt/base.py"
             raw: true
+          - source: "apigear/mqtt/test_base.py"
+            target: "apigear/mqtt/test_base.py"
+            raw: true
       - match: module
         documents:
           - source: "mqtt/__init__.py.tpl"
