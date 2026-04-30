@@ -1,7 +1,6 @@
 pydantic==2.*
 pytest
 pytest-asyncio
-fastapi
 starlette
 uvicorn
 websockets

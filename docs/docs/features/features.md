@@ -48,7 +48,6 @@ Extended features build on `api` and `scaffold` to expose your interfaces over t
     - `examples/mqtt/client.py` shows the client adapter consuming a remote service.
 
   See the dedicated [MQTT page](mqtt.md) for usage, scope, and current limitations.
-- **`http`** — generates a [FastAPI](https://fastapi.tiangolo.com/)-based server (`http/server.py`, `http/routes.py`) and a synchronous [`requests`](https://pypi.org/project/requests/)-based client (`http/client.py`) per module. Routes are simple POSTs at `/{module}/{interface}/{operation}`. Operation responses include the current property `state` alongside the result. See the [HTTP page](http.md) for scope and example usage.
 
 There is also an *internal* feature `apigear`, which is generated for the extended features. Its usage is explained alongside the extended features that pull it in.
 Each feature can be selected using the solution file or via the command-line tool.
@@ -74,11 +73,9 @@ This graph shows the full folder structure which is generated for `all` features
  ┃ ┣ 📂examples
  ┃ ┃ ┣ 📂mqtt
  ┃ ┃ ┗ 📂olink
- ┃ ┣ 📂http
  # highlight-next-line
  ┃ ┣ 📂io_world
  ┃ ┃ ┣ 📂api
- ┃ ┃ ┣ 📂http
  ┃ ┃ ┣ 📂impl
  ┃ ┃ ┣ 📂mqtt
  ┃ ┃ ┣ 📂olink
