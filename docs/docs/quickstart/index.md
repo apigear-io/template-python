@@ -28,8 +28,11 @@ In this case the folder structure should look similar to this
  # highlight-next-line
  ┃ ┣ 📂io_world
  ┃ ┃ ┣ 📂api
- ┃ ┃ ┗ 📂implementation
- ┃ ┗ 📜CMakeLists.txt
+ ┃ ┃ ┗ 📂impl
+ ┃ ┣ 📂utils
+ ┃ ┣ 📜Makefile
+ ┃ ┣ 📜README.md
+ ┃ ┗ 📜requirements.txt
 ```
 
 Using the solution file from the previous paragraph the code will be generated in the `py_hello_world` folder. 

@@ -74,12 +74,17 @@ This graph shows the full folder structure which is generated for `all` features
  ┃ ┣ 📂examples
  ┃ ┃ ┣ 📂mqtt
  ┃ ┃ ┗ 📂olink
+ ┃ ┣ 📂http
  # highlight-next-line
  ┃ ┣ 📂io_world
  ┃ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📂http
  ┃ ┃ ┣ 📂impl
  ┃ ┃ ┣ 📂mqtt
- ┃ ┃ ┗ 📂olink
- ┃ ┣ 📂utlis
+ ┃ ┃ ┣ 📂olink
+ ┃ ┃ ┗ 📂test_helpers
+ ┃ ┣ 📂utils
+ ┃ ┣ 📜Makefile
+ ┃ ┣ 📜README.md
  ┃ ┗ 📜requirements.txt
 ```
