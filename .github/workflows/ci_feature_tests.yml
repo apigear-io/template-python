@@ -1,4 +1,4 @@
-# This workflow will ensure that the generated features work independently
+# This workflow ensures that each generated feature works independently.
 
 name: Technology Template Features Test
 
@@ -22,27 +22,27 @@ jobs:
       matrix:
         config:
           - { name: "Simple", short: "simple", features: "scaffold" }
-          - { name: "OLink", short: "olink", features: "olink" }
-          - { name: "MQTT", short: "mqtt", features: "mqtt" }
+          - { name: "HTTP",   short: "http",   features: "http"     }
+          - { name: "OLink",  short: "olink",  features: "olink"    }
+          - { name: "MQTT",   short: "mqtt",   features: "mqtt"     }
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - uses: actions/setup-go@v3
+          python-version: '3.11'
+      - uses: actions/setup-go@v5
         with:
-          go-version: ${{env.go_version}}
-      - uses: arduino/setup-task@v1
-      - uses: actions/checkout@v4
+          go-version: ${{ env.go_version }}
+      - uses: arduino/setup-task@v2
       - run: task install
       - name: generate ${{ matrix.config.short }} feature set
-        run: apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/test-apis/testbed.simple.module.yaml,apigear/test-apis/testbed.struct.module.yaml     
+        run: apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/test-apis/testbed.simple.module.yaml,apigear/test-apis/testbed.struct.module.yaml
       - run: task py:install_generated
       - name: Start Mosquitto
-        if: ${{ matrix.config.short == 'mqtt'}}
+        if: ${{ matrix.config.short == 'mqtt' }}
         uses: namoshek/mosquitto-github-action@v1
         with:
           version: '1.6'
