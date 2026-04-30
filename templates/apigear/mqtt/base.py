@@ -109,9 +109,9 @@ class BaseClient:
     
     def get_client_id(self):
         return self.client._client_id
-    
+
     def to_payload(self, arguments) -> str:
-        return bytes(json.dumps(arguments), 'utf-8')
-    
+        return bytes(json.dumps(arguments, allow_nan=False), 'utf-8')
+
     def from_payload(self, payload: str) -> list[Any]:
         return json.loads(payload.decode('utf-8'))
