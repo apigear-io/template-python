@@ -82,7 +82,9 @@ class SameStruct1InterfaceClientAdapter():
         return
 
     def __on_func1_resp(self, value, callId):
-       callback = self.pending_calls.func1.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.func1.pop(callId, None)
        if callback != None:
            callback(value)
     class MethodTopics:
@@ -212,12 +214,16 @@ class SameStruct2InterfaceClientAdapter():
         return
 
     def __on_func1_resp(self, value, callId):
-       callback = self.pending_calls.func1.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.func1.pop(callId, None)
        if callback != None:
            callback(value)
 
     def __on_func2_resp(self, value, callId):
-       callback = self.pending_calls.func2.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.func2.pop(callId, None)
        if callback != None:
            callback(value)
     class MethodTopics:
@@ -306,7 +312,9 @@ class SameEnum1InterfaceClientAdapter():
         return
 
     def __on_func1_resp(self, value, callId):
-       callback = self.pending_calls.func1.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.func1.pop(callId, None)
        if callback != None:
            callback(value)
     class MethodTopics:
@@ -436,12 +444,16 @@ class SameEnum2InterfaceClientAdapter():
         return
 
     def __on_func1_resp(self, value, callId):
-       callback = self.pending_calls.func1.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.func1.pop(callId, None)
        if callback != None:
            callback(value)
 
     def __on_func2_resp(self, value, callId):
-       callback = self.pending_calls.func2.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.func2.pop(callId, None)
        if callback != None:
            callback(value)
     class MethodTopics:
