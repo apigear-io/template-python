@@ -186,7 +186,9 @@ class {{Camel .Name}}ClientAdapter():
     {{- range .Operations }}
 
     def __on_{{snake .Name}}_resp(self, value, callId):
-       callback = self.pending_calls.{{snake .Name}}.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.{{snake .Name}}.pop(callId, None)
        if callback != None:
            callback(value)
     {{- end }}

@@ -8,6 +8,12 @@ commit messages follow [Conventional Commits](https://conventionalcommits.org).
 
 ## [Unreleased]
 
+### Fixed
+
+- MQTT: generated `__on_<op>_resp` sink handlers no longer raise
+  `KeyError` on duplicate deliveries (QoS-2 retransmits, pytest
+  teardown). The pending-call lookup now uses `pop(callId, None)`.
+
 ## [2.0.0] - 2026-04-30
 
 ### Removed

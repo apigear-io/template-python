@@ -190,22 +190,30 @@ class CounterClientAdapter():
         return
 
     def __on_increment_resp(self, value, callId):
-       callback = self.pending_calls.increment.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.increment.pop(callId, None)
        if callback != None:
            callback(value)
 
     def __on_increment_array_resp(self, value, callId):
-       callback = self.pending_calls.increment_array.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.increment_array.pop(callId, None)
        if callback != None:
            callback(value)
 
     def __on_decrement_resp(self, value, callId):
-       callback = self.pending_calls.decrement.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.decrement.pop(callId, None)
        if callback != None:
            callback(value)
 
     def __on_decrement_array_resp(self, value, callId):
-       callback = self.pending_calls.decrement_array.pop(callId)
+       # Tolerate duplicate deliveries: paho-mqtt may re-invoke this handler for
+       # the same (topic, callId) on QoS-2 retransmits or during teardown.
+       callback = self.pending_calls.decrement_array.pop(callId, None)
        if callback != None:
            callback(value)
     class MethodTopics:
