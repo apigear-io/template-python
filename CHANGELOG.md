@@ -8,6 +8,8 @@ commit messages follow [Conventional Commits](https://conventionalcommits.org).
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-05-07
+
 ### Fixed
 
 - MQTT: generated `__on_<op>_resp` sink handlers no longer raise
