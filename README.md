@@ -53,3 +53,7 @@ uvicorn olink_server:app
 
 The implementation is in the module `{$module_name}_impl` folder. Each file contains one class that implements the service interface. All methods raise a not implemented exception. It is up to you to implement the service according to your needs.
 
+
+## License
+
+Licensed under the [MIT License](./LICENSE). See [LICENSE](./LICENSE) for details.
