@@ -1,4 +1,8 @@
 ---
+sidebar_label: "Quick-Start"
+title: "Python Template Quick Start - ApiGear"
+description: "Quick-start guide for the ApiGear Python template: install the generator, define an ObjectAPI interface, and generate your first Python SDK in minutes."
+keywords: [python, apigear, objectapi, quick start, getting started, tutorial]
 sidebar_position: 2
 ---
 import QuickStartCommon from "@site/docs/_quickstart_common.md"

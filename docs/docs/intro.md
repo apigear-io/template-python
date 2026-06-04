@@ -1,4 +1,8 @@
 ---
+sidebar_label: "Introduction"
+title: "Python SDK Generator - ApiGear Template"
+description: "Generate Python SDKs from ObjectAPI definitions with ApiGear: typed interfaces, asyncio clients, OLink and MQTT networking, and monitoring for stateful APIs."
+keywords: [python, api code generator, sdk generator, apigear, objectapi, asyncio, olink, mqtt]
 sidebar_position: 1
 ---
 

@@ -1,4 +1,8 @@
 ﻿---
+sidebar_label: "MQTT"
+title: "Python Template MQTT Networking - ApiGear"
+description: "MQTT networking in the ApiGear Python template: expose and consume Python interfaces over MQTT using generated client and server adapters."
+keywords: [python, apigear, objectapi, mqtt, networking, messaging]
 sidebar_position: 3
 ---
 import CodeBlock from '@theme/CodeBlock';

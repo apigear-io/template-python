@@ -1,3 +1,10 @@
+---
+sidebar_label: "Features"
+title: "Python Template Features - ApiGear"
+description: "Overview of the Python template features for the ApiGear code generator: generated interfaces and data types, stub implementations, networking adapters, and traffic monitoring."
+keywords: [python, apigear, objectapi, template features, code generator]
+---
+
 import CodeBlock from '@theme/CodeBlock';
 import helloWorldModuleComponent from '!!raw-loader!./data/helloworld.module.yaml';
 
